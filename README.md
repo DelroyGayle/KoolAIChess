@@ -1,32 +1,94 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# Kool-AI-Chess
 
-Welcome,
+Live Link
 
-This is the Code Institute student template for deploying your third portfolio project, the Python command-line project. The last update to this file was: **March 14, 2023**
+GitHub Repository
 
-## Reminders
+Kool AI Chess - A Chess program written in Python - User vs Computer
 
-- Your code must be placed in the `run.py` file
-- Your dependencies must be placed in the `requirements.txt` file
-- Do not edit any of the other files or your code may not deploy properly
+For my Code Institute Portfolio Project 3, 
+I would like to implement a Chess Program in Python.
 
-## Creating the Heroku app
+In my search for a suitable algorithm I came across this [476-line BASIC PROGRAM by DEAN MENEZES](http://www.petesqbsite.com/sections/express/issue23/Tut_QB_Chess.txt)
 
-When you create the app, you will need to add two buildpacks from the _Settings_ tab. The ordering is as follows:
+Let me reiterate: the basis of my project is a Chess Program written in **BASIC (Beginners' All-purpose Symbolic Instruction Code)**
+available [here](http://www.petesqbsite.com/sections/express/issue23/Tut_QB_Chess.txt)
 
-1. `heroku/python`
-2. `heroku/nodejs`
+I found it amazing how Mr Denezes has written such an highly interesting chess playing program in under 500 lines.
+My goal then is to convert it to Python and add ***castling and en passant*** chess moves to it so that the user can play a complete game of Chess against their Computer opponent, namely, ***Kool A.I.***
 
-You must then create a _Config Var_ called `PORT`. Set this to `8000`
+## UX
 
-If you have credentials, such as in the Love Sandwiches project, you must create another _Config Var_ called `CREDS` and paste the JSON into the value field.
+### Design
 
-Connect your GitHub repository and deploy as normal.
+#### Logic Flow of the program
 
-## Constraints
+![Flowchart](https://github.com/DelroyGayle/Kool-AI-Chess/assets/91061592/218a8f5e-38ef-4fba-bf27-4c577cfb9e83)
 
-The deployment terminal is set to 80 columns by 24 rows. That means that each line of text needs to be 80 characters or less otherwise it will be wrapped onto a second line.
+#### A Mock-up of how the game will look like
+
+The game begins with this view
+
+![image](https://github.com/DelroyGayle/Kool-AI-Chess/assets/91061592/4e782939-b475-4b30-b69f-31b6c79bb39b)
+
+If for example, the user plays **e2e4**
+
+![image](https://github.com/DelroyGayle/Kool-AI-Chess/assets/91061592/61e63c94-30e0-46c6-adb7-96da1f43da2c)
+
+Then the computer may respond with **e7e5**
+
+![image](https://github.com/DelroyGayle/Kool-AI-Chess/assets/91061592/0aa858fb-a6d4-43c0-a15e-f9e5d03fea16)
+
+### Target Audience
+
+### User Stories
+
+------
+
+## Features
+
+------
+
+## Testing
+
+* I tested that the pages work in Chrome
+
+## Code Validation
+
+## Bugs
+
+### Solved Bugs
+
+### Unfixed Bugs
+
+No unfixed bugs
+
+------
+
+## Deployment
+
+## Technologies Used
+
+### Languages Used
+
+* Python
+
+### Other tools
+
+* GitHub - for hosting the site
+* Gitpod - for editing the files
+* GitPages - for the deployment of the site
 
 ---
 
-Happy coding!
+
+## Future Features
+
+## Deployment
+
+------
+
+## Credits/Acknowledgements
+
+I would like to acknowledge Don Menezes, the author of the BASIC program on which my project is based.
+I would like to acknowledge Rod Bird who also adopted Menezes' code. I preferred Bird's display of the Chess Board.
