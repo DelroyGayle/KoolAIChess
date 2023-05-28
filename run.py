@@ -12,6 +12,7 @@ Menezes' QBASIC program can be found at
 """
 
 import constants
+import piece
 
 class Game:
     """
@@ -118,6 +119,11 @@ def main():
     Game.whose_move = 2000
     Game.score = 3000
     print(e.whose_move,e.score)
+    e = piece.King(0,-1)
+    print (e.value)
+    f = piece.King(0,1)
+    print(f.value)
+
 
 if __name__ == "__main__":
     main()
