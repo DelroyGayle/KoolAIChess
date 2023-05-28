@@ -59,6 +59,77 @@ Then the computer may respond with **e7e5**
 
 ### Solved Bugs
 
+Initially when I defined my 'Game' class
+I thought I could call the following the 'initialise_class_variables 'function
+to initialise all the relevant Class Variables
+```
+class Game:
+    """
+    """
+    def initialise_class_variables():
+        print("Initialise")
+        # the number of valid moves found for chosen piece
+        num_moves = -1    
+        ...
+```
+
+However when I tried to access a Class Variable defined that way
+I got
+```
+    print(Game.num_moves)
+          ^^^^^^^^^^^^^^
+AttributeError: type object 'Game' has no attribute 'num_moves'
+```
+
+Solution:
+
+I know the error has something to do with scoping however I don't enough Python to figure it out.
+Therefore I removed the function 'initialise_class_variables' and defined all my Class Variables 
+directly beneath the 'Game' Class definition
+```
+class Game:
+    num_moves = -1    
+    ...
+```
+    """
+    A class that represents the status of the Chess Game
+    This is the main workspace of the program
+    It keeps track of the flags, properties and variables related 
+    to the state of play of the Game
+    """
+    whose_move = 0 
+    @classmethod
+    def initialise_class_variables():
+        print("Initialise")
+        # the number of valid moves found for chosen piece
+        num_moves = -1    
+        # recursion level for evaluate()
+        level = 0         
+        # worth of play
+        score = 0         
+        print("SC",score)
+
+    def initialise_class_variables():
+        print("Initialise")
+        # the number of valid moves found for chosen piece
+        num_moves = -1    
+        # recursion level for evaluate()
+        level = 0         
+        # worth of play
+        score = 0         
+
+
+    whose_move = 0 
+    @classmethod
+    def initialise_class_variables():
+        print("Initialise")
+        # the number of valid moves found for chosen piece
+        num_moves = -1    
+        # recursion level for evaluate()
+        level = 0         
+        # worth of play
+        score = 0         
+
 ### Unfixed Bugs
 
 No unfixed bugs
