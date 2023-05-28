@@ -161,6 +161,6 @@ No unfixed bugs
 
 ## Credits/Acknowledgements
 
-I would like to acknowledge Don Menezes, the author of the BASIC program on which my project is based.
+I would like to acknowledge Don Menezes, the author of the BASIC program on which my project is based on.
 I would like to acknowledge Rod Bird who also adopted Menezes' code. I preferred Bird's display of the Chess Board.
-I would like to acknowledge the Pythoneer [X.S.](https://xsanon.medium.com/) - the article ***How to Code a Simple Chess Game in Python*** and X.S.'s Pythonic style of coding in the following [Chess Program](https://github.com/xsanon/chess)
+I would like to acknowledge the ***Pythoneer*** [X.S.](https://xsanon.medium.com/) - the article ***How to Code a Simple Chess Game in Python*** and X.S.'s ***Pythonic*** style of coding in the following [Chess Program](https://github.com/xsanon/chess)

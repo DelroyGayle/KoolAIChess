@@ -97,10 +97,54 @@ def fillboard():
     a1, b1, c1, d1, e1, f1, g1, h1
 
     Therefore I chose to use a dictionary to reflect the above scheme
-    The keys being a tuple such as ('h',8) for square h8
-    Then each value would be a tuple of the form (PIECE VALUE, LETTER, SIGN)
+    The keys being a string e.g. 'h8' for the square h8
+    Then each value would be a Piece Class instance variable of the form (PIECE VALUE, LETTER, SIGN)
+    Therefore the Dictionary would look like this {a8:value, b8:value, ... a1:value, ... h1:value}
+    Blank squares will have the value None
 
     """
+    board = dict(a8=piece.Rook(constants.ROOK_VALUE, constants.COMPUTER), # Black Rooks
+                 h8=piece.Rook(constants.ROOK_VALUE, constants.COMPUTER),
+                 b8=piece.Knight(constants.KNIGHT_VALUE, constants.COMPUTER), # Black Knights  
+                 g8=piece.Knight(constants.KNIGHT_VALUE, constants.COMPUTER),   
+                 c8=piece.Bishop(constants.BISHOP_VALUE, constants.COMPUTER), # Black Bishops
+                 f8=piece.Bishop(constants.BISHOP_VALUE,constants.COMPUTER), 
+                 d8=piece.Queen(constants.QUEEN_VALUE, constants.COMPUTER),  # Black Queen and King
+                 e8=piece.King(constants.KING_VALUE,constants.COMPUTER), # Black King
+                 a1=piece.Rook(constants.ROOK_VALUE, constants.PLAYER), # White Rooks 
+                 h1=piece.Rook(constants.ROOK_VALUE, constants.PLAYER),
+                 b1=piece.Knight(constants.KNIGHT_VALUE, constants.PLAYER), # White Knights 
+                 g1=piece.Knight(constants.KNIGHT_VALUE, constants.PLAYER),
+                 c1=piece.Bishop(constants.BISHOP_VALUE, constants.PLAYER), # White Bishops 
+                 f1=piece.Bishop(constants.BISHOP_VALUE, constants.PLAYER), # White Queen and King
+                 d1=piece.Queen(constants.QUEEN_VALUE, constants.PLAYER), 
+                 e1=piece.King(constants.KING_VALUE, constants.PLAYER))
+    for letter in ["a","b","c","d","e","f","g","h"]:
+        # Black Pawns
+        board[letter + "7"] = piece.Pawn(constants.PAWN_VALUE, constants.COMPUTER)
+        # White Pawns
+        board[letter + "2"] = piece.Pawn(constants.PAWN_VALUE, constants.PLAYER)
+    for letter in ["a","b","c","d","e","f","g","h"]:
+        for number in ["3","4","5","6"]:
+            board[letter + number] = None
+ 
+    for number in range(8,0,-1):
+        string = ""
+        for letter in ["a","b","c","d","e","f","g","h"]:
+            index = letter + str(number)
+            string += str(0 if not board[index] else board[index].letter) + " "
+            if letter == "h":
+                print(number, string)
+
+    # Depict the kingside rooks
+    board["h8"].kingside = True                
+    board["h1"].kingside = True                
+
+    # Depict the queenside rooks
+    board["a8"].queenside = True                
+    board["a1"].queenside = True                
+    
+    return board
 
 def main():
     """
@@ -123,6 +167,12 @@ def main():
     print (e.value)
     f = piece.King(0,1)
     print(f.value)
+    """
+    Initialise the Game
+    """
+    chess = Game()
+    chess.board = fillboard()
+    print(chess.board)
 
 
 if __name__ == "__main__":

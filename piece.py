@@ -12,8 +12,8 @@ class Piece():
 
     Attributes:
     -----------
-    name : str
-        Represents the name of a piece as following - 
+    letter : str
+        Each letter represents the name of a piece as following - 
         Pawn -> P
         Rook -> R
         Knight -> N
@@ -27,51 +27,61 @@ class Piece():
     """
     
     def __init__(self, sign):
-        self.name = ""
+        self.letter = ""
         self.sign = sign
 
 class Rook(Piece):
     def __init__(self, value, sign):
         """
-        Base class Piece - however differ in value    
+        Base class Piece - Rook's value is 500    
         """
         super().__init__(sign)
-        self.name = "R"
-        self.value = constants.ROOK_VALUE
+        self.letter = constants.ROOK_LETTER
+        self.value = constants.ROOK_VALUE * sign
 
 class Knight(Piece):
     def __init__(self, value, sign):
         """
-        Base class Piece - however differ in value    
+        Base class Piece - Knight's value is 270
         """
         super().__init__(sign)
-        self.name = "N"
-        self.value = constants.KNIGHT_VALUE
+        self.letter = constants.KNIGHT_LETTER
+        self.value = constants.KNIGHT_VALUE * sign
 
 class Bishop(Piece):
     def __init__(self, value, sign):
         """
-        Base class Piece - however differ in value    
+        Base class Piece - Bishop's value is 300   
         """
         super().__init__(sign)
-        self.name = "B"
-        self.value = constants.BISHOP_VALUE
+        self.letter = constants.BISHOP_LETTER
+        self.value = constants.BISHOP_VALUE * sign
 
 class Queen(Piece):
     def __init__(self, value, sign):
         """
-        Base class Piece - however differ in value    
+        Base class Piece - Queen's value is 900   
         """
         super().__init__(sign)
-        self.name = "Q"
-        self.value = constants.QUEEN_VALUE
+        self.letter = constants.QUEEN_LETTER
+        self.value = constants.QUEEN_VALUE * sign
 
 class King(Piece):
     def __init__(self, value, sign):
         """
         Base class Piece
-        Note: The Player's King and the Computer's King have different values
+        Note: The Player's King value is 5000 and the Computer's King value is -7500
         """
         super().__init__(sign)
-        self.name = "K"
+        self.letter = constants.KING_LETTER
         self.value = constants.VALUE_OF_COMPUTER_KING if sign == constants.COMPUTER else constants.VALUE_OF_PLAYER_KING 
+
+class Pawn(Piece):
+    def __init__(self, value, sign):
+        """
+        Base class Piece
+        Note: Base class Piece - Pawn's value is 100
+        """
+        super().__init__(sign)
+        self.letter = constants.PAWN_LETTER
+        self.value = constants.PAWN_VALUE * sign
