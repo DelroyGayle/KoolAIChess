@@ -4,17 +4,17 @@ Live Link
 
 GitHub Repository
 
-Kool AI Chess - A Chess program written in Python - User vs Computer
+## Kool AI Chess - A command line Chess program using Python - Player vs Computer
 
 For my Code Institute Portfolio Project 3, 
 I would like to implement a Chess Program in Python.
 
 In my search for a suitable algorithm I came across this [476-line BASIC PROGRAM by DEAN MENEZES](http://www.petesqbsite.com/sections/express/issue23/Tut_QB_Chess.txt)
 
-Let me reiterate: the basis of my project is a Chess Program written in **BASIC (Beginners' All-purpose Symbolic Instruction Code)**
+Let me reiterate: the basis of my project is a Chess Program written in<br>**[BASIC](https://en.wikipedia.org/wiki/BASIC) (Beginners' All-purpose Symbolic Instruction Code)**
 available [here](http://www.petesqbsite.com/sections/express/issue23/Tut_QB_Chess.txt)
 
-I found it amazing how Mr Denezes has written such an highly interesting chess playing program in under 500 lines.
+I found it amazing how Denezes has written such an highly interesting chess playing program in under 500 lines.
 My goal then is to convert it to Python and add ***castling and en passant*** chess moves to it so that the user can play a complete game of Chess against their Computer opponent, namely, ***Kool A.I.***
 
 ## UX
@@ -60,7 +60,7 @@ Then the computer may respond with **e7e5**
 ### Solved Bugs
 
 Initially when I defined my 'Game' class
-I thought I could call the following the 'initialise_class_variables 'function
+I thought I could call the following ***'initialise_class_variables'*** function
 to initialise all the relevant Class Variables
 ```
 class Game:
@@ -83,52 +83,13 @@ AttributeError: type object 'Game' has no attribute 'num_moves'
 
 Solution:
 
-I know the error has something to do with scoping however I don't enough Python to figure it out.
-Therefore I removed the function 'initialise_class_variables' and defined all my Class Variables 
+I know the error has something to do with scoping however to resolve this issue, I removed the function 'initialise_class_variables' and defined all my Class Variables 
 directly beneath the 'Game' Class definition
 ```
 class Game:
     num_moves = -1    
     ...
 ```
-    """
-    A class that represents the status of the Chess Game
-    This is the main workspace of the program
-    It keeps track of the flags, properties and variables related 
-    to the state of play of the Game
-    """
-    whose_move = 0 
-    @classmethod
-    def initialise_class_variables():
-        print("Initialise")
-        # the number of valid moves found for chosen piece
-        num_moves = -1    
-        # recursion level for evaluate()
-        level = 0         
-        # worth of play
-        score = 0         
-        print("SC",score)
-
-    def initialise_class_variables():
-        print("Initialise")
-        # the number of valid moves found for chosen piece
-        num_moves = -1    
-        # recursion level for evaluate()
-        level = 0         
-        # worth of play
-        score = 0         
-
-
-    whose_move = 0 
-    @classmethod
-    def initialise_class_variables():
-        print("Initialise")
-        # the number of valid moves found for chosen piece
-        num_moves = -1    
-        # recursion level for evaluate()
-        level = 0         
-        # worth of play
-        score = 0         
 
 ### Unfixed Bugs
 
@@ -148,7 +109,7 @@ No unfixed bugs
 
 * GitHub - for hosting the site
 * Gitpod - for editing the files
-* GitPages - for the deployment of the site
+* Heroku - for the deployment of the site
 
 ---
 
@@ -161,6 +122,8 @@ No unfixed bugs
 
 ## Credits/Acknowledgements
 
-I would like to acknowledge Don Menezes, the author of the BASIC program on which my project is based on.
-I would like to acknowledge Rod Bird who also adopted Menezes' code. I preferred Bird's display of the Chess Board.
-I would like to acknowledge the ***Pythoneer*** [X.S.](https://xsanon.medium.com/) - the article ***How to Code a Simple Chess Game in Python*** and X.S.'s ***Pythonic*** style of coding in the following [Chess Program](https://github.com/xsanon/chess)
++  I would like to acknowledge Don Menezes, the author of the BASIC program on which my project is based on.
++  I would like to acknowledge Rod Bird who also adopted Menezes' code. I preferred Bird's display of the Chess Board.
++  I would like to acknowledge the *Pythoneer* [X.S.](https://xsanon.medium.com/)
++  X.S.'s article *[How to Code a Simple Chess Game in Python](https://medium.com/codex/how-to-code-a-simple-chess-game-in-python-9a9cb584f57)* and 
++  X.S.'s *Pythonic* style of coding in the following [Chess Program](https://github.com/xsanon/chess)
