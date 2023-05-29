@@ -4,7 +4,7 @@ Live Link
 
 GitHub Repository
 
-## Kool AI Chess - A command line Chess program using Python - Player vs Computer
+**Kool AI Chess - A command line Chess program using Python - Player vs Computer**
 
 For my Code Institute Portfolio Project 3, 
 I would like to implement a Chess Program in Python.
@@ -122,7 +122,7 @@ No unfixed bugs
 
 ## Credits/Acknowledgements
 
-+  I would like to acknowledge Don Menezes, the author of the BASIC program on which my project is based on.
++  I would like to acknowledge Dean Menezes, the author of the BASIC program on which my project is based on.
 +  I would like to acknowledge Rod Bird who also adopted Menezes' code. I preferred Bird's display of the Chess Board.
 +  I would like to acknowledge the *Pythoneer* [X.S.](https://xsanon.medium.com/)
 +  X.S.'s article *[How to Code a Simple Chess Game in Python](https://medium.com/codex/how-to-code-a-simple-chess-game-in-python-9a9cb584f57)* and 
