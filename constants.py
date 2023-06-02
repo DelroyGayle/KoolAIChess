@@ -1,3 +1,5 @@
+import re
+
 """
 Various Constants used throughout the program
 """
@@ -103,3 +105,8 @@ ROOK_LETTER = "R"
 BISHOP_LETTER = "B"
 KNIGHT_LETTER = "N"
 PAWN_LETTER = "P"
+
+# Regular Expressions
+
+castling_pattern = re.compile(r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))\Z")
+chess_move_pattern = re.compile(r"([a-h][1-8]){2}")

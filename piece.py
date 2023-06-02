@@ -15,8 +15,9 @@ class Piece():
 
     Attributes:
     -----------
-    letter : str
-        Each letter represents the name of a piece as following -
+    piece : str
+        Each piece is depicted by a letter which represents
+        the name of a piece as following :-
         Pawn -> P
         Rook -> R
         Knight -> N
@@ -30,7 +31,7 @@ class Piece():
     """
 
     def __init__(self, sign):
-        self.letter = ""
+        self.piece = ""
         self.sign = sign
 
 
@@ -40,7 +41,7 @@ class Rook(Piece):
         Base class Piece - Rook's value is 500
         """
         super().__init__(sign)
-        self.letter = constants.ROOK_LETTER
+        self.piece = constants.ROOK_LETTER
         self.value = constants.ROOK_VALUE * sign
 
 
@@ -50,7 +51,7 @@ class Knight(Piece):
         Base class Piece - Knight's value is 270
         """
         super().__init__(sign)
-        self.letter = constants.KNIGHT_LETTER
+        self.piece = constants.KNIGHT_LETTER
         self.value = constants.KNIGHT_VALUE * sign
 
 
@@ -60,7 +61,7 @@ class Bishop(Piece):
         Base class Piece - Bishop's value is 300
         """
         super().__init__(sign)
-        self.letter = constants.BISHOP_LETTER
+        self.piece = constants.BISHOP_LETTER
         self.value = constants.BISHOP_VALUE * sign
 
 
@@ -70,7 +71,7 @@ class Queen(Piece):
         Base class Piece - Queen's value is 900
         """
         super().__init__(sign)
-        self.letter = constants.QUEEN_LETTER
+        self.piece = constants.QUEEN_LETTER
         self.value = constants.QUEEN_VALUE * sign
 
 
@@ -82,7 +83,7 @@ class King(Piece):
         and the Computer's King value is -7500
         """
         super().__init__(sign)
-        self.letter = constants.KING_LETTER
+        self.piece = constants.KING_LETTER
         self.value = (constants.VALUE_OF_COMPUTER_KING
                       if sign == constants.COMPUTER
                       else constants.VALUE_OF_PLAYER_KING)
@@ -95,5 +96,5 @@ class Pawn(Piece):
         Note: Base class Piece - Pawn's value is 100
         """
         super().__init__(sign)
-        self.letter = constants.PAWN_LETTER
+        self.piece = constants.PAWN_LETTER
         self.value = constants.PAWN_VALUE * sign

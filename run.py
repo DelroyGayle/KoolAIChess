@@ -13,6 +13,8 @@ Menezes' QBASIC program can be found at
 
 import constants
 import piece
+import os
+import re
 
 
 class Game:
@@ -22,6 +24,7 @@ class Game:
     It keeps track of the flags, properties and variables related
     to the state of play of the Game
     """
+
 # Class Variables
 
     # the number of valid moves found for chosen piece
@@ -57,12 +60,11 @@ class Game:
     computer_pawn_2squares_advanced_row = None
     en_passant_status = None
 
-    # The Chess Board
-    # board = {}
 
     def __init__(self):
         self.board = None
         self.fillboard()
+
 
     def fillboard(self):
         """
@@ -155,22 +157,35 @@ class Game:
         self.board["a8"].queenside = True
         self.board["a1"].queenside = True
 
-    def board_sign(self, index):
-        # Blank cells have a 'sign' of 1 i.e. Positive Zero
+    def board_sign(self, index, rank=""):
+        """
+        Determine the sign of the value of the piece on the square
+        Blank squares have a 'sign' of 1 i.e. Positive Zero
+        """
+        if rank:
+            index += rank
+            
         return getattr(self.board[index], 'sign', 1)
 
-    def board_letter(self, index):
-        # Blank cells depicted with a space
+    def board_piece(self, index, rank=""):
+        """
+        Determine the letter of the piece on the square
+        Blank squares are depicted with a space
+        """
+        if rank:
+            index += rank
+
         space = " "
-        return getattr(self.board[index], 'letter', space)
+        return getattr(self.board[index], 'piece', space)
 
     def showboard(self):
+        """
+        Display the Chessboard
+        """
+
         space = " "
         left_bracket = " ["
         right_bracket = " ]"
-        print(f"{1}<<>>".format(space*6))
-        print("{}<<>>".format(space*6))
-        print(space*6, 100)
 
         # 5 spaces THEN 2 spaces each
         print("{}A  B  C  D  E  F  G  H".format(space*5))
@@ -188,16 +203,16 @@ class Game:
                 letter = chr(97 + column)  # characters a to h
                 number = row
                 number = chr(48 + number)  # characters 1 to 8
-                thesign = self.board_sign(letter + number)
+                thesign = self.board_sign(letter, number)
                 if thesign == constants.BLANK:
                     output_string += portion1 + space + portion2
                 elif thesign == constants.COMPUTER:
                     output_string += (portion1
-                                      + self.board_letter(letter + number)
+                                      + self.board_piece(letter, number)
                                       + portion2)
                 else:
                     output_string += (portion1
-                                      + self.board_letter(letter + number)
+                                      + self.board_piece(letter, number)
                                       .lower()
                                       + portion2)
 
@@ -209,7 +224,230 @@ class Game:
         print("{}A  B  C  D  E  F  G  H".format(space*5))
 
 
-def main():
+def goodbye()
+    """
+    End of Game Message
+    """
+
+    print()
+    print("Thank You For Playing. Goodbye.")
+
+
+def determine_generate_move_method(piece_letter):
+    """
+    Use a dictionary to determine which method to call
+    """
+    methods_dictionary = {  
+        PAWN_LETTER: generate_moves_for_pawn,
+    }
+    themethod = methods_dictionary.get(piece_letter, "Unknown letter " + piece_letter)
+
+    if isinstance(themethod, str):
+        raise Exception("Internal Error: " + themethod)
+
+    return themethod
+
+    
+    def file_plus1(file)
+    """
+    Is the next file plus one
+    between a and h
+    """
+    if file not in ["a", "b", "c", "d", "e", "f", "g"]:
+        return None
+    return chr(ord(file) + 1)
+
+
+    def generate_moves(self, piece_sign)
+        """
+        Generate a list of valid moves for a particular piece
+        """
+        # todo
+        # Capture right?
+
+	...        
+
+def movelist(from_file, from_rank, piece_sign, evaluating= False)
+    """
+    get a list of valid moves for a particular piece
+    """
+    all_the_moves = chess.board[from_files + from_rank].generate_moves(piece_sign)
+    num_moves = - 1
+
+    if bpiece(x, y)
+        elif == asc("P")
+            pawn(x, y, piece_sign)
+        elif == asc("N")
+            knight(x, y, piece_sign)
+        elif == asc("B")
+            bishop(x, y, piece_sign)
+        elif == asc("R")
+            rook(x, y, piece_sign)
+        elif == asc("Q")
+            queen(x, y, piece_sign)
+        elif == asc("K")
+            king(x, y, piece_sign)
+# Determine whether a Castling move is feasible
+            if evaluating:
+                  print("EL/Castle", evaluating, level)  # todo
+                  evaluate_castle(x, y, piece_sign)
+
+
+def is_player_move_legal(from_file, from_rank, to_file, to_rank, taken, illegal)
+
+    """
+    validate that the PLAYER'S move is legal
+    and that it does not put the PLAYER in check
+    """
+
+    piece_sign = constants.PLAYER  # white piece
+    illegal = True
+    all_the_moves = movelist(from_file, from_rank, piece_sign, False)
+
+    ...
+
+def output_attacking_move(who_are_you, from_file, from_rank, to_file, to_rank)
+
+    print_string = from_file + from_file + "-" + to_file + to_rank + " Piece: " + board_piece(from_file, from_rank)
+
+    if who_are_you == constants.PLAYER:
+          return "Checking Player move for " + print_string
+    else:
+          return "Computer moves " + print_string
+
+
+
+def process_computer_move(from_file, from_rank, to_file, to_rank)
+
+
+    just_performed_castling = False
+    computer_move_finalised = False
+
+    ...    
+
+def player_move_validation_loop(from_file, from_rank ,to_file, to_rank, just_performed_castling, attacking_piece, taken)
+    """
+    Input Validation of the Player's Move
+    Main Validation Loop
+    """
+
+    while True:
+        
+        print()
+
+        # fetch the next move from the player from keyboard
+        input_string = trim(input("YOUR MOVE (e.g. e2e4): "))
+
+        if input_string == "R":
+            print("Player Resigned")
+            output_all_chess_moves(chess.COMPUTER_WON)
+            goodbye()  # Player Resigned
+            # *** END ***
+            
+
+        """
+        *** CASTLING ***
+        This is denoted by using capital 'O
+        that is O-O and O-O-O
+        It is not PGN notation to use ZEROS - However will cater for 0-0 and 0-0-0
+        """
+        if constants.castling_pattern.match(input_string):
+            # \A((O-O-O)|(O-O)|(0-0-0)|(0-0))\Z"
+            chess.general_string_result = input_string
+            print("Castling Is Not Implemented")
+            continue
+
+        # General User Input Validation
+        if input_string == "":
+            print("Null Input! Enter 'R' to Resign")
+            continue
+
+        lower_string = input_string.lower()
+        if len(lower_string) != 4 or 
+            not constants.chess_move_pattern.match(lower_string):  # ([a-h][1-8]){2}
+            os.system("clear")
+            chess.showboard()
+            print()
+            print("I do not understand this input ", input_string)
+            print("Format of chess moves ought to be 4 characters e.g. e2e4")
+            print("Files should be a letter from a to h")
+            print("Ranks should be a number from 1 to 8")
+            continue
+            
+        # Determine the file and rank of each board name e.g. e2 ==> file 'e', rank '2'
+        from_file = lower_string[0]
+        from_rank = lower_string[1]
+        to_file = lower_string[2]
+        to_rank = lower_string[3]
+
+        attacking_piece = chess.board_piece(from_file, from_rank)
+
+        print_string = output_attacking_move(chess.PLAYER, from_file, from_rank, to_file, to_rank)
+        # print() todo
+        print(print_string)
+
+        piece_value = chess.board_piece(from_file,from_rank)
+
+        if piece_value < 0: # negative numbers are the Computer's Pieces
+             print("This is not your piece to move")
+             ...
+             continue
+        
+        if  piece_value =- constants.BLANK: # BLANK SQUARE
+             print("There is no piece to be played, instead a Blank Square")
+             ...
+             continue
+        
+        illegal = is_player_move_legal(from_file, from_rank, to_file, to_rank, taken, illegal)
+        if illegal ISTRUE THEN
+            PRINT "Illegal move"
+            ...
+            continue
+
+        else
+
+            # Has the king been moved?
+            # Has a rook been moved
+            record_if_king_or_rook_have_moved(%PLAYER, from_file, from_rank, to_file, to_rank)
+
+            # As the opponent advanced a pawn two squares? if yes, record the pawn's position
+            record_pawn_that_advanced_by2(%PLAYER, from_file, from_rank, to_file, to_rank)
+
+            # Increment the move count
+            # Convert player's chess move for output
+            # Output the chess move
+            finalise_player_move(from_file, from_rank, to_file, to_rank, just_performed_castling, attacking_piece, taken)
+            return
+        
+
+    # Validation Loop ends here                             
+
+
+def player_move(from_file, from_rank, to_file, to_rank)
+    """
+    Firstly show the result of the computer move
+    Then get and validate the player's move
+    """
+
+
+    if chess.player_first_move:
+        # Player goes first so on the first iteration there is no processing of Computer Moves 
+        chess.player_first_move = False
+        return
+
+    # From this point onwards, process computer moves
+    just_performed_castling, attacking_piece, taken = 
+        process_computer_move(from_file, from_rank, to_file, to_rank)
+    #                               just_performed_castling, attacking_piece, taken)
+    
+    player_move_validation_loop(from_file, from_rank, to_file, to_rank, 
+                                just_performed_castling,
+                                attacking_piece,
+                                taken)
+
+
+
+def main_part2():
     """
     The main functionality of the Chess Program begins here
     """
@@ -222,6 +460,24 @@ def main():
     chess.fillboard()
     chess.showboard()
 
+    from_file = None
+    from_rank = None
+    to_file = None
+    to_rank = None
+    result = None
+    # Game Loop
+    while True:
+        player_move(from_file, from_rank, to_file, to_rank, result)
+        chess.showboard()
+        break
+
+def main():
+    try:
+        main_part2()
+    except Exception as error:
+        print(error)
+        print("This Program Will Now End")
+        quit()
 
 if __name__ == "__main__":
     main()
