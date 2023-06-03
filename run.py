@@ -6,7 +6,7 @@ This Python Program is Based on
 To quote Rod Bird who also adopted Menezes' program :-
     "Qudos to Mr Menezes for such a stunningly short and powerful Chess AI."
 
-Menezes' QBASIC program can be found at
+Menezes' QBASIC program can be found at1
  http://www.petesqbsite.com/sections/express/issue23/Tut_QB_Chess.txt
 
 """
@@ -59,6 +59,7 @@ class Game:
     computer_pawn_2squares_advanced_col = None
     computer_pawn_2squares_advanced_row = None
     en_passant_status = None
+    selected_piece = None
 
 
     def __init__(self):
@@ -160,23 +161,23 @@ class Game:
     def board_sign(self, index, rank=""):
         """
         Determine the sign of the value of the piece on the square
-        Blank squares have a 'sign' of 1 i.e. Positive Zero
+        Blank squares have a 'sign' of 0
         """
         if rank:
             index += rank
             
-        return getattr(self.board[index], 'sign', 1)
+        return getattr(self.board[index], 'sign', 0)
 
     def board_piece(self, index, rank=""):
         """
         Determine the letter of the piece on the square
-        Blank squares are depicted with a space
+        Blank squares are depicted as None
         """
         if rank:
             index += rank
 
-        space = " "
-        return getattr(self.board[index], 'piece', space)
+        # space = " " todo
+        return getattr(self.board[index], 'piece', None)
 
     def showboard(self):
         """
@@ -224,13 +225,90 @@ class Game:
         print("{}A  B  C  D  E  F  G  H".format(space*5))
 
 
-def goodbye()
+def goodbye():
     """
     End of Game Message
     """
 
     print()
     print("Thank You For Playing. Goodbye.")
+
+
+def handle_internal_error():
+    """
+    Hopefully this is not necessary
+    Added this just in case I have some kind of logic error that causes
+    a chess logic problem e..g a king piece being taken!
+    If such a thing happens then abort this program with an error message
+    """
+
+    print("Computer resigns due to an internal error")
+    print("Please investigate")
+    output_all_chess_moves(constants.PLAYER_WON)
+    goodbye()
+    # Internal Error
+    # *** END ***
+
+
+def advance_vertical(rank, steps):
+    """
+    Calculate the new rank 
+    by adding 'steps' to the current 'rank'
+    (8 at the top, 1 at the bottom)
+    If the sum is not within the range 1 - 8 
+    then return None
+    """
+    newrank = chr(ord(rank) + steps)
+    return newrank if '1' <= rank <= '8' else None
+
+
+def advance_horizontal(file, steps):
+    """
+    Calculate the new file
+    by adding 'steps' to the current 'file'
+    ('a' to the far left, 'h' to the far right)
+    If the sum is not within the range a - h 
+    then return None
+    """
+    newfile = chr(ord(file) + steps)
+    return newfile if 'a' <= file <= 'h' else None
+
+
+def generate_moves_for_pawn(who_are_you, file, rank, moves_list, piece_sign):
+    """
+    Generate all the legal moves of the pawn piece
+    """
+    rank_plus1 = advance_vertical(rank, piece_sign)
+    if not rank_plus1:
+        # Reached the edge of the board
+        return moves_list
+
+    # Capture left?
+    newfile = advance_horizontal(file, -1)
+    # Is there an opponent piece present?
+    if newfile and chess.board_sign(newfile, rank_plus1) == -piece_sign:
+        moves_list.append(newfile + rank_plus1)
+
+    # Capture right?
+    newfile = advance_horizontal(file, 1)
+        # Is there an opponent piece present?
+    if newfile and chess.board_sign(newfile, rank_plus1) == -piece_sign:
+        moves_list.append(newfile + rank_plus1)
+
+    # one step forward?
+    # Is this square blank?
+    if chess.board_sign(file, rank_plus1) == constants.BLANK:
+        moves_list.append(file + rank_plus1) 
+
+    # two steps forward?
+    rank_plus2 = (advance_vertical(rank, 2) if who_are_you == constants.Player
+                                            else advance_vertical(rank, -2))
+    if rank_plus2:
+    # Is this square blank?
+        if chess.board_sign(file, rank_plus2) == constants.BLANK:
+            moves_list.append(file + rank_plus2) 
+
+    return moves_list
 
 
 def determine_generate_move_method(piece_letter):
@@ -247,33 +325,30 @@ def determine_generate_move_method(piece_letter):
 
     return themethod
 
-    
-    def file_plus1(file)
+
+def generate_moves(self, piece_sign):
     """
-    Is the next file plus one
-    between a and h
+    Generate a list of valid moves for a particular piece
     """
-    if file not in ["a", "b", "c", "d", "e", "f", "g"]:
-        return None
-    return chr(ord(file) + 1)
+    ...
+    # todo    
 
-
-    def generate_moves(self, piece_sign)
-        """
-        Generate a list of valid moves for a particular piece
-        """
-        # todo
-        # Capture right?
-
-	...        
-
-def movelist(from_file, from_rank, piece_sign, evaluating= False)
+def movelist(from_file, from_rank, piece_sign, evaluating= False):
     """
     get a list of valid moves for a particular piece
     """
-    all_the_moves = chess.board[from_files + from_rank].generate_moves(piece_sign)
-    num_moves = - 1
+    who_are_you = piece_sign
+    piece = board_piece(chess.board[from_file + from_rank])
+    if not piece:
+        return []  # blank square
 
+    generate_moves_method = determine_generate_move_method(piece)
+    all_the_moves = generate_moves_method(who_are_you, from_file, from_rank,
+                                          [],board_sign(chess.board[from_file + from_rank]))
+    num_moves = - 1 # todo
+    return all_the_moves
+
+"""
     if bpiece(x, y)
         elif == asc("P")
             pawn(x, y, piece_sign)
@@ -289,24 +364,84 @@ def movelist(from_file, from_rank, piece_sign, evaluating= False)
             king(x, y, piece_sign)
 # Determine whether a Castling move is feasible
             if evaluating:
-                  print("EL/Castle", evaluating, level)  # todo
+                  print("Castle", evaluating, level)  # todo
                   evaluate_castle(x, y, piece_sign)
+todo
+    """
+
+# To quote Rod Bird:
+# this function checks all squares to see if any opposition piece has the king in check
+
+def in_check(user_sign):
+    opponent_sign = 0 - user_sign
+
+    # Go through each square on the board
+    for letter in ["a", "b", "c", "d", "e", "f", "g", "h"]:
+        for number in ["1", "2", "3", "4", "5", "6", "7", "8"]:
+            if chess.board_sign(letter + number) == opponent_sign:
+                all_the_moves = movelist(letter, number, opponent_sign, False)
+                # Start scanning each move
+                for m in range(len(all_legal_moves)):
+                    if chess.board_piece(letter + number) == constants.KING_LETTER:
+                        # Opponent King is in check!
+                        return True
+
+    # Indicate that the Opponent King is currently not in check at all
+                    return False
+    
+
+def determine_if_king_taken(from_square, to_square):
+    taken = showtaken(to_square, constants.PLAYER)
+
+    # Check whether the COMPUTER's King is about to be taken i.e. Check?
+    # Note the Kings' values: Computer's King (-7500) and Player's King (5000)
+    if taken == VALUE_OF_COMPUTER_KING:
+
+        """
+        This means the PLAYER was allowed to make an illegal move i.e. KING cannot actually be taken
+        One can attack a KING - Not take a King
+        This should never happen!
+        Some internal logic error has occurred        """
+        raise Exception("Internal Error: King piece about to be taken")
 
 
-def is_player_move_legal(from_file, from_rank, to_file, to_rank, taken, illegal)
+def is_player_move_legal(from_file, from_rank, to_file, to_rank):  # todo: taken, illegal
 
     """
     validate that the PLAYER'S move is legal
-    and that it does not put the PLAYER in check
+    That is: it does not put the PLAYER in check
     """
 
     piece_sign = constants.PLAYER  # white piece
-    illegal = True
-    all_the_moves = movelist(from_file, from_rank, piece_sign, False)
+    all_legal_moves = movelist(from_file, from_rank, piece_sign, False)
+    to_square = to_file + to_rank
+    from_square = from_file + from_rank
+    # Start scanning each move
+    for m in range(len(all_legal_moves)):
+        if all_legal_moves[m] == to_square:
+            # Found the move that matches the piece, the from square and the to square
+            # Check whether the Computer's King is about to be literally taken
+            # This indicates an Internal Logic Error
+            from_square = from_file + from_rank
+            to_square = to_file + to_rank
+            determine_if_king_taken(from_square, to_square)
+            # No error raised - so the above test passed
 
-    ...
+            # Does this move leave the Player in check?
+            if not in_check(constants.PLAYER):
+                # No!
+                # Indicate that a legal move had been found
+                return True
+            else: 
+                # Yes! In Check!
+                # Indicate that no legal move had been found
+                return False
+    
+    # Indicate that no legal move had been found
+    return False
 
-def output_attacking_move(who_are_you, from_file, from_rank, to_file, to_rank)
+
+def output_attacking_move(who_are_you, from_file, from_rank, to_file, to_rank):
 
     print_string = from_file + from_file + "-" + to_file + to_rank + " Piece: " + board_piece(from_file, from_rank)
 
@@ -314,18 +449,51 @@ def output_attacking_move(who_are_you, from_file, from_rank, to_file, to_rank)
           return "Checking Player move for " + print_string
     else:
           return "Computer moves " + print_string
+   
+
+def finalise_player_move(from_file, from_rank, to_file, to_rank):
+    # TODO just_performed_castling, attacking_piece, taken
+
+# Increment Move Number
+        if not g_move_count_incremented:
+            g_move_count+=1
 
 
+        g_move_count_incremented = False  # keep this flag unset from now on; so that the move count is incremented
 
-def process_computer_move(from_file, from_rank, to_file, to_rank)
+# Output the Move Number
+        append_to_output(lstrip(str(g_move_count)) + "." + constants.SPACE)
 
 
-    just_performed_castling = False
-    computer_move_finalised = False
+# Convert the chess move in order to output it
+# Add a 'x' to the output chess move if a piece was taken
+# Add the promoted piece if a promotion took place
+# Then output the piece to the output file
+        setup_output_chess_move_add_promotion(attacking_piece, x, y, x1, y1, taken)
 
-    ...    
 
-def player_move_validation_loop(from_file, from_rank ,to_file, to_rank, just_performed_castling, attacking_piece, taken)
+# Now that the opponent has played, see if the computer is in check
+    check_flag = incheck(constants.COMPUTER)
+    if check_flag:
+        print("I am in Check")
+        add_check_to_output()
+        check_flag = isit_Checkmate(constants.COMPUTER)
+        if check_flag:
+            output_chess_move = add_checkmate_to_output(output_chess_move)
+            print("Checkmate!! You Win!")
+            print("OS", output_chess_move)  # TODO
+            append_to_output(output_chess_move + constants.SPACE)
+            output_all_chess_moves(constants.PLAYER_WON)
+            print()
+            goodbye()
+            # *** END ***
+
+# Output the chess move
+    append_to_output(output_chess_move + constants.SPACE)
+    print()
+
+
+def player_move_validation_loop(from_file, from_rank ,to_file, to_rank, just_performed_castling, attacking_piece, taken):
     """
     Input Validation of the Player's Move
     Main Validation Loop
@@ -393,42 +561,35 @@ def player_move_validation_loop(from_file, from_rank ,to_file, to_rank, just_per
              ...
              continue
         
-        if  piece_value =- constants.BLANK: # BLANK SQUARE
+        if  piece_value == constants.BLANK: # BLANK SQUARE
              print("There is no piece to be played, instead a Blank Square")
              ...
              continue
         
-        illegal = is_player_move_legal(from_file, from_rank, to_file, to_rank, taken, illegal)
-        if illegal ISTRUE THEN
-            PRINT "Illegal move"
+        if not is_player_move_legal(from_file, from_rank, to_file, to_rank):  # todo: taken, illegal
+            print("Illegal move")
             ...
             continue
 
-        else
+        # Has the king been moved?
+        # Has a rok been moved
+        # TODO record_if_king_or_rook_have_moved(constants.PLAYER, from_file, from_rank, to_file, to_rank)
 
-            # Has the king been moved?
-            # Has a rook been moved
-            record_if_king_or_rook_have_moved(%PLAYER, from_file, from_rank, to_file, to_rank)
+        # As the opponent advanced a pawn two squares? if yes, record the pawn's position
+        # TODO record_pawn_that_advanced_by2(constants.PLAYER, from_file, from_rank, to_file, to_rank)
 
-            # As the opponent advanced a pawn two squares? if yes, record the pawn's position
-            record_pawn_that_advanced_by2(%PLAYER, from_file, from_rank, to_file, to_rank)
-
-            # Increment the move count
-            # Convert player's chess move for output
-            # Output the chess move
-            finalise_player_move(from_file, from_rank, to_file, to_rank, just_performed_castling, attacking_piece, taken)
-            return
-        
-
-    # Validation Loop ends here                             
+        # Increment the move count
+        # Convert player's chess move for output
+        # Output the chess move
+        finalise_player_move(from_file, from_rank, to_file, to_rank)
+        # TODO just_performed_castling, attacking_piece, taken)
 
 
-def player_move(from_file, from_rank, to_file, to_rank)
+def player_move(from_file, from_rank, to_file, to_rank):
     """
     Firstly show the result of the computer move
     Then get and validate the player's move
     """
-
 
     if chess.player_first_move:
         # Player goes first so on the first iteration there is no processing of Computer Moves 
@@ -476,6 +637,7 @@ def main():
         main_part2()
     except Exception as error:
         print(error)
+        handle_internal_error()
         print("This Program Will Now End")
         quit()
 
