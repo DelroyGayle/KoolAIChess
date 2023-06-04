@@ -34,6 +34,12 @@ class Piece():
         self.letter = ""
         self.sign = sign
 
+    def print_string(self):
+        """
+        No 'print_string' for the Base Class
+        """
+        return None
+
 
 class Rook(Piece):
     def __init__(self, value, sign):
@@ -43,6 +49,12 @@ class Rook(Piece):
         super().__init__(sign)
         self.letter = constants.ROOK_LETTER
         self.value = constants.ROOK_VALUE * sign
+
+    def print_string(self):
+        """
+        String to be outputted for Rooks
+        """
+        return "Rook"
 
 
 class Knight(Piece):
@@ -54,6 +66,12 @@ class Knight(Piece):
         self.letter = constants.KNIGHT_LETTER
         self.value = constants.KNIGHT_VALUE * sign
 
+    def print_string(self):
+        """
+        String to be outputted for Knights
+        """
+        return "Knight"
+
 
 class Bishop(Piece):
     def __init__(self, value, sign):
@@ -64,6 +82,12 @@ class Bishop(Piece):
         self.letter = constants.BISHOP_LETTER
         self.value = constants.BISHOP_VALUE * sign
 
+    def print_string(self):
+        """
+        String to be outputted for Bishops
+        """
+        return "Bishop"
+
 
 class Queen(Piece):
     def __init__(self, value, sign):
@@ -73,6 +97,12 @@ class Queen(Piece):
         super().__init__(sign)
         self.letter = constants.QUEEN_LETTER
         self.value = constants.QUEEN_VALUE * sign
+
+    def print_string(self):
+        """
+        String to be outputted for Queens
+        """
+        return "Queen"
 
 
 class King(Piece):
@@ -87,7 +117,8 @@ class King(Piece):
         self.value = (constants.VALUE_OF_COMPUTER_KING
                       if sign == constants.COMPUTER
                       else constants.VALUE_OF_PLAYER_KING)
-
+        # King piece cannot be 'taken'
+        # So no 'print_string'
 
 class Pawn(Piece):
     def __init__(self, value, sign):
@@ -98,3 +129,9 @@ class Pawn(Piece):
         super().__init__(sign)
         self.letter = constants.PAWN_LETTER
         self.value = constants.PAWN_VALUE * sign
+
+    def print_string(self):
+        """
+        String to be outputted for Pawns
+        """
+        return "Pawn"

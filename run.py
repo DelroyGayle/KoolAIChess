@@ -43,15 +43,19 @@ class Game:
     # worth of play
     score = 0
     # todo check_flag
-    check_flag = False  # Therefore, True means that one is currently in check
+    # True means that one is currently in Check
+    check_flag = False
+    # Player (White) goes first
     player_first_move = True
+    # White goes first
+    whose_move = constants.PLAYER  
 
+    # Output purposes
     output_stream = ""
     output_chess_move = ""
     error_message = ""
     message_printed = False
 
-    whose_move = constants.PLAYER  # WHITE goes first
     promoted_piece = ""
     player_castled = False
     computer_castled = False
@@ -300,14 +304,6 @@ def show_taken(to_file, to_rank, piece_sign):
         Computer's King (-7500) and Player's King (5000)
     """
 
-    values_dict = {
-        constants.QUEEN_VALUE:  "Queen",
-        constants.ROOK_VALUE:   "Rook",
-        constants.BISHOP_VALUE: "Bishop",
-        constants.KNIGHT_VALUE: "Knight",
-        constants.PAWN_VALUE:   "Pawn"
-    }
-
     piece_taken = chess.piece_value(to_file, to_rank)
 
     # Return None for a Blank Square
@@ -335,7 +331,7 @@ def show_taken(to_file, to_rank, piece_sign):
         print("Computer took your ", end="")
     else:
         print("Player took my ", end="")
-    print(values_dict[piece_taken])
+    print(chess.print_string(to_file, to_rank))
     return piece_taken
 
 
@@ -473,8 +469,8 @@ todo
 def in_check(user_sign):
     """
     To quote Rod Bird:
-    this function checks all squares to see if any opposition piece
-    has the king in check
+    this function scans all squares to see if any opposition piece
+    has the King in Check
     """
 
     opponent_sign = 0 - user_sign
@@ -488,10 +484,10 @@ def in_check(user_sign):
                 # Start scanning each move
                 for m in range(len(all_legal_moves)):
                     if (chess.piece_letter(index) == constants.KING_LETTER):
-                        # Opponent King is in check!
+                        # Opponent King is in Check!
                         return True
 
-    # Indicate that the Opponent King is currently not in check at all
+    # Indicate that the Opponent King is not in Check at all
                     return False
 
 
@@ -499,7 +495,7 @@ def is_player_move_legal(from_file, from_rank, to_file, to_rank):
 
     """
     validate that the PLAYER'S move is legal
-    That is: it does not put the PLAYER in check
+    That is: validate that the PLAYER'S move does not put the PLAYER in Check
     """
 
     piece_sign = constants.PLAYER  # white piece
@@ -517,7 +513,7 @@ def is_player_move_legal(from_file, from_rank, to_file, to_rank):
             Print a Message if a piece is about to be taken
             At the same time,
             Check whether the Computer's King is about to be literally taken
-            This indicates an Internal Logic Error
+            If so, this indicates an Internal Logic Error
             """
 
             taken = show_taken(to_file, to_rank, piece_sign)
@@ -531,18 +527,20 @@ def is_player_move_legal(from_file, from_rank, to_file, to_rank):
             save_to_square = chess.board[to_square]
             make_move_to_square(from_square, to_square)
 
-            # Does this PLAYER's move place the PLAYER in check?
+            # Does this PLAYER's move place the PLAYER in Check?
             # If so, illegal move!
 
             if in_check(constants.PLAYER):
                 # reset play and restore board pieces
-                print("You are in check")
+                ## check_flag todo
+                print("You are in Check")
                 chess.board[from_square] = save_from_square
                 chess.board[to_square] = save_to_square
                 # Indicate in Check
                 return (True, taken)
 
             # Indicate not in check
+            ## check_flag todo
             return (False, taken)
 
     # Indicate that no legal move had been found
@@ -614,6 +612,164 @@ def setup_output_chess_move_add_promotion(letter, from_file, from_rank,
     add_capture_promotion(taken)
 
 
+def execute_computer_move(x, y, x1, y1, check_flag, attacking_piece, taken)
+    """
+    Carry out the chess move that was produced 
+    by the 'evaluate' function
+    """
+
+    piece_sign = constants.COMPUTER  # black piece
+    # display the move
+    attacking_piece_letter = chess.piece_letter(from_file, from_rank)
+
+    print_string = output_attacking_move(constants.COMPUTER,
+                                         from_file, from_rank,
+                                         to_file, to_rank)
+
+    # print() todo
+    print(print_string)
+
+    """
+    Check whether a Player's piece is about to be taken
+    Print a Message if this is true
+    At the same time,
+    Check whether the Player's King is about to be literally taken
+    If so, this indicates an Internal Logic Error
+    It would mean the COMPUTER's best move is an illegal move!
+    'Kings' cannot actually be taken in Chess!
+    """
+
+    if piece_value(to_file, to_rank) > 0:
+        taken = show_taken(to_file, to_rank, piece_sign)
+        # No error raised - so the above test passed
+
+
+# WHITE (5000)
+            if taken == constants.KING_VALUE:
+# This means the COMPUTER's best move is an illegal move - KING cannot actually be taken
+# One can attack a KING - Not take a King
+# Is the COMPUTER in check?
+                check_flag = incheck(constants.COMPUTER)
+                if check_flag:
+                    computer_resigns()
+
+
+# Otherwise some internal logic error has occurred
+REM print("INTERNAL ERROR 1 HAS OCCURRED - I cannot continue - Computer resigns")
+                print("INTERNAL ERROR 1 HAS OCCURRED - I cannot continue")
+                print()
+                handle_internal_error()
+# *** END ***
+
+
+        makemove(x, y, x1, y1)
+
+# If the COMPUTER cannot play out of check then resign
+        check_flag = incheck(constants.COMPUTER)
+        if check_flag:
+                computer_resigns()
+
+
+# Has the king been moved?
+# Has a rook been moved
+        record_if_king_or_rook_have_moved(constants.COMPUTER, x, y, x1, y1)
+
+# As the opponent advanced a pawn two squares? If yes, record the pawn's position
+        record_pawn_that_advanced_by2(constants.COMPUTER, x, y, x1, y1)
+
+# Convert the chess move in order to output it
+# Add a 'x' to the output chess move if a piece was taken
+# Add the promoted piece if a promotion took place
+# Then output the piece to the output file
+        setup_output_chess_move_add_promotion(attacking_piece, x, y, x1, y1, taken)
+
+def execute_computer_move(from_file, from_rank, to_file, to_rank, check_flag, attacking_piece, taken)
+DIM print_string
+
+# show the move
+# Changed 01MAY23
+# PRINT "Computer moves ";CHR$(65+x);8-y;"-";CHR$(65+x1);8-y1;" Piece ";CHR$(bpiece(x,y))
+
+        print()
+
+        attacking_piece = chr(bpiece(x, y))
+# print_string = "Computer moves " + CHR$(65+x) + LTRIM$(STR$(8-y)) + "-" + CHR$(65+x1) + LTRIM$(STR$(8-y1)) + " Piece " + attacking_piece
+        print_string = output_attacking_move(constants.COMPUTER, from_file, from_rank, to_file, to_rank)
+        print(print_string)
+
+# 12MAY23 Check whether the PLAYER's King is about to be taken i.e. Check?
+        if bvalue(x1, y1) > 0:
+            taken = show_taken(x1, y1, constants.COMPUTER)
+
+# WHITE (5000)
+            if taken == constants.KING_VALUE:
+# This means the COMPUTER's best move is an illegal move - KING cannot actually be taken
+# One can attack a KING - Not take a King
+# Is the COMPUTER in check?
+                check_flag = incheck(constants.COMPUTER)
+                if check_flag:
+                    computer_resigns()
+
+
+# Otherwise some internal logic error has occurred
+REM print("INTERNAL ERROR 1 HAS OCCURRED - I cannot continue - Computer resigns")
+                print("INTERNAL ERROR 1 HAS OCCURRED - I cannot continue")
+                print()
+                handle_internal_error()
+# *** END ***
+
+
+        makemove(from_file, from_rank, to_file, to_rank)
+
+# If the COMPUTER cannot play out of check then resign
+        check_flag = incheck(constants.COMPUTER)
+        if check_flag:
+                computer_resigns()
+
+
+# Has the king been moved?
+# Has a rook been moved
+        record_if_king_or_rook_have_moved(constants.COMPUTER, from_file, from_rank, to_file, to_rank)
+
+# As the opponent advanced a pawn two squares? If yes, record the pawn's position
+        record_pawn_that_advanced_by2(constants.COMPUTER, from_file, from_rank, to_file, to_rank)
+
+# Convert the chess move in order to output it
+# Add a 'x' to the output chess move if a piece was taken
+# Add the promoted piece if a promotion took place
+# Then output the piece to the output file
+        setup_output_chess_move_add_promotion(attacking_piece, from_file, from_rank, to_file, to_rank, taken)
+
+
+def process_computer_move(from_file, from_rank, to_file, to_rank):
+    """
+    This routine handles the playing of the Computer's move
+    """
+    
+    # todo
+    # just_performed_castling = False
+    computer_move_finalised = False
+
+    if Game.player_first_move:
+        # Player goes first so on the first iteration
+        # there is no processing of Computer Moves
+        Game.player_first_move = False
+        return
+
+    # From this point onwards, process computer moves
+
+    # king on king end game?
+    # Stalemate?
+        if result < STALEMATE_THRESHOLD_SCORE:
+            computer_resigns()
+
+# Validate, Execute then Finalise the Computer Chess Move (if it was not a Castling Chess Move)
+        if not computer_move_finalised:
+            execute_computer_move(from_file, from_rank, to_file, to_rank,
+                                  check_flag, attacking_piece_letter, taken)
+            finalise_computer_move(check_flag, output_chess_move, g_move_count_incremented)
+
+
 def finalise_player_move(from_file, from_rank, to_file, to_rank, taken):
     """
     Now that the player's move has been performed
@@ -645,12 +801,14 @@ def finalise_player_move(from_file, from_rank, to_file, to_rank, taken):
                                           to_file, to_rank, taken)
 
 
-# Now that the opponent has played, see if the computer is in check
+# Now that the opponent has played, see if the computer is in Check
+## check_flag todo
+
     check_flag = in_check(constants.COMPUTER)
     if check_flag:
         print("I am in Check")
         add_check_to_output()
-        check_flag = isit_Checkmate(constants.COMPUTER)
+        check_flag = is_it_checkmate(constants.COMPUTER)
         if check_flag:
             output_chess_move = add_checkmate_to_output(output_chess_move)
             print("Checkmate!! You Win!")
@@ -676,6 +834,7 @@ def player_move_validation_loop(from_file, from_rank, to_file, to_rank,
     Main Validation Loop
     """
 
+    print(just_performed_castling, attacking_piece_letter, taken) # todo
     while True:
 
         print()
@@ -730,7 +889,7 @@ def player_move_validation_loop(from_file, from_rank, to_file, to_rank,
 
         attacking_piece_letter = chess.piece_letter(from_file, from_rank)
 
-        print_string = output_attacking_move(chess.PLAYER,
+        print_string = output_attacking_move(constants.PLAYER,
                                              from_file, from_rank,
                                              to_file, to_rank)
         # print() todo
@@ -772,16 +931,15 @@ def player_move_validation_loop(from_file, from_rank, to_file, to_rank,
         # TODO just_performed_castling, attacking_piece_letter, taken)
 
 
-def player_move(from_file, from_rank, to_file, to_rank):
+def player_move(from_file, from_rank, to_file, to_rank, result):
     """
     Firstly show the result of the Computer move
     Then get and validate the Player's move
     """
-
-    if chess.player_first_move:
+    if Game.player_first_move:
         # Player goes first so on the first iteration
         # there is no processing of Computer Moves
-        chess.player_first_move = False
+        Game.player_first_move = False
         return
 
     # From this point onwards, process computer moves
@@ -806,6 +964,7 @@ def main_part2():
     """
 
     chess = Game()
+
     chess.fillboard()
     chess.showboard()
 
@@ -813,12 +972,15 @@ def main_part2():
     from_rank = None
     to_file = None
     to_rank = None
-    result = None
+    result = 0 # TODO
+    num = 0
     # Game Loop
     while True:
-        player_move(from_file, from_rank, to_file, to_rank)
+        player_move(from_file, from_rank, to_file, to_rank, result)
         chess.showboard()
-        break
+        num+=1 # todo
+        if num > 3:
+            break
 
 
 def main():

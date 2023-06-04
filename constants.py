@@ -33,6 +33,9 @@ STR_TOTAL = 7
 LINESIZE = 80 - 7
 FILE_SIZE_LIMIT = 10000
 EVALUATE_THRESHOLD_SCORE = 10000
+# If the 'evaluate' functions computes a score less than this value,
+# then the Computer will resign
+STALEMATE_THRESHOLD_SCORE = -2500
 
 DESTINATION_SQUARE_ONLY = 1  # EG e4 OR Ne2
 PAWN_CAPTURE_FILE = 2  # EG exd4
