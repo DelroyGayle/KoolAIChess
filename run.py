@@ -6,7 +6,7 @@ This Python Program is Based on
 To quote Rod Bird who also adopted Menezes' program :-
     "Qudos to Mr Menezes for such a stunningly short and powerful Chess AI."
 
-Menezes' QBASIC program can be found at1
+Menezes' QBASIC program can be found at
  http://www.petesqbsite.com/sections/express/issue23/Tut_QB_Chess.txt
 
 """
@@ -28,21 +28,21 @@ class Game:
 # Class Variables
 
     # the number of valid moves found for chosen piece
-    num_moves = -1
+    num_moves = -1 # todo
     # recursion level for evaluate()
-    level = 0
+    level = 0 # todo
     # worth of play
     score = 0
-    check_flag = False  # Therefore, True means that one is currently in check
-    reading_game_file = None
-    writing_game_file = False
+    check_flag = False  # Therefore, True means that one is currently in check # todo
     player_first_move = True
-    skipped_seven_tag_rosters = False
-    tag_pair_count = 0
+
     output_stream = ""
+    output_chess_move = "" 
+    error_message = ""
+    message_printed = False
+
     whose_move = constants.PLAYER  # WHITE goes first
-    move_count = 0
-    move_count_incremented = False
+    promoted_piece = ""
     player_castled = False
     computer_castled = False
     player_king_moved = False
@@ -51,15 +51,20 @@ class Game:
     computer_king_moved = False
     computer_king_rook_moved = False
     computer_queen_rook_moved = False
-    error_message = ""
-    message_printed = False
-    inputstream_previous_contents = ""
     player_pawn_2squares_advanced_col = None
     player_pawn_2squares_advanced_row = None
     computer_pawn_2squares_advanced_col = None
     computer_pawn_2squares_advanced_row = None
     en_passant_status = None
     selected_piece = None
+
+    reading_game_file = None
+    writing_game_file = False
+    input_stream_previous_contents = ""
+    skipped_seven_tag_rosters = False
+    tag_pair_count = 0
+    move_count = 0
+    move_count_incremented = False
 
 
     def __init__(self):
@@ -158,6 +163,7 @@ class Game:
         self.board["a8"].queenside = True
         self.board["a1"].queenside = True
 
+
     def board_sign(self, index, rank=""):
         """
         Determine the sign of the value of the piece on the square
@@ -167,6 +173,7 @@ class Game:
             index += rank
             
         return getattr(self.board[index], 'sign', 0)
+
 
     def board_piece(self, index, rank=""):
         """
@@ -179,6 +186,19 @@ class Game:
         # space = " " todo
         return getattr(self.board[index], 'piece', None)
 
+
+    def board_value(self, index, rank=""):
+        """
+        Determine the numerical value of the piece on the square
+        Blank squares are depicted as None
+        """
+        if rank:
+            index += rank
+
+        # space = " " todo
+        return getattr(self.board[index], 'value', None)
+
+
     def showboard(self):
         """
         Display the Chessboard
@@ -188,6 +208,7 @@ class Game:
         left_bracket = " ["
         right_bracket = " ]"
 
+        print()
         # 5 spaces THEN 2 spaces each
         print("{}A  B  C  D  E  F  G  H".format(space*5))
 
@@ -223,6 +244,7 @@ class Game:
         print("{}{}".format(space*3, "-"*26))
         # 5 spaces THEN 2 spaces each
         print("{}A  B  C  D  E  F  G  H".format(space*5))
+        print()
 
 
 def goodbye():
@@ -231,7 +253,8 @@ def goodbye():
     """
 
     print()
-    print("Thank You For Playing. Goodbye.")
+    print("Thank You For Playing")
+    print("Goodbye")
 
 
 def handle_internal_error():
@@ -244,10 +267,57 @@ def handle_internal_error():
 
     print("Computer resigns due to an internal error")
     print("Please investigate")
-    output_all_chess_moves(constants.PLAYER_WON)
+    # output_all_chess_moves(constants.PLAYER_WON) todo
     goodbye()
     # Internal Error
     # *** END ***
+
+
+def show_taken(to_file, to_rank, piece_sign):
+    """
+    Print a message showing which user took which piece
+    Return the positive value of the piece taken
+    In addition I add a test to check that the attacking/taking logic is correctly working
+    If a 'King' is about to be taken raise an error as such a move is illegal in Chess
+    # Note the Kings' values are: Computer's King (-7500) and Player's King (5000)
+    """
+
+    values_dict = {
+        constants.QUEEN_VALUE:  "Queen",
+        constants.ROOK_VALUE:   "Rook",
+        constants.BISHOP_VALUE: "Bishop",
+        constants.KNIGHT_VALUE: "Knight",
+        constants.PAWN_VALUE:   "Pawn"
+    }
+
+    piece_taken = chess.board_value(to_file, to_rank)
+
+    # Return None for a Blank Square
+    if not piece_taken:
+        return None
+
+    # Check whether a King is about to be actually taken!
+    # Note the Kings' values: Computer's King (-7500) and Player's King (5000)
+    if (piece_taken == constants.VALUE_OF_COMPUTER_KING or
+       piece_taken == constants.VALUE_OF_PLAYER_KING):
+        """
+        This means the PLAYER/COMPUTER was allowed to make an illegal move 
+        i.e. KING cannot actually be taken
+        One can attack a KING - Not take a King
+        This should never happen!
+        Some internal logic error has occurred
+        """
+        raise Exception("Internal Error: King piece about to be taken:" + str(piece_taken))
+
+    # Convert to a positive number
+    piece_taken = abs(piece_taken)
+
+    if piece_sign < 0:
+        print("Computer took your ", end = "")
+    else:
+        print("Player took my ", end = "")
+    print(values_dict[piece_taken])
+    return piece_taken
 
 
 def advance_vertical(rank, steps):
@@ -388,24 +458,9 @@ def in_check(user_sign):
 
     # Indicate that the Opponent King is currently not in check at all
                     return False
-    
-
-def determine_if_king_taken(from_square, to_square):
-    taken = showtaken(to_square, constants.PLAYER)
-
-    # Check whether the COMPUTER's King is about to be taken i.e. Check?
-    # Note the Kings' values: Computer's King (-7500) and Player's King (5000)
-    if taken == VALUE_OF_COMPUTER_KING:
-
-        """
-        This means the PLAYER was allowed to make an illegal move i.e. KING cannot actually be taken
-        One can attack a KING - Not take a King
-        This should never happen!
-        Some internal logic error has occurred        """
-        raise Exception("Internal Error: King piece about to be taken")
 
 
-def is_player_move_legal(from_file, from_rank, to_file, to_rank):  # todo: taken, illegal
+def is_player_move_legal(from_file, from_rank, to_file, to_rank):
 
     """
     validate that the PLAYER'S move is legal
@@ -419,26 +474,37 @@ def is_player_move_legal(from_file, from_rank, to_file, to_rank):  # todo: taken
     # Start scanning each move
     for m in range(len(all_legal_moves)):
         if all_legal_moves[m] == to_square:
-            # Found the move that matches the piece, the from square and the to square
-            # Check whether the Computer's King is about to be literally taken
+            # Found the move that matches the Piece, the From square and the To square
+            # Print a Message if a piece is about to be taken
+            # At the same time, Check whether the Computer's King is about to be literally taken
             # This indicates an Internal Logic Error
-            from_square = from_file + from_rank
-            to_square = to_file + to_rank
-            determine_if_king_taken(from_square, to_square)
+            taken = show_taken(to_file, to_rank, piece_sign)
             # No error raised - so the above test passed
 
-            # Does this move leave the Player in check?
-            if not in_check(constants.PLAYER):
-                # No!
-                # Indicate that a legal move had been found
-                return True
-            else: 
-                # Yes! In Check!
-                # Indicate that no legal move had been found
-                return False
+            from_square = from_file + from_rank
+            to_square = to_file + to_rank
+
+            # store mover and target data so that it may be restored
+            save_from_square = chess.board[from_square]
+            save_to_square = chess.board[to_square]
+            make_move_to_square(from_square, to_square)
+
+            # Does this PLAYER's move place the PLAYER in check?
+            # If so, illegal move!
+            if in_check(constants.PLAYER):
+            # reset play and restore board pieces
+                print("You are in check")
+                chess.board[from_square] = save_from_square
+                chess.board[to_square] = save_to_square
+                # Indicate in Check
+                return (True, taken)
+
+            # Indicate not in check
+            return (False, taken)
+
     
     # Indicate that no legal move had been found
-    return False
+    return (False, None)
 
 
 def output_attacking_move(who_are_you, from_file, from_rank, to_file, to_rank):
@@ -449,31 +515,71 @@ def output_attacking_move(who_are_you, from_file, from_rank, to_file, to_rank):
           return "Checking Player move for " + print_string
     else:
           return "Computer moves " + print_string
-   
 
-def finalise_player_move(from_file, from_rank, to_file, to_rank):
-    # TODO just_performed_castling, attacking_piece, taken
 
+def convert_played_piece(piece, from_file, from_rank, to_file, to_rank):
+    """
+    Convert the piece into output format
+    e.g. e2e4 for a pawn move
+         Ng1f3 for a knight move
+    """
+
+    chess.output_chess_move = piece if piece != constants.PAWN_LETTER else ""
+    chess.output_chess_move += from_file + from_rank + to_file + to_rank
+
+
+def add_capture_promotion(taken):
+
+    """
+    If a piece had been taken indicate this 
+    by adding 'x' before the last two characters e.g. e5d5 ==> e5xd4
+    If a Pawn had been promoted to for example, a Queen; indicate this
+    by adding =Q at the end of the Chess move e.g. f1xg1=Q
+    """
+    if taken:
+# add 'x' before the last two characters e.g. e5d5 ==> e5xd4
+        length = len(output_chess_move)
+        suffix = output_chess_move[-2:]
+        chess.output_chess_move = coutput_chess_move[0:length - 2] + "x" + suffix
+
+
+    if chess.promoted_piece:
+# EG Add =Q at the end if a Pawn was promoted to a Queen e.g. fxg1=Q
+          chess.output_chess_move += "=" + chess.promoted_piece
+
+
+def setup_output_chess_move_add_promotion(piece, from_file, from_rank, to_file, to_rank, taken):
+
+# Convert the chess move in order to output it
+    convert_played_piece(piece, from_file, from_rank, to_file, to_rank)
+
+# Add a 'x' to the output chess move if a piece was taken
+# Add the promoted piece if a promotion took place - this is denoted as =Q e.g. f1xg1=Q
+    add_capture_promotion(taken)
+
+def finalise_player_move(from_file, from_rank, to_file, to_rank, taken):
+    # TODO just_performed_castling, attacking_piece
+
+# TODO
 # Increment Move Number
-        if not g_move_count_incremented:
-            g_move_count+=1
+#        if not g_move_count_incremented:
+#            g_move_count+=1
 
-
-        g_move_count_incremented = False  # keep this flag unset from now on; so that the move count is incremented
+#        g_move_count_incremented = False  # keep this flag unset from now on; so that the move count is incremented
 
 # Output the Move Number
-        append_to_output(lstrip(str(g_move_count)) + "." + constants.SPACE)
+#        append_to_output(lstrip(str(g_move_count)) + "." + constants.SPACE)
 
 
 # Convert the chess move in order to output it
 # Add a 'x' to the output chess move if a piece was taken
 # Add the promoted piece if a promotion took place
 # Then output the piece to the output file
-        setup_output_chess_move_add_promotion(attacking_piece, x, y, x1, y1, taken)
+    setup_output_chess_move_add_promotion(attacking_piece, from_file, from_rank, to_file, to_rank, taken)
 
 
 # Now that the opponent has played, see if the computer is in check
-    check_flag = incheck(constants.COMPUTER)
+    check_flag = in_check(constants.COMPUTER)
     if check_flag:
         print("I am in Check")
         add_check_to_output()
@@ -481,15 +587,16 @@ def finalise_player_move(from_file, from_rank, to_file, to_rank):
         if check_flag:
             output_chess_move = add_checkmate_to_output(output_chess_move)
             print("Checkmate!! You Win!")
-            print("OS", output_chess_move)  # TODO
-            append_to_output(output_chess_move + constants.SPACE)
-            output_all_chess_moves(constants.PLAYER_WON)
+#            append_to_output(output_chess_move + constants.SPACE)
+#            output_all_chess_moves(constants.PLAYER_WON)
+# todo
             print()
             goodbye()
             # *** END ***
 
 # Output the chess move
-    append_to_output(output_chess_move + constants.SPACE)
+#   append_to_output(output_chess_move + constants.SPACE)
+# todo
     print()
 
 
@@ -508,7 +615,7 @@ def player_move_validation_loop(from_file, from_rank ,to_file, to_rank, just_per
 
         if input_string == "R":
             print("Player Resigned")
-            output_all_chess_moves(chess.COMPUTER_WON)
+            # output_all_chess_moves(chess.COMPUTER_WON) todo
             goodbye()  # Player Resigned
             # *** END ***
             
@@ -531,8 +638,8 @@ def player_move_validation_loop(from_file, from_rank ,to_file, to_rank, just_per
             continue
 
         lower_string = input_string.lower()
-        if len(lower_string) != 4 or 
-            not constants.chess_move_pattern.match(lower_string):  # ([a-h][1-8]){2}
+        if (len(lower_string) != 4
+            or not constants.chess_move_pattern.match(lower_string)):  # ([a-h][1-8]){2}
             os.system("clear")
             chess.showboard()
             print()
@@ -566,13 +673,14 @@ def player_move_validation_loop(from_file, from_rank ,to_file, to_rank, just_per
              ...
              continue
         
-        if not is_player_move_legal(from_file, from_rank, to_file, to_rank):  # todo: taken, illegal
+        (illegal, taken) = is_player_move_legal(from_file, from_rank, to_file, to_rank)
+        if illegal:
             print("Illegal move")
             ...
             continue
 
         # Has the king been moved?
-        # Has a rok been moved
+        # Has a rook been moved
         # TODO record_if_king_or_rook_have_moved(constants.PLAYER, from_file, from_rank, to_file, to_rank)
 
         # As the opponent advanced a pawn two squares? if yes, record the pawn's position
@@ -581,7 +689,7 @@ def player_move_validation_loop(from_file, from_rank ,to_file, to_rank, just_per
         # Increment the move count
         # Convert player's chess move for output
         # Output the chess move
-        finalise_player_move(from_file, from_rank, to_file, to_rank)
+        finalise_player_move(from_file, from_rank, to_file, to_rank, taken)
         # TODO just_performed_castling, attacking_piece, taken)
 
 
@@ -597,8 +705,8 @@ def player_move(from_file, from_rank, to_file, to_rank):
         return
 
     # From this point onwards, process computer moves
-    just_performed_castling, attacking_piece, taken = 
-        process_computer_move(from_file, from_rank, to_file, to_rank)
+    (just_performed_castling, attacking_piece, taken) = (None, None, None)  # todo
+    process_computer_move(from_file, from_rank, to_file, to_rank)
     #                               just_performed_castling, attacking_piece, taken)
     
     player_move_validation_loop(from_file, from_rank, to_file, to_rank, 
@@ -628,7 +736,7 @@ def main_part2():
     result = None
     # Game Loop
     while True:
-        player_move(from_file, from_rank, to_file, to_rank, result)
+        player_move(from_file, from_rank, to_file, to_rank)
         chess.showboard()
         break
 
@@ -638,7 +746,6 @@ def main():
     except Exception as error:
         print(error)
         handle_internal_error()
-        print("This Program Will Now End")
         quit()
 
 if __name__ == "__main__":
