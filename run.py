@@ -16,6 +16,12 @@ import piece
 import os
 import re
 
+class CustomException(Exception):
+    """ 
+    my custom exception class 
+    Just in case a Chess Logic Error that I had not anticipated happens!
+    This defintion is based on https://www.pythontutorial.net/python-oop/python-custom-exception/ 
+    """
 
 class Game:
     """
@@ -743,10 +749,12 @@ def main_part2():
 def main():
     try:
         main_part2()
-    except Exception as error:
+    except CustomException as error:
         print(error)
         handle_internal_error()
         quit()
-
+    except Exception as error:
+        raise error
+        
 if __name__ == "__main__":
     main()
