@@ -86,9 +86,9 @@ In the Chess World, this is how a chessboard is depicted:
 The chessboard consists of eight files and eight ranks.<br>
 Columns are known as ***files*** and are labelled left to right with letters, ***a*** to ***h***.<br>
 Rows are known as ***ranks*** and are numbered from the bottom of the board upwards, ***1*** to ***8***.<br>
-Therefore, rather than a 8X8 array with numerical indices; instead I chose to use a dictionary to reflect the above scheme.<br>
+Therefore, rather than a 8X8 array with numerical indices; instead I chose to use a Python dictionary to reflect the above scheme.<br>
 The keys being a string e.g. *"h8" for the square h8*<br>
-Then each value would be a *Piece Class* instance variable of the form (PIECE VALUE, LETTER, SIGN)<br>
+Then each value would be a *Piece Class* instance of the form *Piece(VALUE, LETTER, SIGN)*<br>
         
 Therefore the Dictionary would look like this:<br>
 *{a8:value, b8:value, ..., d1:None, ..., e1:None, a1:value, ..., h1:value}*<br>

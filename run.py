@@ -96,12 +96,12 @@ class Game:
         Zero and Space show the empty squares
         Then White at the bottom has positive values
 
-        I chose not to use a 8X8 array with numerical indices
+        I chose not to use a 8X8 array with numerical indices for the following reason.
 
-        In the Chess World,
-        A chess board is depicted as eight ranks (rows) numbered
-        from the bottom of the board 1 to 8
-        Files are columns that are labelled left to right with numbers
+        In the Chess World, a chessboard consists of eight files and eight ranks.
+        Columns are known as files and are labelled left to right with letters, a to h.
+        Rows are known as ranks and are numbered from the bottom of the board upwards, 1 to 8.
+        
         So a chessboard is depicted as
         a8, b8, c8, d8, e8, f8, g8, h8
         a7, b7, c7, d7, e7, f7, g7, h7
@@ -114,13 +114,15 @@ class Game:
         a2, b2, c2, d2, e2, f2, g2, h2
         a1, b1, c1, d1, e1, f1, g1, h1
 
-        Therefore I chose to use a dictionary to reflect the above scheme
-        The keys being a string e.g. 'h8' for the square h8
-        Then each value would be a Piece Class instance variable
-        of the form (PIECE VALUE, LETTER, SIGN)
+        Therefore rather than a 8X8 array with numerical indices; 
+        instead I chose to use a Python dictionary to reflect the above scheme.
+        The keys being a string e.g. "h8" for the square h8
+        Then each value would be a Piece Class instance
+        of the form Piece(VALUE, LETTER, SIGN)
+        
         Therefore the Dictionary would look like this
-        {a8:value, b8:value, ... a1:value, ... h1:value}
-        Blank squares will have the value None
+        {a8:value, b8:value, ..., d1:None, ..., e1:None, a1:value, ..., h1:value}
+        Blank squares have the value None
 
         """
         self.board = dict(
@@ -170,7 +172,7 @@ class Game:
         self.board["a1"].queenside = True
 
 
-    def board_sign(self, index, rank=""):
+    def piece_sign(self, index, rank=""):
         """
         Determine the sign of the value of the piece on the square
         Blank squares have a 'sign' of 0
@@ -181,7 +183,7 @@ class Game:
         return getattr(self.board[index], 'sign', 0)
 
 
-    def board_piece(self, index, rank=""):
+    def piece_letter(self, index, rank=""):
         """
         Determine the letter of the piece on the square
         Blank squares are depicted as None
@@ -193,7 +195,7 @@ class Game:
         return getattr(self.board[index], 'piece', None)
 
 
-    def board_value(self, index, rank=""):
+    def piece_value(self, index, rank=""):
         """
         Determine the numerical value of the piece on the square
         Blank squares are depicted as None
@@ -202,7 +204,7 @@ class Game:
             index += rank
 
         # space = " " todo
-        return getattr(self.board[index], 'value', None)
+        return getattr(self.board[index], 'value', constants.BLANK)
 
 
     def showboard(self):
@@ -231,16 +233,16 @@ class Game:
                 letter = chr(97 + column)  # characters a to h
                 number = row
                 number = chr(48 + number)  # characters 1 to 8
-                thesign = self.board_sign(letter, number)
+                thesign = self.piece_sign(letter, number)
                 if thesign == constants.BLANK:
                     output_string += portion1 + space + portion2
                 elif thesign == constants.COMPUTER:
                     output_string += (portion1
-                                      + self.board_piece(letter, number)
+                                      + self.piece_letter(letter, number)
                                       + portion2)
                 else:
                     output_string += (portion1
-                                      + self.board_piece(letter, number)
+                                      + self.piece_letter(letter, number)
                                       .lower()
                                       + portion2)
 
@@ -296,7 +298,7 @@ def show_taken(to_file, to_rank, piece_sign):
         constants.PAWN_VALUE:   "Pawn"
     }
 
-    piece_taken = chess.board_value(to_file, to_rank)
+    piece_taken = chess.piece_value(to_file, to_rank)
 
     # Return None for a Blank Square
     if not piece_taken:
@@ -362,18 +364,18 @@ def generate_moves_for_pawn(who_are_you, file, rank, moves_list, piece_sign):
     # Capture left?
     newfile = advance_horizontal(file, -1)
     # Is there an opponent piece present?
-    if newfile and chess.board_sign(newfile, rank_plus1) == -piece_sign:
+    if newfile and chess.piece_sign(newfile, rank_plus1) == -piece_sign:
         moves_list.append(newfile + rank_plus1)
 
     # Capture right?
     newfile = advance_horizontal(file, 1)
         # Is there an opponent piece present?
-    if newfile and chess.board_sign(newfile, rank_plus1) == -piece_sign:
+    if newfile and chess.piece_sign(newfile, rank_plus1) == -piece_sign:
         moves_list.append(newfile + rank_plus1)
 
     # one step forward?
     # Is this square blank?
-    if chess.board_sign(file, rank_plus1) == constants.BLANK:
+    if chess.piece_sign(file, rank_plus1) == constants.BLANK:
         moves_list.append(file + rank_plus1) 
 
     # two steps forward?
@@ -381,7 +383,7 @@ def generate_moves_for_pawn(who_are_you, file, rank, moves_list, piece_sign):
                                             else advance_vertical(rank, -2))
     if rank_plus2:
     # Is this square blank?
-        if chess.board_sign(file, rank_plus2) == constants.BLANK:
+        if chess.piece_sign(file, rank_plus2) == constants.BLANK:
             moves_list.append(file + rank_plus2) 
 
     return moves_list
@@ -414,13 +416,13 @@ def movelist(from_file, from_rank, piece_sign, evaluating= False):
     get a list of valid moves for a particular piece
     """
     who_are_you = piece_sign
-    piece = board_piece(chess.board[from_file + from_rank])
+    piece = piece_letter(chess.board[from_file + from_rank])
     if not piece:
         return []  # blank square
 
     generate_moves_method = determine_generate_move_method(piece)
     all_the_moves = generate_moves_method(who_are_you, from_file, from_rank,
-                                          [],board_sign(chess.board[from_file + from_rank]))
+                                          [],piece_sign(chess.board[from_file + from_rank]))
     num_moves = - 1 # todo
     return all_the_moves
 
@@ -454,11 +456,11 @@ def in_check(user_sign):
     # Go through each square on the board
     for letter in ["a", "b", "c", "d", "e", "f", "g", "h"]:
         for number in ["1", "2", "3", "4", "5", "6", "7", "8"]:
-            if chess.board_sign(letter + number) == opponent_sign:
+            if chess.piece_sign(letter + number) == opponent_sign:
                 all_the_moves = movelist(letter, number, opponent_sign, False)
                 # Start scanning each move
                 for m in range(len(all_legal_moves)):
-                    if chess.board_piece(letter + number) == constants.KING_LETTER:
+                    if chess.piece_letter(letter + number) == constants.KING_LETTER:
                         # Opponent King is in check!
                         return True
 
@@ -515,7 +517,7 @@ def is_player_move_legal(from_file, from_rank, to_file, to_rank):
 
 def output_attacking_move(who_are_you, from_file, from_rank, to_file, to_rank):
 
-    print_string = from_file + from_file + "-" + to_file + to_rank + " Piece: " + board_piece(from_file, from_rank)
+    print_string = from_file + from_file + "-" + to_file + to_rank + " Piece: " + piece_letter(from_file, from_rank)
 
     if who_are_you == constants.PLAYER:
           return "Checking Player move for " + print_string
@@ -661,21 +663,21 @@ def player_move_validation_loop(from_file, from_rank ,to_file, to_rank, just_per
         to_file = lower_string[2]
         to_rank = lower_string[3]
 
-        attacking_piece = chess.board_piece(from_file, from_rank)
+        attacking_piece = chess.piece_letter(from_file, from_rank)
 
         print_string = output_attacking_move(chess.PLAYER, from_file, from_rank, to_file, to_rank)
         # print() todo
         print(print_string)
 
-        piece_value = chess.board_piece(from_file,from_rank)
-
-        if piece_value < 0: # negative numbers are the Computer's Pieces
-             print("This is not your piece to move")
-             ...
-             continue
+        piece_value = chess.piece_value(from_file,from_rank)
         
         if  piece_value == constants.BLANK: # BLANK SQUARE
              print("There is no piece to be played, instead a Blank Square")
+             ...
+             continue
+
+        if piece_value < 0: # negative numbers are the Computer's Pieces
+             print("This is not your piece to move")
              ...
              continue
         
