@@ -394,9 +394,10 @@ def check_horizontally(chess, file_start, limit, step, rank,
     """
     Move either right to left OR left to right
     For each blank square append the square's coordinates
-    When an opponent piece is reached, append the square's coordinates
+    When an opponent piece has been reached, append the square's coordinates
     and return the list
-    When a same coloured piece is reached or the edge of the board is reached,
+    When a piece of the same colour has been reached 
+    or the edge of the board has been reached,
     return the list
     """
 
@@ -420,9 +421,10 @@ def check_vertically(chess, rank_start, limit, step,
     """
     Move either from top to bottom OR from bottom to top
     For each blank square append the square's coordinates
-    When an opponent piece is reached, append the square's coordinates
+    When an opponent piece has been reached, append the square's coordinates
     and return the list
-    When a same coloured piece is reached or the edge of the board is reached,
+    When a piece of the same colour has been reached 
+    or the edge of the board has been reached,
     return the list
     """
 
@@ -454,14 +456,14 @@ def horizontal_vertical(chess, file, rank, moves_list, piece_sign):
     # Move from the current piece's position,
     # towards the left until reaching a nonblank square
     # or the edge of the board
-    moves_list = check_horizontally(chess, base_file_number - 1, 0, -1,
-                                    rank, moves_list, piece_sign)
+    moves_list += check_horizontally(chess, base_file_number - 1, 0, -1,
+                                     rank, moves_list, piece_sign)
 
     # Move from the current piece's position,
     # towards the right until reaching a nonblank square
     # or the edge of the board
-    moves_list = check_horizontally(chess, base_file_number + 1, 8, 1,
-                                    rank, moves_list, piece_sign)
+    moves_list += check_horizontally(chess, base_file_number + 1, 8, 1,
+                                     rank, moves_list, piece_sign)
 
     # Convert 'rank' i.e. '1' to '8' to a number between 1 to 8
     base_rank_number = ord(rank) - constants.ASCII_ZERO  # 48
@@ -470,14 +472,109 @@ def horizontal_vertical(chess, file, rank, moves_list, piece_sign):
     # Move from the current piece's position,
     # towards the bottom until reaching a nonblank square
     # or the edge of the board
-    moves_list = check_vertically(chess, base_rank_number - 1, 0, -1,
-                                  file, moves_list, piece_sign)
+    moves_list += check_vertically(chess, base_rank_number - 1, 0, -1,
+                                   file, moves_list, piece_sign)
 
     # Move from the current piece's position,
     # towards the top until reaching a nonblank square
     # or the edge of the board
-    moves_list = check_vertically(chess, base_rank_number + 1, 8, 1,
-                                  file, moves_list, piece_sign)
+    moves_list += check_vertically(chess, base_rank_number + 1, 8, 1,
+                                   file, moves_list, piece_sign)
+
+    return moves_list
+
+
+def check_diagonally(chess, basefile, baserank, horizontal, vertical, piece_sign):
+    """
+    Move diagonally by one square
+    If the coordinates are off the board, return False
+    If a piece of the same colour has been reached return False
+    If the square is blank square return the square's coordinates
+    If an opponent piece has been reached return the square's coordinates
+    """
+
+    newfile = chr(basefile + horizontal)
+    newrank = chr(baserank + vertical)
+    if not (("a" <= newfile <= "h") and ("1" <= newrank <= "8")):
+        return False
+
+    square_sign = chess.piece_sign(newfile, newrank)
+    print("M DIAGONAL", newfile, newrank, square_sign)
+    if piece_sign == square_sign:
+        # Same colour piece
+        return False
+
+    # Either an opponent piece or a blank square
+    return newfile + newrank
+
+
+def diagonal(chess, file, rank, moves_list, piece_sign):
+    """
+    Record blank squares or an opponent's square
+    whilst scanning diagonally
+    """
+
+    # Convert 'file' i.e. 'a' to 'h' to its corresponding code
+    base_file_number = ord(file)
+    # Convert 'rank' i.e. '1' to '8' to its corresponding code
+    base_rank_number = ord(rank)
+    print("BASEFILE diag", file, rank, base_file_number, base_rank_number)
+
+    # Move from the current piece's position,
+    # diagionally bottom-left until reaching a nonblank square
+    # or the edge of the board
+    for m in range(1,8):  # 1 to 7
+        result = check_diagonally(chess, base_file_number, base_rank_number,
+                                  -m, -m,
+                                  piece_sign)
+        if not result:
+            # proceed no further
+            break
+
+        # Otherwise add the square and continue
+        moves_list.append(result)
+
+    # Move from the current piece's position,
+    # diagionally bottom-right until reaching a nonblank square
+    # or the edge of the board
+    for m in range(1,8):  # 1 to 7
+        result = check_diagonally(chess, base_file_number, base_rank_number,
+                                  -m, m,
+                                  piece_sign)
+        if not result:
+            # proceed no further
+            break
+
+        # Otherwise add the square and continue
+        moves_list.append(result)
+
+    # Move from the current piece's position,
+    # diagionally top-left until reaching a nonblank square
+    # or the edge of the board
+    for m in range(1,8):  # 1 to 7
+        result = check_diagonally(chess, base_file_number, base_rank_number,
+                                  m, -m,
+                                  piece_sign)
+        if not result:
+            # proceed no further
+            break
+
+        # Otherwise add the square and continue
+        moves_list.append(result)
+
+    # Move from the current piece's position,
+    # diagionally top-right until reaching a nonblank square
+    # or the edge of the board
+    for m in range(1,8):  # 1 to 7
+        result = check_diagonally(chess, base_file_number, base_rank_number,
+                                  m, m,
+                                  piece_sign)
+        if not result:
+            # proceed no further
+            break
+
+        # Otherwise add the square and continue
+        moves_list.append(result)
 
     return moves_list
 
@@ -535,10 +632,11 @@ def generate_moves_for_rook(chess, file, rank,
     return horizontal_vertical(chess, file, rank, moves_list, piece_sign)
 
 
-def examine_knight_move(diffs_tuple, chess, file, rank, piece_sign):
+def examine_this_square(diffs_tuple, chess, file, rank, piece_sign):
     """
-    Check if it is possible for a Knight piece
-    to land on these coordinates
+    Check if it is possible for this piece
+    to land on this square
+    Calculate the square's coordinates using the numbers in 'diffs_tuple'
     """
 
     (file_diff, rank_diff) = diffs_tuple
@@ -595,10 +693,21 @@ def generate_moves_for_knight(chess, file, rank,
     ]
 
     moves_list += [add_knight_square(diffs, file, rank) for diffs in knight_moves
-                         if examine_knight_move(diffs, chess, file, rank, piece_sign)]
+                         if examine_this_square(diffs, chess, file, rank, piece_sign)]
     print("KN",moves_list)
     return moves_list
-    
+
+
+def generate_moves_for_bishop(chess, file, rank,
+                              moves_list, piece_sign):
+    """
+    Generate all the possible moves of the Bishop piece
+    The legality of the moves are checked later
+    """
+
+    print("GEN BISHOP", file, rank)
+    return diagonal(chess, file, rank, moves_list, piece_sign)
+
 
 def determine_generate_move_method(piece_letter):
     """
@@ -609,6 +718,7 @@ def determine_generate_move_method(piece_letter):
         constants.PAWN_LETTER: generate_moves_for_pawn,
         constants.ROOK_LETTER: generate_moves_for_rook,
         constants.KNIGHT_LETTER: generate_moves_for_knight,
+        constants.BISHOP_LETTER: generate_moves_for_bishop,
     }
 
     themethod = methods_dictionary.get(piece_letter, "Unknown letter: "
