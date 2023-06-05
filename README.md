@@ -22,19 +22,24 @@ My goal then is to convert it to Python and add ***castling and en passant*** ch
 
 ### Ready To Play
 
-The program will prompt the user then await the User's input 
+The program will prompt the User then await the User's input 
 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/2eb31ea3-d3b9-4bd9-953d-b0d4b9985469)
 
-The user input needs to be a four-character string using *Chess Algebraic notation, files-first* 
+The User's input needs to be a four-character string which uses *files-first Chess Algebraic notation*<br> 
 For example, to move one's pawn **from square e2 to e4, enter *e2-e4***
 
 The program will then respond with a message such as<br>
 *Checking Player move for e2-e4 Piece: Pawn*
-Thereby showing the Player's move:
+* Thereby showing the Player's move. That is:
 * Showing the From Square
 * Showing the To Square
 * Showing the Piece being played
+
+Since the User has moved the pawn from square *e2 to e4* the program will display the following board:
+
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/cb116eae-8e63-4573-8ca1-742d3230e67f)
+
 ## Target Audience
 
 ## User Stories
