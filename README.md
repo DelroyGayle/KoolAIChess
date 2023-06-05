@@ -123,7 +123,34 @@ For example to refer to square *"h3* I can use the code
 
 ## Testing
 
-* I tested that the pages work in Chrome
+### Internal Errors
+
+At the top level of the program I have added the following *try-except* :- 
+
+```
+def main():
+    try:
+        main_part2()
+    except CustomException as error:
+        print(error)
+        handle_internal_error()
+        quit()
+    except Exception as error:
+        raise error
+```
+
+That way, if there is some *logic error that I have not anticipated or some internal error occurs*;<br>
+it would be caught here and a suitable message would be printed.
+
+The message will be of the form:<br>
+
+<strong>Internal Error: \<The Error Message\><br>
+Computer resigns due to an internal error<br>
+Please investigate<br>
+<br>
+Thank You For Playing<br>
+Goodbye<br>
+</strong>
 
 ## Code Validation
 

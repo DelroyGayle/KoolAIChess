@@ -186,13 +186,13 @@ class Game:
     def piece_sign(self, index, rank=""):
         """
         Determine the sign of the value of the piece on the square
-        Blank squares have a 'sign' of 0
+        Blank squares have a "sign" of 0
         """
 
         if rank:
             index += rank
 
-        return getattr(self.board[index], 'sign', constants.BLANK)
+        return getattr(self.board[index], "sign", constants.BLANK)
 
     def piece_value(self, index, rank=""):
         """
@@ -204,7 +204,7 @@ class Game:
             index += rank
 
         # space = " " todo
-        return getattr(self.board[index], 'value', constants.BLANK)
+        return getattr(self.board[index], "value", constants.BLANK)
 
     def piece_letter(self, index, rank=""):
         """
@@ -216,7 +216,7 @@ class Game:
             index += rank
 
         # space = " " todo
-        return getattr(self.board[index], 'letter', None)
+        return getattr(self.board[index], "letter", None)
 
     def piece_output_string(self, index, rank=""):
         """
@@ -230,7 +230,7 @@ class Game:
         # space = " " todo
         print("Test")
         print(self.board[index].print_string())
-        # return getattr(self.board[index], 'output_string', None)
+        # return getattr(self.board[index], "output_string", None)
 
     def showboard(self):
         """
@@ -373,7 +373,7 @@ def advance_vertical(rank, steps):
     """
 
     newrank = chr(ord(rank) + steps)
-    return newrank if '1' <= newrank <= '8' else None
+    return newrank if "1" <= newrank <= "8" else None
 
 
 def advance_horizontal(file, steps):
@@ -386,14 +386,102 @@ def advance_horizontal(file, steps):
     """
 
     newfile = chr(ord(file) + steps)
-    return newfile if 'a' <= newfile <= 'h' else None
+    return newfile if "a" <= newfile <= "h" else None
 
+
+def check_horizontally(chess, file_start, limit, step, rank, moves_list, piece_sign):
+    """
+    Move either right to left OR left to right
+    For each blank square append the square's coordinates
+    When an opponent piece is reached, append the square's coordinates 
+    and return the list
+    When a same coloured piece is reached or the edge of the board is reached, 
+    return the list
+    """
+
+    for m in range(file_start, limit, step):
+        newfile = chr(m + constants.ASCII_A_MINUS1)  # 96
+        square_sign = chess.piece_sign(newfile, rank)
+        print("M HORIZ",file_start,rank,limit,step,newfile,square_sign)
+        if piece_sign != square_sign:
+            # Either an opponent piece or a blank square
+            moves_list.append(newfile + rank)
+
+        # Reached an occupied square - proceed no further
+        if square_sign != constants.BLANK:
+            return moves_list
+
+    return moves_list
+
+
+def check_vertically(chess, rank_start, limit, step, file, moves_list, piece_sign):
+    """
+    Move either from top to bottom OR from bottom to top
+    For each blank square append the square's coordinates
+    When an opponent piece is reached, append the square's coordinates 
+    and return the list
+    When a same coloured piece is reached or the edge of the board is reached, 
+    return the list
+    """
+
+    for m in range(rank_start, limit, step):
+        newrank = chr(m + constants.ASCII_ZERO)  # 48
+        square_sign = chess.piece_sign(file, newrank)
+        print("M VERT",file,rank_start,limit,step,newrank,square_sign)
+        if piece_sign != square_sign:
+            # Either an opponent piece or a blank square
+            moves_list.append(file + newrank)
+
+        # Reached an occupied square - proceed no further
+        if square_sign != constants.BLANK:
+            return moves_list
+
+    return moves_list
+
+
+def horizontal_vertical(chess, file, rank, moves_list, piece_sign):
+    """
+    Record blank squares or an opponent's square
+    whilst scanning both horizontally and vertically
+    """
+
+    # Convert 'file' i.e. 'a' to 'h' to a number between 1 to 8
+    base_file_number = ord(file) - constants.ASCII_A_MINUS1  # 96
+    print("BASEFILE",file, base_file_number)
+
+    # Move from the current piece's position,
+    # towards the left until reaching a nonblank square or the edge of the board
+    moves_list = check_horizontally(chess, base_file_number - 1, 0, -1,
+                                    rank, moves_list, piece_sign)
+
+    # Move from the current piece's position,
+    # towards the right until reaching a nonblank square or the edge of the board
+    moves_list = check_horizontally(chess, base_file_number + 1, 8, 1,
+                                    rank, moves_list, piece_sign)
+
+    # Convert 'rank' i.e. '1' to '8' to a number between 1 to 8
+    base_rank_number = ord(rank) - constants.ASCII_ZERO  # 48
+    print("BASERANK",rank, base_rank_number)
+
+    # Move from the current piece's position,
+    # towards the bottom until reaching a nonblank square or the edge of the board
+    moves_list = check_vertically(chess, base_rank_number - 1, 0, -1,
+                                  file, moves_list, piece_sign)
+
+    # Move from the current piece's position,
+    # towards the top until reaching a nonblank square or the edge of the board
+    moves_list = check_vertically(chess, base_rank_number + 1, 8, 1,
+                                  file, moves_list, piece_sign)
+
+    return moves_list
 
 def generate_moves_for_pawn(chess, who_are_you, file, rank, moves_list, piece_sign):
     """
-    Generate all the legal moves of the pawn piece
+    Generate all the possible moves of the Pawn piece
+    The legality of the moves are checked later
     """
 
+    print("GEN PAWN",file, rank)
     rank_plus1 = advance_vertical(rank, piece_sign)
     if not rank_plus1:
         # Reached the edge of the board
@@ -428,6 +516,16 @@ def generate_moves_for_pawn(chess, who_are_you, file, rank, moves_list, piece_si
     return moves_list
 
 
+def generate_moves_for_rook(chess, who_are_you, file, rank, moves_list, piece_sign):
+    """
+    Generate all the possible moves of the Rook piece
+    The legality of the moves are checked later
+    """
+
+    print("GEN ROOK",file, rank)
+    return horizontal_vertical(chess, file, rank, moves_list, piece_sign)
+
+
 def determine_generate_move_method(piece_letter):
     """
     Use a dictionary to determine which method to call
@@ -435,6 +533,7 @@ def determine_generate_move_method(piece_letter):
 
     methods_dictionary = {
         constants.PAWN_LETTER: generate_moves_for_pawn,
+        constants.ROOK_LETTER: generate_moves_for_rook,
     }
     themethod = methods_dictionary.get(piece_letter, "Unknown letter: "
                                        + piece_letter)
@@ -465,6 +564,7 @@ def movelist(chess, from_file, from_rank, piece_sign, evaluating=False):
         return []  # blank square
 
     generate_moves_method = determine_generate_move_method(letter)
+    print(generate_moves_method)
     all_the_moves = generate_moves_method(chess, who_are_you, from_file, from_rank,
                                           [],
                                           chess.board[index].sign)
@@ -497,7 +597,7 @@ todo
 def in_check(chess, user_sign):
     """
     To quote Rod Bird:
-    this function scans all squares to see if any opposition piece
+    this function [ scans ] all squares to see if any opposition piece
     has the King in Check
     """
 
@@ -509,6 +609,7 @@ def in_check(chess, user_sign):
             index = letter + number
             if chess.piece_sign(index) == opponent_sign:
                 all_the_moves = movelist(chess, letter, number, opponent_sign, False)
+                print(opponent_sign, "LOOP",letter,number,movelist)
                 # Start scanning each move
                 for m in range(len(all_the_moves)):
                     if (chess.piece_letter(index) == constants.KING_LETTER):
@@ -516,18 +617,20 @@ def in_check(chess, user_sign):
                         return True
 
     # Indicate that the Opponent King is not in Check at all
-                    return False
+    return False
 
 
 def is_player_move_legal(chess, from_file, from_rank, to_file, to_rank):
 
     """
-    validate that the PLAYER'S move is legal
+    Validate that the PLAYER'S move is legal
     That is: validate that the PLAYER'S move does not put the PLAYER in Check
     """
 
     piece_sign = constants.PLAYER  # white piece
     all_possible_moves = movelist(chess, from_file, from_rank, piece_sign, False)
+    print("APM",all_possible_moves)
+    print("APM list",all_possible_moves, from_file, from_rank, piece_sign, to_file, to_rank)
     from_square = from_file + from_rank
     to_square = to_file + to_rank
     # Start scanning each move
@@ -550,10 +653,10 @@ def is_player_move_legal(chess, from_file, from_rank, to_file, to_rank):
             from_square = from_file + from_rank
             to_square = to_file + to_rank
 
-            # store mover and target data so that it may be restored
+            # store From and To data so that it may be restored
             save_from_square = chess.board[from_square]
             save_to_square = chess.board[to_square]
-            make_move_to_square(chess, from_square, to_square)
+            make_move_to_square(chess, from_square, to_square, to_file, to_rank)
 
             # Does this PLAYER's move place the PLAYER in Check?
             # If so, illegal move!
@@ -589,7 +692,7 @@ def output_attacking_move(chess, who_are_you, from_file, from_rank, to_file, to_
         constants.PAWN_LETTER:   "Pawn"
     }
     print_string = (from_file + from_rank + "-" + to_file + to_rank
-                    + " Piece: " + print_strings_dict[chess.piece_letter(from_file, from_rank)])
+                    + " Piece: " + print_strings_dict.get(chess.piece_letter(from_file, from_rank),""))
 
     if who_are_you == constants.PLAYER:
         return "Checking Player move for " + print_string
@@ -647,17 +750,40 @@ def setup_output_chess_move_add_promotion(letter, from_file, from_rank,
     add_capture_promotion(taken)
 
 
-def make_move_to_square(chess, from_square, to_square):
+# promote pawn if it reaches board edge
+def any_promotion(chess, to_file, to_rank):
+    """
+    Pawn Promotion
+    Promote Pawn Piece if it reaches the board edge
+    """
+
+    to_square = to_file + to_rank
+    if to_rank == "8" and chess.board[to_square].value == PAWN_VALUE:
+            # The Player has reached the top of the board
+            # Promote the White Pawn to a White Queen
+            chess.board[to_square].value = QUEEN_VALUE 
+            chess.board[to_square].letter = QUEEN_LETTER
+            Game.promoted_piece = QUEEN_LETTER
+    elif to_rank == to_rank == "1" and chess.board[to_square].value == -PAWN_VALUE:
+            # The Computer has reached the bottom of the board
+            # Promote the Black Pawn to a Black Queen
+            chess.board[to_square].value = -QUEEN_VALUE
+            chess.board[to_square].letter = QUEEN_LETTER
+            Game.promoted_piece = QUEEN_LETTER
+    else:
+            Game.promoted_piece = ""
+
+def make_move_to_square(chess, from_square, to_square, to_file, to_rank):
     """
     fill the square taken
     """
     
     chess.board[to_square] = chess.board[from_square]
     
-# erase square vacated
+    # erase square vacated
     chess.board[from_square] = None
-# promote pawn if it reaches board edge
-    # any_promotion(x1, y1) todo
+    # promote pawn if it reaches the board edge
+    any_promotion(chess, to_file, to_rank)
 
 
 def execute_computer_move(chess, from_file, from_rank, to_file, to_rank):
@@ -694,7 +820,7 @@ def execute_computer_move(chess, from_file, from_rank, to_file, to_rank):
 
     from_square = from_file + from_rank
     to_square = to_file + to_rank
-    make_move_to_square(chess, from_square, to_square)
+    make_move_to_square(chess, from_square, to_square, to_file, to_rank)
 
 # If the COMPUTER cannot play out of check then resign
     if in_check(chess, constants.COMPUTER):
@@ -856,6 +982,8 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
 
         # fetch the next move from the player from keyboard
         input_string = input("YOUR MOVE (e.g. e2e4): ").strip()
+        # os.system("clear")
+        chess.showboard()
 
         if input_string == "R" or input_string == "r":
             print("Player Resigned")
@@ -866,7 +994,7 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
 
         """
         *** CASTLING ***
-        This is denoted by using capital 'O
+        This is denoted by using capital 'O'
         that is O-O and O-O-O
         It is not PGN notation to use ZEROS
         However will cater for 0-0 and 0-0-0
@@ -887,8 +1015,6 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         if (len(lower_string) != 4
             # Pattern: ([a-h][1-8]){2}
                 or not constants.chess_move_pattern.match(lower_string)):
-            os.system("clear")
-            chess.showboard()
             print()
             print("I do not understand this input:", input_string)
             print("Format of Chess moves ought to be 4 characters e.g. e2e4")
@@ -902,8 +1028,10 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         from_rank = lower_string[1]
         to_file = lower_string[2]
         to_rank = lower_string[3]
+        print(lower_string)
 
         attacking_piece_letter = chess.piece_letter(from_file, from_rank)
+        print(attacking_piece_letter,"ATT",chess.piece_value(from_file, from_rank))
 
         print_string = output_attacking_move(chess, constants.PLAYER,
                                              from_file, from_rank,
@@ -947,6 +1075,8 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         finalise_player_move(chess, from_file, from_rank, to_file, to_rank,
                              attacking_piece_letter, taken)
         # TODO just_performed_castling, attacking_piece_letter, taken)
+        # os.system("clear")
+        chess.showboard()
 
 
 def player_move(chess, from_file, from_rank, to_file, to_rank, result):
