@@ -389,20 +389,21 @@ def advance_horizontal(file, steps):
     return newfile if "a" <= newfile <= "h" else None
 
 
-def check_horizontally(chess, file_start, limit, step, rank, moves_list, piece_sign):
+def check_horizontally(chess, file_start, limit, step, rank,
+                       moves_list, piece_sign):
     """
     Move either right to left OR left to right
     For each blank square append the square's coordinates
-    When an opponent piece is reached, append the square's coordinates 
+    When an opponent piece is reached, append the square's coordinates
     and return the list
-    When a same coloured piece is reached or the edge of the board is reached, 
+    When a same coloured piece is reached or the edge of the board is reached,
     return the list
     """
 
     for m in range(file_start, limit, step):
         newfile = chr(m + constants.ASCII_A_MINUS1)  # 96
         square_sign = chess.piece_sign(newfile, rank)
-        print("M HORIZ",file_start,rank,limit,step,newfile,square_sign)
+        print("M HORIZ", file_start, rank, limit, step, newfile, square_sign)
         if piece_sign != square_sign:
             # Either an opponent piece or a blank square
             moves_list.append(newfile + rank)
@@ -414,20 +415,21 @@ def check_horizontally(chess, file_start, limit, step, rank, moves_list, piece_s
     return moves_list
 
 
-def check_vertically(chess, rank_start, limit, step, file, moves_list, piece_sign):
+def check_vertically(chess, rank_start, limit, step,
+                     file, moves_list, piece_sign):
     """
     Move either from top to bottom OR from bottom to top
     For each blank square append the square's coordinates
-    When an opponent piece is reached, append the square's coordinates 
+    When an opponent piece is reached, append the square's coordinates
     and return the list
-    When a same coloured piece is reached or the edge of the board is reached, 
+    When a same coloured piece is reached or the edge of the board is reached,
     return the list
     """
 
     for m in range(rank_start, limit, step):
         newrank = chr(m + constants.ASCII_ZERO)  # 48
         square_sign = chess.piece_sign(file, newrank)
-        print("M VERT",file,rank_start,limit,step,newrank,square_sign)
+        print("M VERT", file, rank_start, limit, step, newrank, square_sign)
         if piece_sign != square_sign:
             # Either an opponent piece or a blank square
             moves_list.append(file + newrank)
@@ -447,41 +449,47 @@ def horizontal_vertical(chess, file, rank, moves_list, piece_sign):
 
     # Convert 'file' i.e. 'a' to 'h' to a number between 1 to 8
     base_file_number = ord(file) - constants.ASCII_A_MINUS1  # 96
-    print("BASEFILE",file, base_file_number)
+    print("BASEFILE", file, base_file_number)
 
     # Move from the current piece's position,
-    # towards the left until reaching a nonblank square or the edge of the board
+    # towards the left until reaching a nonblank square
+    # or the edge of the board
     moves_list = check_horizontally(chess, base_file_number - 1, 0, -1,
                                     rank, moves_list, piece_sign)
 
     # Move from the current piece's position,
-    # towards the right until reaching a nonblank square or the edge of the board
+    # towards the right until reaching a nonblank square
+    # or the edge of the board
     moves_list = check_horizontally(chess, base_file_number + 1, 8, 1,
                                     rank, moves_list, piece_sign)
 
     # Convert 'rank' i.e. '1' to '8' to a number between 1 to 8
     base_rank_number = ord(rank) - constants.ASCII_ZERO  # 48
-    print("BASERANK",rank, base_rank_number)
+    print("BASERANK", rank, base_rank_number)
 
     # Move from the current piece's position,
-    # towards the bottom until reaching a nonblank square or the edge of the board
+    # towards the bottom until reaching a nonblank square
+    # or the edge of the board
     moves_list = check_vertically(chess, base_rank_number - 1, 0, -1,
                                   file, moves_list, piece_sign)
 
     # Move from the current piece's position,
-    # towards the top until reaching a nonblank square or the edge of the board
+    # towards the top until reaching a nonblank square
+    # or the edge of the board
     moves_list = check_vertically(chess, base_rank_number + 1, 8, 1,
                                   file, moves_list, piece_sign)
 
     return moves_list
 
-def generate_moves_for_pawn(chess, who_are_you, file, rank, moves_list, piece_sign):
+
+def generate_moves_for_pawn(chess, who_are_you, file, rank,
+                            moves_list, piece_sign):
     """
     Generate all the possible moves of the Pawn piece
     The legality of the moves are checked later
     """
 
-    print("GEN PAWN",file, rank)
+    print("GEN PAWN", file, rank)
     rank_plus1 = advance_vertical(rank, piece_sign)
     if not rank_plus1:
         # Reached the edge of the board
@@ -516,13 +524,14 @@ def generate_moves_for_pawn(chess, who_are_you, file, rank, moves_list, piece_si
     return moves_list
 
 
-def generate_moves_for_rook(chess, who_are_you, file, rank, moves_list, piece_sign):
+def generate_moves_for_rook(chess, who_are_you, file, rank,
+                            moves_list, piece_sign):
     """
     Generate all the possible moves of the Rook piece
     The legality of the moves are checked later
     """
 
-    print("GEN ROOK",file, rank)
+    print("GEN ROOK", file, rank)
     return horizontal_vertical(chess, file, rank, moves_list, piece_sign)
 
 
@@ -565,7 +574,8 @@ def movelist(chess, from_file, from_rank, piece_sign, evaluating=False):
 
     generate_moves_method = determine_generate_move_method(letter)
     print(generate_moves_method)
-    all_the_moves = generate_moves_method(chess, who_are_you, from_file, from_rank,
+    all_the_moves = generate_moves_method(chess, who_are_you,
+                                          from_file, from_rank,
                                           [],
                                           chess.board[index].sign)
     num_moves = - 1  # todo
@@ -608,8 +618,9 @@ def in_check(chess, user_sign):
         for number in ["1", "2", "3", "4", "5", "6", "7", "8"]:
             index = letter + number
             if chess.piece_sign(index) == opponent_sign:
-                all_the_moves = movelist(chess, letter, number, opponent_sign, False)
-                print(opponent_sign, "LOOP",letter,number,movelist)
+                all_the_moves = movelist(chess, letter, number,
+                                         opponent_sign, False)
+                print(opponent_sign, "LOOP", letter, number, movelist)
                 # Start scanning each move
                 for m in range(len(all_the_moves)):
                     if (chess.piece_letter(index) == constants.KING_LETTER):
@@ -628,9 +639,11 @@ def is_player_move_legal(chess, from_file, from_rank, to_file, to_rank):
     """
 
     piece_sign = constants.PLAYER  # white piece
-    all_possible_moves = movelist(chess, from_file, from_rank, piece_sign, False)
-    print("APM",all_possible_moves)
-    print("APM list",all_possible_moves, from_file, from_rank, piece_sign, to_file, to_rank)
+    all_possible_moves = movelist(chess, from_file, from_rank,
+                                  piece_sign, False)
+    print("APM", all_possible_moves)
+    print("APM list", all_possible_moves, from_file, from_rank,
+          piece_sign, to_file, to_rank)
     from_square = from_file + from_rank
     to_square = to_file + to_rank
     # Start scanning each move
@@ -656,7 +669,8 @@ def is_player_move_legal(chess, from_file, from_rank, to_file, to_rank):
             # store From and To data so that it may be restored
             save_from_square = chess.board[from_square]
             save_to_square = chess.board[to_square]
-            make_move_to_square(chess, from_square, to_square, to_file, to_rank)
+            make_move_to_square(chess,
+                                from_square, to_square, to_file, to_rank)
 
             # Does this PLAYER's move place the PLAYER in Check?
             # If so, illegal move!
@@ -678,12 +692,13 @@ def is_player_move_legal(chess, from_file, from_rank, to_file, to_rank):
     return (False, None)
 
 
-def output_attacking_move(chess, who_are_you, from_file, from_rank, to_file, to_rank):
+def output_attacking_move(chess, who_are_you,
+                          from_file, from_rank, to_file, to_rank):
     """
     Create a output message for the current chess move
     Showing who played what, the from square and the to square
     """
-    print_strings_dict = {
+    strings_dict = {
         constants.KING_LETTER:   "King",
         constants.QUEEN_LETTER:  "Queen",
         constants.ROOK_LETTER:   "Rook",
@@ -691,8 +706,9 @@ def output_attacking_move(chess, who_are_you, from_file, from_rank, to_file, to_
         constants.KNIGHT_LETTER: "Knight",
         constants.PAWN_LETTER:   "Pawn"
     }
+    dict_entry = strings_dict.get(chess.piece_letter(from_file, from_rank), "")
     print_string = (from_file + from_rank + "-" + to_file + to_rank
-                    + " Piece: " + print_strings_dict.get(chess.piece_letter(from_file, from_rank),""))
+                    + " Piece: " + dict_entry)
 
     if who_are_you == constants.PLAYER:
         return "Checking Player move for " + print_string
@@ -759,27 +775,31 @@ def any_promotion(chess, to_file, to_rank):
 
     to_square = to_file + to_rank
     if to_rank == "8" and chess.board[to_square].value == PAWN_VALUE:
-            # The Player has reached the top of the board
-            # Promote the White Pawn to a White Queen
-            chess.board[to_square].value = QUEEN_VALUE 
-            chess.board[to_square].letter = QUEEN_LETTER
-            Game.promoted_piece = QUEEN_LETTER
-    elif to_rank == to_rank == "1" and chess.board[to_square].value == -PAWN_VALUE:
-            # The Computer has reached the bottom of the board
-            # Promote the Black Pawn to a Black Queen
-            chess.board[to_square].value = -QUEEN_VALUE
-            chess.board[to_square].letter = QUEEN_LETTER
-            Game.promoted_piece = QUEEN_LETTER
+        # The Player has reached the top of the board
+        # Promote the White Pawn to a White Queen
+        chess.board[to_square].value = QUEEN_VALUE
+        chess.board[to_square].letter = QUEEN_LETTER
+        Game.promoted_piece = QUEEN_LETTER
+
+    elif (to_rank == to_rank == "1"
+          and chess.board[to_square].value == -PAWN_VALUE):
+        # The Computer has reached the bottom of the board
+        # Promote the Black Pawn to a Black Queen
+        chess.board[to_square].value = -QUEEN_VALUE
+        chess.board[to_square].letter = QUEEN_LETTER
+        Game.promoted_piece = QUEEN_LETTER
+
     else:
-            Game.promoted_piece = ""
+        Game.promoted_piece = ""
+
 
 def make_move_to_square(chess, from_square, to_square, to_file, to_rank):
     """
     fill the square taken
     """
-    
+
     chess.board[to_square] = chess.board[from_square]
-    
+
     # erase square vacated
     chess.board[from_square] = None
     # promote pawn if it reaches the board edge
@@ -901,7 +921,8 @@ def process_computer_move(chess, from_file, from_rank, to_file, to_rank):
 # Validate, Execute then Finalise the Computer Chess Move
 # (if it was not a Castling Chess Move)
         if not computer_move_finalised:
-            execute_computer_move(chess, from_file, from_rank, to_file, to_rank)
+            execute_computer_move(chess,
+                                  from_file, from_rank, to_file, to_rank)
             # todo
             # finalise_computer_move
             # (check_flag, output_chess_move, g_move_count_incremented)
@@ -1031,7 +1052,8 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         print(lower_string)
 
         attacking_piece_letter = chess.piece_letter(from_file, from_rank)
-        print(attacking_piece_letter,"ATT",chess.piece_value(from_file, from_rank))
+        print(attacking_piece_letter, "ATT",
+              chess.piece_value(from_file, from_rank))
 
         print_string = output_attacking_move(chess, constants.PLAYER,
                                              from_file, from_rank,
