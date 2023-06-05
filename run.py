@@ -482,7 +482,7 @@ def horizontal_vertical(chess, file, rank, moves_list, piece_sign):
     return moves_list
 
 
-def generate_moves_for_pawn(chess, who_are_you, file, rank,
+def generate_moves_for_pawn(chess, file, rank,
                             moves_list, piece_sign):
     """
     Generate all the possible moves of the Pawn piece
@@ -513,7 +513,7 @@ def generate_moves_for_pawn(chess, who_are_you, file, rank,
         moves_list.append(file + rank_plus1)
 
     # two steps forward?
-    rank_plus2 = (advance_vertical(rank, 2) if who_are_you == constants.PLAYER
+    rank_plus2 = (advance_vertical(rank, 2) if piece_sign == constants.PLAYER
                   else advance_vertical(rank, -2))
 
     if rank_plus2:
@@ -524,7 +524,7 @@ def generate_moves_for_pawn(chess, who_are_you, file, rank,
     return moves_list
 
 
-def generate_moves_for_rook(chess, who_are_you, file, rank,
+def generate_moves_for_rook(chess, file, rank,
                             moves_list, piece_sign):
     """
     Generate all the possible moves of the Rook piece
@@ -535,6 +535,71 @@ def generate_moves_for_rook(chess, who_are_you, file, rank,
     return horizontal_vertical(chess, file, rank, moves_list, piece_sign)
 
 
+def examine_knight_move(diffs_tuple, chess, file, rank, piece_sign):
+    """
+    Check if it is possible for a Knight piece
+    to land on these coordinates
+    """
+
+    (file_diff, rank_diff) = diffs_tuple
+    print(diffs_tuple, file, rank)
+    # Is it on the board?
+    newfile = chr(ord(file) + file_diff)
+    if not("a" <= newfile <= "h"):
+        return False
+
+    newrank = chr(ord(rank) + rank_diff)
+    if not("1" <= newrank <= "8"):
+        return False
+
+    index = newfile + newrank 
+    print("NEW INDEX", index)
+    square_sign = chess.piece_sign(file, newrank)
+    
+    # True: Either an opponent piece or a blank square
+    # False: Otherwise same coloured piece
+    return piece_sign != square_sign
+
+
+def add_knight_square(diffs_tuple, file, rank):
+    """
+    Having determined that it is possible for a Knight piece
+    to land on a particular square
+    Create the coordinates of this square using the numbers in 'diff_tuple'
+    e.g. (1, 2) means file += 1, rank += 2.
+    """
+
+    (file_diff, rank_diff) = diffs_tuple
+    newfile = chr(ord(file) + file_diff)
+    newrank = chr(ord(rank) + rank_diff)
+    return newfile + newrank
+
+
+def generate_moves_for_knight(chess, file, rank,
+                              moves_list, piece_sign):
+    """
+    Generate all the possible moves of the Knight piece
+    The legality of the moves are checked later
+    """
+
+    print("GEN KNIGHT", file, rank)
+    knight_moves = [
+        (-1, -2),  # down 1, left 2
+        (-1, 2),   # down 1, right 2
+        (-2, -1),  # down 2, left 1
+        (-2, 1),   # down 2, right 1
+        (1, -2),   # up 1, left 2
+        (1, 2),    # up 1, right 2
+        (2, -1),   # up 2, left 1
+        (2, 1),    # up 2, right 1
+    ]
+
+    moves_list += [add_knight_square(diffs, file, rank) for diffs in knight_moves
+                         if examine_knight_move(diffs, chess, file, rank, piece_sign)]
+    print("KN",moves_list)
+    return moves_list
+    
+
 def determine_generate_move_method(piece_letter):
     """
     Use a dictionary to determine which method to call
@@ -543,7 +608,9 @@ def determine_generate_move_method(piece_letter):
     methods_dictionary = {
         constants.PAWN_LETTER: generate_moves_for_pawn,
         constants.ROOK_LETTER: generate_moves_for_rook,
+        constants.KNIGHT_LETTER: generate_moves_for_knight,
     }
+
     themethod = methods_dictionary.get(piece_letter, "Unknown letter: "
                                        + piece_letter)
 
@@ -567,14 +634,13 @@ def movelist(chess, from_file, from_rank, piece_sign, evaluating=False):
     """
 
     index = from_file + from_rank
-    who_are_you = piece_sign
     letter = (chess.board[index]).letter
     if not letter:
         return []  # blank square
 
     generate_moves_method = determine_generate_move_method(letter)
     print(generate_moves_method)
-    all_the_moves = generate_moves_method(chess, who_are_you,
+    all_the_moves = generate_moves_method(chess,
                                           from_file, from_rank,
                                           [],
                                           chess.board[index].sign)
@@ -611,6 +677,7 @@ def in_check(chess, user_sign):
     has the King in Check
     """
 
+    print("IN CHECK IN", user_sign)
     opponent_sign = 0 - user_sign
 
     # Go through each square on the board
@@ -625,9 +692,11 @@ def in_check(chess, user_sign):
                 for m in range(len(all_the_moves)):
                     if (chess.piece_letter(index) == constants.KING_LETTER):
                         # Opponent King is in Check!
+                        print("IN CHECK OUT TRUE")
                         return True
 
     # Indicate that the Opponent King is not in Check at all
+    print("IN CHECK OUT FALSE")
     return False
 
 
