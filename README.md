@@ -1,7 +1,6 @@
 # Kool-AI-Chess
 
 Live Link
-
 GitHub Repository
 
 **Kool AI Chess - A command line Chess program using Python - Player vs Computer**
@@ -21,6 +20,21 @@ My goal then is to convert it to Python and add ***castling and en passant*** ch
 
 ## How To Play
 
+### Ready To Play
+
+The program will prompt the user then await the User's input 
+
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/2eb31ea3-d3b9-4bd9-953d-b0d4b9985469)
+
+The user input needs to be a four-character string using *Chess Algebraic notation, files-first* 
+For example, to move one's pawn **from square e2 to e4, enter *e2-e4***
+
+The program will then respond with a message such as<br>
+*Checking Player move for e2-e4 Piece: Pawn*
+Thereby showing the Player's move:
+* Showing the From Square
+* Showing the To Square
+* Showing the Piece being played
 ## Target Audience
 
 ## User Stories
