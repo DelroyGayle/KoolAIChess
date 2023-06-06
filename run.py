@@ -955,6 +955,25 @@ def add_capture_promotion(taken):
         Game.output_chess_move += "=" + Game.promoted_piece
 
 
+def add_check_to_output():
+    """
+    Indicate Check!
+    """
+
+    Game.output_chess_move += output_chess_move + constants.CHECK_INDICATION
+
+
+def add_checkmate_to_output(thestring):
+    """
+    Indicate Checkmate!
+    Remove any trailing '+' OR SPACE first; then add # and SPACE afterwards
+    """
+
+    return (thestring.rstrip(thestring,
+                             constants.CHECK_INDICATION + constants.SPACE)
+            + constants.CHECKMATE_INDICATION + constants.SPACE)
+
+
 def setup_output_chess_move_add_promotion(letter, from_file, from_rank,
                                           to_file, to_rank, taken):
     """
