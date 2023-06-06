@@ -401,6 +401,7 @@ def check_horizontally(chess, file_start, limit, step, rank,
     return the list
     """
 
+    print("HORIZ IN", moves_list)
     for m in range(file_start, limit, step):
         newfile = chr(m + constants.ASCII_A_MINUS1)  # 96
         square_sign = chess.piece_sign(newfile, rank)
@@ -456,14 +457,16 @@ def horizontal_vertical(chess, file, rank, moves_list, piece_sign):
     # Move from the current piece's position,
     # towards the left until reaching a nonblank square
     # or the edge of the board
-    moves_list += check_horizontally(chess, base_file_number - 1, 0, -1,
-                                     rank, moves_list, piece_sign)
+    moves_list = check_horizontally(chess, base_file_number - 1, 0, -1,
+                                    rank, moves_list, piece_sign)
+    print("HORIZ OUT1", moves_list)
 
     # Move from the current piece's position,
     # towards the right until reaching a nonblank square
     # or the edge of the board
-    moves_list += check_horizontally(chess, base_file_number + 1, 8, 1,
-                                     rank, moves_list, piece_sign)
+    moves_list = check_horizontally(chess, base_file_number + 1, 8, 1,
+                                    rank, moves_list, piece_sign)
+    print("HORIZ OUT2", moves_list)
 
     # Convert 'rank' i.e. '1' to '8' to a number between 1 to 8
     base_rank_number = ord(rank) - constants.ASCII_ZERO  # 48
@@ -472,14 +475,16 @@ def horizontal_vertical(chess, file, rank, moves_list, piece_sign):
     # Move from the current piece's position,
     # towards the bottom until reaching a nonblank square
     # or the edge of the board
-    moves_list += check_vertically(chess, base_rank_number - 1, 0, -1,
-                                   file, moves_list, piece_sign)
+    moves_list = check_vertically(chess, base_rank_number - 1, 0, -1,
+                                  file, moves_list, piece_sign)
+    print("VERT1 OUT", moves_list)
 
     # Move from the current piece's position,
     # towards the top until reaching a nonblank square
     # or the edge of the board
-    moves_list += check_vertically(chess, base_rank_number + 1, 8, 1,
-                                   file, moves_list, piece_sign)
+    moves_list = check_vertically(chess, base_rank_number + 1, 8, 1,
+                                  file, moves_list, piece_sign)
+    print("VERT2 OUT", moves_list)
 
     return moves_list
 
@@ -519,10 +524,9 @@ def diagonal(chess, file, rank, moves_list, piece_sign):
     base_file_number = ord(file)
     # Convert 'rank' i.e. '1' to '8' to its corresponding code
     base_rank_number = ord(rank)
-    print("BASEFILE diag", file, rank, base_file_number, base_rank_number)
 
     # Move from the current piece's position,
-    # diagionally bottom-left until reaching a nonblank square
+    # diagonally bottom-left until reaching a nonblank square
     # or the edge of the board
     for m in range(1, 8):  # 1 to 7
         result = check_diagonally(chess, base_file_number, base_rank_number,
@@ -534,9 +538,10 @@ def diagonal(chess, file, rank, moves_list, piece_sign):
 
         # Otherwise add the square and continue
         moves_list.append(result)
+        print("ADDED1", result, moves_list)
 
     # Move from the current piece's position,
-    # diagionally bottom-right until reaching a nonblank square
+    # diagonally bottom-right until reaching a nonblank square
     # or the edge of the board
     for m in range(1, 8):  # 1 to 7
         result = check_diagonally(chess, base_file_number, base_rank_number,
@@ -548,9 +553,10 @@ def diagonal(chess, file, rank, moves_list, piece_sign):
 
         # Otherwise add the square and continue
         moves_list.append(result)
+        print("ADDED2", result, moves_list)
 
     # Move from the current piece's position,
-    # diagionally top-left until reaching a nonblank square
+    # diagonally top-left until reaching a nonblank square
     # or the edge of the board
     for m in range(1, 8):  # 1 to 7
         result = check_diagonally(chess, base_file_number, base_rank_number,
@@ -562,9 +568,10 @@ def diagonal(chess, file, rank, moves_list, piece_sign):
 
         # Otherwise add the square and continue
         moves_list.append(result)
+        print("ADDED3", result, moves_list)
 
     # Move from the current piece's position,
-    # diagionally top-right until reaching a nonblank square
+    # diagonally top-right until reaching a nonblank square
     # or the edge of the board
     for m in range(1, 8):  # 1 to 7
         result = check_diagonally(chess, base_file_number, base_rank_number,
@@ -576,7 +583,9 @@ def diagonal(chess, file, rank, moves_list, piece_sign):
 
         # Otherwise add the square and continue
         moves_list.append(result)
+        print("ADDED4", result, moves_list)
 
+    print("RET QUEEN", moves_list)
     return moves_list
 
 
@@ -721,9 +730,9 @@ def generate_moves_for_queen(chess, file, rank,
     """
 
     print("GEN QUEEN", file, rank)
-    return (moves_list
-            + diagonal(chess, file, rank, moves_list, piece_sign)
-            + horizontal_vertical(chess, file, rank, moves_list, piece_sign))
+    moves_list = diagonal(chess, file, rank, moves_list, piece_sign)
+    moves_list = horizontal_vertical(chess, file, rank, moves_list, piece_sign)
+    return moves_list
 
 
 def generate_moves_for_king(chess, file, rank,
@@ -833,8 +842,7 @@ def in_check(chess, user_sign):
     has the King in Check
     """
 
-    print("IN CHECK IN", user_sign)
-    opponent_sign = 0 - user_sign
+    opponent_sign = -user_sign
 
     # Go through each square on the board
     for letter in ["a", "b", "c", "d", "e", "f", "g", "h"]:
@@ -843,16 +851,14 @@ def in_check(chess, user_sign):
             if chess.piece_sign(index) == opponent_sign:
                 all_the_moves = movelist(chess, letter, number,
                                          opponent_sign, False)
-                print(opponent_sign, "LOOP", letter, number, movelist)
                 # Start scanning each move
                 for m in range(len(all_the_moves)):
-                    if (chess.piece_letter(index) == constants.KING_LETTER):
+                    if (chess.piece_letter(all_the_moves[m])
+                    == constants.KING_LETTER):
                         # Opponent King is in Check!
-                        print("IN CHECK OUT TRUE")
                         return True
 
     # Indicate that the Opponent King is not in Check at all
-    print("IN CHECK OUT FALSE")
     return False
 
 
@@ -914,7 +920,7 @@ def is_player_move_legal(chess, from_file, from_rank, to_file, to_rank):
             return (False, taken)
 
     # Indicate that no legal move had been found
-    return (False, None)
+    return (True, None)
 
 
 def output_attacking_move(chess, who_are_you,
@@ -1301,6 +1307,7 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         (illegal, taken) = is_player_move_legal(chess,
                                                 from_file, from_rank,
                                                 to_file, to_rank)
+        print("RETURNED", illegal, taken)
         if illegal:
             print("Illegal move")
             ...
