@@ -218,20 +218,6 @@ class Game:
         # space = " " todo
         return getattr(self.board[index], "letter", None)
 
-    def piece_output_string(self, index, rank=""):
-        """
-        Determine the letter of the piece on the square
-        Blank squares are depicted as None
-        """
-
-        if rank:
-            index += rank
-
-        # space = " " todo
-        print("Test")
-        print(self.board[index].print_string())
-        # return getattr(self.board[index], "output_string", None)
-
     def showboard(self):
         """
         Display the Chessboard
@@ -278,6 +264,16 @@ class Game:
         # 5 spaces THEN 2 spaces each
         print("{}A  B  C  D  E  F  G  H".format(space*5))
         print()
+
+    def display(self, message):
+        """
+        Clear Screen
+        Show the Chessboard
+        Then display a message
+        """
+        os.system("clear")
+        self.showboard()
+        print(message)
 
 
 def goodbye():
@@ -401,11 +397,9 @@ def check_horizontally(chess, file_start, limit, step, rank,
     return the list
     """
 
-    print("HORIZ IN", moves_list)
     for m in range(file_start, limit, step):
         newfile = chr(m + constants.ASCII_A_MINUS1)  # 96
         square_sign = chess.piece_sign(newfile, rank)
-        print("M HORIZ", file_start, rank, limit, step, newfile, square_sign)
         if piece_sign != square_sign:
             # Either an opponent piece or a blank square
             moves_list.append(newfile + rank)
@@ -432,7 +426,6 @@ def check_vertically(chess, rank_start, limit, step,
     for m in range(rank_start, limit, step):
         newrank = chr(m + constants.ASCII_ZERO)  # 48
         square_sign = chess.piece_sign(file, newrank)
-        print("M VERT", file, rank_start, limit, step, newrank, square_sign)
         if piece_sign != square_sign:
             # Either an opponent piece or a blank square
             moves_list.append(file + newrank)
@@ -452,39 +445,33 @@ def horizontal_vertical(chess, file, rank, moves_list, piece_sign):
 
     # Convert 'file' i.e. 'a' to 'h' to a number between 1 to 8
     base_file_number = ord(file) - constants.ASCII_A_MINUS1  # 96
-    print("BASEFILE", file, base_file_number)
 
     # Move from the current piece's position,
     # towards the left until reaching a nonblank square
     # or the edge of the board
     moves_list = check_horizontally(chess, base_file_number - 1, 0, -1,
                                     rank, moves_list, piece_sign)
-    print("HORIZ OUT1", moves_list)
 
     # Move from the current piece's position,
     # towards the right until reaching a nonblank square
     # or the edge of the board
     moves_list = check_horizontally(chess, base_file_number + 1, 8, 1,
                                     rank, moves_list, piece_sign)
-    print("HORIZ OUT2", moves_list)
 
     # Convert 'rank' i.e. '1' to '8' to a number between 1 to 8
     base_rank_number = ord(rank) - constants.ASCII_ZERO  # 48
-    print("BASERANK", rank, base_rank_number)
 
     # Move from the current piece's position,
     # towards the bottom until reaching a nonblank square
     # or the edge of the board
     moves_list = check_vertically(chess, base_rank_number - 1, 0, -1,
                                   file, moves_list, piece_sign)
-    print("VERT1 OUT", moves_list)
 
     # Move from the current piece's position,
     # towards the top until reaching a nonblank square
     # or the edge of the board
     moves_list = check_vertically(chess, base_rank_number + 1, 8, 1,
                                   file, moves_list, piece_sign)
-    print("VERT2 OUT", moves_list)
 
     return moves_list
 
@@ -505,7 +492,6 @@ def check_diagonally(chess, basefile, baserank,
         return False
 
     square_sign = chess.piece_sign(newfile, newrank)
-    print("M DIAGONAL", newfile, newrank, square_sign)
     if piece_sign == square_sign:
         # Same colour piece
         return False
@@ -538,7 +524,6 @@ def diagonal(chess, file, rank, moves_list, piece_sign):
 
         # Otherwise add the square and continue
         moves_list.append(result)
-        print("ADDED1", result, moves_list)
 
     # Move from the current piece's position,
     # diagonally bottom-right until reaching a nonblank square
@@ -553,7 +538,6 @@ def diagonal(chess, file, rank, moves_list, piece_sign):
 
         # Otherwise add the square and continue
         moves_list.append(result)
-        print("ADDED2", result, moves_list)
 
     # Move from the current piece's position,
     # diagonally top-left until reaching a nonblank square
@@ -568,7 +552,6 @@ def diagonal(chess, file, rank, moves_list, piece_sign):
 
         # Otherwise add the square and continue
         moves_list.append(result)
-        print("ADDED3", result, moves_list)
 
     # Move from the current piece's position,
     # diagonally top-right until reaching a nonblank square
@@ -583,9 +566,7 @@ def diagonal(chess, file, rank, moves_list, piece_sign):
 
         # Otherwise add the square and continue
         moves_list.append(result)
-        print("ADDED4", result, moves_list)
 
-    print("RET QUEEN", moves_list)
     return moves_list
 
 
@@ -596,7 +577,6 @@ def generate_moves_for_pawn(chess, file, rank,
     The legality of the moves are checked later
     """
 
-    print("GEN PAWN", file, rank)
     rank_plus1 = advance_vertical(rank, piece_sign)
     if not rank_plus1:
         # Reached the edge of the board
@@ -638,7 +618,6 @@ def generate_moves_for_rook(chess, file, rank,
     The legality of the moves are checked later
     """
 
-    print("GEN ROOK", file, rank)
     return horizontal_vertical(chess, file, rank, moves_list, piece_sign)
 
 
@@ -650,7 +629,7 @@ def examine_this_square(diffs_tuple, chess, file, rank, piece_sign):
     """
 
     (file_diff, rank_diff) = diffs_tuple
-    print(diffs_tuple, file, rank)
+
     # Is it on the board?
     newfile = chr(ord(file) + file_diff)
     if not ("a" <= newfile <= "h"):
@@ -661,7 +640,6 @@ def examine_this_square(diffs_tuple, chess, file, rank, piece_sign):
         return False
 
     index = newfile + newrank
-    print("NEW INDEX", index, chess.piece_sign(newfile, newrank), piece_sign)
     square_sign = chess.piece_sign(newfile, newrank)
 
     # True: Either an opponent piece or a blank square
@@ -691,7 +669,6 @@ def generate_moves_for_knight(chess, file, rank,
     The legality of the moves are checked later
     """
 
-    print("GEN KNIGHT", file, rank)
     knight_moves = [
         (-1, -2),  # down 1, left 2
         (-1, 2),   # down 1, right 2
@@ -707,7 +684,6 @@ def generate_moves_for_knight(chess, file, rank,
                    for diffs in knight_moves
                    if examine_this_square(diffs, chess,
                                           file, rank, piece_sign)]
-    print("KN", moves_list)
     return moves_list
 
 
@@ -718,7 +694,6 @@ def generate_moves_for_bishop(chess, file, rank,
     The legality of the moves are checked later
     """
 
-    print("GEN BISHOP", file, rank)
     return diagonal(chess, file, rank, moves_list, piece_sign)
 
 
@@ -729,7 +704,6 @@ def generate_moves_for_queen(chess, file, rank,
     The legality of the moves are checked later
     """
 
-    print("GEN QUEEN", file, rank)
     moves_list = diagonal(chess, file, rank, moves_list, piece_sign)
     moves_list = horizontal_vertical(chess, file, rank, moves_list, piece_sign)
     return moves_list
@@ -742,7 +716,6 @@ def generate_moves_for_king(chess, file, rank,
     The legality of the moves are checked later
     """
 
-    print("GEN KING", file, rank)
     king_moves = [
         (0, 1),     # up
         (0, -1),    # down
@@ -758,7 +731,7 @@ def generate_moves_for_king(chess, file, rank,
                    for diffs in king_moves
                    if examine_this_square(diffs, chess,
                                           file, rank, piece_sign)]
-    print("KING", moves_list)
+
     return moves_list
 
 
@@ -803,8 +776,8 @@ def movelist(chess, from_file, from_rank, piece_sign, evaluating=False):
     if not letter:
         return []  # blank square
 
+    # Determine which function to call
     generate_moves_method = determine_generate_move_method(letter)
-    print(generate_moves_method)
     all_the_moves = generate_moves_method(chess,
                                           from_file, from_rank,
                                           [],
@@ -854,7 +827,7 @@ def in_check(chess, user_sign):
                 # Start scanning each move
                 for m in range(len(all_the_moves)):
                     if (chess.piece_letter(all_the_moves[m])
-                    == constants.KING_LETTER):
+                       == constants.KING_LETTER):
                         # Opponent King is in Check!
                         return True
 
@@ -862,19 +835,23 @@ def in_check(chess, user_sign):
     return False
 
 
-def is_player_move_legal(chess, from_file, from_rank, to_file, to_rank):
+def is_player_move_illegal(chess, from_file, from_rank, to_file, to_rank):
 
     """
-    Validate that the PLAYER'S move is legal
-    That is: validate that the PLAYER'S move does not put the PLAYER in Check
+    Determine whether the PLAYER'S move is illegal
+    For example:
+    1) Does the PLAYER'S move put the PLAYER in Check?
+    2) Can the chosen piece make that move?
     """
 
     piece_sign = constants.PLAYER  # white piece
     all_possible_moves = movelist(chess, from_file, from_rank,
                                   piece_sign, False)
+
     print("APM", all_possible_moves)
     print("APM list", all_possible_moves, from_file, from_rank,
           piece_sign, to_file, to_rank)
+
     from_square = from_file + from_rank
     to_square = to_file + to_rank
     # Start scanning each move
@@ -912,7 +889,7 @@ def is_player_move_legal(chess, from_file, from_rank, to_file, to_rank):
                 print("You are in Check")
                 chess.board[from_square] = save_from_square
                 chess.board[to_square] = save_to_square
-                # Indicate in Check
+                # Indicate that the chosen move placed the Player in Check
                 return (True, taken)
 
             # Indicate not in check
@@ -1109,7 +1086,10 @@ def finalise_computer_move(chess):
 
     check_flag = in_check(chess, constants.PLAYER)
     if check_flag:
-        print("You are in check")
+        # todo
+        # showboard()
+        # print("You are in check")
+        chess.display("You are in check")
         add_check_to_output()
         check_flag = is_it_checkmate(constants.PLAYER)
         if check_flag:
@@ -1123,7 +1103,6 @@ def finalise_computer_move(chess):
 # g_move_count_incremented = False
 # todo
             print()
-            showboard()
             # todo Pause the Computer for 3 seconds
 
 
@@ -1234,11 +1213,13 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
 
         # fetch the next move from the player from keyboard
         input_string = input("YOUR MOVE (e.g. e2e4): ").strip()
+        # todo
         # os.system("clear")
-        chess.showboard()
+        # chess.showboard()
 
         if input_string == "R" or input_string == "r":
-            print("Player Resigned")
+            # print("Player Resigned") # todo
+            chess.display("Player Resigned")
             # output_all_chess_moves(chess.COMPUTER_WON) todo
             goodbye()
             # Player Resigned
@@ -1255,19 +1236,19 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         if constants.castling_pattern.match(input_string):
             # \A((O-O-O)|(O-O)|(0-0-0)|(0-0))\Z"
             chess.general_string_result = input_string
-            print("Castling Is Not Implemented")
+            chess.display("Castling Is Not Implemented")
             continue
 
         # General User Input Validation
         if input_string == "":
-            print("Null Input! Enter 'R' to Resign")
+            chess.display("Null Input! Enter 'R' to Resign")
             continue
 
         lower_string = input_string.lower()
         if (len(lower_string) != 4
             # Pattern: ([a-h][1-8]){2}
                 or not constants.chess_move_pattern.match(lower_string)):
-            print()
+            chess.display("")
             print("I do not understand this input:", input_string)
             print("Format of Chess moves ought to be 4 characters e.g. e2e4")
             print("Files should be a letter from a to h")
@@ -1280,35 +1261,35 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         from_rank = lower_string[1]
         to_file = lower_string[2]
         to_rank = lower_string[3]
-        print(lower_string)
+        print(lower_string)  # todo
 
         attacking_piece_letter = chess.piece_letter(from_file, from_rank)
-        print(attacking_piece_letter, "ATT",
-              chess.piece_value(from_file, from_rank))
 
         print_string = output_attacking_move(chess, constants.PLAYER,
                                              from_file, from_rank,
                                              to_file, to_rank)
         # print() todo
-        print(print_string)
+        # print(print_string)
 
         piece_value = chess.piece_value(from_file, from_rank)
 
         if piece_value == constants.BLANK:  # BLANK SQUARE
+            chess.display(print_string)
             print("There is no piece to be played, instead a Blank Square")
             ...
             continue
 
         if piece_value < 0:  # negative numbers are the Computer's Pieces
+            chess.display(print_string)
             print("This is not your piece to move")
             ...
             continue
 
-        (illegal, taken) = is_player_move_legal(chess,
-                                                from_file, from_rank,
-                                                to_file, to_rank)
-        print("RETURNED", illegal, taken)
+        (illegal, taken) = is_player_move_illegal(chess,
+                                                  from_file, from_rank,
+                                                  to_file, to_rank)
         if illegal:
+            chess.display(print_string)
             print("Illegal move")
             ...
             continue
@@ -1329,8 +1310,9 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         finalise_player_move(chess, from_file, from_rank, to_file, to_rank,
                              attacking_piece_letter, taken)
         # TODO just_performed_castling, attacking_piece_letter, taken)
+        # todo
         # os.system("clear")
-        chess.showboard()
+        # chess.showboard()
 
 
 def player_move(chess, from_file, from_rank, to_file, to_rank, result):
@@ -1367,6 +1349,7 @@ def main_part2():
     chess = Game()
 
     chess.fillboard()
+    os.system("clear")
     chess.showboard()
 
     from_file = None
@@ -1378,7 +1361,9 @@ def main_part2():
     # Game Loop
     while True:
         player_move(chess, from_file, from_rank, to_file, to_rank, result)
-        chess.showboard()
+        # todo
+        #  os.system("clear")
+        #  chess.showboard()
         num += 1  # todo testing
         if num > 3:
             break
