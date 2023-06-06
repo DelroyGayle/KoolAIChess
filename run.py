@@ -396,7 +396,7 @@ def check_horizontally(chess, file_start, limit, step, rank,
     For each blank square append the square's coordinates
     When an opponent piece has been reached, append the square's coordinates
     and return the list
-    When a piece of the same colour has been reached 
+    When a piece of the same colour has been reached
     or the edge of the board has been reached,
     return the list
     """
@@ -423,7 +423,7 @@ def check_vertically(chess, rank_start, limit, step,
     For each blank square append the square's coordinates
     When an opponent piece has been reached, append the square's coordinates
     and return the list
-    When a piece of the same colour has been reached 
+    When a piece of the same colour has been reached
     or the edge of the board has been reached,
     return the list
     """
@@ -484,7 +484,8 @@ def horizontal_vertical(chess, file, rank, moves_list, piece_sign):
     return moves_list
 
 
-def check_diagonally(chess, basefile, baserank, horizontal, vertical, piece_sign):
+def check_diagonally(chess, basefile, baserank,
+                     horizontal, vertical, piece_sign):
     """
     Move diagonally by one square
     If the coordinates are off the board, return False
@@ -523,7 +524,7 @@ def diagonal(chess, file, rank, moves_list, piece_sign):
     # Move from the current piece's position,
     # diagionally bottom-left until reaching a nonblank square
     # or the edge of the board
-    for m in range(1,8):  # 1 to 7
+    for m in range(1, 8):  # 1 to 7
         result = check_diagonally(chess, base_file_number, base_rank_number,
                                   -m, -m,
                                   piece_sign)
@@ -537,7 +538,7 @@ def diagonal(chess, file, rank, moves_list, piece_sign):
     # Move from the current piece's position,
     # diagionally bottom-right until reaching a nonblank square
     # or the edge of the board
-    for m in range(1,8):  # 1 to 7
+    for m in range(1, 8):  # 1 to 7
         result = check_diagonally(chess, base_file_number, base_rank_number,
                                   -m, m,
                                   piece_sign)
@@ -551,7 +552,7 @@ def diagonal(chess, file, rank, moves_list, piece_sign):
     # Move from the current piece's position,
     # diagionally top-left until reaching a nonblank square
     # or the edge of the board
-    for m in range(1,8):  # 1 to 7
+    for m in range(1, 8):  # 1 to 7
         result = check_diagonally(chess, base_file_number, base_rank_number,
                                   m, -m,
                                   piece_sign)
@@ -565,7 +566,7 @@ def diagonal(chess, file, rank, moves_list, piece_sign):
     # Move from the current piece's position,
     # diagionally top-right until reaching a nonblank square
     # or the edge of the board
-    for m in range(1,8):  # 1 to 7
+    for m in range(1, 8):  # 1 to 7
         result = check_diagonally(chess, base_file_number, base_rank_number,
                                   m, m,
                                   piece_sign)
@@ -643,25 +644,26 @@ def examine_this_square(diffs_tuple, chess, file, rank, piece_sign):
     print(diffs_tuple, file, rank)
     # Is it on the board?
     newfile = chr(ord(file) + file_diff)
-    if not("a" <= newfile <= "h"):
+    if not ("a" <= newfile <= "h"):
         return False
 
     newrank = chr(ord(rank) + rank_diff)
-    if not("1" <= newrank <= "8"):
+    if not ("1" <= newrank <= "8"):
         return False
 
-    index = newfile + newrank 
-    print("NEW INDEX", index)
-    square_sign = chess.piece_sign(file, newrank)
-    
+    index = newfile + newrank
+    print("NEW INDEX", index, chess.piece_sign(newfile, newrank), piece_sign)
+    square_sign = chess.piece_sign(newfile, newrank)
+
     # True: Either an opponent piece or a blank square
     # False: Otherwise same coloured piece
     return piece_sign != square_sign
 
 
-def add_knight_square(diffs_tuple, file, rank):
+def add_knight_king_square(diffs_tuple, file, rank):
     """
-    Having determined that it is possible for a Knight piece
+    Having determined that it is possible
+    for a Knight piece or a King piece
     to land on a particular square
     Create the coordinates of this square using the numbers in 'diff_tuple'
     e.g. (1, 2) means file += 1, rank += 2.
@@ -692,9 +694,11 @@ def generate_moves_for_knight(chess, file, rank,
         (2, 1),    # up 2, right 1
     ]
 
-    moves_list += [add_knight_square(diffs, file, rank) for diffs in knight_moves
-                         if examine_this_square(diffs, chess, file, rank, piece_sign)]
-    print("KN",moves_list)
+    moves_list += [add_knight_king_square(diffs, file, rank)
+                   for diffs in knight_moves
+                   if examine_this_square(diffs, chess,
+                                          file, rank, piece_sign)]
+    print("KN", moves_list)
     return moves_list
 
 
@@ -709,16 +713,58 @@ def generate_moves_for_bishop(chess, file, rank,
     return diagonal(chess, file, rank, moves_list, piece_sign)
 
 
+def generate_moves_for_queen(chess, file, rank,
+                             moves_list, piece_sign):
+    """
+    Generate all the possible moves of the Queen piece
+    The legality of the moves are checked later
+    """
+
+    print("GEN QUEEN", file, rank)
+    return (moves_list
+            + diagonal(chess, file, rank, moves_list, piece_sign)
+            + horizontal_vertical(chess, file, rank, moves_list, piece_sign))
+
+
+def generate_moves_for_king(chess, file, rank,
+                            moves_list, piece_sign):
+    """
+    Generate all the possible moves of the King piece
+    The legality of the moves are checked later
+    """
+
+    print("GEN KING", file, rank)
+    king_moves = [
+        (0, 1),     # up
+        (0, -1),    # down
+        (-1, 0),    # left
+        (1, 0),     # right
+        (-1, 1),    # diagonal up-left
+        (1, 1),     # diagonal up-right
+        (-1, -1),   # diagonal down-left
+        (1, -1),    # diagonal down-right
+    ]
+
+    moves_list += [add_knight_king_square(diffs, file, rank)
+                   for diffs in king_moves
+                   if examine_this_square(diffs, chess,
+                                          file, rank, piece_sign)]
+    print("KING", moves_list)
+    return moves_list
+
+
 def determine_generate_move_method(piece_letter):
     """
     Use a dictionary to determine which method to call
     """
 
     methods_dictionary = {
-        constants.PAWN_LETTER: generate_moves_for_pawn,
-        constants.ROOK_LETTER: generate_moves_for_rook,
-        constants.KNIGHT_LETTER: generate_moves_for_knight,
-        constants.BISHOP_LETTER: generate_moves_for_bishop,
+        constants.PAWN_LETTER:      generate_moves_for_pawn,
+        constants.ROOK_LETTER:      generate_moves_for_rook,
+        constants.KNIGHT_LETTER:    generate_moves_for_knight,
+        constants.BISHOP_LETTER:    generate_moves_for_bishop,
+        constants.QUEEN_LETTER:     generate_moves_for_queen,
+        constants.KING_LETTER:      generate_moves_for_king,
     }
 
     themethod = methods_dictionary.get(piece_letter, "Unknown letter: "
