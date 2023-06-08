@@ -363,7 +363,6 @@ def is_piece_taken(chess, to_file, to_rank, piece_sign):
     # Check whether the same colour is about to be taken
     # Of course, this should never happen!
     if ((piece_sign < 0 and chess.piece_sign(to_file, to_rank) < 0)
-       or True
        or
        (piece_sign > 0 and chess.piece_sign(to_file, to_rank) > 0)):
         """
@@ -1210,44 +1209,52 @@ def evaluate(chess, level, piece_sign, prune_factor):
     bestscore = constants.EVALUATE_THRESHOLD_SCORE * piece_sign
     # Go through each square on the board
 
-    for letter in ["a", "b", "c", "d", "e", "f", "g", "h"]:
-        for number in ["1", "2", "3", "4", "5", "6", "7", "8"]:
-            index = letter + number
-            if chess.piece_sign(index) != piece_sign:
-                continue
+    """
+    PRESET_CHESSBOARD is a list containing the entire chessboard coordinates
+    ['a1', 'a2' ... 'h7', 'h8']
+    In order to 
+    1) save time in regards to generating such a list from scratch
+    2) the need for two nested for-loops in regards to generating the list
+    3) Instead I filter PRESET_CHESSBOARD for all the pieces of
+       the same colour of the current user using a List Comprehension
+    """
 
-            # Found same coloured piece - evaluate its score
-            from_file = letter
-            from_rank = number
+    same_colour_pieces_list = [index for index in constants.PRESET_CHESSBOARD
+                               if chess.piece_sign(index) == piece_sign]
 
-            if level == 1:  # Level 1 # todo refactor with level == 1 ==>
-                all_the_moves = movelist(chess, from_file, from_rank,
+    for index in same_colour_pieces_list:
+        # Have a same coloured piece - evaluate its score
+        from_file = index[0]
+        from_rank = index[1]
+
+        if level == 1:  # Level 1 # todo refactor with level == 1 ==>
+            all_the_moves = movelist(chess, from_file, from_rank,
                                          piece_sign, True)
-            else:
-                all_the_moves = movelist(chess, from_file, from_rank,
-                                         piece_sign, False)
+        else:
+            all_the_moves = movelist(chess, from_file, from_rank,
+                                     piece_sign, False)
 
-            # Loop through each possible move
-            for m in range(len(all_the_moves)):
-                # todo
-                # For level=1, add logic to handle castling
+        # Loop through each possible move
+        for m in range(len(all_the_moves)):
+            # todo
+            # For level=1, add logic to handle castling
 
-                (to_file, to_rank) = all_the_moves[m]
-                oldscore = Game.score
-                (exit_loop, bestscore) = do_evaluation(chess, level,
-                                                       piece_sign,
-                                                       prune_factor,
-                                                       from_file, from_rank,
-                                                       to_file, to_rank,
-                                                       bestscore)
+            (to_file, to_rank) = all_the_moves[m]
+            oldscore = Game.score
+            (exit_loop, bestscore) = do_evaluation(chess, level,
+                                                   piece_sign,
+                                                   prune_factor,
+                                                   from_file, from_rank,
+                                                   to_file, to_rank,
+                                                   bestscore)
 
-                # Restore 'score'
-                Game.score = oldscore
-                if exit_loop:
-                    return bestscore  # Done!
+            # Restore 'score'
+            Game.score = oldscore
+            if exit_loop:
+                return bestscore  # Done!
 
-                # Otherwise continue evaluating
-                continue
+            # Otherwise continue evaluating
+            continue
 
     return bestscore  # Done!
 
