@@ -1,14 +1,14 @@
 # Kool-AI-Chess
 
 Live Link
-GitHub Repository
+[GitHub Repository](https://github.com/DelroyGayle/KoolAIChess/)
 
 **Kool AI Chess - A command line Chess program using Python - Player vs Computer**
 
 ## Introduction
 
 For my Code Institute Portfolio Project 3, 
-I would like to implement a Chess Program in Python.
+I would like to implement a Chess Program in Python<br> in order to play Chess with a Computer opponent.
 
 In my search for a suitable algorithm I came across this [476-line BASIC PROGRAM by DEAN MENEZES](http://www.petesqbsite.com/sections/express/issue23/Tut_QB_Chess.txt)
 
@@ -75,6 +75,9 @@ Then the computer may respond with **e7e5**
 ------
 
 ## Future Features
+* The ability to switch sides
+* Undo/Redo ability when playing moves
+* Saving board positions during the game
 
 ## Data Model
 
@@ -116,10 +119,85 @@ Thereby if a variable for example *board* represents the chessboard, each square
 For example to refer to square *"h3* I can use the code
 *square = board["h3"]*
 
-
-
 ### Overview of Classes
 
+In order to incorporate Object Oriented programming I have used three classes in this program.
+
+1. Piece
+2. Game
+3. CustomException(Exception)
+
+#### 1) Class: Piece
+
+This is the Class that is the Base Classes for all the Chess Pieces.
+
+As a basis I adopted the way that X.S. had implemented the Pieces' Class in [this code](https://github.com/xsanon/chess/blob/main/src/piece.py)
+
+In my version the rationale is as follows:
+```
+    Attributes:
+    -----------
+    piece : str
+        Each piece is depicted by a letter which represents
+        the name of a piece as following :-
+        Pawn -> P
+        Rook -> R
+        Knight -> N
+        Bishop -> B
+        Queen -> Q
+        King -> K
+
+    sign (colour) : is depicted by a number
+        1 if the piece belongs to the Player i.e. white
+       -1 if the piece belongs to the Computer i.e. black
+  ```
+
+Each piece has
+* **self.sign**: **-1** for the Computer (Black Pieces); **1** for the Player (White Pieces)
+
+* **self.letter**: P R N B Q K
+
+* **self.value**:
+* * Player:
+* * Pawn's value is 100
+* * Rook's value is 500
+* * Knight's value is 270
+* * Bishop's value is 300
+* * Queen's value is 900
+* * **Note: The Player's King value is 5000 and the Computer's King value is -7500**
+* * The Computer's values of each of the above is the negative equivalent i.e. **-100, -500, -270, -300, -900**
+* * **The Kings' values differ as shown above**
+* Note: Blank squares have a value and a sign of ZERO
+
+* **print_string(self)**: This method returns a string description of each piece to describe which piece has been *taken* in a game
+* * "Pawn"
+* * "Rook"
+* * "Knight"
+* * "Bishop"
+* * "Queen"
+* * Note: King piece cannot be *taken* - So no 'print_string'
+
+#### 2. Game
+
+This class represents the status of the Chess Game.
+It is the main workspace of the program containing all the *global* flags, properties and variables related to the state of play of the Game.
+
+So instead of *global* variables I use *Class Variables* of this Class to hold important values.
+
+#### 3. CustomException(Exception)
+
+I have tested my program to the best of my ability however I am a novice Chess Player.
+So just in case my program does some absurd illegal move such as *trying to take a king or capturing a piece of its own colour*;<br>
+I have added a Try-Except method to catch a Custom Exception which will be generated if some *strange* chess move occurs.<br>
+*Hopefully this will never happen! :)*
+
+### constants.py
+
+In order to avoid the usage of *magic numbers* I created this file to hold all the constants needed for this program.
+So if this program needs to be amended, this would me the main place to look at for making adjustments of major values.
+
+The exception is that the function *showboard* in *run.py* uses numbers and strings specific to usage on the ANSI terminal used for this project.
+So I suggest an entire new function will need to be written if displaying the chessboard on a different display media.
 
 ## Testing
 
@@ -201,6 +279,9 @@ No unfixed bugs
 
 ## Libraries and Technologies Used
 
+### os
+I use this library for the *clear* function in order to clear the console before displaying an updated chessboard
+
 ### Languages Used
 
 * Python
@@ -217,7 +298,7 @@ No unfixed bugs
 
 + The depiction of the chessboard with letters and numbers is from [Naming Ranks and Files in Chess](https://www.dummies.com/article/home-auto-hobbies/games/board-games/chess/naming-ranks-and-files-in-chess-186935/)
 +  I would like to acknowledge Dean Menezes, the author of the BASIC program on which my project is based on.
-+  I would like to acknowledge Rod Bird who also adopted Menezes' code. I preferred Bird's display of the Chess Board.
++  I would like to acknowledge [Rod Bird](https://justbasiccom.proboards.com/thread/258/chess?page=2) who also adopted Menezes' code. I preferred Bird's display of the Chess Board.
 +  I would like to acknowledge the *Pythoneer* [X.S.](https://xsanon.medium.com/)
 +  X.S.'s article *[How to Code a Simple Chess Game in Python](https://medium.com/codex/how-to-code-a-simple-chess-game-in-python-9a9cb584f57)* and 
 +  X.S.'s *Pythonic* style of coding in the following [Chess Program](https://github.com/xsanon/chess)
