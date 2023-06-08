@@ -1212,7 +1212,7 @@ def evaluate(chess, level, piece_sign, prune_factor):
     """
     PRESET_CHESSBOARD is a list containing the entire chessboard coordinates
     ['a1', 'a2' ... 'h7', 'h8']
-    In order to 
+    In order to
     1) save time in regards to generating such a list from scratch
     2) the need for two nested for-loops in regards to generating the list
     3) Instead I filter PRESET_CHESSBOARD for all the pieces of
@@ -1229,7 +1229,7 @@ def evaluate(chess, level, piece_sign, prune_factor):
 
         if level == 1:  # Level 1 # todo refactor with level == 1 ==>
             all_the_moves = movelist(chess, from_file, from_rank,
-                                         piece_sign, True)
+                                     piece_sign, True)
         else:
             all_the_moves = movelist(chess, from_file, from_rank,
                                      piece_sign, False)
