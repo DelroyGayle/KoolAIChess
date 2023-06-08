@@ -44,7 +44,7 @@ class Piece():
 class Rook(Piece):
     def __init__(self, value, sign):
         """
-        Base class Piece - Rook's value is 500
+        Rook's value is 500
         """
         super().__init__(sign)
         self.letter = constants.ROOK_LETTER
@@ -60,7 +60,7 @@ class Rook(Piece):
 class Knight(Piece):
     def __init__(self, value, sign):
         """
-        Base class Piece - Knight's value is 270
+        Knight's value is 270
         """
         super().__init__(sign)
         self.letter = constants.KNIGHT_LETTER
@@ -76,7 +76,7 @@ class Knight(Piece):
 class Bishop(Piece):
     def __init__(self, value, sign):
         """
-        Base class Piece - Bishop's value is 300
+        Bishop's value is 300
         """
         super().__init__(sign)
         self.letter = constants.BISHOP_LETTER
@@ -92,7 +92,7 @@ class Bishop(Piece):
 class Queen(Piece):
     def __init__(self, value, sign):
         """
-        Base class Piece - Queen's value is 900
+        Queen's value is 900
         """
         super().__init__(sign)
         self.letter = constants.QUEEN_LETTER
@@ -108,7 +108,6 @@ class Queen(Piece):
 class King(Piece):
     def __init__(self, value, sign):
         """
-        Base class Piece
         Note: The Player's King value is 5000
         and the Computer's King value is -7500
         """
@@ -124,8 +123,7 @@ class King(Piece):
 class Pawn(Piece):
     def __init__(self, value, sign):
         """
-        Base class Piece
-        Note: Base class Piece - Pawn's value is 100
+        Pawn's value is 100
         """
         super().__init__(sign)
         self.letter = constants.PAWN_LETTER
