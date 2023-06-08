@@ -120,6 +120,7 @@ class King(Piece):
         # King piece cannot be 'taken'
         # So no 'print_string'
 
+
 class Pawn(Piece):
     def __init__(self, value, sign):
         """

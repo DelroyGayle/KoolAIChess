@@ -56,7 +56,6 @@ class Game:
     player_first_move = True
     # White goes first
     whose_move = constants.PLAYER
-    LV=0
 
     # Output purposes
     output_stream = ""
@@ -251,9 +250,11 @@ class Game:
                 position = (row + column) % 2
                 portion1 = left_bracket[position]
                 portion2 = right_bracket[position]
-                letter = chr(97 + column)  # characters a to h
+                # characters 'a' to 'h'
+                letter = chr(constants.ASCII_A + column)
                 number = row
-                number = chr(48 + number)  # characters 1 to 8
+                # characters '1' to '8'
+                number = chr(constants.ASCII_ZERO + number)
                 thesign = self.piece_sign(letter, number)
                 if thesign == constants.BLANK:
                     output_string += portion1 + space + portion2
@@ -281,7 +282,7 @@ class Game:
         Show the Chessboard
         Then display a message
         """
-        # os.system("clear")
+        os.system("clear")
         self.showboard()
         print(message)
 
@@ -362,12 +363,14 @@ def is_piece_taken(chess, to_file, to_rank, piece_sign):
     # Check whether the same colour is about to be taken
     # Of course, this should never happen!
     if ((piece_sign < 0 and chess.piece_sign(to_file, to_rank) < 0)
-        or
-        (piece_sign > 0 and chess.piece_sign(to_file, to_rank) > 0)):
+       or True
+       or
+       (piece_sign > 0 and chess.piece_sign(to_file, to_rank) > 0)):
         """
         Some internal logic error has occurred
         """
-        raise CustomException("Internal Error: Piece of the same colour about to be taken: "
+        raise CustomException("Internal Error: "
+                              "Piece of the same colour about to be taken: "
                               + str(piece_taken))
 
     # Convert to a positive number
@@ -377,7 +380,7 @@ def is_piece_taken(chess, to_file, to_rank, piece_sign):
         message = "Computer took your "
     else:
         message = "Player took my "
-    # todo print(chess.print_string(to_file, to_rank))
+
     index = to_file + to_rank
     Game.show_taken = message + chess.board[index].print_string()
     return piece_taken
@@ -635,7 +638,6 @@ def generate_moves_for_pawn(chess, file, rank,
     # Is this square blank?
     if chess.piece_sign(file, rank_plus1) == constants.BLANK:
         moves_list.append(file + rank_plus1)
-        # print("PAWN ADVANCED ONE", file, rank_plus1)
 
     # two steps forward?
     rank_plus2 = (advance_vertical(rank, 2) if piece_sign == constants.PLAYER
@@ -652,7 +654,6 @@ def generate_moves_for_pawn(chess, file, rank,
         # Is this square blank?
         if chess.piece_sign(file, rank_plus2) == constants.BLANK:
             moves_list.append(file + rank_plus2)
-            # print("PAWN ADVANCED TWO", file, rank_plus2)
 
     return moves_list
 
@@ -883,7 +884,8 @@ def in_check(chess, user_sign):
 
 # todo
 def is_it_checkmate(who_are_you):
-    return False # todo
+    return False  # todo
+
 
 def is_player_move_illegal(chess, from_file, from_rank, to_file, to_rank):
 
@@ -897,10 +899,6 @@ def is_player_move_illegal(chess, from_file, from_rank, to_file, to_rank):
     piece_sign = constants.PLAYER  # white piece
     all_possible_moves = movelist(chess, from_file, from_rank,
                                   piece_sign, False)
-
-    print("APM", all_possible_moves)
-    print("APM list", all_possible_moves, from_file, from_rank,
-          piece_sign, to_file, to_rank)
 
     from_square = from_file + from_rank
     to_square = to_file + to_rank
@@ -1053,10 +1051,9 @@ def any_promotion(chess, to_file, to_rank):
     """
 
     to_square = to_file + to_rank
-    # todo   if to_rank == "8" and chess.board[to_square].value == constants.PAWN_VALUE:
-    if (to_rank == "8" 
-        and chess.piece_value(to_square) == constants.PAWN_VALUE):
-        
+    if (to_rank == "8"
+       and chess.piece_value(to_square) == constants.PAWN_VALUE):
+
         # The Player has reached the top of the board
         # Promote the White Pawn to a White Queen
         chess.board[to_square].value = constants.QUEEN_VALUE
@@ -1078,7 +1075,7 @@ def any_promotion(chess, to_file, to_rank):
 def coords_formula(file, rank):
     """
     Need to convert chessboard squares coordinates
-    from chess algebraic notation to 
+    from chess algebraic notation to
     computer array notation
     COLUMN FIRST that is Y then X
 
@@ -1088,7 +1085,7 @@ def coords_formula(file, rank):
 
     a8 to 0,0
     a7 to 0,1
-    a1 to 0,7 
+    a1 to 0,7
     b8 to 1,0
     h8 to 7,0
     h7 to 7,1
@@ -1096,8 +1093,8 @@ def coords_formula(file, rank):
     etc
     """
 
-    file_number = ord(file) - constants.ASCII_A
-    rank_number = constants.ASCII_EIGHT - ord(rank) 
+    file_number = ord(file) - constants.ASCII_A  # 97
+    rank_number = constants.ASCII_EIGHT - ord(rank)
     return (file_number, rank_number)
 
 
@@ -1116,8 +1113,7 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
     # store From and To data so that it may be restored
     save_from_square = chess.board[from_square]
     save_to_square = chess.board[to_square]
-    targetvalue = chess.board[to_square].value if chess.board[to_square] else 0
-    (from_file_number, from_rank_number) = coords_formula(from_file, from_rank)
+    targetvalue = chess.piece_value(to_square)
     (to_file_number, to_rank_number) = coords_formula(to_file, to_rank)
     # Make the move so that it can be evaluated
     make_move_to_square(chess,
@@ -1125,11 +1121,13 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
 
     # negamax formula
     if level < constants.MAXLEVEL:
+        temp_calc = (bestscore - targetvalue + piece_sign
+                     * (8 - abs(4 - to_file_number) - abs(4 - to_rank_number)))
+
         Game.score += evaluate(chess,
                                level,
                                -piece_sign,
-                               bestscore - targetvalue + piece_sign
-                               * (8 - abs(4 - to_file_number) - abs(4 - to_rank_number)))
+                               temp_calc)
 
     """
     Rod Bird's comment:
@@ -1139,17 +1137,18 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
     to favour forwards and central play
     """
 
-    Game.score += targetvalue - piece_sign * (8 - abs(4 - to_file_number) - abs(4 - to_rank_number))
+    temp_calc = (8 - abs(4 - to_file_number) - abs(4 - to_rank_number))
+    Game.score += targetvalue - piece_sign * temp_calc
 
-    """ 
+    """
     Rod Bird's comment:
-    If it results in a better score than previously 
+    If it results in a better score than previously
     then store it as the best
     """
 
-    if ((piece_sign < 0 and Game.score > bestscore) 
+    if ((piece_sign < 0 and Game.score > bestscore)
        or
-        (piece_sign > 0 and Game.score < bestscore)):
+       (piece_sign > 0 and Game.score < bestscore)):
         bestscore = Game.score
         if level == 1:
             # Record the best move found so far
@@ -1157,21 +1156,21 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
             Game.best_from_rank = from_rank
             Game.best_to_file = to_file
             Game.best_to_rank = to_rank
-        
+
         # Restore previous squares
         chess.board[from_square] = save_from_square
         chess.board[to_square] = save_to_square
 
-        """ 
+        """
         Rod Bird's comment:
-        If it is not as good as a previous piece move 
+        If it is not as good as a previous piece move
         then cut the search short
         Exit the loop in 'evaluate'
         """
-    
+
         if ((piece_sign < 0 and bestscore >= prune_factor)
-        or 
-        (piece_sign > 0 and bestscore <= prune_factor)):
+           or
+           (piece_sign > 0 and bestscore <= prune_factor)):
             exitloop = True
 
         else:
@@ -1191,47 +1190,42 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
 def evaluate(chess, level, piece_sign, prune_factor):
     """
     To quote Rod Bird:
-    This function checks all squares for players to move then recursively test plays.
-    It plays its own move then plays the opponent's best move, recursively over four moves.
+    This function checks all squares for players
+    to move then recursively test plays.
+    It plays its own move then plays the opponent's best move,
+    recursively over four moves.
     So getting the potential net worth of each moveable player on the board.
     The highest scored determines the computer's next move.
-    It is a classic mini max evaluation shortened to its a negamax form with pruning
+    It is a classic mini max evaluation shortened
+    to its a negamax form with pruning
     i.e. it does not waste time on lower value plays.
     """
 
     # Update recursion level
     level += 1
     if level > constants.MAXLEVEL:
-        raise CustomException("Internal Error: Level Number Overflow: " + str(level))
+        raise CustomException("Internal Error: Level Number Overflow: "
+              + str(level))
 
     bestscore = constants.EVALUATE_THRESHOLD_SCORE * piece_sign
     # Go through each square on the board
-    """
-    print(piece_sign)
-    for letter in ["a", "b", "c", "d", "e", "f", "g", "h"]:
-        for number in ["1", "2", "3", "4", "5", "6", "7", "8"]:
-            index = letter + number
-            if chess.piece_sign(index) != piece_sign:
-                continue
-            print(letter,number, chess.piece_value(index),
-                      coords_formula(letter, number))
-    quit()
-    """
 
     for letter in ["a", "b", "c", "d", "e", "f", "g", "h"]:
         for number in ["1", "2", "3", "4", "5", "6", "7", "8"]:
             index = letter + number
             if chess.piece_sign(index) != piece_sign:
                 continue
-            
+
             # Found same coloured piece - evaluate its score
             from_file = letter
             from_rank = number
 
             if level == 1:  # Level 1 # todo refactor with level == 1 ==>
-                all_the_moves = movelist(chess, from_file, from_rank, piece_sign, True)
+                all_the_moves = movelist(chess, from_file, from_rank,
+                                         piece_sign, True)
             else:
-                all_the_moves = movelist(chess, from_file, from_rank, piece_sign, False)
+                all_the_moves = movelist(chess, from_file, from_rank,
+                                         piece_sign, False)
 
             # Loop through each possible move
             for m in range(len(all_the_moves)):
@@ -1240,628 +1234,24 @@ def evaluate(chess, level, piece_sign, prune_factor):
 
                 (to_file, to_rank) = all_the_moves[m]
                 oldscore = Game.score
-                (exit_loop, bestscore) = do_evaluation(chess, level, piece_sign, prune_factor,
-                                         from_file, from_rank,
-                                         to_file, to_rank,
-                                         bestscore)
-                if (level == 1):
-                    print("GS/B", bestscore, Game.score, oldscore)
-                    print(Game.best_from_file, Game.best_from_rank, Game.best_to_file, Game.best_to_rank)
+                (exit_loop, bestscore) = do_evaluation(chess, level,
+                                                       piece_sign,
+                                                       prune_factor,
+                                                       from_file, from_rank,
+                                                       to_file, to_rank,
+                                                       bestscore)
+
                 # Restore 'score'
                 Game.score = oldscore
                 if exit_loop:
                     return bestscore  # Done!
 
                 # Otherwise continue evaluating
-
-    return bestscore  # Done!
-
-
-def do_evaluation(chess, level, piece_sign, prune_factor,
-                  from_file, from_rank,
-                  to_file, to_rank,
-                  bestscore):
-    """
-    Perform the evaluation using
-    minimax/negamax formula
-    """
-
-    from_square = from_file + from_rank
-    to_square = to_file + to_rank
-
-    # store From and To data so that it may be restored
-    save_from_square = chess.board[from_square]
-    save_to_square = chess.board[to_square]
-    targetvalue = chess.board[to_square].value if chess.board[to_square] else 0
-    (from_file_number, from_rank_number) = coords_formula(from_file, from_rank)
-    (to_file_number, to_rank_number) = coords_formula(to_file, to_rank)
-    # Make the move so that it can be evaluated
-    make_move_to_square(chess,
-                        from_square, to_square, to_file, to_rank)
-
-    # negamax formula
-    if level < constants.MAXLEVEL:
-        Game.score += evaluate(chess,
-                               level,
-                               -piece_sign,
-                               bestscore - targetvalue + piece_sign
-                               * (8 - abs(4 - to_file_number) - abs(4 - to_rank_number)))
-
-    """
-    Rod Bird's comment:
-    Unwind the recursion by coming back here
-    until we finally return to the main program flow
-    Work out the score adding a small amount
-    to favour forwards and central play
-    """
-
-    Game.score += targetvalue - piece_sign * (8 - abs(4 - to_file_number) - abs(4 - to_rank_number))
-
-    """ 
-    Rod Bird's comment:
-    If it results in a better score than previously 
-    then store it as the best
-    """
-
-    if ((piece_sign < 0 and Game.score > bestscore) 
-       or
-        (piece_sign > 0 and Game.score < bestscore)):
-        bestscore = Game.score
-        if level == 1:
-            # Record the best move found so far
-            Game.best_from_file = from_file
-            Game.best_from_rank = from_rank
-            Game.best_to_file = to_file
-            Game.best_to_rank = to_rank
-        
-        # Restore previous squares
-        chess.board[from_square] = save_from_square
-        chess.board[to_square] = save_to_square
-
-        """ 
-        Rod Bird's comment:
-        If it is not as good as a previous piece move 
-        then cut the search short
-        Exit the loop in 'evaluate'
-        """
-    
-        if ((piece_sign < 0 and bestscore >= prune_factor)
-        or 
-        (piece_sign > 0 and bestscore <= prune_factor)):
-            exitloop = True
-
-        else:
-            # Continue the loop i.e. continue evaluating
-            exitloop = False
-
-        return (exitloop, bestscore)
-
-    # Restore previous squares
-    chess.board[from_square] = save_from_square
-    chess.board[to_square] = save_to_square
-    # Continue the loop i.e. continue evaluating
-    exitloop = False
-    return (exitloop, bestscore)
-
-
-def evaluate2(chess, level, piece_sign, prune_factor):
-    """
-    To quote Rod Bird:
-    This function checks all squares for players to move then recursively test plays.
-    It plays its own move then plays the opponent's best move, recursively over four moves.
-    So getting the potential net worth of each moveable player on the board.
-    The highest scored determines the computer's next move.
-    It is a classic mini max evaluation shortened to its a negamax form with pruning
-    i.e. it does not waste time on lower value plays.
-    """
-
-    # Update recursion level
-    level += 1
-    if level > constants.MAXLEVEL:
-        raise CustomException("Internal Error: Level Number Overflow: " + str(level))
-
-    bestscore = constants.EVALUATE_THRESHOLD_SCORE * piece_sign
-    # Go through each square on the board
-
-    for y in range(7,-1,-1):
-        for x in range(7,-1,-1):
-            letter = chr(y + ord('a'))
-            number = str(8 - x)
-            index = letter + number
-            if chess.piece_sign(index) != piece_sign:
                 continue
-            
-            # Found same coloured piece - evaluate its score
-            from_file = letter
-            from_rank = number
-
-            if level == 1:  # Level 1 # todo refactor with level == 1 ==>
-                all_the_moves = movelist(chess, from_file, from_rank, piece_sign, True)
-            else:
-                all_the_moves = movelist(chess, from_file, from_rank, piece_sign, False)
-            if (level == 1):
-                print("ALL", from_file, from_rank, piece_sign, all_the_moves)
-
-            # Loop through each possible move
-            for m in range(len(all_the_moves)):
-                # todo
-                # For level=1, add logic to handle castling
-
-                (to_file, to_rank) = all_the_moves[m]
-                oldscore = Game.score
-                """
-                (exit_loop, bestscore) = do_evaluation(chess, level, piece_sign, prune_factor,
-                                         from_file, from_rank,
-                                         to_file, to_rank,
-                                         bestscore)
-                """
-
-                from_square = from_file + from_rank
-                to_square = to_file + to_rank
-
-                # store From and To data so that it may be restored
-                save_from_square = chess.board[from_square]
-                save_to_square = chess.board[to_square]
-                targetvalue = chess.board[to_square].value if chess.board[to_square] else 0
-                # (from_file_number, from_rank_number) = coords_formula(from_file, from_rank)
-                (to_file_number, to_rank_number) = coords_formula(to_file, to_rank)
-                # Make the move so that it can be evaluated
-                make_move_to_square(chess,
-                        from_square, to_square, to_file, to_rank)
-
-                # negamax formula
-                if level < constants.MAXLEVEL:
-                    Game.score += evaluate2(chess,
-                               level,
-                               -piece_sign,
-                               bestscore - targetvalue + piece_sign
-                               * (8 - abs(4 - to_file_number) - abs(4 - to_rank_number)))
-
-                    """
-                    Rod Bird's comment:
-                    Unwind the recursion by coming back here
-                    until we finally return to the main program flow
-                    Work out the score adding a small amount
-                    to favour forwards and central play
-                    """
-
-                Game.score += targetvalue - piece_sign * (8 - abs(4 - to_file_number) - abs(4 - to_rank_number))
-
-                """ 
-                Rod Bird's comment:
-                If it results in a better score than previously 
-                then store it as the best
-                """
-
-                if ((piece_sign < 0 and Game.score > bestscore) 
-                or
-                (piece_sign > 0 and Game.score < bestscore)):
-                    bestscore = Game.score
-                    if level == 1:
-                    # Record the best move found so far
-                        Game.best_from_file = from_file
-                        Game.best_from_rank = from_rank
-                        Game.best_to_file = to_file
-                        Game.best_to_rank = to_rank
-                       # print("GS/B", bestscore, Game.score, oldscore)
-                       # print(Game.best_from_file, Game.best_from_rank, Game.best_to_file, Game.best_to_rank)
-                       # print("EXIT",from_file, from_rank, to_file, to_rank, bestscore)
-        
-
-                    """ 
-                    Rod Bird's comment:
-                    If it is not as good as a previous piece move 
-                    then cut the search short
-                    Exit the loop in 'evaluate'
-                    """
-    
-                    if ((piece_sign < 0 and bestscore >= prune_factor)
-                    or 
-                    (piece_sign > 0 and bestscore <= prune_factor)):
-                        # Restore previous squares
-                        chess.board[from_square] = save_from_square
-                        chess.board[to_square] = save_to_square
-                        # Restore 'score'
-                        Game.score = oldscore
-                        return
-
-                else:
-            # Continue the loop i.e. continue evaluating
-                    chess.board[from_square] = save_from_square
-                    chess.board[to_square] = save_to_square
-                    # Restore 'score'
-                    Game.score = oldscore
-
-                # Otherwise continue evaluating
 
     return bestscore  # Done!
 
 
-def evaluate3(chess, level, piece_sign, prune_factor):
-    """
-    To quote Rod Bird:
-    This function checks all squares for players to move then recursively test plays.
-    It plays its own move then plays the opponent's best move, recursively over four moves.
-    So getting the potential net worth of each moveable player on the board.
-    The highest scored determines the computer's next move.
-    It is a classic mini max evaluation shortened to its a negamax form with pruning
-    i.e. it does not waste time on lower value plays.
-    """
-
-    # Update recursion level
-    level += 1
-    if level > constants.MAXLEVEL:
-        raise CustomException("Internal Error: Level Number Overflow: " + str(level))
-
-    bestscore = constants.EVALUATE_THRESHOLD_SCORE * piece_sign
-    # Go through each square on the board
-
-
-    """
-    IF (level = 1) THEN PRINT "A",x,y,x1,y1,score, piece_sign,bestscore, targetvalue
-    IF level<maxlevel THEN score=score+evaluate(0-piece_sign,bestscore - targetvalue + piece_sign*(8-ABS(4-x1)-ABS(4-y1)))
-    IF (level = 1) THEN PRINT "B",x,y,x1,y1,score
-                    score=score+targetvalue-piece_sign*(8-ABS(4-x1)-ABS(4-y1))
-    IF (level = 1) THEN PRINT "C", x,y,x1,y1,score,targetvalue-piece_sign*(8-ABS(4-x1)-ABS(4-y1)):WAITKEY$ 
-    """
-
-    """
-    for y in range(7,-1,-1):  # 7 to 0
-        for x in range(7,-1,-1):  # 7 to 0
-            letter = chr(x + ord('a'))
-            number = str(8 - y)
-            index = letter + number
-            print(y,x,index, chess.piece_value(index))
-    quit()
-    """
-
-    for y in range(7,-1,-1):  # 7 to 0
-        for x in range(7,-1,-1):  # 7 to 0
-            letter = chr(x + ord('a'))
-            number = str(8 - y)
-            index = letter + number
-            # print(index, chess.piece_value(index))
-            if (level == 1):
-                print(y,x,letter,number,index,chess.piece_value(index))
-            if chess.piece_sign(index) != piece_sign:
-                continue
-            # print(letter,number,level)
-            # Found same coloured piece - evaluate its score
-            from_file = letter
-            from_rank = number
-
-            if level == 1:  # Level 1 # todo refactor with level == 1 ==>
-                all_the_moves = movelist(chess, from_file, from_rank, piece_sign, True)
-            else:
-                all_the_moves = movelist(chess, from_file, from_rank, piece_sign, False)
-            if (level == 1):
-                print("ALL", from_file, from_rank, piece_sign, all_the_moves)
-            # print("level Y, X m", level, y, x, len(all_the_moves), all_the_moves)
-            # print('h5', chess.piece_value('h5'), 'h4', chess.piece_value('h4'))
-
-            for m in range(len(all_the_moves)):
-                # todo
-                # For level=1, add logic to handle castling
-
-                (to_file, to_rank) = all_the_moves[m]
-                oldscore = Game.score
-                """
-                (exit_loop, bestscore) = do_evaluation(chess, level, piece_sign, prune_factor,
-                                         from_file, from_rank,
-                                         to_file, to_rank,
-                                         bestscore)
-                """
-
-                from_square = from_file + from_rank
-                to_square = to_file + to_rank
-
-                # store From and To data so that it may be restored
-                save_from_square = chess.board[from_square]
-                save_to_square = chess.board[to_square]
-
-                #targetvalue = chess.board[to_square].value if chess.board[to_square] else 0
-                targetvalue = chess.piece_value(to_square)
-
-                # (from_file_number, from_rank_number) = coords_formula(from_file, from_rank)
-                (to_file_number, to_rank_number) = coords_formula(to_file, to_rank)
-                # Make the move so that it can be evaluated
-                make_move_to_square(chess,
-                        from_square, to_square, to_file, to_rank)
-
-                # print("level s xy", level, Game.score, x,y, to_file_number, to_rank_number,  targetvalue)
-                if (level == 1):
-                    print("try", all_the_moves, m, all_the_moves[m], 
-                      "level", level, Game.score, x,y, to_file_number, to_rank_number,  targetvalue)
-                    print("BEST SO FAR",
-                         bestscore, Game.score, oldscore,
-                         Game.best_from_file, Game.best_from_rank, Game.best_to_file, Game.best_to_rank)
-
-                    # k=input()
-
-                if (level == 1):
-                    print("A", x, y, to_file_number, to_rank_number,Game.score, piece_sign,bestscore, targetvalue)
-                    
-                # negamax formula
-                if level < constants.MAXLEVEL:
-                #    print(to_file_number, to_rank_number)
-                    Game.score += evaluate3(chess,
-                               level,
-                               -piece_sign,
-                               bestscore - targetvalue + piece_sign
-                               * (8 - abs(4 - to_file_number) - abs(4 - to_rank_number)))
-                if (level == 1):
-                    print("B", x, y, to_file_number, to_rank_number,Game.score, type(abs(-4)))
-                    #k=input("")
-
-                # print("score1", level, Game.score, x,y, to_file_number, to_rank_number,  targetvalue)
-
-                """
-                Rod Bird's comment:
-                Unwind the recursion by coming back here
-                until we finally return to the main program flow
-                Work out the score adding a small amount
-                to favour forwards and central play
-                """
-
-                Game.score += targetvalue - piece_sign * (8 - abs(4 - to_file_number) - abs(4 - to_rank_number))
-                
-                # print("score2", level, Game.score, bestscore, piece_sign)
-                #k=input()
-                if (level == 1):
-                    print("C", x, y, to_file_number, to_rank_number,from_file,from_rank,to_file,to_rank,"GS>",Game.score, 
-                          targetvalue - piece_sign * (8 - abs(4 - to_file_number) - abs(4 - to_rank_number)))
-                    #k=input("")
-
-                """ 
-                Rod Bird's comment:
-                If it results in a better score than previously 
-                then store it as the best
-                """
-
-                if ((piece_sign < 0 and Game.score > bestscore) 
-                or
-                (piece_sign > 0 and Game.score < bestscore)):
-                    # print("BETTER",level,piece_sign, Game.score,bestscore)
-                    bestscore = Game.score
-                    if level == 1:
-                        # Record the best move found so far
-                        Game.best_from_file = from_file
-                        Game.best_from_rank = from_rank
-                        Game.best_to_file = to_file
-                        Game.best_to_rank = to_rank
-                        print("GS/B", bestscore, Game.score, oldscore)
-                        print(Game.best_from_file, Game.best_from_rank, Game.best_to_file, Game.best_to_rank)
-                        print("BETTER2",from_file, from_rank, to_file, to_rank, bestscore, piece_sign, prune_factor, level)
-        
-
-                    """ 
-                    Rod Bird's comment:
-                    If it is not as good as a previous piece move 
-                    then cut the search short
-                    Exit the loop in 'evaluate'
-                    """
-    
-                    if ((piece_sign < 0 and bestscore >= prune_factor)
-                    or 
-                    (piece_sign > 0 and bestscore <= prune_factor)):
-                        # print("EXIT",level,piece_sign, bestscore,prune_factor)
-                        # Restore previous squares
-                        chess.board[from_square] = save_from_square
-                        chess.board[to_square] = save_to_square
-                        # Restore 'score'
-                        Game.score = oldscore
-                        return bestscore
-
-            
-                # Continue the loop i.e. continue evaluating
-                # Restore previous squares
-                # else:
-                chess.board[from_square] = save_from_square
-                chess.board[to_square] = save_to_square
-                # Restore 'score'
-                Game.score = oldscore
-
-                    # Otherwise continue evaluating
-
-    # print("LV", level)
-    return bestscore  # Done!
-
-
-
-
-def evaluate4(chess, level, piece_sign, prune_factor):
-    """
-    To quote Rod Bird:
-    This function checks all squares for players to move then recursively test plays.
-    It plays its own move then plays the opponent's best move, recursively over four moves.
-    So getting the potential net worth of each moveable player on the board.
-    The highest scored determines the computer's next move.
-    It is a classic mini max evaluation shortened to its a negamax form with pruning
-    i.e. it does not waste time on lower value plays.
-    """
-
-    # Update recursion level
-    level += 1
-    Game.LV+=1
-    if level > constants.MAXLEVEL:
-        raise CustomException("Internal Error: Level Number Overflow: " + str(level))
-
-    bestscore = constants.EVALUATE_THRESHOLD_SCORE * piece_sign
-    # Go through each square on the board
-
-
-    """
-    IF (level = 1) THEN PRINT "A",x,y,x1,y1,score, piece_sign,bestscore, targetvalue
-    IF level<maxlevel THEN score=score+evaluate(0-piece_sign,bestscore - targetvalue + piece_sign*(8-ABS(4-x1)-ABS(4-y1)))
-    IF (level = 1) THEN PRINT "B",x,y,x1,y1,score
-                    score=score+targetvalue-piece_sign*(8-ABS(4-x1)-ABS(4-y1))
-    IF (level = 1) THEN PRINT "C", x,y,x1,y1,score,targetvalue-piece_sign*(8-ABS(4-x1)-ABS(4-y1)):WAITKEY$ 
-    """
-
-    """
-    for y in range(7,-1,-1):  # 7 to 0
-        for x in range(7,-1,-1):  # 7 to 0
-            letter = chr(x + ord('a'))
-            number = str(8 - y)
-            index = letter + number
-            print(y,x,index, chess.piece_value(index))
-    quit()
-    """
-
-    for y in range(7,-1,-1):  # 7 to 0
-        for x in range(7,-1,-1):  # 7 to 0
-            letter = chr(x + ord('a'))
-            number = str(8 - y)
-            index = letter + number
-            # print(index, chess.piece_value(index))
-            if (level == 1):
-                print(y,x,letter,number,index,chess.piece_value(index))
-            if chess.piece_sign(index) != piece_sign:
-                continue
-            # print(letter,number,level)
-            # Found same coloured piece - evaluate its score
-            from_file = letter
-            from_rank = number
-
-            if Game.LV == 1:  # Level 1 # todo refactor with level == 1 ==>
-                all_the_moves = movelist(chess, from_file, from_rank, piece_sign, True)
-            else:
-                all_the_moves = movelist(chess, from_file, from_rank, piece_sign, False)
-            if (level == 1):
-                print("ALL", from_file, from_rank, piece_sign, all_the_moves)
-            # print("level Y, X m", level, y, x, len(all_the_moves), all_the_moves)
-            # print('h5', chess.piece_value('h5'), 'h4', chess.piece_value('h4'))
-
-            for m in range(len(all_the_moves)):
-                # todo
-                # For level=1, add logic to handle castling
-
-                (to_file, to_rank) = all_the_moves[m]
-                oldscore = Game.score
-                """
-                (exit_loop, bestscore) = do_evaluation(chess, level, piece_sign, prune_factor,
-                                         from_file, from_rank,
-                                         to_file, to_rank,
-                                         bestscore)
-                """
-
-                from_square = from_file + from_rank
-                to_square = to_file + to_rank
-
-                # store From and To data so that it may be restored
-                save_from_square = chess.board[from_square]
-                save_to_square = chess.board[to_square]
-
-                #targetvalue = chess.board[to_square].value if chess.board[to_square] else 0
-                targetvalue = chess.piece_value(to_square)
-
-                # (from_file_number, from_rank_number) = coords_formula(from_file, from_rank)
-                (to_file_number, to_rank_number) = coords_formula(to_file, to_rank)
-                # Make the move so that it can be evaluated
-                make_move_to_square(chess,
-                        from_square, to_square, to_file, to_rank)
-
-                # print("level s xy", level, Game.score, x,y, to_file_number, to_rank_number,  targetvalue)
-                if (level == 1):
-                    print("try", all_the_moves, m, all_the_moves[m], 
-                      "level", level, Game.score, x,y, to_file_number, to_rank_number,  targetvalue)
-                    print("BEST SO FAR",
-                         bestscore, Game.score, oldscore,
-                         Game.best_from_file, Game.best_from_rank, Game.best_to_file, Game.best_to_rank)
-
-                    # k=input()
-
-                if (level == 1):
-                    print("A", x, y, to_file_number, to_rank_number,Game.score, piece_sign,bestscore, targetvalue)
-                    
-                # negamax formula
-                if Game.LV < constants.MAXLEVEL:
-                #    print(to_file_number, to_rank_number)
-                    Game.score += evaluate4(chess,
-                               level,
-                               -piece_sign,
-                               bestscore - targetvalue + piece_sign
-                               * (8 - abs(4 - to_file_number) - abs(4 - to_rank_number)))
-                if (level == 1):
-                    print("B", x, y, to_file_number, to_rank_number,Game.score, type(abs(-4)))
-                    #k=input("")
-
-                # print("score1", level, Game.score, x,y, to_file_number, to_rank_number,  targetvalue)
-
-                """
-                Rod Bird's comment:
-                Unwind the recursion by coming back here
-                until we finally return to the main program flow
-                Work out the score adding a small amount
-                to favour forwards and central play
-                """
-
-                Game.score += targetvalue - piece_sign * (8 - abs(4 - to_file_number) - abs(4 - to_rank_number))
-                
-                # print("score2", level, Game.score, bestscore, piece_sign)
-                #k=input()
-                if (level == 1):
-                    print("C", x, y, to_file_number, to_rank_number,from_file,from_rank,to_file,to_rank,"GS>",Game.score, 
-                          targetvalue - piece_sign * (8 - abs(4 - to_file_number) - abs(4 - to_rank_number)))
-                    #k=input("")
-
-                """ 
-                Rod Bird's comment:
-                If it results in a better score than previously 
-                then store it as the best
-                """
-
-                if ((piece_sign < 0 and Game.score > bestscore) 
-                or
-                (piece_sign > 0 and Game.score < bestscore)):
-                    # print("BETTER",level,piece_sign, Game.score,bestscore)
-                    bestscore = Game.score
-                    if level == 1:
-                        # Record the best move found so far
-                        Game.best_from_file = from_file
-                        Game.best_from_rank = from_rank
-                        Game.best_to_file = to_file
-                        Game.best_to_rank = to_rank
-                        print("GS/B", bestscore, Game.score, oldscore)
-                        print(Game.best_from_file, Game.best_from_rank, Game.best_to_file, Game.best_to_rank)
-                        print("BETTER2",from_file, from_rank, to_file, to_rank, bestscore, piece_sign, prune_factor, level)
-        
-
-                    """ 
-                    Rod Bird's comment:
-                    If it is not as good as a previous piece move 
-                    then cut the search short
-                    Exit the loop in 'evaluate'
-                    """
-    
-                    if ((piece_sign < 0 and bestscore >= prune_factor)
-                    or 
-                    (piece_sign > 0 and bestscore <= prune_factor)):
-                        # print("EXIT",level,piece_sign, bestscore,prune_factor)
-                        # Restore previous squares
-                        chess.board[from_square] = save_from_square
-                        chess.board[to_square] = save_to_square
-                        # Restore 'score'
-                        Game.score = oldscore
-                        Game.LV-=1
-                        return bestscore
-
-            
-                # Continue the loop i.e. continue evaluating
-                # Restore previous squares
-                # else:
-                chess.board[from_square] = save_from_square
-                chess.board[to_square] = save_to_square
-                # Restore 'score'
-                Game.score = oldscore
-
-                    # Otherwise continue evaluating
-
-    # print("LV", level)
-    Game.LV-=1
-    return bestscore  # Done!
-    
-    
 def execute_computer_move(chess, from_file, from_rank, to_file, to_rank):
     """
     Carry out the chess move that was produced
@@ -1872,9 +1262,10 @@ def execute_computer_move(chess, from_file, from_rank, to_file, to_rank):
     # display the move
     attacking_piece_letter = chess.piece_letter(from_file, from_rank)
 
-    Game.computer_print_string = output_attacking_move(chess, constants.COMPUTER,
-                                         from_file, from_rank,
-                                         to_file, to_rank)
+    Game.computer_print_string = output_attacking_move(chess,
+                                                       constants.COMPUTER,
+                                                       from_file, from_rank,
+                                                       to_file, to_rank)
 
     """
     Check whether a Player's piece is about to be taken
@@ -1944,8 +1335,10 @@ def finalise_computer_move(chess):
         check_flag = is_it_checkmate(constants.PLAYER)
         if check_flag:
             print("Checkmate!! I Win!")
-            print(Game.output_chess_move)
-            Game.output_chess_move = add_checkmate_to_output(Game.output_chess_move)
+            # todo print(Game.output_chess_move)
+            # Keep Linter happy
+            chess_move = Game.output_chess_move
+            Game.output_chess_move = add_checkmate_to_output(chess_move)
 
 #            append_to_output(Game.output_chess_move + constants.SPACE)
 # keep this flag unset from now on; so that the move count is incremented
@@ -1981,10 +1374,11 @@ def process_computer_move(chess, from_file, from_rank, to_file, to_rank):
 # (if it was not a Castling Chess Move)
     if not computer_move_finalised:
         execute_computer_move(chess,
-                                  from_file, from_rank, to_file, to_rank)
-            # todo
-            # finalise_computer_move
-            # (check_flag, Game.output_chess_move, g_move_count_incremented)
+                              from_file, from_rank,
+                              to_file, to_rank)
+        # todo
+        # finalise_computer_move
+        # (check_flag, Game.output_chess_move, g_move_count_incremented)
         finalise_computer_move(chess)
 
 
@@ -2035,7 +1429,9 @@ def finalise_player_move(chess, from_file, from_rank, to_file, to_rank,
         add_check_to_output()
         check_flag = is_it_checkmate(constants.COMPUTER)
         if check_flag:
-            Game.output_chess_move = add_checkmate_to_output(Game.output_chess_move)
+            # Keep Linter happy
+            chess_move = Game.output_chess_move
+            Game.output_chess_move = add_checkmate_to_output(chess_move)
             print("Checkmate!! You Win!")
 #            append_to_output(Game.output_chess_move + constants.SPACE)
 #            output_all_chess_moves(constants.PLAYER_WON)
@@ -2068,7 +1464,7 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
 
         # fetch the next move from the player from keyboard
         input_string = input("YOUR MOVE (e.g. e2e4): ").strip()
-        # todo
+        # todo - REMOVE
         # os.system("clear")
         # chess.showboard()
 
@@ -2142,9 +1538,11 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
             ...
             continue
 
-        (illegal, illegal_because_in_check, taken) = is_player_move_illegal(chess,
-                                                 from_file, from_rank,
-                                                  to_file, to_rank)
+        (illegal,
+         illegal_because_in_check,
+         taken) = is_player_move_illegal(chess,
+                                         from_file, from_rank,
+                                         to_file, to_rank)
         if illegal_because_in_check:
             chess.display(print_string)
             print("Illegal move because you are in check")
@@ -2175,7 +1573,7 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         # TODO just_performed_castling, attacking_piece_letter, taken)
 
         # Valid move has been played - show the updated board
-        # todo
+        # todo - REMOVE
         # os.system("clear")
         # chess.showboard()
         chess.display("I am evaluating my next move...")
@@ -2216,7 +1614,7 @@ def main_part2():
     chess = Game()
 
     chess.fillboard()
-    # os.system("clear")
+    os.system("clear")
     chess.showboard()
 
     # remove todo
@@ -2224,24 +1622,27 @@ def main_part2():
     from_rank = None
     to_file = None
     to_rank = None
-    result = 0  # TODO
-    num = 0
+
     # Game Loop
     while True:
-        play_2_moves(chess, Game.best_from_file, Game.best_from_rank, Game.best_to_file, Game.best_to_rank, result)
-        # todo
+        play_2_moves(chess,
+                     Game.best_from_file,
+                     Game.best_from_rank,
+                     Game.best_to_file,
+                     Game.best_to_rank,
+                     Game.evaluation_result)
+
+        # todo - REMOVE
         #  os.system("clear")
         #  chess.showboard()
-        Game.evaluation_result = evaluate4(chess, 0, constants.COMPUTER, constants.EVALUATE_THRESHOLD_SCORE)
-        print("GS", Game.evaluation_result,
-              Game.score, Game.best_from_file,Game.best_from_rank,
-                           Game.best_to_file, Game.best_to_rank)
-        print("DONE")
-        input("DONE")
-        # remove
+        Game.evaluation_result = evaluate(chess, 0,
+                                          constants.COMPUTER,
+                                          constants.EVALUATE_THRESHOLD_SCORE)
+
+        # remove todo
         # from_file = Game.best_from_file
         # from_rank = Game.best_from_rank
-        
+
 
 def main():
     try:

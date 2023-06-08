@@ -114,6 +114,17 @@ BISHOP_LETTER = "B"
 KNIGHT_LETTER = "N"
 PAWN_LETTER = "P"
 
+"""
+Generate a list of the entire chessboard coordinates
+['a1', 'a2' ... 'h7', 'h8']
+In order to save time with 'evaluate'
+generated such a list from scratch
+"""
+
+PRESET_CHESSBOARD = [chr(j+97) + chr(k+49)
+                     for j in range(8)
+                     for k in range(8)]
+
 # Regular Expressions
 
 castling_pattern = re.compile(r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))\Z")
