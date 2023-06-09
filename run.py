@@ -1662,4 +1662,5 @@ def main():
         raise error
 
 
-main()
+if __name__ == "__main__":
+    main()
