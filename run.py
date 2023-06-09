@@ -15,6 +15,14 @@ import constants
 import piece
 import os
 import re
+from colorama import Fore, Back, Style, init
+import time
+
+print(Fore.RED + 'some red text')
+print(Back.GREEN + 'and with a green background')
+print(Style.DIM + 'and in dim text')
+print(Style.RESET_ALL)
+print('back to normal now')
 
 
 class CustomException(Exception):
@@ -276,6 +284,60 @@ class Game:
         print("{}A  B  C  D  E  F  G  H".format(space*5))
         print()
 
+    def showboard2(self):
+        """
+        Display the Chessboard
+        In Colour
+        """
+        # Cursor 3, 30
+        # locate(3,30)
+        # colour(7, 0) WHITE on BLACK
+
+        horiz_top = "\u2584"
+        horiz_bottom = "\u2580"
+        vert = "\u2588"
+        print(Fore.WHITE + locate(3, 30) + "A  B  C  D  E  F  G  H", end="")
+
+        for k in range(26):
+            row = 4
+            column = 28 + k
+            print(Fore.GREEN + locate(row, column) + horiz_top, end="")
+
+        for b in range(8):
+            row = 2 * b + 5
+            print(Fore.WHITE + locate(row, 26) + chr(56 - b), end="")
+            print(Fore.GREEN + locate(row, 28) + vert, end="")
+            row = 2 * b + 6
+            print(Fore.GREEN + locate(row, 28) + vert, end="")
+
+            for a in range(8):
+                if ((a + b) % 2):
+                    colour = 8
+                    foreground = Fore.LIGHTBLACK_EX
+                    background = Back.LIGHTBLACK_EX
+                else:
+                    colour = 9
+                    foreground = Fore.BLUE
+                    background = Back.BLUE
+                display_square(3 * a + 31, 2 * b + 5, colour)
+
+            print(Fore.GREEN + locate(2 * b + 5, 53) + vert, end="")
+            print(Fore.GREEN + locate(2 * b + 6, 53) + vert, end="")
+            # originally 2 * b + 6, 55
+            print(Fore.WHITE + locate(2 * b + 5, 55) + chr(56 - b), end="")
+
+        for k in range(26):
+            row = 21
+            column = 28 + k
+            print(Fore.GREEN + locate(row, column) + horiz_bottom, end="")
+
+        print(Fore.WHITE + locate(22, 30) + "A  B  C  D  E  F  G  H", end="")
+        show_pieces(self)
+        # Display the Coloured Chessboard for two minutes
+        time.sleep(120)
+
+        return
+
     def display(self, message):
         """
         Clear Screen
@@ -285,6 +347,72 @@ class Game:
         os.system("clear")
         self.showboard()
         print(message)
+
+
+def show_pieces(self):
+    """
+    Display each piece
+    """
+    for index in constants.PRESET_CHESSBOARD:
+        square_value = self.piece_value(index)
+        background = 0 if square_value <= 0 else 7
+        foreground = 7 - background
+        temp = ord(index[1]) - 48
+        num2 = 8 - temp
+        num1 = ord(index[0]) - 97
+        if square_value == 0:
+            background = 8 if (((num1 + num2) % 2)) else 12
+            foreground = background
+        piece = self.piece_letter(index)
+        if not piece:
+            piece = "\u2588"
+        temp = -1 if square_value > 0 else 0
+
+        if foreground == 7:
+            f = Fore.WHITE
+        elif foreground == 8:
+            f = Fore.LIGHTBLACK_EX
+        elif foreground == 9:
+            f = Fore.BLUE
+        else:
+            f = Fore.LIGHTMAGENTA_EX
+
+        if background == 7:
+            b = Fore.WHITE
+        elif background == 8:
+            b = Fore.LIGHTBLACK_EX
+        elif background == 9:
+            b = Fore.BLUE
+        else:
+            b = Fore.LIGHTMAGENTA_EX
+
+        print(f + b + locate(2 * num2 + 5 - temp, 3 * num1 + 30) + piece,
+              end="")
+
+
+def locate(row, column):
+    # ESC [ y;x H
+    return "\x1b[" + str(row) + ";" + str(column) + "H"
+
+
+def colour(foreground, background):
+    # EG ESC [ 36 ; 45 m     # cyan text on magenta background
+    print("\033[{};{}m".format(foreground, background))
+
+
+# Display a square
+def display_square(column, row, colour):
+    square_shape = "\u2588"  # same as vert
+    square_shape = square_shape * 3
+    if colour == 8:
+        f = Fore.LIGHTBLACK_EX
+        b = Back.LIGHTBLACK_EX
+    else:
+        f = Fore.LIGHTMAGENTA_EX
+        b = Back.LIGHTMAGENTA_EX
+
+    print(f + b + locate(row, column - 2) + square_shape, end="")
+    print(f + b + locate(row + 1, column - 2) + square_shape, end="")
 
 
 def goodbye():
@@ -1618,11 +1746,21 @@ def main_part2():
     Display the Board
     """
 
+    # Experiment with Colorama
+    init(autoreset=True)
+    print(Fore.RED + 'some red text')
+    print(Back.GREEN + 'and with a green background')
+    print(Style.DIM + 'and in dim text')
+    print('back to normal now')
+    print(Fore.RED + locate(0, 30) + "Diff Place")
+    print(Style.RESET_ALL)
+
     chess = Game()
 
     chess.fillboard()
     os.system("clear")
-    chess.showboard()
+    chess.showboard2()
+    quit()
 
     # remove todo
     from_file = None
