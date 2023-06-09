@@ -278,20 +278,22 @@ No unfixed bugs
 
 ## Deployment
 
-## Libraries and Technologies Used
+## Languages, Libraries and Technologies
 
-### os
-I use this library for the *clear* function in order to clear the console before displaying an updated chessboard
+### Languages
+* Python3
 
-### Languages Used
+### Libraries
 
-* Python
+* os - I use this library for the *clear* function in order to clear the console before displaying an updated chessboard
+* re - I use *regular expressions* in order to validate the user input of chess moves
 
 ### Other tools
 
 * GitHub - for hosting the site
 * Gitpod - for editing the files
 * Heroku - for the deployment of the site
+* Code Institute's GitHub full template - in order to run Python on Heroku
 
 ------
 
@@ -303,5 +305,5 @@ I use this library for the *clear* function in order to clear the console before
 +  I would like to acknowledge the *Pythoneer* [X.S.](https://xsanon.medium.com/).
 +  X.S.'s article *[How to Code a Simple Chess Game in Python](https://medium.com/codex/how-to-code-a-simple-chess-game-in-python-9a9cb584f57)* and 
 +  X.S.'s *Pythonic* style of coding in the following [Chess Program](https://github.com/xsanon/chess).
-+  Background image by [Chris Burns](https://unsplash.com/@chris_burns ) at [Unsplash](https://unsplash.com/).
++  Background image photo by [Chris Burns](https://unsplash.com/@chris_burns ) on [Unsplash](https://unsplash.com/).
 +  I would like to acknowledge [asiask97's CLI Battleship game](https://github.com/asiask97/Battleship-cli-game/) which shows how to present a Python program against a background image.
