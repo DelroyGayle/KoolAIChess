@@ -1,6 +1,6 @@
 # Kool-AI-Chess
 
-Live Link(https://koolai-chess.herokuapp.com/)
+[Live Link](https://koolai-chess.herokuapp.com/)
 
 [GitHub Repository](https://github.com/DelroyGayle/KoolAIChess/)
 
