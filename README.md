@@ -300,6 +300,8 @@ I use this library for the *clear* function in order to clear the console before
 + The depiction of the chessboard with letters and numbers is from [Naming Ranks and Files in Chess](https://www.dummies.com/article/home-auto-hobbies/games/board-games/chess/naming-ranks-and-files-in-chess-186935/)
 +  I would like to acknowledge Dean Menezes, the author of the BASIC program on which my project is based on.
 +  I would like to acknowledge [Rod Bird](https://justbasiccom.proboards.com/thread/258/chess?page=2) who also adopted Menezes' code. I preferred Bird's display of the Chess Board.
-+  I would like to acknowledge the *Pythoneer* [X.S.](https://xsanon.medium.com/)
++  I would like to acknowledge the *Pythoneer* [X.S.](https://xsanon.medium.com/).
 +  X.S.'s article *[How to Code a Simple Chess Game in Python](https://medium.com/codex/how-to-code-a-simple-chess-game-in-python-9a9cb584f57)* and 
-+  X.S.'s *Pythonic* style of coding in the following [Chess Program](https://github.com/xsanon/chess)
++  X.S.'s *Pythonic* style of coding in the following [Chess Program](https://github.com/xsanon/chess).
++  Background image by [Chris Burns](https://unsplash.com/@chris_burns ) at [Unsplash](https://unsplash.com/).
++  I would like to acknowledge [asiask97's CLI Battleship game](https://github.com/asiask97/Battleship-cli-game/) which shows how to present a Python program against a background image.
