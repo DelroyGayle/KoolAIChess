@@ -13,15 +13,57 @@ I would like to implement a Chess Program in Python<br> in order to play Chess w
 
 In my search for a suitable algorithm I came across this [476-line BASIC PROGRAM by DEAN MENEZES](http://www.petesqbsite.com/sections/express/issue23/Tut_QB_Chess.txt)
 
-Let me reiterate: the basis of my project is a Chess Program written in<br>**[BASIC](https://en.wikipedia.org/wiki/BASIC) (Beginners' All-purpose Symbolic Instruction Code)**
-available [here](http://www.petesqbsite.com/sections/express/issue23/Tut_QB_Chess.txt)
+Let me reiterate: the basis of my project is a Chess Program written in<br>**[BASIC](https://en.wikipedia.org/wiki/BASIC) (Beginners' All-purpose Symbolic Instruction Code)** which is available [here](http://www.petesqbsite.com/sections/express/issue23/Tut_QB_Chess.txt).
 
 I found it amazing how Denezes has written such an highly interesting chess playing program in under 500 lines.
-My goal then is to convert it to Python and add ***castling and en passant*** chess moves to it so that the user can play a complete game of Chess against their Computer opponent, namely, ***Kool A.I.***
+My goal then is to convert Denezes' BASIC program to Python; moreover, to add ***castling and en passant*** chess moves so that the user can play a complete game of Chess against their Computer opponent, namely, ***Kool A.I.***
 
-## How To Play
+## Chess
 
-### Ready To Play
+To quote [Boardgamegeek](https://boardgamegeek.com/boardgame/171/chess)
+
+> Chess is a two-player, abstract strategy board game that represents medieval warfare on an 8x8 board with alternating light and dark squares. Opposing pieces, traditionally designated *White and Black*, are initially lined up on either side. Each type of piece has a unique form of movement and capturing occurs when a piece, via its movement, occupies the square of an opposing piece. Players take turns moving one of their pieces in an attempt to capture, attack, defend, or develop their positions.<br>Chess games can end in **checkmate, resignation, or one of several types of draws.**<br>Chess is one of the most popular games in the world, played by millions of people worldwide at home, in clubs, online, by correspondence, and in tournaments. 
+
+To quote [Wikipedia](https://en.wikipedia.org/wiki/Chess)
+
+> Chess is an abstract strategy game that involves no hidden information and no elements of chance. It is played on a chessboard with 64 squares arranged in an eight-by-eight grid.<br>At the start, each player controls sixteen pieces:<br>
+*one king, one queen, two rooks, two bishops, two knights, and eight pawns.*<br>
+**White moves first, followed by Black. The game is won by checkmating the opponent's king, i.e. threatening it with inescapable capture.**<br>There are also several ways a game can end in a draw.
+
+For the rules and further information on the game of Chess please refer to the following Wikipedia articles:<br>
+1. [Rules of Chess](https://en.wikipedia.org/wiki/Rules_of_chess)
+2. [Chess](https://en.wikipedia.org/wiki/Chess)
+
+Thank You.
+
+## How To Play Against Kool A.I.
+
+The user goes first. The user is designated *White* however seeing that this is a monochrome game,<br>the user's pieces are depicted as the lowercase letters at the bottom of the board.
+
+*Kool A.I., your Computer opponent* will go second. The computer is designated *Black*.<br>The computer's pieces are depicted as the uppercase letters at the top of the board.
+
+From this point onwards each will play their move until either
+
+* The user beats *Kool A.I.*! That is, **[Checkmate!](https://en.wikipedia.org/wiki/Checkmate) The user has Won!**
+* *Kool A.I.* recognises it cannot win therefore it resigns. **The user has Won!**
+* ***Kool A.I.* beats the user** and informs the user that they are in **[Checkmate](https://en.wikipedia.org/wiki/Checkmate)**
+* The user resigns because of one of the following reasons:
+* 1. The user can foresee that they will be in *Checkmate*.
+* 2. The user realises that the game is *Stalemate*.<br>([Stalemate](https://en.wikipedia.org/wiki/Stalemate) is a situation in Chess where the player whose turn it is to move is not in Check and has no legal move.)
+* 3. The user realises that the game is a [Draw](https://en.wikipedia.org/wiki/Draw_(chess)).
+* 4. Or the user chooses to no longer continue with the game.
+
+### Resignation
+
+Resignation in Chess is the player conceding the game to their opponent. To acknowledge defeat.<br>
+Resignation immediately ends the game.<br>
+Please note however:
+1.  Kool A.I.'s algorithm will score each of its potential moves before its play and if the score of a move is *too low* it will resign.
+2.  Unfortunately, my program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the human user to end the game by *entering 'R' to resign*.
+3. Also, I am a novice chess player. So in writing this program, there is the distinct possibility that my program may declare **Checkmate** when in fact, it is not!<br>(Personally, throughout my testing I have not come across such a scenario!)<br>
+Therefore, in considering the possibility of such a scenario; even after declaring **Checkmate** I leave it up to the user to resign.<br>That is, my program does **not** force the end of the game - *the player can play on!*
+
+### Game Screen
 
 The program will prompt the User then await the User's input 
 
@@ -41,9 +83,22 @@ Since the User has moved the pawn from square *e2 to e4* the program will displa
 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/cb116eae-8e63-4573-8ca1-742d3230e67f)
 
-## Target Audience
+### Check
+
+### Checkmate
+
+### Resignation
 
 ## User Stories
+
+1.  As a user I want to be welcomed by a start screen with the name of the game.
+2.  As a user I want to be able to enjoy a game of Chess against a Computer Opponent
+3.  As a user I want to know whether I am entering correct Chess moves. Moreover, if not,<br>then an explanation of why a move is incorrect.
+4.  As a user, I want to know whether I have placed the Computer *in Check*.
+5.  As a user, I want to know whether I have placed the Computer *in Checkmate*. That is, have I won?
+6.  As a user, I want to know whether I am *in Check*.
+7.  As a user, I want to know whether the Computer has placed me *in Checkmate*. That is, have I lost?
+8.  As a user, I want the option to *Resign* when realising that I cannot beat my opponent.
 
 ------
 
@@ -79,6 +134,7 @@ Then the computer may respond with **e7e5**
 * The ability to switch sides
 * Undo/Redo ability when playing moves
 * Saving board positions during the game
+* A Colour Chessboard using a libary such as [Colorama](https://pypi.org/project/colorama/)
 
 ## Data Model
 
@@ -202,6 +258,10 @@ So I suggest an entire new function will need to be written if displaying the ch
 
 ## Testing
 
++ Passed the code through the PEP8 linter and confirmed there are no problems
+
++ Carried out tests of the program on both the local terminal and the Code Institute Heroku terminal
+
 ### Internal Errors
 
 At the top level of the program I have added the following *try-except* :- 
@@ -272,11 +332,36 @@ class Game:
 
 ### Unfixed Bugs
 
-No unfixed bugs
+No unfixed bugs.
 
 ------
 
 ## Deployment
+
+The project is deployed on Heroku. These are the steps in order to deploy on Heroku
+
+1. Create Heroku account.
+2. Create new project.
+3. Go into settings -> Config Var and add the fallowing:
+    +  key by the name of *PORT* with the value of *8000*.<p>
+
+4. Include the following buildpacks:
+    + Heroku/python
+    + Heroku/nodejs
+    + Please note: the order is significant - the Python buildpack **must** appear before the NodeJs buildback.<br>One can use the mouse to drag the buildpacks into the correct order.<p>
+
+
+5. Regarding your project:
+    + create a Procfile with the following one line entry
+    ```
+    web: node index.js
+    ```
+
+6. Then Deploy the project to GitHub with the following files included.
+7. On Heroku for Deployment Method pick Github and find the repo with the project you want to deploy.
+8. Pick which branch you want to deploy -- Generally this would be **main**
+9. Click **deploy** and wait until the project is built.
+10. Ensure there are no errors.
 
 ## Languages, Libraries and Technologies
 
@@ -285,8 +370,8 @@ No unfixed bugs
 
 ### Libraries
 
-* os - I use this library for the *clear* function in order to clear the console before displaying an updated chessboard
-* re - I use *regular expressions* in order to validate the user input of chess moves
+* os - I use this library for the *clear* function in order to clear the console before displaying an updated chessboard.
+* re - I use *regular expressions* in order to validate user input of chess moves.
 
 ### Other tools
 
@@ -299,11 +384,16 @@ No unfixed bugs
 
 ## Credits/Acknowledgements
 
-+ The depiction of the chessboard with letters and numbers is from [Naming Ranks and Files in Chess](https://www.dummies.com/article/home-auto-hobbies/games/board-games/chess/naming-ranks-and-files-in-chess-186935/)
-+  I would like to acknowledge Dean Menezes, the author of the BASIC program on which my project is based on.
-+  I would like to acknowledge [Rod Bird](https://justbasiccom.proboards.com/thread/258/chess?page=2) who also adopted Menezes' code. I preferred Bird's display of the Chess Board.
++  I would like to acknowledge Dean Menezes, the author of [the BASIC program](http://www.petesqbsite.com/sections/express/issue23/Tut_QB_Chess.txt) on which my project is based on.
++  I would like to acknowledge [Rod Bird](https://justbasiccom.proboards.com/thread/258/chess?page=2) who also adopted Menezes' code. I preferred and adopted Bird's display of the Chess Board.
 +  I would like to acknowledge the *Pythoneer* [X.S.](https://xsanon.medium.com/).
-+  X.S.'s article *[How to Code a Simple Chess Game in Python](https://medium.com/codex/how-to-code-a-simple-chess-game-in-python-9a9cb584f57)* and 
-+  X.S.'s *Pythonic* style of coding in the following [Chess Program](https://github.com/xsanon/chess).
++  X.S.'s article *[How to Code a Simple Chess Game in Python](https://medium.com/codex/how-to-code-a-simple-chess-game-in-python-9a9cb584f57)*
++  X.S.'s *Pythonic* style of coding can be seen in the following [Chess Program](https://github.com/xsanon/chess).
+
 +  Background image photo by [Chris Burns](https://unsplash.com/@chris_burns ) on [Unsplash](https://unsplash.com/).
 +  I would like to acknowledge [asiask97's CLI Battleship game](https://github.com/asiask97/Battleship-cli-game/) which shows how to present a Python program against a background image.
++  Thanks to [Code Institute](https://codeinstitute.net/) for [the template](https://github.com/Code-Institute-Org/python-essentials-template) by which a terminal could be created; in order that my game could be displayed on a webpage.
++  Thanks to [Code Institute](https://codeinstitute.net/) for [the CI Python Linter](https://pep8ci.herokuapp.com/) which ensures that Python code complies with [PEP 8](https://peps.python.org/pep-0008/)
++ [Boardgamegeek](https://boardgamegeek.com/boardgame/171/chess) for the explanation of the game of Chess
++ [Wikipedia](https://en.wikipedia.org/wiki/Chess) for the explanation of the game of Chess
++  The depiction of the chessboard with letters and numbers is from [Naming Ranks and Files in Chess](https://www.dummies.com/article/home-auto-hobbies/games/board-games/chess/naming-ranks-and-files-in-chess-186935/)
