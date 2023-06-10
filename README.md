@@ -1,8 +1,8 @@
 # Kool-AI-Chess
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/cedf65e7-23b2-47a6-beb1-e0b2dc097035)
+
 
 [Live Link](https://koolai-chess.herokuapp.com/)
-
-[GitHub Repository](https://github.com/DelroyGayle/KoolAIChess/)
 
 **Kool AI Chess - A command line Chess program using Python - Player vs Computer**
 
@@ -16,7 +16,7 @@ In my search for a suitable algorithm I came across this [476-line BASIC PROGRAM
 Let me reiterate: the basis of my project is a Chess Program written in<br>**[BASIC](https://en.wikipedia.org/wiki/BASIC) (Beginners' All-purpose Symbolic Instruction Code)** which is available [here](http://www.petesqbsite.com/sections/express/issue23/Tut_QB_Chess.txt).
 
 I found it amazing how Denezes has written such an highly interesting chess playing program in under 500 lines.
-My goal then is to convert Denezes' BASIC program to Python; moreover, to add ***castling and en passant*** chess moves so that the user can play a complete game of Chess against their Computer opponent, namely, ***Kool A.I.***
+My goal then is to convert Denezes' BASIC program to Python; moreover, to add ***castling and en passant*** chess moves so that the user can play a complete game of Chess against their Computer opponent, namely, ***Kool AI***
 
 ## Chess
 
@@ -28,7 +28,7 @@ To quote [Wikipedia](https://en.wikipedia.org/wiki/Chess)
 
 > Chess is an abstract strategy game that involves no hidden information and no elements of chance. It is played on a chessboard with 64 squares arranged in an eight-by-eight grid.<br>At the start, each player controls sixteen pieces:<br>
 *one king, one queen, two rooks, two bishops, two knights, and eight pawns.*<br>
-**White moves first, followed by Black. The game is won by checkmating the opponent's king, i.e. threatening it with inescapable capture.**<br>There are also several ways a game can end in a draw.
+**White moves first, followed by Black. The game is won by checkmating the opponent's king,<br>i.e. threatening it with inescapable capture.**<br>There are also several ways a game can end in a draw.
 
 For the rules and further information on the game of Chess please refer to the following Wikipedia articles:<br>
 1. [Rules of Chess](https://en.wikipedia.org/wiki/Rules_of_chess)
@@ -36,40 +36,72 @@ For the rules and further information on the game of Chess please refer to the f
 
 Thank You.
 
-## How To Play Against Kool A.I.
+## How To Play Against Kool AI
 
-The user goes first. The user is designated *White* however seeing that this is a monochrome game,<br>the user's pieces are depicted as the lowercase letters at the bottom of the board.
+In the context of this game *the user* is referred to as *The Player*. So I will describe the user in this manner in the following sections.
 
-*Kool A.I., your Computer opponent* will go second. The computer is designated *Black*.<br>The computer's pieces are depicted as the uppercase letters at the top of the board.
+The Player goes first and is prompted to do so. The Player is designated *White* however seeing that this is a monochrome console game,<br>the Player's pieces are depicted as lowercase letters at the bottom of the board.
 
-From this point onwards each will play their move until either
+*Kool AI, your Computer opponent* will go second. The Computer is designated *Black*.<br>The Computer's pieces are depicted as uppercase letters at the top of the board.
 
-* The user beats *Kool A.I.*! That is, **[Checkmate!](https://en.wikipedia.org/wiki/Checkmate) The user has Won!**
-* *Kool A.I.* recognises it cannot win therefore it resigns. **The user has Won!**
-* ***Kool A.I.* beats the user** and informs the user that they are in **[Checkmate](https://en.wikipedia.org/wiki/Checkmate)**
-* The user resigns because of one of the following reasons:
-* 1. The user can foresee that they will be in *Checkmate*.
-* 2. The user realises that the game is *Stalemate*.<br>([Stalemate](https://en.wikipedia.org/wiki/Stalemate) is a situation in Chess where the player whose turn it is to move is not in Check and has no legal move.)
-* 3. The user realises that the game is a [Draw](https://en.wikipedia.org/wiki/Draw_(chess)).
-* 4. Or the user chooses to no longer continue with the game.
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/848f397e-3704-4e75-8203-53f1b70a8138)
 
-### Resignation
+From this point onwards each, that is, *the Player and the Computer* will play their corresponding moves until:
 
-Resignation in Chess is the player conceding the game to their opponent. To acknowledge defeat.<br>
-Resignation immediately ends the game.<br>
-Please note however:
-1.  Kool A.I.'s algorithm will score each of its potential moves before its play and if the score of a move is *too low* it will resign.
-2.  Unfortunately, my program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the human user to end the game by *entering 'R' to resign*.
-3. Also, I am a novice chess player. So in writing this program, there is the distinct possibility that my program may declare **Checkmate** when in fact, it is not!<br>(Personally, throughout my testing I have not come across such a scenario!)<br>
-Therefore, in considering the possibility of such a scenario; even after declaring **Checkmate** I leave it up to the user to resign.<br>That is, my program does **not** force the end of the game - *the player can play on!*
+* **The Player beats *Kool AI* ! That is, [Checkmate!](https://en.wikipedia.org/wiki/Checkmate) The Player has Won!**
+* *Kool AI* recognises it cannot win therefore it resigns. **The Player has Won!**
+* ***Kool AI* beats the Player** and informs the Player that the Player is in **[Checkmate](https://en.wikipedia.org/wiki/Checkmate)**
+* The Player resigns because of one of the following reasons:
+* 1. The Player can foresee that one will be in *Checkmate*.
+* 2. The Player realises that the game is *Stalemate*.<br>([Stalemate](https://en.wikipedia.org/wiki/Stalemate) is a situation in Chess where the player whose turn it is to move is not in Check and has no legal move.)
+* 3. The Player realises that the game is a [Draw](https://en.wikipedia.org/wiki/Draw_(chess)).
+* 4. Or the Player chooses to no longer continue the game.
+
+### How to enter a move
+
+The chessboard has the following coordinates:
+
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/4ab1187f-3d85-4d83-9eb4-1d4d3bed8224)
+
+The chessboard at the beginning of the game is shown as:
+
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/848f397e-3704-4e75-8203-53f1b70a8138)
+
+Therefore, the form of how one enters a chess move is of the form *<FromSquare><ToSquare> e.g. d2d4*.<br>That is, pawn *(p)* from square *d2* to square *d4*.<br>
+Another example, would be *g1f3*.<br>That is, knight *(n)* from square *g1* to square *f3*.<br>
+
+From the outset a prompt **(e.g. e2e4)** is displayed reminding the Player of the format of a Chess move.<br>
+Each piece has a letter. Starting from the top of the board:
+* R for Rook
+* N for Knight
+* B for Bishop
+* Q for Queen
+* K for King
+* P for Pawn
+
+The Computer's pieces (Black) are depicted as *uppercase, capital* letters - R, N, B, Q, K, P
+
+The Player's pieces (White) are depicted as *lowercase* letters - r, n, b, q, k, p
+
+Please Note: A description of both the Player's and Computer's moves is always shown.
+The format will of the form of either e.g.<br>
+
+**Player moves g1-f3 Piece: Pawn**<br>
+**Computer moves g7-g6 Piece: Pawn**
+
+Therefore the description will always show:
+* Who played
+* The From Square
+* The To Square
+* The Piece Played
 
 ### Game Screen
 
-The program will prompt the User then await the User's input 
+The program will prompt the Player then await the Player's input 
 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/2eb31ea3-d3b9-4bd9-953d-b0d4b9985469)
 
-The User's input needs to be a four-character string which uses *files-first Chess Algebraic notation*<br> 
+The Player's input needs to be a four-character string which uses *files-first Chess Algebraic notation*<br> 
 For example, to move one's pawn **from square e2 to e4, enter *e2-e4***
 
 The program will then respond with a message such as<br>
@@ -79,15 +111,66 @@ The program will then respond with a message such as<br>
 * Showing the To Square
 * Showing the Piece being played
 
-Since the User has moved the pawn from square *e2 to e4* the program will display the following board:
+Since the Player has moved the pawn from square *e2 to e4* the program will display the following board:
 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/cb116eae-8e63-4573-8ca1-742d3230e67f)
 
+*Kool AI* will inform the Player that it is *Thinking* - That is, *evaluating its next move*:<br>
+**Please note: it may take up to 4 seconds for Kool AI to respond.** Be patient :)
+
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/d4fdb642-448e-41ef-b9fc-c594edd593e8)
+
+In this scenario, *Kool AI* has responded with *e7-e6*<br>That is, Pawn from square *E7* to *E6*<br>
+Please Note: A description of both the Player's and Computer's moves is always shown
+
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/8292752c-c146-4281-96ba-7202fa115c7d)
+
+### Illegal Moves
+
+The Player's input will be validated. Here are some examples:
+
+1. When it cannot understand the input - that is, it does not fit the Chess move format
+
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/acbd33e1-d39c-465b-bc2c-68b8e579b59e)
+
+
+2. Trying to play a *Blank Square*
+
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/15fc2286-4912-4379-bf7e-0621f7d1772d)
+
+3. Trying to play *an opponent's piece*
+
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/17368a9f-5f2c-4b43-9bdf-3d9a72cd773a)
+
+4. Trying to play an illegal move for a piece
+
+This is the general catchall response.
+The algorithm will examine the Player's move against all the possible moves for the chosen piece.
+If the Player's move does not appear in the list of all possible moves it will display **an Illegal Move** message.
+In these scenarios it would be up to the user to see why such a move cannot be played.
+For example:
+
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/324873df-a696-4269-a2fa-a96475a774b0)
+
+A rook cannot *pass through pieces*. It is blocked by a pawn.
 ### Check
+Here is an example of Check:
+
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/8c4e1d1d-cc68-4414-87c0-8b87959fb9d8)
+
 
 ### Checkmate
 
+
 ### Resignation
+
+Resignation in Chess is the player conceding the game to their opponent, that is, to acknowledge defeat.<br>
+Resignation immediately ends the game.<br>
+Please note however:
+1.  Kool AI's algorithm will score each of its potential moves before its play and if the score of a move is *too low* it will resign.
+2.  Unfortunately, my program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the human user to end the game by *entering 'R' to resign*.
+3. Also, I am a novice chess player. So in writing this program, there is the distinct possibility that my program may declare **Checkmate** against the human opponent when in fact, it is not!<br>(Personally, throughout my testing I have not come across such a scenario!)<br>
+Therefore, in considering the possibility of such a scenario; even after declaring **Checkmate**; I leave it up to the user to resign. That is, my program does **not** force the end of the game - *the player can play on!*
 
 ## User Stories
 
