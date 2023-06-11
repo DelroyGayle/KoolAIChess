@@ -113,7 +113,7 @@ Since the Player has moved the pawn from square *e2 to e4* and the move is valid
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/cb116eae-8e63-4573-8ca1-742d3230e67f)
 
 *Kool AI* will inform the Player that it is *Thinking* - That is, *it is evaluating its next move*:<br>
-**Please note: it may take up to 4 seconds for Kool AI to respond.** Please Be Patient :)
+**Please note: sometimes Kool AI takes up to 10 seconds to respond!** Please Be Patient :)
 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/d4fdb642-448e-41ef-b9fc-c594edd593e8)
 
@@ -131,16 +131,19 @@ In this scenario, the Player entered the word, *hello*
 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/acbd33e1-d39c-465b-bc2c-68b8e579b59e)
 
+2. A null entry
 
-2. Trying to play a *Blank Square*
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/4c2ff854-55ce-47d6-bda7-09e780231ae7)
+
+3. Trying to play a *Blank Square*
 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/15fc2286-4912-4379-bf7e-0621f7d1772d)
 
-3. Trying to play *an opponent's piece*
+4. Trying to play *an opponent's piece*
 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/17368a9f-5f2c-4b43-9bdf-3d9a72cd773a)
 
-4. Trying to play an illegal move for a piece
+5. Trying to play an illegal move for a piece
 
 This is the general catchall response.
 Kool AI's algorithm will examine the Player's move against all the possible moves for the chosen piece.
@@ -151,16 +154,46 @@ For example:
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/324873df-a696-4269-a2fa-a96475a774b0)
 
 In this case, a rook cannot *pass through pieces*. It is blocked by a pawn.
+
 ### Check
 Here is an example of Check:
 
-![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/8c4e1d1d-cc68-4414-87c0-8b87959fb9d8)
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/94a31e76-2d33-4567-8273-100521b6ee9c)
 
+Here are a couple of examples of illegal moves whilst **in Check**
+
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/a58df4fb-eccd-4d45-a117-9808e13035d6)
+
+That is, the king cannot move towards an attacking piece whilst being attacked!<br>A king however, can *take an attacking piece* if the king is in a position to do so.
+
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/a35e7c33-c9ad-4449-a09b-d1a78765839b)
+
+The only *legal moves when in Check* is to protect your king, whether by
+1. Taking the attacking piece
+2. Moving a piece to block the attacking piece
+3. Or moving the king out of its position where it is currently under attack
+
+So, in the above scenario, the Knight move does none of the above, **therefore, an illegal move!
 
 ### Checkmate
+Here is an example of Checkmate:
 
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/5fd730fc-8748-42f0-bff8-80f350405743)
+
+*Kool AI* first declares that the Player is *in Check*.
+Seeing this is the case, *Kool AI* does a *further test to see whether it is Checkmate?*
+In the above scenario, this is indeed the case. Therefore, *Kool AI* declares itself the Victor!<br>
+However, for reasons explained below, the Game **will continue until the Player resigns!**
+
+By the way, the above chessboard Checkmate configuration, is known in the Chess world, as<br>
+**Fool's Mate - Checkmate in two moves! 1. f2f3 e7e5 2. g2g4 Qd8h4# 0-1**
+
+The Computer algorithm as designed by *Dean Menezes is clever enough* to make these moves and to checkmate the opponent.
 
 ### Resignation
+Here is an example of Resignation:
+
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/d7bf8bf7-83cc-41ab-b3fd-f5ca4be4e07e)
 
 Resignation in Chess is the player conceding the game to their opponent, that is, to acknowledge defeat.<br>
 Resignation immediately ends the game.<br>
@@ -196,19 +229,7 @@ Therefore, in considering the possibility of such a scenario; even after declari
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/96d70908-f9f3-4309-be9c-b77191987523)
 
 
-#### A Mock-up of how the game will look like
 
-The game begins with this view
-
-![image](https://github.com/DelroyGayle/Kool-AI-Chess/assets/91061592/4e782939-b475-4b30-b69f-31b6c79bb39b)
-
-If for example, the user plays **e2e4**
-
-![image](https://github.com/DelroyGayle/Kool-AI-Chess/assets/91061592/61e63c94-30e0-46c6-adb7-96da1f43da2c)
-
-Then the computer may respond with **e7e5**
-
-![image](https://github.com/DelroyGayle/Kool-AI-Chess/assets/91061592/0aa858fb-a6d4-43c0-a15e-f9e5d03fea16)
 
 ------
 
@@ -417,7 +438,17 @@ class Game:
 
 ### Unfixed Bugs
 
-No unfixed bugs.
+When I played the following moves
+```
+1. e2e4
+2. d2d4
+3. c1h6
+```
+After I played my Bishop move c1h6, **the Computer took 40 seconds to respond with g7h6**!<br>
+So, the Computer algorithm can sometimes be *very slow* to evaluate its next move.<br>
+Whether this is *a bug* or whether it is related to the speed of the Python interpreter.<br>
+At this stage, I cannot tell.
+    
 
 ------
 
@@ -457,6 +488,7 @@ The project is deployed on Heroku. These are the steps in order to deploy on Her
 
 * os - I use this library for the *clear* function in order to clear the console before displaying an updated chessboard.
 * re - I use *regular expressions* in order to validate user input of chess moves.
+* time - I use the *sleep* function to cause the program to delay for a few seconds.
 
 ### Other tools
 
