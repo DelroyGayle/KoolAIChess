@@ -9,14 +9,14 @@
 ## Introduction
 
 For my Code Institute Portfolio Project 3, 
-I would like to implement a Chess Program in Python<br> in order to play Chess with a Computer opponent.
+I would like to implement a Chess Program in Python<br> in order to play Chess against a Computer opponent.
 
 In my search for a suitable algorithm I came across this [476-line BASIC PROGRAM by DEAN MENEZES](http://www.petesqbsite.com/sections/express/issue23/Tut_QB_Chess.txt)
 
 Let me reiterate: the basis of my project is a Chess Program written in<br>**[BASIC](https://en.wikipedia.org/wiki/BASIC) (Beginners' All-purpose Symbolic Instruction Code)** which is available [here](http://www.petesqbsite.com/sections/express/issue23/Tut_QB_Chess.txt).
 
-I found it amazing how Denezes has written such an highly interesting chess playing program in under 500 lines.
-My goal then is to convert Denezes' BASIC program to Python; moreover, to add ***castling and en passant*** chess moves so that the user can play a complete game of Chess against their Computer opponent, namely, ***Kool AI***
+I found it amazing how Denezes has written such an highly interesting chess playing program in under 500 lines.<br>
+My goal then is to convert Denezes' BASIC program to Python; moreover, to add ***castling and en passant*** chess moves so that the user can play a complete game of Chess against their Computer opponent, namely, ***Kool AI***.
 
 ## Chess
 
@@ -40,19 +40,19 @@ Thank You.
 
 In the context of this game *the user* is referred to as *The Player*. So I will describe the user in this manner in the following sections.
 
-The Player goes first and is prompted to do so. The Player is designated *White* however seeing that this is a monochrome console game,<br>the Player's pieces are depicted as lowercase letters at the bottom of the board.
+The Player goes first and is prompted to do so.<br>The Player is designated *White* however seeing that this is a monochrome console game,<br>the Player's pieces are depicted as lowercase letters at the bottom of the board.
 
-*Kool AI, your Computer opponent* will go second. The Computer is designated *Black*.<br>The Computer's pieces are depicted as uppercase letters at the top of the board.
+*Kool AI, the Computer opponent* will go second. The Computer is designated *Black*.<br>The Computer's pieces are depicted as uppercase letters at the top of the board.
 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/848f397e-3704-4e75-8203-53f1b70a8138)
 
-From this point onwards each, that is, *the Player and the Computer* will play their corresponding moves until:
+From this point onwards each, that is, *the Player and the Computer*, will play their corresponding moves until one of the following scenarios:
 
 * **The Player beats *Kool AI* ! That is, [Checkmate!](https://en.wikipedia.org/wiki/Checkmate) The Player has Won!**
 * *Kool AI* recognises it cannot win therefore it resigns. **The Player has Won!**
 * ***Kool AI* beats the Player** and informs the Player that the Player is in **[Checkmate](https://en.wikipedia.org/wiki/Checkmate). Kool AI has Won!**
 * The Player resigns because of one of the following reasons:
-* 1. The Player can foresee that one will be in *Checkmate*.
+* 1. The Player can foresee that *Checkmate* is inevitable.
 * 2. The Player realises that the game is *Stalemate*.<br>([Stalemate](https://en.wikipedia.org/wiki/Stalemate) is a situation in Chess where the player whose turn it is to move is not in Check and has no legal move.)
 * 3. The Player realises that the game is a [Draw](https://en.wikipedia.org/wiki/Draw_(chess)).
 * 4. Or the Player chooses to no longer continue the game.
@@ -67,10 +67,11 @@ The chessboard at the beginning of the game is shown as:
 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/848f397e-3704-4e75-8203-53f1b70a8138)
 
-Therefore, the form of how one enters a chess move is of the form *\<FromSquare\>\<ToSquare\> e.g. d2d4*.<br>That is, pawn *(p)* from square *d2* to square *d4*.<br>
-Another example, would be *g1f3*.<br>That is, knight *(n)* from square *g1* to square *f3*.<br>
+Therefore, the form of how one enters a Chess move is of the form *\<FromSquare\>\<ToSquare\> e.g. d2d4*<br>That is, pawn *(p)* from square *d2* to square *d4*.<br>
+Another example, would be *g1f3*<br>That is, knight *(n)* from square *g1* to square *f3*.<br>
 
 From the outset a prompt **(e.g. e2e4)** is displayed reminding the Player of the format of a Chess move.<br>
+
 Each piece has a letter. Starting from the top of the board:
 * R for Rook
 * N for Knight
@@ -102,22 +103,22 @@ The program will prompt the Player then await the Player's input
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/2eb31ea3-d3b9-4bd9-953d-b0d4b9985469)
 
 The Player's input needs to be a four-character string which uses *[files-first Chess Algebraic notation](https://en.wikipedia.org/wiki/Algebraic_notation_(chess))*<br> 
-For example, to move one's pawn **from square e2 to e4, enter *e2-e4***
+For example, to move one's pawn **from square e2 to e4, enter *e2e4***
 
 The program will then respond with a message such as<br>
 *Checking Player move for e2-e4 Piece: Pawn*
 
-Since the Player has moved the pawn from square *e2 to e4* the program will display the following board:
+Since the Player has moved the pawn from square *e2 to e4* and the move is valid, the program will display the following board:
 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/cb116eae-8e63-4573-8ca1-742d3230e67f)
 
-*Kool AI* will inform the Player that it is *Thinking* - That is, *evaluating its next move*:<br>
-**Please note: it may take up to 4 seconds for Kool AI to respond.** Be patient :)
+*Kool AI* will inform the Player that it is *Thinking* - That is, *it is evaluating its next move*:<br>
+**Please note: it may take up to 4 seconds for Kool AI to respond.** Please Be Patient :)
 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/d4fdb642-448e-41ef-b9fc-c594edd593e8)
 
-In this scenario, *Kool AI* has responded with *e7e6*<br>That is, Pawn from square *E7* to *E6*<br>
-Please Note: A description of both the Player's and Computer's moves is always shown
+Subsequently, *Kool AI* has responded with *e7e6*<br>That is, Pawn from square *E7* to *E6*<br>
+Please Note: A description of both the Player's and Computer's moves is always shown.
 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/8292752c-c146-4281-96ba-7202fa115c7d)
 
@@ -143,8 +144,8 @@ In this scenario, the Player entered the word, *hello*
 
 This is the general catchall response.
 Kool AI's algorithm will examine the Player's move against all the possible moves for the chosen piece.
-If the Player's move does not appear in the list of all possible moves it will display **an Illegal Move** message.
-In these scenarios it would be up to the user to see why such a move cannot be played.
+If the Player's move does not appear in the list of all possible moves it will display<br>**an Illegal Move** message.
+In such a scenario it would be up to the user to determine why such a move cannot be played.
 For example:
 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/324873df-a696-4269-a2fa-a96475a774b0)
@@ -164,7 +165,7 @@ Here is an example of Check:
 Resignation in Chess is the player conceding the game to their opponent, that is, to acknowledge defeat.<br>
 Resignation immediately ends the game.<br>
 Please note however:
-1.  Kool AI's algorithm will score each of **its own** potential moves before its play and if the score of a move is *too low* it will resign.
+1.  Kool AI's algorithm will score each of **its own** potential moves before its play and if the score of a move is *too low Kool AI* will resign.
 2.  Unfortunately, my program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the human user to end the game by *entering 'R' to resign*.
 3. Also, I am a novice chess player. So in writing this program, there is the distinct possibility that my program may declare **Checkmate** against the human opponent when in fact, it is not!<br>(Personally, throughout my testing I have not come across such a scenario!)<br>
 Therefore, in considering the possibility of such a scenario; even after declaring **Checkmate**; I leave it up to the user to resign.<br>That is, my program does **not** force the end of the game - *the player can play on!*
@@ -172,8 +173,8 @@ Therefore, in considering the possibility of such a scenario; even after declari
 ## User Stories
 
 1.  As a user I want to be welcomed by a start screen with the name of the game.
-2.  As a user I want to be able to enjoy a game of Chess against a Computer Opponent
-3.  As a user I want to know whether I am entering correct Chess moves. Moreover, if not,<br>then an explanation of why a move is incorrect ought to be displayed.
+2.  As a user I want to be able to enjoy a game of Chess against a Computer opponent.
+3.  As a user I want to know whether I am have entered a correct Chess move. Moreover, if I have not,<br>then an explanation of why a move is incorrect ought to be displayed, if possible.
 4.  As a user, I want to know whether I have placed the Computer *in Check*.
 5.  As a user, I want to know whether I have placed the Computer *in Checkmate*. That is, have I won?
 6.  As a user, I want to know whether I am *in Check*.
@@ -257,7 +258,7 @@ Then each value would be a *Piece Class* instance of the form *Piece(VALUE, LETT
 Therefore the Dictionary would look like this:<br>
 *{a8:value, b8:value, ..., d1:None, ..., e1:None, a1:value, ..., h1:value}*<br>
 Blank squares have the value None<br> 
-Thereby if a variable for example *board* represents the chessboard, each square can be accessed using a *string index*.<br>
+Thereby if a variable for example *board* represents the chessboard, each square can be accessed using a *string key*.<br>
 For example to refer to square *"h3* I can use the code
 *square = board["h3"]*
 
@@ -271,7 +272,7 @@ In order to incorporate Object Oriented programming I have used three classes in
 
 #### 1) Class: Piece
 
-This is the Class that is the Base Classes for all the Chess Pieces.
+This Class is the Base Class for all the Chess Pieces.
 
 As a basis I adopted the way that X.S. had implemented the Pieces' Class in [this code](https://github.com/xsanon/chess/blob/main/src/piece.py)
 
@@ -279,7 +280,7 @@ In my version the rationale is as follows:
 ```
     Attributes:
     -----------
-    piece : str
+    piece : string
         Each piece is depicted by a letter which represents
         the name of a piece as following :-
         Pawn -> P
@@ -289,7 +290,7 @@ In my version the rationale is as follows:
         Queen -> Q
         King -> K
 
-    sign (colour) : is depicted by a number
+    sign (represents the colour) : it is depicted by a number
         1 if the piece belongs to the Player i.e. white
        -1 if the piece belongs to the Computer i.e. black
   ```
@@ -311,7 +312,7 @@ Each piece has
 * * **The Kings' values differ as shown above**
 * Note: Blank squares have a value and a sign of ZERO
 
-* **print_string(self)**: This method returns a string description of each piece to describe which piece has been *taken* in a game
+* **print_string(self)**: This method returns a string description of each piece to describe which piece had been *taken* in a Chess move.
 * * "Pawn"
 * * "Rook"
 * * "Knight"
@@ -319,14 +320,14 @@ Each piece has
 * * "Queen"
 * * Note: King piece cannot be *taken* - So no 'print_string'
 
-#### 2. Game
+#### 2. Class: Game
 
 This class represents the status of the Chess Game.
 It is the main workspace of the program containing all the *global* flags, properties and variables related to the state of play of the Game.
 
-So instead of *global* variables I use *Class Variables* of this Class to hold important values.
+So instead of *global* variables I use *Class Variables* belonging to this Class to hold important values.
 
-#### 3. CustomException(Exception)
+#### 3. Class: CustomException(Exception)
 
 I have tested my program to the best of my ability however I am a novice Chess Player.
 So just in case my program does some absurd illegal move such as *trying to take a king or capturing a piece of its own colour*;<br>
@@ -406,8 +407,7 @@ AttributeError: type object 'Game' has no attribute 'num_moves'
 
 Solution:
 
-I know the error has something to do with scoping however to resolve this issue, I removed the function 'initialise_class_variables' and defined all my Class Variables 
-directly beneath the 'Game' Class definition
+I know the error has something to do with scoping however to resolve this issue, I removed the function 'initialise_class_variables' and defined all my Class Variables directly beneath the 'Game' Class definition.
 ```
 class Game:
     player_first_move = True   
@@ -427,13 +427,13 @@ The project is deployed on Heroku. These are the steps in order to deploy on Her
 
 1. Create Heroku account.
 2. Create new project.
-3. Go into settings -> Config Var and add the fallowing:
+3. Go into settings -> Config Var and add the following:
     +  key by the name of *PORT* with the value of *8000*.<p>
 
 4. Include the following buildpacks:
     + Heroku/python
     + Heroku/nodejs
-    + Please note: the order is significant - the Python buildpack **must** appear before the NodeJs buildback.<br>One can use the mouse to drag the buildpacks into the correct order.<p>
+    + Please note: the order is significant - the Python buildpack **must** appear before the NodeJs buildpack.<br>One can use the mouse to drag the buildpacks into the correct order.<p>
 
 
 5. Regarding your project:
@@ -442,7 +442,7 @@ The project is deployed on Heroku. These are the steps in order to deploy on Her
     web: node index.js
     ```
 
-6. Then Deploy the project to GitHub with the following files included.
+6. Then ensure that you have pushed your latest version including Procfile to GitHub.
 7. On Heroku for Deployment Method pick Github and find the repo with the project you want to deploy.
 8. Pick which branch you want to deploy -- Generally this would be **main**
 9. Click **deploy** and wait until the project is built.
@@ -468,20 +468,20 @@ The project is deployed on Heroku. These are the steps in order to deploy on Her
 ------
 
 ## Credits
-+  Background image photo by [Chris Burns](https://unsplash.com/@chris_burns ) on [Unsplash](https://unsplash.com/).
-+  I would like to acknowledge [asiask97's CLI Battleship game](https://github.com/asiask97/Battleship-cli-game/) which shows how to present a Python program against a background image.
++  Background image photo by [Chris Burns](https://unsplash.com/@chris_burns ) on [Unsplash](https://unsplash.com/)
++  I would like to credit [asiask97's CLI Battleship game](https://github.com/asiask97/Battleship-cli-game/) which shows how to present a Python program against a background image
 +  Thanks to [Code Institute](https://codeinstitute.net/) for [the template](https://github.com/Code-Institute-Org/python-essentials-template) by which a terminal could be created; in order that my game could be displayed on a webpage.
 +  Thanks to [Code Institute](https://codeinstitute.net/) for [the CI Python Linter](https://pep8ci.herokuapp.com/) which ensures that Python code complies with [PEP 8](https://peps.python.org/pep-0008/)
 + [Boardgamegeek](https://boardgamegeek.com/boardgame/171/chess) for the explanation of the game of Chess
 + [Wikipedia](https://en.wikipedia.org/wiki/Chess) for the explanation of the game of Chess
 +  The depiction of the chessboard with letters and numbers is from [Naming Ranks and Files in Chess](https://www.dummies.com/article/home-auto-hobbies/games/board-games/chess/naming-ranks-and-files-in-chess-186935/)
-+ [Flowchart Fun](https://flowchart.fun/) used to create the flowchart for the Logic Flow of the Program
-+ [Miro](https://miro.com/) used to create the flowchart for the Evaluation Algorithm
++ [Flowchart Fun](https://flowchart.fun/) was used to create the flowchart for the Logic Flow of the Program
++ [Miro](https://miro.com/) was used to create the flowchart for the Evaluation Algorithm
         
 ## Acknowledgements    
 +  I would like to thank my mentor Derek McAuley for his advice and guidance.
 +  I would like to acknowledge Dean Menezes, the author of [the BASIC program](http://www.petesqbsite.com/sections/express/issue23/Tut_QB_Chess.txt) on which my project is based on.
 +  I would like to acknowledge [Rod Bird](https://justbasiccom.proboards.com/thread/258/chess?page=2) who also adopted Menezes' code.<br>I preferred and adopted Bird's display of the Chessboard.
-+  I would like to acknowledge the *Pythoneer* [X.S.](https://xsanon.medium.com/).
++  I would like to acknowledge the *Pythoneer* [X.S.](https://xsanon.medium.com/)
 +  X.S.'s article *[How to Code a Simple Chess Game in Python](https://medium.com/codex/how-to-code-a-simple-chess-game-in-python-9a9cb584f57)*
 +  X.S.'s *Pythonic* style of coding can be seen in the following [Chess Program](https://github.com/xsanon/chess).
