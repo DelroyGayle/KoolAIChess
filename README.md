@@ -186,9 +186,14 @@ Therefore, in considering the possibility of such a scenario; even after declari
 
 ### Design
 
-#### Logic Flow of the program
+#### Logic Flow of the Program
 
-![Flowchart](https://github.com/DelroyGayle/Kool-AI-Chess/assets/91061592/218a8f5e-38ef-4fba-bf27-4c577cfb9e83)
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/04461b56-96b0-444c-b2b2-f716bd0c6fcb)
+
+### Evaluation Algorithm
+
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/96d70908-f9f3-4309-be9c-b77191987523)
+
 
 #### A Mock-up of how the game will look like
 
@@ -448,28 +453,21 @@ The project is deployed on Heroku. These are the steps in order to deploy on Her
 ### Languages
 * Python3
 
-### Libraries
+### Python Libraries
 
 * os - I use this library for the *clear* function in order to clear the console before displaying an updated chessboard.
 * re - I use *regular expressions* in order to validate user input of chess moves.
 
 ### Other tools
 
-* GitHub - for hosting the site
-* Gitpod - for editing the files
-* Heroku - for the deployment of the site
-* Code Institute's GitHub full template - in order to run Python on Heroku
+* [GitHub](https://github.com/) - for hosting the site
+* [Gitpod](https://www.gitpod.io/) - for editing the files
+* [Heroku](https://heroku.com) - for the deployment of the site
+* [Code Institute's GitHub full template](https://github.com/Code-Institute-Org/python-essentials-template) - in order to run Python on Heroku
 
 ------
 
-## Credits/Acknowledgements
-
-+  I would like to acknowledge Dean Menezes, the author of [the BASIC program](http://www.petesqbsite.com/sections/express/issue23/Tut_QB_Chess.txt) on which my project is based on.
-+  I would like to acknowledge [Rod Bird](https://justbasiccom.proboards.com/thread/258/chess?page=2) who also adopted Menezes' code. I preferred and adopted Bird's display of the Chess Board.
-+  I would like to acknowledge the *Pythoneer* [X.S.](https://xsanon.medium.com/).
-+  X.S.'s article *[How to Code a Simple Chess Game in Python](https://medium.com/codex/how-to-code-a-simple-chess-game-in-python-9a9cb584f57)*
-+  X.S.'s *Pythonic* style of coding can be seen in the following [Chess Program](https://github.com/xsanon/chess).
-
+## Credits
 +  Background image photo by [Chris Burns](https://unsplash.com/@chris_burns ) on [Unsplash](https://unsplash.com/).
 +  I would like to acknowledge [asiask97's CLI Battleship game](https://github.com/asiask97/Battleship-cli-game/) which shows how to present a Python program against a background image.
 +  Thanks to [Code Institute](https://codeinstitute.net/) for [the template](https://github.com/Code-Institute-Org/python-essentials-template) by which a terminal could be created; in order that my game could be displayed on a webpage.
@@ -477,3 +475,13 @@ The project is deployed on Heroku. These are the steps in order to deploy on Her
 + [Boardgamegeek](https://boardgamegeek.com/boardgame/171/chess) for the explanation of the game of Chess
 + [Wikipedia](https://en.wikipedia.org/wiki/Chess) for the explanation of the game of Chess
 +  The depiction of the chessboard with letters and numbers is from [Naming Ranks and Files in Chess](https://www.dummies.com/article/home-auto-hobbies/games/board-games/chess/naming-ranks-and-files-in-chess-186935/)
++ [Flowchart Fun](https://flowchart.fun/) used to create the flowchart for the Logic Flow of the Program
++ [Miro](https://miro.com/) used to create the flowchart for the Evaluation Algorithm
+        
+## Acknowledgements    
++  I would like to thank my mentor Derek McAuley for his advice and guidance.
++  I would like to acknowledge Dean Menezes, the author of [the BASIC program](http://www.petesqbsite.com/sections/express/issue23/Tut_QB_Chess.txt) on which my project is based on.
++  I would like to acknowledge [Rod Bird](https://justbasiccom.proboards.com/thread/258/chess?page=2) who also adopted Menezes' code.<br>I preferred and adopted Bird's display of the Chessboard.
++  I would like to acknowledge the *Pythoneer* [X.S.](https://xsanon.medium.com/).
++  X.S.'s article *[How to Code a Simple Chess Game in Python](https://medium.com/codex/how-to-code-a-simple-chess-game-in-python-9a9cb584f57)*
++  X.S.'s *Pythonic* style of coding can be seen in the following [Chess Program](https://github.com/xsanon/chess).
