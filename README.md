@@ -144,7 +144,7 @@ In this scenario, the Player entered the word, *hello*
 
 This is the general catchall response.
 Kool AI's algorithm will examine the Player's move against all the possible moves for the chosen piece.
-If the Player's move does not appear in the list of all possible moves it will display<br>**an Illegal Move** message.
+If the Player's move does not appear in the list of all possible moves it will display **an Illegal Move** message.
 In such a scenario it would be up to the user to determine why such a move cannot be played.
 For example:
 
