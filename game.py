@@ -1,3 +1,5 @@
+# game.py
+
 import constants
 import piece
 
@@ -50,10 +52,10 @@ class Game:
     computer_king_moved = False
     computer_king_rook_moved = False
     computer_queen_rook_moved = False
-    player_pawn_2squares_advanced_col = None
-    player_pawn_2squares_advanced_row = None
-    computer_pawn_2squares_advanced_col = None
-    computer_pawn_2squares_advanced_row = None
+    player_pawn_2squares_advanced_file = None
+    player_pawn_2squares_advanced_rank = None
+    computer_pawn_2squares_advanced_file = None
+    computer_pawn_2squares_advanced_rank = None
     en_passant_status = None
     selected_piece = None
 

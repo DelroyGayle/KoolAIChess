@@ -1,8 +1,10 @@
-import re
-
 """
+constants.py
 Various Constants used throughout the program
 """
+
+import re
+
 # maximum recursive calls for the function evaluate()
 # 5 normal play; 3 dumber and quicker
 MAXLEVEL = 5
@@ -53,6 +55,7 @@ CASTLING_MOVE = 8  # O-O or O-O-O
 PLAYER_SIDE_ROW = 7  # White - Bottom row i.e. Row 7
 COMPUTER_SIDE_ROW = 0  # Black - Top row i.e. Row 0
 
+# REMOVE?? TODO
 # kingside rook must be present in column 7 in order to be castled
 KINGSIDE_ROOK_COLUMN = 7
 # queenside rook must be present in column 7 in order to be castled
@@ -65,13 +68,13 @@ KINGSIDE_KING_COLUMN = 5
 # Note: the ranks are always ordered from White's perspective,
 # so it is labelled White's fourth rank
 # Likewise for the fifth rank
-FOURTH_RANK = 4
-FIFTH_RANK = 3
+FOURTH_RANK = "4"  # a4...h4
+FIFTH_RANK = "5"  # a5...h5
 
 # The rank (row) of white pieces
-PLAYER_PAWNS_RANK = 6
+PLAYER_PAWNS_RANK = "2"  # a2...h2
 # The rank (row) of black pieces
-COMPUTER_PAWNS_RANK = 1
+COMPUTER_PAWNS_RANK = "7"  # a7...h7
 
 
 NONE = -1
@@ -92,6 +95,8 @@ TAB = "\t"  # TODO
 SPACE = " "
 CHECK_INDICATION = "+"
 CHECKMATE_INDICATION = "#"
+CASTLING_KINGSIDE = "O-O"
+CASTLING_QUEENSIDE = "O-O-O"
 
 # Defined this way to keep the linter happy :)
 # Note the SPACE at the end

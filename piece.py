@@ -1,11 +1,10 @@
-import constants
-
 """
 My coding of piece.py is based somewhat on how
 X.S. styled piece.py as shown here
 https://github.com/xsanon/chess/blob/main/src/piece.py
 """
 
+import constants
 
 class Piece():
     """
