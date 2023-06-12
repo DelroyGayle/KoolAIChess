@@ -4,6 +4,9 @@ So this file contains all the routines related to reading chess moves from a fil
 and their validation.
 """
 
+import constants
+from game import Game
+
 def output_message(message):
     """
     Output a message after first removing any superfluous blank lines
