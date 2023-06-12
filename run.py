@@ -57,6 +57,7 @@ class Game:
     # White goes first
     whose_move = constants.PLAYER
     who_are_you = constants.PLAYER
+    global_piece_sign = constants.PLAYER
     opponent_who_are_you = constants.COMPUTER
 
     # Output purposes
@@ -88,8 +89,6 @@ class Game:
     input_stream = ""
     input_stream_previous_contents = ""
     move_type = ""
-    skipped_seven_tag_rosters = False
-    tag_pair_count = 0
     move_count = 0
     move_count_incremented = False
     it_is_checkmate = None
@@ -1604,7 +1603,7 @@ def handle_castling_input(chess, from_file, from_rank, to_file, to_rank):
 
     # Default: 'pass' as in Python i.e. NOP
     do_next = "pass"
-    if not constants.castling_pattern.match(input_string):
+    if not constants.castling_keyboard_pattern.match(input_string):
             # \A((O-O-O)|(O-O)|(0-0-0)|(0-0))\Z"
         # No Castling move. Determine what this chess move is
         return do_next

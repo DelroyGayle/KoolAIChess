@@ -128,10 +128,41 @@ INPUT_PGN_NAME = "input.pgn"
 OUTPUT_PGN_NAME = "output.pgn"
 
 # Regular Expressions
-
 percent_pattern = re.compile(r"(\A%)|(\n%)")
 en_passant_pattern = re.compile(r"\Ae\.p\.[ \n]*")
 nag_pattern = re.compile(r"\A\$[0-9]+")
 parens_pattern = re.compile(r"[()]")
-castling_pattern = re.compile(r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))\Z")
+periods_pattern = re.compile(r"\A[.]+")
+move_number_pattern = re.compile(r"\A[0-9]+[. ]*")
+move_number_suffix_pattern = re.compile(r"\A[.][ \n]*")
+game_termination_pattern = re.compile(r"\A((1-0)|(0-1)|(1/2-1/2)|[*])")
+
+#7
+long_notation_pattern = re.compile(r"\A([KQRBN]?)([a-h][1-8])([a-h][1-8])",
+                                     flags=re.IGNORECASE | re.ASCII)
+
+#6
+capture_2squares_pattern = re.compile(r"\A([KQRBN]?)([a-h][1-8])x([a-h][1-8])",
+                                     flags=re.IGNORECASE | re.ASCII)
+#1
+one_square_pattern = re.compile(r"\A([KQRBN]?)([a-h][1-8])",
+                                     flags=re.IGNORECASE | re.ASCII)
+#2
+pawn_capture_pattern = re.compile(r"\A([a-h])x?([a-h][1-8])",
+                                     flags=re.IGNORECASE | re.ASCII)
+#3
+nonpawn_capture_pattern = re.compile(r"\A([KQRBN])x([a-h][1-8])",
+                                     flags=re.IGNORECASE | re.ASCII)
+
+#4
+file_pattern = re.compile(r"\A([KQRBN])([a-h])x?([a-h][1-8])",
+                                     flags=re.IGNORECASE | re.ASCII)
+
+#5
+rank_pattern = re.compile(r"\A([KQRBN])([1-8])x?([a-h][1-8])",
+                                     flags=re.IGNORECASE | re.ASCII)
+
+castling_infile_pattern = re.compile(r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))")
+
+castling_keyboard_pattern = re.compile(r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))\Z")
 chess_move_pattern = re.compile(r"([a-h][1-8]){2}")

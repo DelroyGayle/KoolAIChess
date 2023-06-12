@@ -268,87 +268,361 @@ def regexp_loop():
             return True
 
 
-def parse_move_text():
+def chess_move_to_tuple():
+    """
+    Parse the chess move into a comma-separated string
+    Place that string into
+    TODO
+    Note: the order of these patterns is significant
+    """
 
-    parse_move_text = False
+    print(">" + Game.input_stream[0:20])  # todo
 
-    if Game.whose_move == constants.PLAYER:
+    inputstream_previous_contents = Game.input_stream[0:20]
 
-# Increment the Move Counter
-        global_piece_sign = constants.PLAYER
-        g_move_count+=1
-        g_move_count_incremented = True
+#    work_string = "123456789abc"
+#    REGREPL "(123)(456)(789)abc" IN work_string WITH "\01\03\02" TO position, work_string2
+#    print position, work_string2, work_string
+# ==>  10           123789456     123456789abc
+#                            ^
+#    REGREPL "(123)(456)(789)abc" IN work_string WITH "\01\01\03\03\02\02" TO position, work_string2
+#    PRINT position, work_string2, work_string
+# ==>  19           123123789789456456          123456789abc
+#                                     ^
 
-# Output the Move Number
-        append_to_output(lstrip(str(g_move_count)) + "." + constants.SPACE)
+#    work_string = "e4"
+#    REGREPL "\c^([KQRBN]?)([a-h][1-8])" IN work_string WITH "\01,\02" TO position, work_string2
+#    PRINT position, work_string2, work_string
+# ==>  4            ,e4           e4
+#    work_string = "Nf3"
+#    REGREPL "\c^([KQRBN]?)([a-h][1-8])" IN work_string WITH "\01,\02" TO position, work_string2
+#    PRINT position, work_string2, work_string
+# ==>   5            N,f3          Nf3
 
-# Move Number expected EG 40. I will allow periods to be optional
-        regexp = "^[0-9]+[. ]+"
-        REGEXPR regexp IN Game.input_stream TO position, length
-# Cater for how PBasic handles ^
-        if position != 1:
-            input_status_message("Expected Move Number" + str(g_move_count) + ". Instead: " + Game.input_stream[0:10])
-            return
+# DISCOVERED 24MAY23 THAT REGEXPR/REGEXPL MATCHES ON $LF (NOT JUST $CRLF AS DOCUMENTED)
+# SO HAVE TO ENSURE THAT $LF IS NOT IN THE STRING BEING SEARCHED
+# HENCE
+# REPLACE $LF WITH CHR$(255) IN Game.input_stream
 
+# SEVEN REGEXPS
 
-# Expecting matching move number
+# 7)
 
-# Determine the move number
-# PRINT VAL("10."), VAL("10..") ==>  10 10
+    print("NO7>> " + Game.input_stream)  # todo
 
-        move_number = VAL(Game.input_stream[0:length])
+# *** NON-AMBIGUOUS LONG NOTATION SHOWING PIECE & COORDINATES OF BOTH PIECES ***
+# *** HANDLE MOVES/CAPTURES REGARDING PIECES DETERMINED BY BOTH two character square coordinates ***
+# EG Ng1f3 e2e4
+# An En Passant move could be of this format
+# tuple format - (the piece, the source square, the destination square)
 
-        if g_move_count != move_number:
-            input_status_message("Expected Move Number" + str(g_move_count) + ". Instead: " + Game.input_stream[0:10])
-            return
+    REGREPL "\c^([KQRBN]?)([a-h][1-8])([a-h][1-8])" IN Game.input_stream WITH "\01,\02,\03" TO position, work_string
 
-
-# Skip the move number and determine the Chess Move
-# That is, parse any periods and whitespace
-        Game.input_stream = Game.input_stream[length + 1 - 1:]
-
-# Cater for how PBasic handles ^
-# Replace
-# regexp = "^[. \n]*"
-# with
-        regexp = "^[.][ \n]*"
-
-        REGEXPR regexp IN Game.input_stream TO position, length
-        if position == 1:
-            Game.input_stream = Game.input_stream[length + 1 - 1:]
-
-
-# Handle any comments
-# If empty don't continue
-        if not regexp_loop() or Game.input_stream == "":
-            return
-
-
-# is it "1-0" (White wins), "0-1" (Black wins), "1/2-1/2" (drawn game), OR "*"
-        if check_game_termination_marker_found():
-           return
+    if position:
+# That is, the piece, the source square, the destination square
+# Fetch the matched string
+        Game.general_string_result = work_string[0:position - 1]
+        Game.move_type = constants.LONG_NOTATION
+        GOTO move_found
 
 
-    else:
+# 6)
 
-        global_piece_sign = constants.COMPUTER
-# For the Computer check that it is not ...
-        regexp = "^[.]+"
-        REGEXPR regexp IN Game.input_stream TO position, length
-# Cater for how PBasic handles ^
-        if position == 1:
-            input_status_message("Expected the Player's Chess Move not Periods: " + Game.input_stream[position - 1:29])
-            return
+# *** HANDLE MOVES/CAPTURES REGARDING PIECES DETERMINED BY BOTH two character square coordinates ***
+# EG Nd2xe4  e4xd5
+# An En Passant move could be of this format
+# tuple format - (the piece, the source square, the destination square)
+
+    REGREPL "\c^([KQRBN]?)([a-h][1-8])x([a-h][1-8])" IN Game.input_stream WITH "\01,\02,\03" TO position, work_string
+
+    if position:
+# That is, the piece, the source square, the destination square
+# Fetch the matched string
+        Game.general_string_result = work_string[0:position - 1]
+        Game.move_type = constants.PIECE_BOTH_SQUARES
+        GOTO move_found
 
 
-    parse_move_text = handle_chess_move()
+# 1)
+
+# *** HANDLE e4 Ng2 ***
+
+# Note: This program does NOT support En Passant captures of the form EG d6
+# En Passant captures must contain a 'from_file' EG exd6
+# tuple format - (the piece optional , the destination square)
+
+    REGREPL "\c^([KQRBN]?)([a-h][1-8])" IN Game.input_stream WITH "\01,\02" TO position, work_string
+
+# EG e4+?
+# position = 4  ,e4+?
+#                  ^
+
+    if position:
+# That is, just piece and the destination square only
+# EG e4 Ne2
+# Fetch the matched string
+        Game.general_string_result = work_string[0:position - 1]
+        Game.move_type = constants.DESTINATION_SQUARE_ONLY
+        GOTO move_found
+
+
+# 2)
+
+# *** HANDLE PAWN CAPTURES USING 'file' EG exd4 ***
+
+# EG exd4
+# An En Passant move could be of this format
+# tuple format - (the file , the destination square)
+
+    REGREPL "\c^([a-h])x?([a-h][1-8])" IN Game.input_stream WITH "\01,\02" TO position, work_string
+
+    if position:
+# That is, just the file and the destination square only
+# Fetch the matched string
+        Game.general_string_result = work_string[0:position - 1]
+        Game.move_type = constants.PAWN_CAPTURE_FILE
+        GOTO move_found
+
+
+# 3)
+
+# *** HANDLE CAPTURES REGARDING OTHER PIECES EG Qxd4 ***
+
+# No possibility of an En Passant move in this format
+# tuple format - (the piece, the destination square)
+
+    REGREPL "\^([KQRBN])x([a-h][1-8])" IN Game.input_stream WITH "\01,\02" TO position, work_string
+
+    if position:
+# That is, the piece and the destination square
+# EG Qxe1 Kxf7 Rxe1+
+# Fetch the matched string
+        Game.general_string_result = work_string[0:position - 1]
+        Game.move_type = constants.PIECE_DESTINATION_SQUARE
+        GOTO move_found
+
+
+# 4)
+
+# *** HANDLE MOVES/CAPTURES REGARDING PIECES DETERMINED BY THEIR 'file' ***
+# EG Nge2  - THE FILE BEING 'g'
+# EG Nfxe4 - THE FILE BEING 'f'
+
+# This pattern does not apply to Pawns
+# Therefore, no possibility of an En Passant move in this format
+# tuple format - (the piece, the file, the destination square)
+
+    REGREPL "\c^([KQRBN])([a-h])x?([a-h][1-8])" IN Game.input_stream WITH "\01,\02,\03" TO position, work_string
+
+    if position:
+# That is, the piece, the file and the destination square
+# EG Nge2 Nfxe4
+# Fetch the matched string
+        Game.general_string_result = work_string[0:position - 1]
+        Game.move_type = constants.PIECE_FILE_MOVE
+        GOTO move_found
+
+
+# 5)
+
+# *** HANDLE MOVES/CAPTURES REGARDING PIECES DETERMINED BY THEIR 'rank' ***
+# EG N2d4  - THE RANK BEING '2'
+# EG N6xe4 - THE FILE BEING 'G'
+
+# This pattern does not apply to Pawns
+# Therefore, no possibility of an En Passant move in this format
+# tuple format - (the piece, the rank, the destination square)
+
+    REGREPL "\c^([KQRBN])([1-8])x?([a-h][1-8])" IN Game.input_stream WITH "\01,\02,\03" TO position, work_string
+
+    if position:
+# That is, the piece, the file and the destination square
+# EG N2d4 N6xe4
+# Fetch the matched string
+        Game.general_string_result = work_string[0:position - 1]
+        Game.move_type = constants.PIECE_RANK_MOVE
+        GOTO move_found
+
+
+# *** CASTLING ***
+# This is denoted by using capital 'O' that is O-O and O-O-O
+# It is not PGN notation to use ZEROS - However will cater for 0-0 and 0-0-0
+    REGEXPR "^((O-O-O)|(O-O)|(0-0-0)|(0-0))" IN Game.input_stream TO position, length
+
+    if position:
+# Fetch the matched castling move string
+
+# Needed in 'Game.general_string_result' to later convert 0-0-0 to O-O-O
+# or 0-0 to O-O
+        Game.general_string_result = Game.input_stream[0:length]
+
+# Remove it from the input stream
+        Game.input_stream = Game.input_stream[length + 1 - 1:]  # Note: matched at position 1 using ^
+        work_string = Game.input_stream
+
+        print("OO>", Game.general_string_result, position, length)  # todo
+
+        Game.move_type = constants.CASTLING_MOVE
+# Note: position = 1
+        GOTO move_found
+
+
+# Unknown Chess Move
+    if not position:
+# REVERT BACK TO $LF
+        REPLACE chr(255) WITH constants.LF IN Game.input_stream
+        REPLACE chr(255) WITH constants.LF IN Game.general_string_result
+
+#     CALL input_status_message("Chess Move Expected. Instead: " + MID$(Game.input_stream,1,20))
+        input_status_message(constants.BAD_CHESS_MOVE_FROM_FILE + Game.input_stream[0:20])
+        return
+
+
+    move_found:
+# REVERT BACK TO $LF
+    REPLACE chr(255) WITH constants.LF IN Game.general_string_result
+
+# Remove any trailing symbol continuation characters.
+# These continuation characters are letter characters ("A-Za-z"), digit characters ("0-9"),
+# the plus sign ("+"), the octothorpe sign ("#"),
+# the equal sign ("="), the colon (":"),  and the hyphen ("-").
+# Therefore ignore suffix text such as =Q+
+    work_string = work_string[position - 1:]
+
+    REGREPL "^[A-Za-z0-9+#=:\-]*" IN work_string WITH "" TO position, Game.input_stream
+
+# REVERT BACK TO $LF
+    REPLACE chr(255) WITH constants.LF IN Game.input_stream
+
+    chess_move_to_tuple = True  # Indicate success
+
+
+def check_game_termination_marker_found()
+    """
+    Determine if the parsed string is
+    # is it "1-0" (White wins), "0-1" (Black wins), "1/2-1/2" (drawn game), OR "*"
+    """
+
+    result = False
+    # r"\A((1-0)|(0-1)|(1/2-1/2)|[*])"'
+    matched = constants.move_number_pattern.match(Game.input_stream)
+    if matched:
+    # Reached the Indicator regarding the Result and the End of the Game
+        input_status_message("Result of the Game has been read from the input file: "
+                             + matched.group(0))
+        result = True
+
+# Remove it from the input stream
+        Game.input_stream = Game.input_stream[len(matched.group(0)):]
+
+    return result
+
+
+def expected_move_number_not_found():
+    """
+    Report that an expected move number could not be determined
+    """
+
+    input_status_message("Expected Move Number " + str(Game.move_count)
+                         + ". Instead: " + Game.input_stream[0:10])
+
+
+def parse_move_text()
+    """
+    Parse the text into a tuple of the following form:
+    (the piece optional, the destination square)
+    The result is placed in Game.general_string_result
+    TODO
+    """
+
+    if Game.whose_move == constants.COMPUTER:
+        Game.global_piece_sign = constants.COMPUTER
+        # For parsing a Computer's move check that it is not a string of periods e.g. ...
+        # r"\A[.]+"
+        matched = constants.periods_pattern.match(Game.input_stream)
+        if not matched:
+            input_status_message("Expected the Player's Chess Move not Periods: "
+                                 + Game.input_stream[0:10])
+            return False
+            
+        # Otherwise    
+        return chess_move_to_tuple()
+
+    # Therefore Game.whose_move is == constants.PLAYER
+    # Increment the Move Counter
+    global_piece_sign = constants.PLAYER
+    Game.move_count += 1
+    Game.move_count_incremented = True
+
+    # Output the Move Number
+    # todo
+    #       append_to_output(lstrip(str(Game.move_count)) + "." + constants.SPACE)
+
+    # Move Number expected EG 4. I will allow periods to be optional
+    matched = constants.move_number_pattern.match(Game.input_stream)
+    if not matched:
+        expected_move_number_not_found()
+        return False
+
+    # Expecting matching move number
+    # Determine the move number
+
+    try:
+        move_number = int(matched(0))
+    except ValueError:
+        expected_move_number_not_found()
+        return False
+
+    # Do they match?
+    if Game.move_count != move_number:
+        expected_move_number_not_found()
+        return False
+
+    # Skip the move number and determine the Chess Move
+    # That is, parse any periods and whitespace
+    # r"\A[.][ \n]*"
+    Game.input_stream = constants.move_number_suffix_pattern.sub("", Game.input_stream, count=1)
+
+    # Handle any comments
+    # If empty don't continue
+    if Game.input_stream == "" or not regexp_loop():
+        return False
+
+    # is it "1-0" (White wins), "0-1" (Black wins), "1/2-1/2" (drawn game), OR "*"
+    if check_game_termination_marker_found():
+        return False
+
+    # Otherwise
+    return chess_move_to_tuple()
+
+
+def handle_move_text()
+    """
+    If the Parsing operation was successful,
+    The result would be placed in Game.general_string_result
+    then TODO
+    Part 2
+    """
+
+    # Was the parsing successful?
+    result = parse_move_text()
+    # Alternate the players for the next time; that is, negate the sign
+    Game.whose_move = -Game.whose_move
+
+    if not result:
+        return
+
+
+    print("BEFORE1", Game.reading_game_file)
+    # TODO
+    # result = determine_piece_and_destination()
+    print("test", Game.reading_game_file, RESULT)  # todo
 
 
 def fetch_chess_move_from_file():
     """
     Handle a chess move recently parsed from an input file
     """
-    if not regexp_loop() or Game.input_stream == "":
     if Game.input_stream == "" or not regexp_loop():
         # Empty or Erroneous input
         return
