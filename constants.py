@@ -88,10 +88,7 @@ END_UP_IN_CHECK = 10
 KINGSIDE = 11
 QUEENSIDE = 12
 
-LPAREN = "("
-RPAREN = ")"
-LBRACKET = "["
-RBRACKET = "]"
+TAB = "\t"  # TODO
 SPACE = " "
 CHECK_INDICATION = "+"
 CHECKMATE_INDICATION = "#"
@@ -125,7 +122,16 @@ PRESET_CHESSBOARD = [chr(j+97) + chr(k+49)
                      for j in range(8)
                      for k in range(8)]
 
+# FILE I/O
+
+INPUT_PGN_NAME = "input.pgn"
+OUTPUT_PGN_NAME = "output.pgn"
+
 # Regular Expressions
 
+percent_pattern = re.compile(r"(\A%)|(\n%)")
+en_passant_pattern = re.compile(r"\Ae\.p\.[ \n]*")
+nag_pattern = re.compile(r"\A\$[0-9]+")
+parens_pattern = re.compile(r"[()]")
 castling_pattern = re.compile(r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))\Z")
 chess_move_pattern = re.compile(r"([a-h][1-8]){2}")

@@ -13,7 +13,7 @@ Menezes' QBASIC program can be found at
 
 import constants
 import piece
-import fileio
+import fileio as f
 import os
 import re
 import time
@@ -1553,7 +1553,7 @@ def handle_input_from_game_file(chess, from_file, from_rank, to_file, to_rank,
     Game.who_are_you = constants.PLAYER
     Game.opponent_who_are_you = constants.COMPUTER
     
-    fileio.fetch_chess_move_from_file()
+    f.fetch_chess_move_from_file()
 
     # Was a castling move read from the file? If so, process it
     if Game.reading_game_file and Game.move_type == constants.CASTLING_MOVE:
@@ -1824,6 +1824,8 @@ def main_part2():
     """
 
     chess = Game()
+
+    f.open_input_file()
 
     chess.fillboard()
     os.system("clear")
