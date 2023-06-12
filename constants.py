@@ -162,7 +162,9 @@ file_pattern = re.compile(r"\A([KQRBN])([a-h])x?([a-h][1-8])",
 rank_pattern = re.compile(r"\A([KQRBN])([1-8])x?([a-h][1-8])",
                                      flags=re.IGNORECASE | re.ASCII)
 
-castling_infile_pattern = re.compile(r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))")
+castling_inputfile_pattern = re.compile(r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))")
+
+chess_move_suffix_pattern = re.compile(r"\A[A-Za-z0-9+#=:\-]*")
 
 castling_keyboard_pattern = re.compile(r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))\Z")
 chess_move_pattern = re.compile(r"([a-h][1-8]){2}")

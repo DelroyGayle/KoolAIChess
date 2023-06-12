@@ -88,6 +88,7 @@ class Game:
     writing_game_file = False
     input_stream = ""
     input_stream_previous_contents = ""
+    chess_move_tuple = None
     move_type = ""
     move_count = 0
     move_count_incremented = False
