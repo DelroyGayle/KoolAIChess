@@ -628,30 +628,22 @@ def check_for_en_passant_first(chess, source, target):
     # This chess move is not an en passant move
     return
 
-
-def determine_the_move(chess, piece, to_square):
+def find_the_match(chess, all_matched_list,
+                   from_file, from_rank,
+                   to_file, to_rank):
     """
-    Using 'piece' and 'to_square' to determine what the 'from' square is
+    Go through each filtered square
+    Regarding the piece on the square generate all the possible moves for this piece
+    Find the move with the matching 'target' destination
     """
-
-    to_file = to_square[0]
-    to_rank = to_square[1]
-
-    # Filter all the squares where both the colour and the piece match
-    same_colour_pieces_list = [index for index in constants.PRESET_CHESSBOARD
-                               if chess.piece_sign(index) == Game.global_piece_sign
-                                  and chess.piece_letter(index) == piece]
-
-    # Go through each filtered square, 
-    # generated all the moves for the piece on a filtered square
-    # and find the move with the matching 'target' destination
-    for index in same_colour_pieces_list:
+    
+    found_target = None
+    
+    for index in all_matched_list:
         from_file = index[0]
         from_rank = index[1]
         all_the_moves = movelist(chess, from_file, from_rank,
                                  Game.global_piece_sign, False)
-
-        found_target = None
 
         for m in all_the_moves:
             target_file = all_the_moves[m][0]
@@ -659,7 +651,7 @@ def determine_the_move(chess, piece, to_square):
             if target_file == to_file and target_rank == to_rank:
                 found_target = all_the_moves[m]
                 # todo
-                print("MATCH", from_file, from_rank, to_file, to_rank)
+                print("MATCH/ANSWER", from_file, from_rank, to_file, to_rank)
                 break
 
         if found_target:
@@ -674,6 +666,8 @@ def determine_the_move(chess, piece, to_square):
         input_status_message(constants.BAD_CHESS_MOVE_FROM_FILE + inputstream_previous_contents)
         return # Failure
 
+    # Match found
+    # Retrieve the new values
     Game.new_from_file = from_file
     Game.new_from_rank = from_rank
     Game.new_to_file = to_file
@@ -686,11 +680,30 @@ def determine_the_move(chess, piece, to_square):
         Game.output_chess_move = piece
 
     Game.output_chess_move += found_target
-
-    # todo
-    print("ANSWER1",Game.new_from_file, Game.new_from_rank, Game.new_to_file, Game.new_to_rank, Game.output_chess_move)
-
+    print("OCM", output_chess_move) # todo
     return # Success
+
+
+def determine_the_move(chess, piece, to_square):
+    """
+    Using 'piece' and 'to_square' to determine what the 'from' square is
+    """
+
+    to_file = to_square[0]
+    to_rank = to_square[1]
+
+    # Filter all the squares where both the colour and the piece match
+    all_matched_list = [index for index in constants.PRESET_CHESSBOARD
+                        if chess.piece_sign(index) == Game.global_piece_sign
+                        and chess.piece_letter(index) == piece]
+
+    # Go through each filtered square, 
+    # generated all the moves for the piece on a filtered square
+    # and find the move with the matching 'target' destination
+    
+    return find_the_match(chess, all_matched_list,
+                         from_file, from_rank,
+                         to_file, to_rank)
 
 
 def determine_the_capture_by_file(chess, piece, from_file, to_square):
@@ -699,76 +712,48 @@ def determine_the_capture_by_file(chess, piece, from_file, to_square):
     to determine what the 'from' rank is
     """
 
+    to_file = to_square[0]
+    to_rank = to_square[1]
+
     # Filter all the squares where
     # The file, the colour and the piece all match
     all_matched_list = [index for index in constants.PRESET_CHESSBOARD
-                               if index[0] == from_file
+                        if index[0] == from_file
+                        and chess.piece_sign(index) == Game.global_piece_sign
+                        and chess.piece_letter(index) == piece]
+
+    # Go through each filtered square, 
+    # generated all the moves for the piece on a filtered square
+    # and find the move with the matching 'target' destination
+
+    return find_the_match(chess, all_matched_list,
+                   from_file, from_rank,
+                   to_file, to_rank)
+
+
+def determine_the_capture_by_rank(chess, piece, from_rank, to_square):
+    """
+    Using 'piece', 'from_rank' and 'to_square'
+    to determine what the 'from' file is
+    """
+
+    to_file = to_square[0]
+    to_rank = to_square[1]
+
+    # Filter all the squares where
+    # The rank, the colour and the piece all match
+    all_matched_list = [index for index in constants.PRESET_CHESSBOARD
+                               if index[1] == from_rank
                                   and chess.piece_sign(index) == Game.global_piece_sign
                                   and chess.piece_letter(index) == piece]
 
     # Go through each filtered square, 
     # generated all the moves for the piece on a filtered square
     # and find the move with the matching 'target' destination
-    for index in all_matched_list:
-        temp_file = index[0]
-        temp_rank = index[1]
-        all_the_moves = movelist(chess, temp_file, temp_rank,
-                                 Game.global_piece_sign, False)
 
-        found_target = None
-
-        for m in all_the_moves:
-            target_file = all_the_moves[m][0]
-            target_rank = all_the_moves[m][1]
-            if target_file == to_file and target_rank == to_rank:
-                found_target = all_the_moves[m]
-                # debugging todo
-                print("MATCH2", from_file, from_rank, to_file, to_rank)
-                break
-
-        if found_target:
-           break
-
-# THIS MUST BE DONE
-    level = 0
-    return (found_target, from_file, from_rank, to_file, to_rank)
-    if not found:
-#        PRINT "INTERNAL ERROR 4: NO MATCH FOUND"
-#        PRINT piece, file, destination, file_x, target_y, destination_x, destination_y, global_piece_sign
-#        console_input = WAITKEY$
-#        END
-
-# The erroneous text/input is in Game.general_string_result
-
-         input_status_message(constants.BAD_CHESS_MOVE_FROM_FILE + inputstream_previous_contents)
-         return
-
-
-# REFACTOR
-
-    Game.new_from_file = file_x
-    Game.new_from_rank = target_y
-    Game.new_to_file = destination_x
-    Game.new_to_rank = destination_y
-    g_en_passant_status = constants.NOVALUE
-
-    if piece == "P":
-        output_chess_move = ""
-    else:
-        output_chess_move = piece
-
-
-    output_chess_move = output_chess_move + convert_indices_to_file_rank(Game.new_from_file, Game.new_from_rank, Game.new_to_file, Game.new_to_rank)
-
-# debugging
-# PRINT "ANSWER2",Game.new_from_file, Game.new_from_rank, Game.new_to_file, Game.new_to_rank, output_chess_move
-
-# PRINT "OS2>",output_stream
-
-# THIS MUST BE DONE
-# level = 0 - SEE ABOVE
-
-    determine_the_capture_by_file = True  # Success
+    return find_the_match(chess, all_matched_list,
+                   from_file, from_rank,
+                   to_file, to_rank)
 
 
 def determine_move_both_file_rank(chess):
@@ -817,42 +802,21 @@ def determine_move_both_file_rank(chess):
 
 
     if (Game.move_type == constants.DESTINATION_SQUARE_ONLY
-       or constants.PIECE_DESTINATION_SQUARE):
-       # DESTINATION_SQUARE_ONLY EG e4 OR Ne2
+       or Game.move_type == constants.PIECE_DESTINATION_SQUARE):
+       # DESTINATION_SQUARE_ONLY  EG e4 OR Ne2
        # PIECE_DESTINATION_SQUARE EG Qxe1
-        result = determine_the_move(chess, piece, target)
+        return determine_the_move(chess, piece, target)
 
-    if Game.move_type == constants.PAWN_CAPTURE_FILE:
-        # EG exd4
-        result = determine_the_capture_by_file(chess, piece, source, target)
+    elif (Game.move_type == constants.PAWN_CAPTURE_FILE
+       or Game.move_type == constants.PIECE_RANK_MOVE):
+        # PAWN_CAPTURE_FILE EG exd4
+        # PIECE_RANK_MOVE   EG Nfxe4
+        return determine_the_capture_by_file(chess, piece, source, target)
 
-    (found_target, from_file, from_rank, to_file, to_rank) = result
+    elif Game.move_type == constants.PIECE_RANK_MOVE:
+        # EG N6xe4
+        return determine_the_capture_by_rank(chess, piece, source, target)
 
-    if not found_target:
-        """
-        This ought not to happen! 
-        It means: An illegal move or invalid move has been read in from the input file    
-        The erroneous text/input is in Game.general_string_result
-        """
-        input_status_message(constants.BAD_CHESS_MOVE_FROM_FILE + inputstream_previous_contents)
-        return # Failure
-
-    # Retrieve the new values
-    Game.new_from_file = from_file
-    Game.new_from_rank = from_rank
-    Game.new_to_file = to_file
-    Game.new_to_rank = to_rank
-    Game.en_passant_status = constants.NOVALUE
-
-    if piece == "P":
-        Game.output_chess_move = ""
-    else:
-        Game.output_chess_move = piece
-
-    Game.output_chess_move += found_target
-
-    # todo
-    print("ANSWER:",Game.new_from_file, Game.new_from_rank, Game.new_to_file, Game.new_to_rank, Game.output_chess_move)
 
 
 def handle_move_text(chess):
