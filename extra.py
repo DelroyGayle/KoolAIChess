@@ -384,7 +384,7 @@ def perform_en_passant(from_file, from_rank, to_file, to_rank):
 
 # Erase square of 'from' pawn now vacated
     save_current_pawn = chess[from_file + from_rank]
-    chess(from_file + from_rank) = None
+    chess[from_file + from_rank] = None
 
 # The king must not end up in check
     if incheck(Game.who_are_you):
