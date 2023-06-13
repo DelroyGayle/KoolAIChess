@@ -24,6 +24,11 @@ class Game:
     best_from_rank = ""
     best_to_file = ""
     best_to_rank = ""
+    new_from_file = ""
+    new_from_rank = ""
+    new_to_file = ""
+    new_to_rank = ""
+
     # todo check_flag
     # True means that one is currently in Check
     check_flag = False

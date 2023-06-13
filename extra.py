@@ -128,15 +128,6 @@ def any_promotion(chess, to_file, to_rank):
         Game.promoted_piece = ""
 
 
-def is_error_from_input_file()
-    """
-    Display a general message if an erroneous chess move came from the input file
-    """
-    if Game.reading_game_file:
-        input_status_message("Since This Illegal Move came from the input file\n"
-                             "moves will hereafter come from your input via the keyboard")
-
-
 """
 ************ CASTLING ************
 There are two types:
@@ -261,7 +252,7 @@ def handle_castling(who_are_you)
         print("Illegal Castling Move")
         print(Game.error_message)
         Game.general_string_result = output_castling_move  # Need this
-        time.sleep(3)  # Pause the Computer
+        time.sleep(constants.SLEEP_VALUE)  # Pause the Computer
         return False
 
     # This Castling move is valid! - Indicate this

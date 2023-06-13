@@ -8,6 +8,7 @@ and their validation.
 import constants
 from game import Game
 
+
 def output_message(message):
     """
     Output a message after first removing any superfluous blank lines
@@ -38,6 +39,15 @@ def input_status_message(message):
     print()
     # Reset Flag
     Game.reading_game_file = False
+
+
+def is_error_from_input_file():
+    """
+    Display a general message if an erroneous chess move came from the input file
+    """
+    if Game.reading_game_file:
+        input_status_message("Since This Illegal Move came from the input file\n"
+                             "moves will hereafter come from your input via the keyboard")
 
 
 def cleanup_input_stream(in_string):

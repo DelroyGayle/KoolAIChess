@@ -77,7 +77,7 @@ PLAYER_PAWNS_RANK = "2"  # a2...h2
 COMPUTER_PAWNS_RANK = "7"  # a7...h7
 
 
-NONE = -1
+NOVALUE = -1
 INVALID = 1
 VALID = 2
 ALREADY_CASTLED = 3
@@ -131,6 +131,7 @@ PRESET_CHESSBOARD = [chr(j+97) + chr(k+49)
 
 INPUT_PGN_NAME = "input.pgn"
 OUTPUT_PGN_NAME = "output.pgn"
+SLEEP_VALUE = 2  # Pause 2 seconds
 
 # Regular Expressions
 percent_pattern = re.compile(r"(\A%)|(\n%)")
