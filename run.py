@@ -17,7 +17,7 @@ from game import Game
 import fileio as f
 import os
 import re
-import time
+from time import sleep
 
 
 class CustomException(Exception):
@@ -547,14 +547,6 @@ def determine_generate_move_method(piece_letter):
     return themethod
 
 
-def generate_moves(self, piece_sign):
-    """
-    Generate a list of valid moves for a particular piece
-    """
-    ...
-    # todo
-
-
 def movelist(chess, from_file, from_rank, piece_sign, evaluating=False):
     """
     Get a list of possible moves for a particular piece
@@ -575,7 +567,7 @@ def movelist(chess, from_file, from_rank, piece_sign, evaluating=False):
     return all_the_moves
 
 
-"""
+""" TODO
     if bpiece(x, y)
         elif == asc("P")
             pawn(x, y, piece_sign)
@@ -1045,12 +1037,12 @@ def finalise_computer_move(chess):
             Game.output_chess_move = add_checkmate_to_output(chess_move)
 
             # todo
-#            append_to_output(Game.output_chess_move + constants.SPACE)
+#            append_to_output_stream(Game.output_chess_move + constants.SPACE)
 # keep this flag unset from now on; so that the move count is incremented
 # g_move_count_incremented = False
 # todo
 
-            time.sleep(constants.SLEEP_VALUE)
+            sleep(constants.SLEEP_VALUE)
             chess.display("Checkmate!! I Win!")
 
 
@@ -1065,7 +1057,7 @@ def handle_chess_move_from_inputfile(chess, from_file, from_rank, to_file, to_ra
     Game.who_are_you = constants.COMPUTER
     Game.opponent_who_are_you = constants.PLAYER
 
-    fetch_chess_move_from_file()
+    f.fetch_chess_move_from_file(chess)
     print("FILE OK", Game.reading_game_file, Game.move_type, do_castle_move, computer_move_finalised)  # TODO
 
     # Was there an file input issue?
@@ -1076,7 +1068,7 @@ def handle_chess_move_from_inputfile(chess, from_file, from_rank, to_file, to_ra
     if not Game.reading_game_file:
         print("Computer from this point onwards will now generate its own moves")
         print()
-        time.sleep(constants.SLEEP_VALUE)
+        sleep(constants.SLEEP_VALUE)
         return (False, False, from_file, from_rank, to_file, to_rank)
 
     if Game.move_type == constants.CASTLING_MOVE:
@@ -1087,7 +1079,7 @@ def handle_chess_move_from_inputfile(chess, from_file, from_rank, to_file, to_ra
         # 'handle_castling() redisplays the Board and displays the appropriate error messaging
             print("Computer from this point onwards will now generate its own moves")  # REFACTOR
             print()
-            time.sleep(constants.SLEEP_VALUE)
+            sleep(constants.SLEEP_VALUE)
             return (False, False, from_file, from_rank, to_file, to_rank)
 
         else:
@@ -1182,7 +1174,7 @@ def finalise_player_move(chess, from_file, from_rank, to_file, to_rank,
     # keep this flag unset from now on; so that the move count is incremented
 
     # Output the Move Number
-    #     append_to_output(lstrip(str(g_move_count)) + "." + constants.SPACE)
+    #     append_to_output_stream(lstrip(str(g_move_count)) + "." + constants.SPACE)
 
     # Convert the chess move in order to output it
     # Add a 'x' to the output chess move if a piece was taken
@@ -1212,7 +1204,7 @@ def finalise_player_move(chess, from_file, from_rank, to_file, to_rank,
             Game.output_chess_move = add_checkmate_to_output(chess_move)
             print("Checkmate!! You Win!")
             # todo
-#            append_to_output(Game.output_chess_move + constants.SPACE)
+#            append_to_output_stream(Game.output_chess_move + constants.SPACE)
 #            output_all_chess_moves(constants.PLAYER_WON)
 # todo
             print()
@@ -1240,7 +1232,7 @@ def handle_input_from_game_file(chess, from_file, from_rank, to_file, to_rank,
     Game.who_are_you = constants.PLAYER
     Game.opponent_who_are_you = constants.COMPUTER
     
-    f.fetch_chess_move_from_file()
+    f.fetch_chess_move_from_file(chess)
 
     # Was a castling move read from the file? If so, process it
     if Game.reading_game_file and Game.move_type == constants.CASTLING_MOVE:
@@ -1472,7 +1464,7 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         chess.display(print_string)
         # Pause so that the Player
         # can see the description of the move that the Player chose
-        time.sleep(constants.SLEEP_VALUE)
+        sleep(constants.SLEEP_VALUE)
         # Inform Player that Kool AI is thinking!
         print("I am evaluating my next move...")
         return

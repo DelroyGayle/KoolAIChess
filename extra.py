@@ -128,6 +128,16 @@ def any_promotion(chess, to_file, to_rank):
         Game.promoted_piece = ""
 
 
+def append_to_output_stream(astring):
+    """
+    append string to Game.output_stream
+    """
+    Game.output_stream += astring
+
+    # debugging TODO
+    print("OS",Game.output_stream)
+
+
 """
 ************ CASTLING ************
 There are two types:
@@ -138,16 +148,15 @@ the White king goes left and the Black king goes right.
 https://www.chessable.com/blog/how-to-castle-in-chess/
 """
 
-# Note: This test does not regard the colour of the piece
-def is_piece_a_king(chess, row, column)
-"""
-Is the piece on this square a King?
-Ignore the colour
+def is_piece_a_king(chess, row, column):
+    """
+    Is the piece on this square a King?
+    Regardless of colour
 """
     return chess.piece_letter(from_file, from_rank) == constants.KING_LETTER
 
 
-def record_if_king_or_rook_have_moved(chess, who_are_you, file, rank)
+def record_if_king_or_rook_have_moved(chess, who_are_you, file, rank):
     """
     Record whether either a king or rook piece has been moved
     Once such a piece has been move, the Castling move is no longer an option
@@ -212,7 +221,7 @@ def record_if_king_or_rook_have_moved(chess, who_are_you, file, rank)
 #   DIM which_castle_side AS INTEGER, who_are_you AS INTEGER, just_performed_castling AS BYTE
 #   DIM output_castling_move AS STRING, castling_message AS STRING
 
-def handle_castling(who_are_you)
+def handle_castling(who_are_you):
     """
     This is the base routine to handle the Chess move of Castling
     CASTLING_KINGSIDE = "O-O"
@@ -275,7 +284,7 @@ Note: the ranks are always ordered from White's perspective, so it is labelled W
 Likewise for the fifth rank
 """
 
-def record_pawn_that_advanced_by2(who_are_you, previous_file, previous_rank, current_file, current_rank)
+def record_pawn_that_advanced_by2(who_are_you, previous_file, previous_rank, current_file, current_rank):
     """
     Record a pawn if it has made its first initial two-square move
     """
@@ -284,13 +293,13 @@ def record_pawn_that_advanced_by2(who_are_you, previous_file, previous_rank, cur
     print("WHO ", who_are_you, chess.value(previous_rank, previous_rank), chess.value(current_rank, current_rank))  # todo
     if (who_are_you == constants.PLAYER
        and previous_rank == constants.PLAYER_PAWNS_RANK and current_rank == constants.FOURTH_RANK):
-        print("YES/player")
-           player_pawn_2squares_advanced_file = current_file
-           player_pawn_2squares_advanced_rank = current_rank
+            print("YES/player") # todo
+            player_pawn_2squares_advanced_file = current_file
+            player_pawn_2squares_advanced_rank = current_rank
 
     elif (who_are_you == constants.COMPUTER
           and previous_rank == constants.COMPUTER_PAWNS_RANK and current_rank == constants.FIFTH_RANK):
-            print("YES/computer")
+            print("YES/computer") #todo
             computer_pawn_2squares_advanced_file = current_file
             computer_pawn_2squares_advanced_rank = current_rank
     
@@ -300,7 +309,7 @@ def record_pawn_that_advanced_by2(who_are_you, previous_file, previous_rank, cur
            reset_2squares_pawn_positions(who_are_you)
 
 
-def validate_player_en_passant_move(from_file, from_rank, to_file, to_rank)
+def validate_player_en_passant_move(from_file, from_rank, to_file, to_rank):
     """
     Validate the Player's en passant move
     That is the human opponent, not the Computer!
@@ -328,3 +337,178 @@ def validate_player_en_passant_move(from_file, from_rank, to_file, to_rank)
         print("Illegal En Passant Move or Illegal Pawn Move")
 
     return False
+
+
+
+def indicate_en_passant_done(who_are_you):
+    """
+    At this point, en passant has been executed.
+    A post-examination of the move has been done to ensure that the king in question is not in Check
+    Therefore it is a legal en passant move - no need for any further checks
+    Reset variables holding opponent's advanced-by-2 pawn positions
+    Display a message
+    """
+    
+    if who_are_you == constants.PLAYER:
+            print("Player Took Pawn En Passant")
+            reset_2squares_pawn_positions(constants.COMPUTER)
+    else:
+            print("Computer Took Pawn En Passant")
+            reset_2squares_pawn_positions(constants.PLAYER)
+
+    print()
+
+
+def perform_en_passant(from_file, from_rank, to_file, to_rank):
+    """
+    Chess move has been determined which matches an en passant move
+    Therefore, perform it
+    """
+
+    
+    # Erase square of opponent pawn now vacated
+    if Game.opponent_who_are_you == constants.COMPUTER:
+        save_captured_file = Game.computer_pawn_2squares_advanced_file
+        save_captured_rank = Game.computer_pawn_2squares_advanced_rank
+        save_captured_pawn = chess.piece_value(Game.computer_pawn_2squares_advanced_file, Game.computer_pawn_2squares_advanced_rank)
+        chess[save_captured_file + save_captured_rank] = None
+    else:
+        save_captured_rank = Game.player_pawn_2squares_advanced_rank
+        save_captured_file = Game.player_pawn_2squares_advanced_file
+        save_captured_pawn = chess.piece_value(Game.player_pawn_2squares_advanced_file, Game.player_pawn_2squares_advanced_rank)
+        chess[save_captured_file + save_captured_rank] = None
+
+# fill square with pawn
+
+    chess[to_file + to_rank] = piece.Pawn(constants.PAWN_VALUE, Game.who_are_you)
+
+# Erase square of 'from' pawn now vacated
+    save_current_pawn = chess[from_file + from_rank]
+    chess(from_file + from_rank) = None
+
+# The king must not end up in check
+    if incheck(Game.who_are_you):
+# If so, then this en passant is invalid
+# Redisplay the Board
+        display("Invalid en passant - The king must not end up in check")
+        sleep(constants.SLEEP_VALUE)
+        Game.message_printed = True
+        Game.en_passant_status = constants.INVALID
+        return False
+
+    # Otherwise successful en passant - update values
+    indicate_en_passant_done(Game.who_are_you)
+    Game.new_from_file = from_file
+    Game.new_from_rank = from_rank
+    Game.new_to_file = to_file
+    Game.new_to_rank = to_rank
+    Game.en_passant_status = constants.VALID
+    return True
+
+
+def valid_and_perform_en_passant(chess, from_file, from_rank, to_file, to_rank):
+    """
+    If an en passant move is possible, perform it
+    """
+
+    if chess.piece_value(to_file, to_rank) != constants.BLANK:
+    # destination square is occupied so cannot be an en passant move
+        return False
+        return
+
+
+    print("EPFIRST ? R> " + from_rank + "C" + from_file + "TO R " + to_row + "C " + to_column)
+    print("COMP CR>", Game.computer_pawn_2squares_advanced_col, Game.computer_pawn_2squares_advanced_row)
+    print("PLAY CR>", Game.player_pawn_2squares_advanced_col, Game.player_pawn_2squares_advanced_row)
+    print("WHO/1", Game.opponent_who_are_you, chess.piece_value(to_file, to_rank))
+    # todo
+
+# Player is White
+# Is there a black pawn (which advanced 2 squares) adjacent to the white pawn?
+    if (Game.opponent_who_are_you == constants.COMPUTER
+        and Game.computer_pawn_2squares_advanced_file == to_file
+        and Game.computer_pawn_2squares_advanced_rank == str(int(to_rank + 1))):
+            print("YES/ OPP = COMPUTER EP")
+            print("X", from_file)
+            print("Y", from_rank) # todo
+            print("PAWN/c", chess.piece_value(Game.computer_pawn_2squares_advanced_file, Game.computer_pawn_2squares_advanced_rank), constants.PAWN_VALUE * Game.who_are_you, Game.who_are_you, Game.opponent_who_are_you)
+            the_rank = str(int(to_rank + 1))
+            the_file = Game.computer_pawn_2squares_advanced_file
+            print("DEST ROW", the_rank)
+            print("DEST COL", to_file) # todo
+            save_rank = Game.computer_pawn_2squares_advanced_rank
+            save_file = Game.computer_pawn_2squares_advanced_file
+
+# Computer is Black
+# Is there a white pawn (which advanced 2 squares) adjacent to the black pawn?
+    elif (Game.opponent_who_are_you == constants.PLAYER
+         and Game.player_pawn_2squares_advanced_file == to_column
+         and Game.player_pawn_2squares_advanced_rank == str(int(to_rank - 1))):
+            print("YES/OPP = PLAYER EP")
+            print("X", from_file)
+            print("Y", from_rank)
+            print("PAWN/p", chess.piece_value(Game.player_pawn_2squares_advanced_file, Game.player_pawn_2squares_advanced_rank), constants.PAWN_VALUE * Game.who_are_you, Game.who_are_you, Game.opponent_who_are_you)
+            the_rank = str(int(to_rank - 1))
+            the_file = Game.player_pawn_2squares_advanced_file
+            print("DEST ROW", the_row)
+            print("DEST COL", to_column)
+            save_row = Game.player_pawn_2squares_advanced_rank
+            save_col = Game.player_pawn_2squares_advanced_file
+
+    else:
+        # Destination Square does not match the opponent's 2-square pawn advanced coordinates - Therefore, definitely not an en passant move
+        return False
+
+    # Is the 'From' Rank known? That is, is the Rank of this piece known?
+    if from_rank == constants.NOVALUE:
+        # No! Therefore, the rank would be the same as the potential captured pawn's rank
+        from_rank = save_rank
+
+    # Is the attacking piece, a pawn?
+    if chess.piece_letter(from_file, from_rank) != constants.PAWN_LETTER:
+    # No! - Therefore, definitely not an en passant move
+        return False
+
+    # Redisplay the Board
+    display(output_attacking_move(chess, Game.who_are_you, from_file, from_rank, to_column, to_row))
+
+    # Defensive Programming
+    # Add a failsafe just to double-check that
+    # 1) The attacking piece is a pawn of the right colour
+    if chess.piece_value(from_file, from_rank) != constants.PAWN_VALUE * Game.who_are_you:
+        # Redisplay the Board
+        output_error_message = "INTERNAL ERROR: Expected the Attacking Piece to be a Pawn\n"
+        output_error_message += "of the right colour for the en passant move;\n"
+        output_error_message += f"Instead, Value: {chess.piece_value(from_file, from_rank)}"
+        if Game.reading_game_file:
+            input_status_message(output_error_message)
+        else:
+            print(output_error_message)
+            print()
+
+        sleep(constants.SLEEP_VALUE)
+        Game.en_passant_status = constants.INVALID
+        Game.message_printed = True
+        return False
+
+    # 2) The captured piece is a pawn of the right colour
+    # That is, is the 'attacked piece' an actual opponent pawn of the right colour?
+    if chess.piece_value(save_col, save_row) != constants.PAWN_VALUE * Game.opponent_who_are_you:
+        # Redisplay the Board
+        showboard()
+        output_error_message = "INTERNAL ERROR: Expected the Captured Piece to be a Pawn\n"
+        output_error_message += "of the right colour for the en passant move;\n"
+        output_error_message += f"Instead, Value: {chess.piece_value(from_file, from_rank)}"
+        if Game.reading_game_file:
+            input_status_message(output_error_message)
+        else:
+            print(output_error_message)
+            print()
+
+        sleep(constants.SLEEP_VALUE)
+        Game.en_passant_status = constants.INVALID
+        Game.message_printed = True
+        return False
+ 
+# Otherwise perform the en passant
+    return perform_en_passant(from_file, from_rank, to_file, to_rank)
