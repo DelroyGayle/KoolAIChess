@@ -15,7 +15,7 @@ In my search for a suitable algorithm I came across this [476-line BASIC PROGRAM
 
 Let me reiterate: the basis of my project is a Chess Program written in<br>**[BASIC](https://en.wikipedia.org/wiki/BASIC) (Beginners' All-purpose Symbolic Instruction Code)** which is available [here](http://www.petesqbsite.com/sections/express/issue23/Tut_QB_Chess.txt).
 
-I found it amazing how Denezes has written such an highly interesting chess playing program in under 500 lines.<br>
+I found it amazing how Denezes has written such a highly interesting chess playing program in under 500 lines.<br>
 My goal then is to convert Denezes' BASIC program to Python; moreover, to add ***castling and en passant*** chess moves so that the user can play a complete game of Chess against their Computer opponent, namely, ***Kool AI***.
 
 ## Chess
@@ -188,7 +188,7 @@ However, for reasons explained below, the Game **will continue until the Player 
 By the way, the above chessboard Checkmate configuration, is known in the Chess world, as<br>
 **Fool's Mate - Checkmate in two moves! 1. f2f3 e7e5 2. g2g4 Qd8h4# 0-1**
 
-The Computer algorithm as designed by *Dean Menezes is clever enough* to make these moves and to checkmate the opponent.
+The Computer algorithm as designed by *Dean Menezes is clever enough* to make these moves and to Checkmate the opponent.
 
 ### Resignation
 Here is an example of Resignation:
@@ -207,7 +207,7 @@ Therefore, in considering the possibility of such a scenario; even after declari
 
 1.  As a user I want to be welcomed by a start screen with the name of the game.
 2.  As a user I want to be able to enjoy a game of Chess against a Computer opponent.
-3.  As a user I want to know whether I am have entered a correct Chess move. Moreover, if I have not,<br>then an explanation of why a move is incorrect ought to be displayed, if possible.
+3.  As a user I want to know whether I have entered a correct Chess move. Moreover, if I have not,<br>then an explanation of why a move is incorrect ought to be displayed, if possible.
 4.  As a user, I want to know whether I have placed the Computer *in Check*.
 5.  As a user, I want to know whether I have placed the Computer *in Checkmate*. That is, have I won?
 6.  As a user, I want to know whether I am *in Check*.
@@ -241,7 +241,8 @@ Therefore, in considering the possibility of such a scenario; even after declari
 * The ability to switch sides
 * Undo/Redo ability when playing moves
 * Saving board positions during the game
-* A Colour Chessboard using a libary such as [Colorama](https://pypi.org/project/colorama/)
+* A Colour Chessboard using a library such as [Colorama](https://pypi.org/project/colorama/)
+* Better Graphics for the Chess Pieces and the Chessboard
 
 ## Data Model
 
@@ -358,7 +359,7 @@ I have added a Try-Except method to catch a Custom Exception which will be gener
 ### constants.py
 
 In order to avoid the usage of *magic numbers* I created this file to hold all the constants needed for this program.
-So if this program needs to be amended, this would me the main place to look at for making adjustments of major values.
+So if this program needs to be amended, this would be the main place to look at for making adjustments of major values.
 
 The exception is that the function *showboard* in *run.py* uses numbers and strings specific to usage on the ANSI terminal used for this project.
 So I suggest an entire new function will need to be written if displaying the chessboard on a different display media.
@@ -428,7 +429,7 @@ AttributeError: type object 'Game' has no attribute 'num_moves'
 
 Solution:
 
-I know the error has something to do with scoping however to resolve this issue, I removed the function 'initialise_class_variables' and defined all my Class Variables directly beneath the 'Game' Class definition.
+I know the error has something to do with scoping, however to resolve this issue, I removed the function 'initialise_class_variables' and defined all my Class Variables directly beneath the 'Game' Class definition.
 ```
 class Game:
     player_first_move = True   
@@ -457,7 +458,7 @@ At this stage, I cannot tell.
 The project is deployed on Heroku. These are the steps in order to deploy on Heroku
 
 1. Create Heroku account.
-2. Create new project.
+2. Create a new project.
 3. Go into settings -> Config Var and add the following:
     +  key by the name of *PORT* with the value of *8000*.<p>
 

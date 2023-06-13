@@ -128,6 +128,15 @@ def any_promotion(chess, to_file, to_rank):
         Game.promoted_piece = ""
 
 
+def is_error_from_input_file()
+    """
+    Display a general message if an erroneous chess move came from the input file
+    """
+    if Game.reading_game_file:
+        input_status_message("Since This Illegal Move came from the input file\n"
+                             "moves will hereafter come from your input via the keyboard")
+
+
 """
 ************ CASTLING ************
 There are two types:
@@ -162,7 +171,7 @@ def record_if_king_or_rook_have_moved(chess, who_are_you, file, rank)
     """
 
     # Note: 'is_piece_a_king' does not regard the colour of the piece
-    print("REC IF", Game.player_king_moved, is_piece_a_king(file, rank))
+    print("REC IF", Game.player_king_moved, is_piece_a_king(file, rank)) # todo
 
     index = file + rank
     if who_are_you == constants.PLAYER:
@@ -207,7 +216,8 @@ def record_if_king_or_rook_have_moved(chess, who_are_you, file, rank)
     print("COMPUTER", Game.computer_king_moved,
                     Game.computer_queen_rook_moved, Game.computer_king_rook_moved) # TODO
 
-# Use a tuple
+
+# Use a tuple # todo
 #   DIM which_castle_side AS INTEGER, who_are_you AS INTEGER, just_performed_castling AS BYTE
 #   DIM output_castling_move AS STRING, castling_message AS STRING
 
@@ -223,7 +233,7 @@ def handle_castling(who_are_you)
     Game.general_string_result = Game.general_string_result.replace("0", "O")
 
 
-# Use Constants for O-O and O-O-O
+    # Use Constants for O-O and O-O-O
     if Game.general_string_result == constants.CASTLING_KINGSIDE:
             # kingside' castling
             which_castle_side = constants.KINGSIDE
@@ -270,13 +280,13 @@ So, if you are White, your pawn must be on the 5th rank,
 and if you are Black, then your pawn must be on the 4th rank
 https://www.chessable.com/blog/the-en-passant-rule-in-chess/
 
-Note: the ranks are always ordered from Whites perspective, so it is labelled Whites fourth rank
+Note: the ranks are always ordered from White's perspective, so it is labelled White's fourth rank
 Likewise for the fifth rank
 """
 
 def record_pawn_that_advanced_by2(who_are_you, previous_file, previous_rank, current_file, current_rank)
     """
-    Record the pawn that has made its first initial two-square move
+    Record a pawn if it has made its first initial two-square move
     """
     # TODO
     print("CAME IN RP> " + previous_file + " PFR " + previous_rank + " CFR " + current_file + " CC " + current_rank)
@@ -299,34 +309,31 @@ def record_pawn_that_advanced_by2(who_are_you, previous_file, previous_rank, cur
            reset_2squares_pawn_positions(who_are_you)
 
 
-def is_error_from_input_file()
-         if Game.reading_game_file:
-                  input_status_message("Since This Illegal Move came from the input file" + constants.CRLF + "moves will now come from your input")
+def validate_player_en_passant_move(from_file, from_rank, to_file, to_rank)
+    """
+    Validate the Player's en passant move
+    That is the human opponent, not the Computer!
+    """
+    # todo DIM isit_an_en_passant_move
 
-
-# ************ EN PASSANT ************ '
-
-def validate_player_en_passant_move(from_column, from_row, to_column, to_row)
-DIM isit_an_en_passant_move
-
-# Ensure that these are set correctly
+    # Ensure that these are set correctly
     Game.who_are_you = constants.PLAYER
     Game.opponent_who_are_you = constants.COMPUTER
 
-    isit_an_en_passant_move = check_for_en_passant(from_column, from_row, to_column, to_row)
+    isit_an_en_passant_move = check_for_en_passant(from_file, from_rank, to_file, to_rank)
     if isit_an_en_passant_move:
 
-# Valid en passant move
-        output_chess_move = convert_indices_to_file_rank(Game.resultant_source_x, Game.resultant_source_y, Game.resultant_destination_x, Game.resultant_destination_y)
-        validate_player_en_passant_move = True
-        return
+    # Valid en passant move
+    # todo
+        # output_chess_move = convert_indices_to_file_rank(Game.resultant_source_x,
+        #                                                  Game.resultant_source_y, 
+        #                                                  Game.resultant_destination_x,
+        #                                                  Game.resultant_destination_y)
+        return True
 
+    # Illegal En Passant Move
+    # If no message has been printed, then print one
+    if not g_message_printed:
+        print("Illegal En Passant Move or Illegal Pawn Move")
 
-# Illegal En Passant Move
-      validate_player_en_passant_move = False
-      if g_message_printed:
-            return
-      else:
-            print("Illegal En Passant Move or Illegal Pawn Move")
-
-
+    return False
