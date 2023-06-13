@@ -8,7 +8,6 @@ and their validation.
 import constants
 from game import Game
 from extra import append_to_output_stream, output_attacking_move
-from time import sleep
 
 
 def output_message(message):
@@ -756,6 +755,27 @@ def determine_the_capture_by_rank(chess, piece, from_rank, to_square):
                    to_file, to_rank)
 
 
+def determine_the_capture_by_both_squares(chess, piece, from_square, to_square):
+    """
+    Using 'piece', 'from_square' and 'to_square'
+    Check that the move is possible for this piece
+    """
+
+    if (chess.piece_sign(from_square) == global_piece_sign 
+        and chess.piece_letter(from_square) == piece):
+            to_file = to_square[0]
+            to_rank = to_square[1]
+
+        # Go through each filtered square, 
+        # generated all the moves for the piece on a filtered square
+        # and find the move with the matching 'target' destination
+
+            return find_the_match(chess, all_matched_list,
+                                  from_file, from_rank,
+                                  to_file, to_rank)
+    return # Failure
+
+
 def determine_move_both_file_rank(chess):
     """
     Since SAN is shortened i.e. short algebraic notation
@@ -772,7 +792,8 @@ def determine_move_both_file_rank(chess):
     # Depending on the 'move_type' check whether 
     # an en passant move is possible
     # And if so, perform it
-    if Game.move_type == constants.PAWN_CAPTURE_FILE:
+    if (Game.move_type == constants.PAWN_CAPTURE_FILE
+        or Game.move_type == constants.LONG_NOTATION):
         result = check_for_en_passant_first(chess, source, target)
         
         """
@@ -793,9 +814,9 @@ def determine_move_both_file_rank(chess):
             return # Successful en passant move
     
         if g_en_passant_status == constants.INVALID:
-            return 
+            return # Unsuccessful
 
-        # Therefore not an en passant move - Continue
+        # Otherwise not an en passant move - Continue
 
     if piece == "":  # PAWN
         piece = "P"
@@ -817,6 +838,19 @@ def determine_move_both_file_rank(chess):
         # EG N6xe4
         return determine_the_capture_by_rank(chess, piece, source, target)
 
+    elif (Game.move_type == constants.PIECE_BOTH_SQUARES
+         or Game.move_type == constants.LONG_NOTATION):
+        # PIECE_BOTH_SQUARES EG Nd2xe4
+        # LONG_NOTATION EG Ng1f3
+        return determine_the_capture_by_both_squares(chess, piece, source, target)
+
+    elif Game.move_type == constants.LONG_NOTATION:
+        # EG Ng1f3
+        return determine_the_capture_by_both_squares(chess, piece, source, target)
+
+    else:
+    # Defensive Programming
+        raise CustomException(f"Internal Error: Unknown Move Type: {Game.move_type}")
 
 
 def handle_move_text(chess):

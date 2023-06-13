@@ -261,7 +261,6 @@ def handle_castling(who_are_you):
         print("Illegal Castling Move")
         print(Game.error_message)
         Game.general_string_result = output_castling_move  # Need this
-        time.sleep(constants.SLEEP_VALUE)  # Pause the Computer
         return False
 
     # This Castling move is valid! - Indicate this
@@ -359,7 +358,7 @@ def indicate_en_passant_done(who_are_you):
     print()
 
 
-def perform_en_passant(from_file, from_rank, to_file, to_rank):
+def perform_en_passant(chess, from_file, from_rank, to_file, to_rank):
     """
     Chess move has been determined which matches an en passant move
     Therefore, perform it
@@ -378,20 +377,19 @@ def perform_en_passant(from_file, from_rank, to_file, to_rank):
         save_captured_pawn = chess.piece_value(Game.player_pawn_2squares_advanced_file, Game.player_pawn_2squares_advanced_rank)
         chess[save_captured_file + save_captured_rank] = None
 
-# fill square with pawn
+    # fill square with pawn
 
     chess[to_file + to_rank] = piece.Pawn(constants.PAWN_VALUE, Game.who_are_you)
 
-# Erase square of 'from' pawn now vacated
+    # Erase square of 'from' pawn now vacated
     save_current_pawn = chess[from_file + from_rank]
     chess[from_file + from_rank] = None
 
-# The king must not end up in check
+    # The king must not end up in check
     if incheck(Game.who_are_you):
-# If so, then this en passant is invalid
-# Redisplay the Board
-        display("Invalid en passant - The king must not end up in check")
-        sleep(constants.SLEEP_VALUE)
+        # If so, then this en passant is invalid
+        # Redisplay the Board
+        chess.display("Invalid en passant - The king must not end up in check")
         Game.message_printed = True
         Game.en_passant_status = constants.INVALID
         return False
@@ -470,7 +468,7 @@ def valid_and_perform_en_passant(chess, from_file, from_rank, to_file, to_rank):
         return False
 
     # Redisplay the Board
-    display(output_attacking_move(chess, Game.who_are_you, from_file, from_rank, to_column, to_row))
+    chess.display(output_attacking_move(chess, Game.who_are_you, from_file, from_rank, to_column, to_row))
 
     # Defensive Programming
     # Add a failsafe just to double-check that
@@ -486,7 +484,6 @@ def valid_and_perform_en_passant(chess, from_file, from_rank, to_file, to_rank):
             print(output_error_message)
             print()
 
-        sleep(constants.SLEEP_VALUE)
         Game.en_passant_status = constants.INVALID
         Game.message_printed = True
         return False
@@ -505,10 +502,9 @@ def valid_and_perform_en_passant(chess, from_file, from_rank, to_file, to_rank):
             print(output_error_message)
             print()
 
-        sleep(constants.SLEEP_VALUE)
         Game.en_passant_status = constants.INVALID
         Game.message_printed = True
         return False
  
 # Otherwise perform the en passant
-    return perform_en_passant(from_file, from_rank, to_file, to_rank)
+    return perform_en_passant(chess, from_file, from_rank, to_file, to_rank)
