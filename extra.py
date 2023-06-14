@@ -394,136 +394,141 @@ def check_castling_valid_part1(who_are_you, which_castle_side, king_rook_rank):
         print("RES3.3")  # todo
 
 
-def move_king_one_square(king_file, king_rank, king_direction, king_value, king_sign):
+def calculate_new_file(file, number):
+    """
+    Used for the Castling movement
+    New file = Current file value + number
+    EG h8 + -1 = g8; a8 + 2 = c8
+    Add the value of square[file + number, rank] is equal to 'test_value'
+    """
 
-# Move the King by one square - TODO
-        new_king_file = king_file + king_direction
+    new_file = chr(ord(file) + number)
+    # Defensive Programming
+    if not ("a" <= new_file <= "h"):
+        raise CustomException(f"Internal Error: File is Off-board {newfile} = {file} + {number}")
 
-# fill square with king
-
-        chess.piece_value(new_king_file, king_rank) = king_value
-        bpiece(new_king_file, king_rank) = asc(constants.KING_LETTER)
-        bsign(new_king_file, king_rank) = king_sign
-
-# erase square of king now vacated
-        chess.piece_value(new_king_file - king_direction, king_rank) = constants.BLANK
-        bpiece(new_king_file - king_direction, king_rank) = constants.ASCII_SPACE  # 32 - blank square which in turn will be printed as a SPACE
-        bsign(new_king_file - king_direction, king_rank) = 0
-
-        return new_king_file
+    return new_file
 
 
-def restore_original_positions(king_rook_rank, king_value, king_sign, king_direction, 
-                               rook_value, rook_file, which_castle_side):
+def move_king_one_square(chess, the_king, king_file, king_rank, king_direction):
+    """
+    Move the king by one square according to the value of 'king_direction'
+    """
 
-# fill the original square with king
-        the_file = CASTLING_KING_FILE
-        chess.piece_value(the_file, king_rook_rank) = king_value
-        bpiece(the_file, king_rook_rank) = asc(constants.KING_LETTER)
-        bsign(the_file, king_rook_rank) = king_sign
+    new_king_file = calculate_new_file(king_file, king_direction)
 
-# move by one square and erase square vacated
-        the_file = the_file + king_direction #todo
-        chess.piece_value(the_file, king_rook_rank) = constants.BLANK
-        bpiece(the_file, king_rook_rank) = constants.ASCII_SPACE  # 32 - blank square which in turn will be printed as a SPACE
-        bsign(the_file, king_rook_rank) = 0
+    # fill square with king
+    chess.board[new_king_file + king_rank] = the_king
 
-# move again by one square and erase square vacated
-        the_file = the_file + king_direction
-        chess.piece_value(the_file, king_rook_rank) = constants.BLANK
-        bpiece(the_file, king_rook_rank) = constants.ASCII_SPACE  # 32 - blank square which in turn will be printed as a SPACE
-        bsign(the_file, king_rook_rank) = 0
-
-        if which_castle_side == constants.QUEENSIDE:
-# For QUEENSIDE - a total of three squares need to be blank
-# So, move again by one square and erase square vacated
-               the_file = the_file + king_direction
-               chess.piece_value(the_file, king_rook_rank) = constants.BLANK
-               bpiece(the_file, king_rook_rank) = constants.ASCII_SPACE  # 32 - blank square which in turn will be printed as a SPACE
-               bsign(the_file, king_rook_rank) = 0
+    # erase square of king now vacated
+    chess.board[king_file + king_rank] = None
+    return new_king_file
 
 
-# fill square with rook
-        chess.piece_value(rook_file, king_rook_rank) = rook_value
-        bpiece(rook_file, king_rook_rank) = asc(constants.ROOK_LETTER)
-        bsign(rook_file, king_rook_rank) = king_sign
+def restore_original_positions(chess, the_king, the_rook,
+                               the_king_square, the_rook_square,
+                               king_rook_rank, direction):
+    """
+    After attempting a Castle move
+    Restore the king and rook to their original positions
+    """
+
+    chess.board[the_king_square] = the_king
+    chess.board[the_rook_square] = the_rook
+    # Erase the other squares
+    current_square = the_rook_square
+    new_file = the_rook_square[0]
+    while True:
+        new_file = calculate_new_file(new_king_file, direction)
+        new_square = new_file + king_rook_rank
+        if new_square == the_king_square:
+            return
+        chess.board[new_square] = None
+
 
 def check_castling_valid_part2(who_are_you, which_castle_side, king_rook_rank, evaluating):
     """
+    Castling: The following must be true for the Castling move to be valid
+    The king is not currently in check;
+    Your king must not pass through a square that is under attack by enemy pieces;
+    The king must not end up in check.    
     """
-
-    check_castling_valid_part2 = False
 
 # Check that the king is not currently in check
     if incheck(who_are_you):
        produce_error_message(constants.KING_IN_CHECK)
        return
 
-    king_value = chess.piece_value(constants.CASTLING_KING_FILE, king_rook_rank)
+    the_king_square = constants.CASTLING_KING_FILE + king_rook_rank
+    the_king = chess.board[the_king_square]
     king_sign = who_are_you
 
     if which_castle_side == constants.KINGSIDE:
             king_direction = 1  # RIGHT
-            rook_direction = - 1  # LEFT
-            rook_value = chess.piece_value(constants.KINGSIDE_ROOK_FILE, king_rook_rank)
-            rook_file = constants.KINGSIDE_ROOK_FILE
+            rook_direction = -1  # LEFT
+            the_rook_square = constants.KINGSIDE_ROOK_FILE + king_rook_rank
+            the_rook_file = constants.KINGSIDE_ROOK_FILE
+            the_rook = chess.board[the_rook_square]
     else:
-            king_direction = - 1  # LEFT
+            king_direction = -1  # LEFT
             rook_direction = 1  # RIGHT
-            rook_value = chess.piece_value(constants.QUEENSIDE_ROOK_FILE, king_rook_rank)
-            rook_file = constants.QUEENSIDE_ROOK_FILE
-
+            the_rook_square = constants.QUEENSIDE_ROOK_FILE + king_rook_rank
+            the_rook_file = constants.QUEENSIDE_ROOK_FILE
+            the_rook = chess.board[the_rook_square]
 
     new_king_file = constants.CASTLING_KING_FILE
 
 # Move the King by one square
-    new_king_file = move_king_one_square(king_rook_rank, new_king_file, king_direction, king_value, king_sign)
+    new_king_file = move_king_one_square(chess, the_king, new_king_file, king_rook_rank, king_rook_rank, new_king_file, king_direction)
 
 # The king must not pass through a square that is under attack by opponent pieces
     if incheck(who_are_you):
         produce_error_message(constants.THROUGH_CHECK)
-        restore_original_positions(king_rook_rank, king_value, king_sign, king_direction, rook_value, rook_file, which_castle_side)
+        restore_original_positions(chess, the_king, the_rook, 
+                                    the_king_square, the_rook_square, 
+                                    king_rook_rank, -rook_direction)
         return
 
 
 # Move the King again by one square
-    new_king_file = move_king_one_square(king_rook_rank, new_king_file, king_direction, king_value, king_sign)
+    new_king_file = move_king_one_square(chess, the_king, new_king_file, king_rook_rank, king_rook_rank, new_king_file, king_direction)
 
 # The king must not pass through a square that is under attack by opponent pieces
     if incheck(who_are_you):
         produce_error_message(constants.THROUGH_CHECK)
-        restore_original_positions(king_rook_rank, king_value, king_sign, king_direction, rook_value, rook_file, which_castle_side)
+        restore_original_positions(chess, the_king, the_rook, 
+                                    the_king_square, the_rook_square, 
+                                    king_rook_rank, -rook_direction)
         return
 
-
 # Now move the Rook on to the other side of the King
-    new_rook_file = new_king_file + rook_direction
+    new_rook_file = calculate_new_file(new_king_file,rook_direction)
 
 # fill square with rook
-    chess.piece_value(new_rook_file, king_rook_rank) = constants.ROOK_VALUE
-    bpiece(new_rook_file, king_rook_rank) = asc(constants.ROOK_LETTER)
-    bsign(new_rook_file, king_rook_rank) = king_sign
+    chess.board[new_rook_file + king_rook_rank] = the_rook
 
 # erase square of rook now vacated
-    chess.piece_value(rook_file, king_rook_rank) = constants.BLANK
-    bpiece(rook_file, king_rook_rank) = constants.ASCII_SPACE  # 32 - blank square which in turn will be printed as a SPACE
-    bsign(rook_file, king_rook_rank) = 0
+    chess.board[rook_file + king_rook_rank] = None
 
 # The king must not end up in check
     if incheck(who_are_you):
         produce_error_message(constants.END_UP_IN_CHECK)
-        restore_original_positions(king_rook_rank, king_value, king_sign, king_direction, rook_value, rook_file, which_castle_side)
+        restore_original_positions(chess, the_king, the_rook, 
+                                    the_king_square, the_rook_square, 
+                                    king_rook_rank, -rook_direction)
         return
 
 
 # This Castling move is valid
 # If evaluating, restore regardless
     if EVALUATING:
-        showboard()  # TODO
-        restore_original_positions(king_rook_rank, king_value, king_sign, king_direction, rook_value, rook_file, which_castle_side)
+        restore_original_positions(chess, the_king, the_rook, 
+                                    the_king_square, the_rook_square, 
+                                    king_rook_rank, -rook_direction)
         showboard()  # todo
 
-    return True
+    return True # Successful Castling move
+
 
 def check_if_castling_move_is_valid(who_are_you, which_castle_side, evaluating):
     """
@@ -542,26 +547,16 @@ def check_if_castling_move_is_valid(who_are_you, which_castle_side, evaluating):
     else:
         king_rook_rank = constants.COMPUTER_SIDE_RANK  # Black - Top row  i.e. "8"
 
-
     if not check_castling_valid_part1(who_are_you, which_castle_side, king_rook_rank):
-
         print("FS1 FALSE")  # TODO
         return False
 
-        return
-
-
     if not check_castling_valid_part2(who_are_you, which_castle_side, king_rook_rank, evaluating):
-
         print("FS2 FALSE")  # TODO
         return False
 
-        return
-
-
     return True
 
-    return
 
 # At this point, castling has been executed.
 # A post-examination of the move has been done to ensure that the king in question is not in check
@@ -569,7 +564,7 @@ def check_if_castling_move_is_valid(who_are_you, which_castle_side, evaluating):
 # Record that Castling has been executed once for either the player or the computer
 # Display a message
 
-def indicate_castling.done(which_side_castled, who_are_you):
+def indicate_castling_done(which_side_castled, who_are_you):
     if who_are_you == constants.PLAYER:
         Game.player_castled = True
         Game.player_king_moved = True
@@ -594,10 +589,6 @@ def indicate_castling.done(which_side_castled, who_are_you):
         Game.computer_queen_rook_moved = True
         print("Computer Castled Queenside O-O-O")
 
-
-# Use a tuple # todo
-#   DIM which_castle_side AS INTEGER, who_are_you AS INTEGER, just_performed_castling AS BYTE
-#   DIM output_castling_move AS STRING, castling_message AS STRING
 
 def perform_castling(chess, who_are_you):
     """
@@ -652,8 +643,8 @@ def perform_castling(chess, who_are_you):
 
 En Passant Rule:
 The attacking pawn must be one square into your opponent's half of the board.
-So, if you are White, your pawn must be on the 5th rank,
-and if you are Black, then your pawn must be on the 4th rank
+So, if you are White, your pawn must be on the fifth rank,
+and if you are Black, then your pawn must be on the fourth rank
 https://www.chessable.com/blog/the-en-passant-rule-in-chess/
 
 Note: the ranks are always ordered from White's perspective, so it is labelled White's fourth rank
@@ -746,20 +737,21 @@ def perform_en_passant(chess, from_file, from_rank, to_file, to_rank):
     if Game.opponent_who_are_you == constants.COMPUTER:
         save_captured_file = Game.computer_pawn_2squares_advanced_file
         save_captured_rank = Game.computer_pawn_2squares_advanced_rank
-        save_captured_pawn = chess.piece_value(Game.computer_pawn_2squares_advanced_file, Game.computer_pawn_2squares_advanced_rank)
-        chess[save_captured_file + save_captured_rank] = None
+        save_captured_pawn = chess.board[save_captured_file + save_captured_rank]
+        chess.board[save_captured_file + save_captured_rank] = None
     else:
-        save_captured_rank = Game.player_pawn_2squares_advanced_rank
         save_captured_file = Game.player_pawn_2squares_advanced_file
-        save_captured_pawn = chess.piece_value(Game.player_pawn_2squares_advanced_file, Game.player_pawn_2squares_advanced_rank)
-        chess[save_captured_file + save_captured_rank] = None
+        save_captured_rank = Game.player_pawn_2squares_advanced_rank
+        save_captured_pawn = chess.board[save_captured_file + save_captured_rank]
+        chess.board[save_captured_file + save_captured_rank] = None
 
     # fill square with pawn
+    # TODO
+    # save_from_pawn = chess[from_file + from_rank]
 
-    chess[to_file + to_rank] = piece.Pawn(constants.PAWN_VALUE, Game.who_are_you)
+    chess[to_file + to_rank] = chess[from_file + from_rank]
 
     # Erase square of 'from' pawn now vacated
-    save_current_pawn = chess[from_file + from_rank]
     chess[from_file + from_rank] = None
 
     # The king must not end up in check
