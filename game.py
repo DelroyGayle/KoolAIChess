@@ -75,6 +75,9 @@ class Game:
     move_count_incremented = False
     it_is_checkmate = None
 
+    # For Castling
+    evaluate_castle_move = ""
+
     def __init__(self):
         self.board = None
         self.fillboard()

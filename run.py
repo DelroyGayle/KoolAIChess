@@ -14,6 +14,7 @@ Menezes' QBASIC program can be found at
 import constants
 import piece
 from game import Game
+from extra as e
 import fileio as f
 import os
 import re
@@ -698,6 +699,7 @@ def is_player_move_illegal(chess, from_file, from_rank, to_file, to_rank):
     For example:
     1) Does the PLAYER'S move put the PLAYER in Check?
     2) Can the chosen piece make that move?
+    Note: returns 'taken'
     """
 
     piece_sign = constants.PLAYER  # white piece
@@ -950,16 +952,17 @@ def execute_computer_move(chess, from_file, from_rank, to_file, to_rank):
     """
     Carry out the chess move that was produced
     by the 'evaluate' function
+    Note: returns 'attacking_piece_letter, taken'
     """
 
     piece_sign = constants.COMPUTER  # black piece
     # display the move
     attacking_piece_letter = chess.piece_letter(from_file, from_rank)
 
-    Game.computer_print_string = output_attacking_move(chess,
-                                                       constants.COMPUTER,
-                                                       from_file, from_rank,
-                                                       to_file, to_rank)
+    Game.computer_print_string = e.output_attacking_move(chess,
+                                                         constants.COMPUTER,
+                                                         from_file, from_rank,
+                                                         to_file, to_rank)
 
     """
     Check whether a Player's piece is about to be taken
@@ -983,24 +986,26 @@ def execute_computer_move(chess, from_file, from_rank, to_file, to_rank):
     check_flag = in_check(chess, constants.COMPUTER)
     if check_flag:
         computer_resigns()
+        # *** END PROGRAM ***
 
-# todo
-# Has the king been moved?
-# Has a rook been moved
-#       record_if_king_or_rook_have_moved(constants.COMPUTER, x, y, x1, y1)
+    # Has the king been moved?
+    # Has a rook been moved
+    e.record_if_king_or_rook_have_moved(chess, constants.COMPUTER,
+                                        from_square, to_square)
 
-# As the opponent advanced a pawn two squares?
-#       If yes, record the pawn's position
-#       record_pawn_that_advanced_by2(constants.COMPUTER, x, y, x1, y1)
+    # As the opponent advanced a pawn two squares?
+    # If yes, record the pawn's position
+    e.record_pawn_that_advanced_by2(chess, constants.COMPUTER,
+                                    from_file, from_rank, to_file, to_rank)
 
-# Convert the chess move in order to output it
-# Add a 'x' to the output chess move if a piece was taken
-# Add the promoted piece if a promotion took place
-# Then output the piece to the output file
+    # Convert the chess move in order to output it
+    # Add a 'x' to the output chess move if a piece was taken
+    # Add the promoted piece if a promotion took place
+    # Then output the piece to the output file
     setup_output_chess_move_add_promotion(attacking_piece_letter,
                                           from_file, from_rank,
                                           to_file, to_rank, taken)
-    # return (attacking_piece, taken)  # todo
+    return (attacking_piece_letter, taken)
 
 
 def finalise_computer_move(chess):
@@ -1089,7 +1094,7 @@ def handle_chess_move_from_inputfile(chess, from_file, from_rank, to_file, to_ra
             # Since this chess move is not a pawn that has advanced two squares
             # Ensure that previous values for 'Computer' have been reset
 
-            reset_2squares_pawn_positions(constants.COMPUTER)
+            e.reset_2squares_pawn_positions(constants.COMPUTER)
             finalise_computer_move(check_flag, Game.output_chess_move, Game.move_count_incremented)
             computer_move_finalised = True
             return (computer_move_finalised, just_performed_castling,
@@ -1107,16 +1112,19 @@ def handle_chess_move_from_inputfile(chess, from_file, from_rank, to_file, to_ra
 def process_computer_move(chess, from_file, from_rank, to_file, to_rank):
     """
     This routine handles the playing of the Computer's move
+    Note: returns 'computer_move_finalised, just_performed_castling, attacking_piece_letter, taken'
     """
 
     computer_move_finalised = False
     just_performed_castling = False
+    attacking_piece_letter = ""
+    taken = ""
 
     if Game.player_first_move:
         # Player goes first so on the very first iteration
         # there is no processing of Computer Moves
         Game.player_first_move = False
-        return
+        return (computer_move_finalised, just_performed_castling, attacking_piece_letter, taken)
 
     # From this point onwards, process the Computer's move
 
@@ -1134,22 +1142,30 @@ def process_computer_move(chess, from_file, from_rank, to_file, to_rank):
         from_file, from_rank, to_file, to_rank) = tuple 
 
     """
-    Regardless of whether fetching the chess move from an input file or 'evaluate'
-    # From this point onwards the logic flow will continue to fall through until the catchall statement below
+    At this stage, three possibilities
+    # 1) 'evaluate' function generated a Castling Move
+    # 2) 'No longer reading Chess Moves from an input file
+    # 3) No Chess Move has been finalised
+    """
+    
+    # Handle 1) Castling Move
+    e.handle_evaluated_castling_move()
+
     # Whereby the chosen Chess Move will be executed
     """
 
 # Validate, Execute then Finalise the Computer Chess Move
 # (if it was not a Castling Chess Move)
     if not computer_move_finalised:
-        execute_computer_move(chess,
-                              from_file, from_rank,
-                              to_file, to_rank)
+        (attacking_piece_letter, taken) = execute_computer_move(chess,
+                                                                from_file, from_rank,
+                                                                to_file, to_rank)
         # todo
         # finalise_computer_move
         # (check_flag, Game.output_chess_move, g_move_count_incremented)
         finalise_computer_move(chess)
 
+ (computer_move_finalised, just_performed_castling, attacking_piece_letter, taken)
 
 def finalise_player_move(chess, from_file, from_rank, to_file, to_rank,
                          print_string,
@@ -1262,7 +1278,7 @@ def handle_input_from_file_for_player(chess, from_file, from_rank, to_file, to_r
         Ensure that previous values for 'Player' have been reset
         """
         
-        reset_2squares_pawn_positions(constants.PLAYER)
+        e.reset_2squares_pawn_positions(constants.PLAYER)
         # Increment the move count
         # Convert player's chess move for output
         # Output the chess move
@@ -1312,7 +1328,7 @@ def handle_castling_input(chess, from_file, from_rank, to_file, to_rank):
     Ensure that previous values for 'Player' have been reset
     """
         
-    reset_2squares_pawn_positions(constants.PLAYER)
+    e.reset_2squares_pawn_positions(constants.PLAYER)
     # Increment the move count
     # Convert player's chess move for output
     # Output the chess move
@@ -1328,6 +1344,7 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
     """
     Input Validation of the Player's Move
     Main Validation Loop
+    Note: returns 'taken'
     """
 
     # todo                      (just_performed_castling,
@@ -1396,9 +1413,9 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
 
         attacking_piece_letter = chess.piece_letter(from_file, from_rank)
 
-        print_string = output_attacking_move(chess, constants.PLAYER,
-                                             from_file, from_rank,
-                                             to_file, to_rank)
+        print_string = e.output_attacking_move(chess, constants.PLAYER,
+                                               from_file, from_rank,
+                                               to_file, to_rank)
         # print() todo
         # print(print_string)
 
@@ -1444,8 +1461,8 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
 
         # Has the king been moved?
         # Has a rook been moved
-        # TODO record_if_king_or_rook_have_moved(constants.PLAYER,
-        #       from_file, from_rank, to_file, to_rank)
+        e.record_if_king_or_rook_have_moved(chess, constants.PLAYER,
+                                            from_file + from_rank, to_file + to_rank)
 
         # As the opponent advanced a pawn two squares?
         # If yes, record the pawn's position
