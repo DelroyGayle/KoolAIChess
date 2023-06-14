@@ -14,7 +14,7 @@ Menezes' QBASIC program can be found at
 import constants
 import piece
 from game import Game
-from extra as e
+import extra as e
 import fileio as f
 import os
 import re
@@ -67,6 +67,16 @@ def handle_internal_error():
     goodbye()
     # Internal Error
     # *** END PROGRAM ***
+
+
+def append_to_output_stream(astring):
+    """
+    append string to Game.output_stream
+    """
+    Game.output_stream += astring
+
+    # debugging TODO
+    print("OS",Game.output_stream, output_chess_move)
 
 
 def is_piece_taken(chess, to_file, to_rank, piece_sign):
@@ -1012,7 +1022,7 @@ def finalise_computer_move(chess):
     """
     Now that the Computer's move has been performed
     Output the chess move to the output stream
-    Determine whether the Player is in Check
+    Determine whether the Computer's move has placed the Player in Check
     If so, determine to see if the Computer has won
     That is, is it Checkmate?
     """
@@ -1023,32 +1033,25 @@ def finalise_computer_move(chess):
         # Show what piece the Computer took
         print(Game.show_taken_message)
 
-    # check_flag todo
-
     check_flag = in_check(chess, constants.PLAYER)
     if check_flag:
-        # todo
-        # showboard()
-        # print("You are in check")
-        # todo checkmate
         print("You are in check")
-        add_check_to_output()
+        e.add_check_to_output()
         check_flag = is_it_checkmate(chess, constants.PLAYER)
         if check_flag:
             print("Checkmate!! I Win!")
-            # todo print(Game.output_chess_move)
+            sleep(constants.SLEEP_VALUE)
+            print("PLEASE CHECK:",Game.output_chess_move) # todo
             # Keep Linter happy
             chess_move = Game.output_chess_move
             Game.output_chess_move = add_checkmate_to_output(chess_move)
+            # Checkmate! However do not end the program
+            # Rather, the Player has to resign!
 
-            # todo
-#            append_to_output_stream(Game.output_chess_move + constants.SPACE)
-# keep this flag unset from now on; so that the move count is incremented
-# g_move_count_incremented = False
-# todo
-
-            sleep(constants.SLEEP_VALUE)
-            chess.display("Checkmate!! I Win!")
+    append_to_output_stream(Game.output_chess_move + constants.SPACE)
+    # keep this flag unset from now on; so that the move count is incremented
+    Game.move_count_incremented = False
+    print()
 
 
 def handle_chess_move_from_inputfile(chess, from_file, from_rank, to_file, to_rank):
@@ -1075,13 +1078,14 @@ def handle_chess_move_from_inputfile(chess, from_file, from_rank, to_file, to_ra
         sleep(constants.SLEEP_VALUE)
         return (False, False, from_file, from_rank, to_file, to_rank)
 
+    # No file input issue ... Continue
     if Game.move_type == constants.CASTLING_MOVE:
     # A Castling Move has been read from the file - process it
         just_performed_castling = perform_castling(constants.COMPUTER)
         if not just_performed_castling:
         # The Castling that was read from the input file was invalid!
         # 'perform_castling() redisplays the Board and displays the appropriate error messaging
-            print("Computer from this point onwards will now generate its own moves")  # REFACTOR
+            print("Computer from this point onwards will now generate its own moves")
             print()
             sleep(constants.SLEEP_VALUE)
             return (False, False, from_file, from_rank, to_file, to_rank)
@@ -1095,14 +1099,14 @@ def handle_chess_move_from_inputfile(chess, from_file, from_rank, to_file, to_ra
             # Ensure that previous values for 'Computer' have been reset
 
             e.reset_2squares_pawn_positions(constants.COMPUTER)
-            finalise_computer_move(check_flag, Game.output_chess_move, Game.move_count_incremented)
+            finalise_computer_move(chess)
             computer_move_finalised = True
             return (computer_move_finalised, just_performed_castling,
                     from_file, from_rank, to_file, to_rank)
 
     # Not a Castling move therefore
     # Fetch new values for 'from_file,from_rank,to_file,to_rank'
-    # from what was determined in the input game file
+    # from what was read in the input game file
     Game.en_passant_status = constants.NOVALUE
     return (False, False,
             Game.new_from_file, Game.new_from_rank,
@@ -1124,7 +1128,7 @@ def process_computer_move(chess, from_file, from_rank, to_file, to_rank):
         # Player goes first so on the very first iteration
         # there is no processing of Computer Moves
         Game.player_first_move = False
-        return (computer_move_finalised, just_performed_castling, attacking_piece_letter, taken)
+        return (just_performed_castling, attacking_piece_letter, taken)
 
     # From this point onwards, process the Computer's move
 
@@ -1139,33 +1143,29 @@ def process_computer_move(chess, from_file, from_rank, to_file, to_rank):
     if Game.reading_game_file:
         tuple = handle_chess_move_from_inputfile(chess, from_file, from_rank, to_file, to_rank)
         (computer_move_finalised, just_performed_castling,
-        from_file, from_rank, to_file, to_rank) = tuple 
+         from_file, from_rank, to_file, to_rank) = tuple 
 
     """
     At this stage, three possibilities
     # 1) 'evaluate' function generated a Castling Move
-    # 2) 'No longer reading Chess Moves from an input file
+    # 2) No longer reading Chess Moves from an input file
     # 3) No Chess Move has been finalised
     """
     
-    # Handle 1) Castling Move
-    e.handle_evaluated_castling_move()
+    # Handle 1) Castling Move if one was generated by the 'evaluate' function
+    computer_move_finalised = e.handle_evaluated_castling_move(chess, computer_move_finalised)
 
-    # Whereby the chosen Chess Move will be executed
-    """
-
-# Validate, Execute then Finalise the Computer Chess Move
-# (if it was not a Castling Chess Move)
+    # Handle 2 and 3
+    # Validate, Execute then Finalise the Computer Chess Move
+    # (if it was not a Castling Chess Move)
     if not computer_move_finalised:
         (attacking_piece_letter, taken) = execute_computer_move(chess,
                                                                 from_file, from_rank,
                                                                 to_file, to_rank)
-        # todo
-        # finalise_computer_move
-        # (check_flag, Game.output_chess_move, g_move_count_incremented)
         finalise_computer_move(chess)
 
- (computer_move_finalised, just_performed_castling, attacking_piece_letter, taken)
+    return (just_performed_castling, attacking_piece_letter, taken)
+
 
 def finalise_player_move(chess, from_file, from_rank, to_file, to_rank,
                          print_string,
@@ -1340,7 +1340,9 @@ def handle_castling_input(chess, from_file, from_rank, to_file, to_rank):
     return do_next
 
 
-def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
+def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank,
+                                just_performed_castling,
+                                attacking_piece_letter, taken):
     """
     Input Validation of the Player's Move
     Main Validation Loop
@@ -1497,22 +1499,13 @@ def play_2_moves(chess, from_file, from_rank, to_file, to_rank, result):
     1) Play and show the result of the Computer move
     2) Then get, validate and play the Player's move
     """
-
-    # From this point onwards, process computer moves
-    # todo
-    (just_performed_castling, attacking_piece, taken) = (None, None, None)
-
-    process_computer_move(chess, from_file, from_rank, to_file, to_rank)
-    #  todo        just_performed_castling, attacking_piece_letter, taken)
-
-    player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank)
-
-    """
-    todo
-                                just_performed_castling,
-                                attacking_piece_letter,
-                                taken
-    """
+    
+    tuple = process_computer_move(chess, from_file, from_rank, to_file, to_rank)
+    
+    (just_performed_castling, attacking_piece_letter, taken) = tuple
+    
+    player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank,
+                                just_performed_castling, attacking_piece_letter, taken)
 
 
 def main_part2():

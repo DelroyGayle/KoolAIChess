@@ -7,7 +7,6 @@ and their validation.
 
 import constants
 from game import Game
-from extra import append_to_output_stream, output_attacking_move
 
 
 def output_message(message):
