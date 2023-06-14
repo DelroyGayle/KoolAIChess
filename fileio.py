@@ -849,8 +849,8 @@ def determine_move_both_file_rank(chess):
         return determine_the_capture_by_both_squares(chess, piece, source, target)
 
     else:
-    # Defensive Programming
-        raise CustomException(f"Internal Error: Unknown Move Type: {Game.move_type}")
+        # Defensive Programming
+        raise CustomException(f"Internal Error: Unknown Move Type {Game.move_type}")
 
 
 def handle_move_text(chess):

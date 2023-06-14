@@ -52,18 +52,16 @@ PIECE_BOTH_SQUARES = 6   # EG  Nd2xe4
 LONG_NOTATION = 7  # EG Ng1f3
 CASTLING_MOVE = 8  # O-O or O-O-O
 
-PLAYER_SIDE_ROW = 7  # White - Bottom row i.e. Row 7
-COMPUTER_SIDE_ROW = 0  # Black - Top row i.e. Row 0
+PLAYER_SIDE_RANK =   "1"   # White - Bottom row
+COMPUTER_SIDE_RANK = "8" # Black - Top row
 
 # REMOVE?? TODO
-# kingside rook must be present in column 7 in order to be castled
-KINGSIDE_ROOK_COLUMN = 7
-# queenside rook must be present in column 7 in order to be castled
-QUEENSIDE_ROOK_COLUMN = 0
-# A king must be present in column 4 in order to be castled
-CASTLING_KING_COLUMN = 4
-# This is the column where the king piece will end up after castling
-KINGSIDE_KING_COLUMN = 5
+# kingside rook must be present in file 'a' in order to be castled
+KINGSIDE_ROOK_FILE =  "a"
+# queenside rook must be present in file "h" in order to be castled
+QUEENSIDE_ROOK_FILE = "h"
+# A king must be present in file 'e' in order to be castled
+CASTLING_KING_FILE = "e"
 
 # Note: the ranks are always ordered from White's perspective,
 # so it is labelled White's fourth rank
