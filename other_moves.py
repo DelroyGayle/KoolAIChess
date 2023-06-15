@@ -1,5 +1,5 @@
 """
-extra.py
+other_moves.py
 This module contains the routines related to
 # Castling and En Passant
 
@@ -9,7 +9,7 @@ the formatting, displaying and output of chess moves are placed here
 
 import constants
 from game import Game
-from run import handle_internal_error, finalise_computer_move, append_to_output_stream
+from run import handle_internal_error, finalise_computer_move
 
 def output_attacking_move(chess, who_are_you,
                           from_file, from_rank, to_file, to_rank):
@@ -224,20 +224,20 @@ def record_if_king_or_rook_has_moved(chess, who_are_you, previous_file, previous
                     Game.computer_queen_rook_moved, Game.computer_king_rook_moved) # TODO
 
 
-def does_value_match(file, rank, number, test_value):
+def does_value_match(chess, file, rank, number, test_value):
     """
     Used for the Castling tests
     Check that the value of square[file + number, rank] is equal to 'test_value'
     """
-
     new_file = chr(ord(file) + number)
+    print("SO", file, rank, number, test_value, new_file)  # TODO
     # Defensive Programming
     if not ("a" <= new_file <= "h"):
         print(f"Castling Internal Error: File is Off-board {new_file} = {file} + {number}")
         handle_internal_error()
         # *** END PROGRAM ***
 
-    return chess.piece_value(newfile, rank) == test_value
+    return chess.piece_value(new_file, rank) == test_value
 
 
 def produce_error_message(error_type):
@@ -322,8 +322,8 @@ def check_adjacent_squares(chess, who_are_you, which_castle_side, king_rook_rank
 
         # No pieces can be between the king and the rook
         # So, the two adjacent squares between the rook and the king must be blank
-        elif (not does_value_match(constants.KINGSIDE_ROOK_FILE, king_rook_rank, -1, constants.BLANK)
-             or not does_value_match(constants.KINGSIDE_ROOK_FILE, king_rook_rank, -2, constants.BLANK)):
+        elif (not does_value_match(chess, constants.KINGSIDE_ROOK_FILE, king_rook_rank, -1, constants.BLANK)
+             or not does_value_match(chess, constants.KINGSIDE_ROOK_FILE, king_rook_rank, -2, constants.BLANK)):
             produce_error_message(constants.NOT_ALL_BLANK)
 
         else: # Valid!
@@ -347,9 +347,9 @@ def check_adjacent_squares(chess, who_are_you, which_castle_side, king_rook_rank
 
 # No pieces can be between the king and the rook
 # So, the three adjacent squares between the rook and the king must be blank
-    elif (not does_value_match(constants.QUEENSIDE_ROOK_FILE, king_rook_rank, 1, constants.BLANK)
-        or not does_value_match(constants.QUEENSIDE_ROOK_FILE, king_rook_rank, 2, constants.BLANK)
-        or not does_value_match(constants.QUEENSIDE_ROOK_FILE, king_rook_rank, 3, constants.BLANK)):
+    elif (not does_value_match(chess, constants.QUEENSIDE_ROOK_FILE, king_rook_rank, 1, constants.BLANK)
+        or not does_value_match(chess, constants.QUEENSIDE_ROOK_FILE, king_rook_rank, 2, constants.BLANK)
+        or not does_value_match(chess, constants.QUEENSIDE_ROOK_FILE, king_rook_rank, 3, constants.BLANK)):
             produce_error_message(constants.NOT_ALL_BLANK)
     
     else: # Valid!
@@ -628,7 +628,7 @@ def perform_castling(chess, who_are_you):
 
     result = check_if_castling_move_is_valid(chess, who_are_you, which_castle_side, False)
 
-    print("IS CASTLING VALID", result, castling_message, g_error_message)  # TODO
+    print("IS CASTLING VALID", result, castling_message, Game.error_message)  # TODO
 
     if not result:
         # This Castling move is invalid!

@@ -7,6 +7,7 @@ and their validation.
 
 import constants
 from game import Game
+from extras import append_to_output_stream
 
 
 def output_message(message):
@@ -23,7 +24,7 @@ def output_message(message):
         print()
         return
 
-    for m in stripped:
+    for m in range(len(stripped)):
         print(stripped[m])
         return
 
@@ -158,7 +159,11 @@ def open_input_file():
     if len(file_contents) == 0:
         # Empty file
         Game.reading_game_file = False
-        # Game.input_stream already set to ""
+        # Game.input_stream already set to "" 
+        # TODO DG
+        print(100)
+        Game.input_stream = ";;"
+        Game.reading_game_file = True
         return
 
     if len(file_contents) > constants.FILE_SIZE_LIMIT:
@@ -185,7 +190,7 @@ def regexp_loop():
 # Remove any spaces
         Game.input_stream = Game.input_stream.lstrip()
         if len(Game.input_stream) == 0:
-            input_status_message(f"No further input available from '{constants.INPUT_PGN_NAME}'")
+            input_status_message(f"Finished reading all the moves from the input file")
             return True
 
         # % Escape mechanism - This mechanism is triggered
@@ -208,7 +213,7 @@ def regexp_loop():
 # Remove any leading whitespace i.e. including \n
         Game.input_stream = Game.input_stream.lstrip(" \n\t")
         if len(Game.input_stream) == 0:
-            input_status_message(f"No further input available from '{constants.INPUT_PGN_NAME}'")
+            input_status_message(f"Finished reading all the moves from the input file")
             return True
 
         # Just in case any found - remove an 'en passant' annotation, that is 'e.p.'
