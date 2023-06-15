@@ -7,6 +7,8 @@ Also all other extra and miscellaneous routines relating to
 the formatting, displaying and output of chess moves are placed here
 """
 
+import constants
+from game import Game
 from run import handle_internal_error, finalise_computer_move, append_to_output_stream
 
 def output_attacking_move(chess, who_are_you,
@@ -172,7 +174,7 @@ def record_if_king_or_rook_have_moved(chess, who_are_you, file, rank):
     """
 
     # Note: 'is_piece_a_king' does not regard the colour of the piece
-    print("REC IF", Game.player_king_moved, is_piece_a_king(file, rank)) # todo
+    print("REC IF", Game.player_king_moved, is_piece_a_king(chess, file, rank)) # todo
 
     index = file + rank
     if who_are_you == constants.PLAYER:
@@ -182,7 +184,7 @@ def record_if_king_or_rook_have_moved(chess, who_are_you, file, rank):
         # Has the player's king been moved?
         # Note: 'is_piece_a_king' does not regard the colour of the piece
         Game.player_king_moved = (not Game.player_king_moved
-                                  and is_piece_a_king(file, rank))
+                                  and is_piece_a_king(chess, file, rank))
 
         """
         Has a rook been moved?
@@ -203,7 +205,7 @@ def record_if_king_or_rook_have_moved(chess, who_are_you, file, rank):
     # Has the computer's king been moved?
     # Note: 'is_piece_a_king' does not regard the colour of the piece
     Game.computer_king_moved = (not Game.computer_king_moved
-                               and is_piece_a_king(file, rank))
+                               and is_piece_a_king(chess, file, rank))
 
     """
     Has a rook been moved?
@@ -370,7 +372,7 @@ def check_castling_valid_part1(who_are_you, which_castle_side, king_rook_rank):
          constants.CASTLING_KING_FILE, chess.piece_value(constants.CASTLING_KING_FILE, king_rook_rank))  # TODO
     print(king_rook_rank, constants.CASTLING_KING_FILE)  # todo
     print("regarding the king")
-    print("ROOKrank", king_rook_rank, is_piece_a_king(king_rook_rank, constants.CASTLING_KING_FILE), 
+    print("ROOKrank", king_rook_rank, is_piece_a_king(chess, king_rook_rank, constants.CASTLING_KING_FILE), 
            "KING=", chess.piece_value(constants.CASTLING_KING_FILE, king_rook_rank))
     print("ROOKS", chess.piece_value(constants.KINGSIDE_ROOK_FILE, king_rook_rank), 
         chess.piece_value(constants.QUEENSIDE_ROOK_file, king_rook_rank))
@@ -383,7 +385,7 @@ def check_castling_valid_part1(who_are_you, which_castle_side, king_rook_rank):
     print("WHO?", KING_SIGN, WHO_ARE_YOU)  # TODO
     # Note: 'is_piece_a_king' does not regard the colour of the piece
 
-    if not (is_piece_a_king(king_rook_rank, constants.CASTLING_KING_FILE) and king_sign == who_are_you):
+    if not (is_piece_a_king(chess, king_rook_rank, constants.CASTLING_KING_FILE) and king_sign == who_are_you):
         produce_error_message(constants.NO_KING_ROOK)
         print("RES3.1", Game.error_message)  # todo
         return
