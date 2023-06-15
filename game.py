@@ -2,6 +2,7 @@
 
 import constants
 import piece
+import os
 
 class Game:
     """

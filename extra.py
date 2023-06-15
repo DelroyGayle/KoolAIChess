@@ -159,7 +159,7 @@ def is_piece_a_king(chess, file, rank):
     return chess.piece_letter(file, rank) == constants.KING_LETTER
 
 
-def record_if_king_or_rook_have_moved(chess, who_are_you, file, rank):
+def record_if_king_or_rook_has_moved(chess, who_are_you, previous_file, previous_rank, current_file, current_rank):
     """
     Record whether either a king or rook piece has been moved
     Once such a piece has been move, the Castling move is no longer an option
@@ -172,11 +172,15 @@ def record_if_king_or_rook_have_moved(chess, who_are_you, file, rank):
         self.board["a8"].queenside = True
         self.board["a1"].queenside = True
     """
+    print("CAME IN R" + previous_rank + "C" + previous_file + "CR" + current_rank + "CC" + current_file)
+    print("WHO", who_are_you, "KING?", chess.piece_value(current_file, current_rank), 
+        "ROOK?", chess.piece_value(current_file, current_rank))
+    # todo
 
     # Note: 'is_piece_a_king' does not regard the colour of the piece
-    print("REC IF", Game.player_king_moved, is_piece_a_king(chess, file, rank)) # todo
+    print("REC IF", Game.player_king_moved, is_piece_a_king(chess, current_file, current_rank)) # todo
 
-    index = file + rank
+    index = current_file + current_rank
     if who_are_you == constants.PLAYER:
         # The Player
 
@@ -184,7 +188,7 @@ def record_if_king_or_rook_have_moved(chess, who_are_you, file, rank):
         # Has the player's king been moved?
         # Note: 'is_piece_a_king' does not regard the colour of the piece
         Game.player_king_moved = (not Game.player_king_moved
-                                  and is_piece_a_king(chess, file, rank))
+                                  and is_piece_a_king(chess, current_file, current_rank))
 
         """
         Has a rook been moved?
@@ -205,7 +209,7 @@ def record_if_king_or_rook_have_moved(chess, who_are_you, file, rank):
     # Has the computer's king been moved?
     # Note: 'is_piece_a_king' does not regard the colour of the piece
     Game.computer_king_moved = (not Game.computer_king_moved
-                               and is_piece_a_king(chess, file, rank))
+                               and is_piece_a_king(chess, current_file, current_rank))
 
     """
     Has a rook been moved?
@@ -482,7 +486,7 @@ def check_castling_valid_part2(who_are_you, which_castle_side, king_rook_rank, e
     new_king_file = constants.CASTLING_KING_FILE
 
 # Move the King by one square
-    new_king_file = move_king_one_square(chess, the_king, new_king_file, king_rook_rank, king_rook_rank, new_king_file, king_direction)
+    new_king_file = move_king_one_square(chess, the_king, new_king_file, king_rook_rank, king_direction)
 
 # The king must not pass through a square that is under attack by opponent pieces
     if incheck(who_are_you):
@@ -494,7 +498,7 @@ def check_castling_valid_part2(who_are_you, which_castle_side, king_rook_rank, e
 
 
 # Move the King again by one square
-    new_king_file = move_king_one_square(chess, the_king, new_king_file, king_rook_rank, king_rook_rank, new_king_file, king_direction)
+    new_king_file = move_king_one_square(chess, the_king, new_king_file, king_rook_rank, king_rook_rank, king_direction)
 
 # The king must not pass through a square that is under attack by opponent pieces
     if incheck(who_are_you):
@@ -660,7 +664,7 @@ def record_pawn_that_advanced_by2(chess, who_are_you, previous_file, previous_ra
     """
     # TODO
     print("CAME IN RP> " + previous_file + " PFR " + previous_rank + " CFR " + current_file + " CC " + current_rank)
-    print("WHO ", who_are_you, chess.value(previous_rank, previous_rank), chess.value(current_rank, current_rank))  # todo
+    print("WHO ", who_are_you, chess.piece_value(previous_file, previous_rank), chess.piece_value(current_file, current_rank))  # todo
     if (who_are_you == constants.PLAYER
        and previous_rank == constants.PLAYER_PAWNS_RANK and current_rank == constants.FOURTH_RANK):
             print("YES/player") # todo

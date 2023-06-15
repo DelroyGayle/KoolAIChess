@@ -76,7 +76,7 @@ def append_to_output_stream(astring):
     Game.output_stream += astring
 
     # debugging TODO
-    print("OS",Game.output_stream, output_chess_move)
+    print("OS",Game.output_stream, Game.output_chess_move)
 
 
 def is_piece_taken(chess, to_file, to_rank, piece_sign):
@@ -1000,8 +1000,8 @@ def execute_computer_move(chess, from_file, from_rank, to_file, to_rank):
 
     # Has the king been moved?
     # Has a rook been moved
-    e.record_if_king_or_rook_have_moved(chess, constants.COMPUTER,
-                                        from_square, to_square)
+    e.record_if_king_or_rook_has_moved(chess, constants.COMPUTER,
+                                        from_file, from_rank, to_file, to_rank)
 
     # As the opponent advanced a pawn two squares?
     # If yes, record the pawn's position
@@ -1465,8 +1465,8 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
 
         # Has the king been moved?
         # Has a rook been moved
-        e.record_if_king_or_rook_have_moved(chess, constants.PLAYER,
-                                            from_file + from_rank, to_file + to_rank)
+        e.record_if_king_or_rook_has_moved(chess, constants.PLAYER,
+                                            from_file, from_rank, to_file, to_rank)
 
         # As the opponent advanced a pawn two squares?
         # If yes, record the pawn's position
