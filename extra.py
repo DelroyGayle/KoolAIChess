@@ -233,7 +233,9 @@ def does_value_match(file, rank, number, test_value):
     new_file = chr(ord(file) + number)
     # Defensive Programming
     if not ("a" <= new_file <= "h"):
-        raise CustomException(f"Internal Error: File is Off-board {newfile} = {file} + {number}")
+        print(f"Castling Internal Error: File is Off-board {new_file} = {file} + {number}")
+        handle_internal_error()
+        # *** END PROGRAM ***
 
     return chess.piece_value(newfile, rank) == test_value
 
@@ -357,7 +359,7 @@ def check_adjacent_squares(chess, who_are_you, which_castle_side, king_rook_rank
     return result
 
 
-def check_castling_valid_part1(who_are_you, which_castle_side, king_rook_rank):
+def check_castling_valid_part1(chess, who_are_you, which_castle_side, king_rook_rank):
     """
     Castling:
     Test 1 of 6 - Is there an actual king in the right position to be moved?
@@ -372,24 +374,24 @@ def check_castling_valid_part1(who_are_you, which_castle_side, king_rook_rank):
 
 # A king OF THE CORRECT COLOUR must be present in file 'e' of its colour's rank in order to be castled
 
-    print("which2", abs(chess.piece_value(constants.CASTLING_KING_FILE, king_rook_rank)), KING_VALUE,
+    print("which2", abs(chess.piece_value(constants.CASTLING_KING_FILE, king_rook_rank)), constants.KING_VALUE,
          constants.CASTLING_KING_FILE, chess.piece_value(constants.CASTLING_KING_FILE, king_rook_rank))  # TODO
-    print(king_rook_rank, constants.CASTLING_KING_FILE)  # todo
+    print(constants.CASTLING_KING_FILE, king_rook_rank, )  # todo
     print("regarding the king")
-    print("ROOKrank", king_rook_rank, is_piece_a_king(chess, king_rook_rank, constants.CASTLING_KING_FILE), 
+    print("ROOKrank", king_rook_rank, is_piece_a_king(chess, constants.CASTLING_KING_FILE, king_rook_rank, ), 
            "KING=", chess.piece_value(constants.CASTLING_KING_FILE, king_rook_rank))
     print("ROOKS", chess.piece_value(constants.KINGSIDE_ROOK_FILE, king_rook_rank), 
-        chess.piece_value(constants.QUEENSIDE_ROOK_file, king_rook_rank))
+        chess.piece_value(constants.QUEENSIDE_ROOK_FILE, king_rook_rank))
 
     if chess.piece_value(constants.CASTLING_KING_FILE, king_rook_rank) < 0:
          king_sign = constants.COMPUTER  # -1
     else:
          king_sign = constants.PLAYER  #  1
 
-    print("WHO?", KING_SIGN, WHO_ARE_YOU)  # TODO
+    print("WHO?", king_sign, who_are_you)  # TODO
     # Note: 'is_piece_a_king' does not regard the colour of the piece
 
-    if not (is_piece_a_king(chess, king_rook_rank, constants.CASTLING_KING_FILE) and king_sign == who_are_you):
+    if not (is_piece_a_king(chess, constants.CASTLING_KING_FILE, king_rook_rank) and king_sign == who_are_you):
         produce_error_message(constants.NO_KING_ROOK)
         print("RES3.1", Game.error_message)  # todo
         return
@@ -397,7 +399,7 @@ def check_castling_valid_part1(who_are_you, which_castle_side, king_rook_rank):
         print("RES3.2")  # todo
         return
     else:
-        return check_adjacent_squares(who_are_you, which_castle_side, king_rook_rank)
+        return check_adjacent_squares(chess, who_are_you, which_castle_side, king_rook_rank)
         print("RES3.3")  # todo
 
 
@@ -453,7 +455,7 @@ def restore_original_positions(chess, the_king, the_rook,
         chess.board[new_square] = None
 
 
-def check_castling_valid_part2(who_are_you, which_castle_side, king_rook_rank, evaluating):
+def check_castling_valid_part2(chess, who_are_you, which_castle_side, king_rook_rank, evaluating):
     """
     Castling: The following must be true for the Castling move to be valid
     The king is not currently in check;
@@ -537,7 +539,7 @@ def check_castling_valid_part2(who_are_you, which_castle_side, king_rook_rank, e
     return True # Successful Castling move
 
 
-def check_if_castling_move_is_valid(who_are_you, which_castle_side, evaluating):
+def check_if_castling_move_is_valid(chess, who_are_you, which_castle_side, evaluating):
     """
     Castling:
     Test 1 of 6 - Is there an actual king in the right position to be moved?
@@ -554,11 +556,11 @@ def check_if_castling_move_is_valid(who_are_you, which_castle_side, evaluating):
     else:
         king_rook_rank = constants.COMPUTER_SIDE_RANK  # Black - Top row  i.e. "8"
 
-    if not check_castling_valid_part1(who_are_you, which_castle_side, king_rook_rank):
+    if not check_castling_valid_part1(chess, who_are_you, which_castle_side, king_rook_rank):
         print("FS1 FALSE")  # TODO
         return False
 
-    if not check_castling_valid_part2(who_are_you, which_castle_side, king_rook_rank, evaluating):
+    if not check_castling_valid_part2(chess, who_are_you, which_castle_side, king_rook_rank, evaluating):
         print("FS2 FALSE")  # TODO
         return False
 
@@ -619,12 +621,12 @@ def perform_castling(chess, who_are_you):
     
     else:  # queenside' castling
              which_castle_side = constants.QUEENSIDE
-             output_castling_move = CASTLING_QUEENSIDE
+             output_castling_move = constants.CASTLING_QUEENSIDE
              castling_message = ("Player Attempted Castling Queenside O-O-O"
                                 if who_are_you == constants.PLAYER
                                 else "Computer Attempted Castling Queenside O-O-O")
 
-    result = check_if_castling_move_is_valid(who_are_you, which_castle_side, False)
+    result = check_if_castling_move_is_valid(chess, who_are_you, which_castle_side, False)
 
     print("IS CASTLING VALID", result, castling_message, g_error_message)  # TODO
 
@@ -926,3 +928,45 @@ def handle_evaluated_castling_move(chess, computer_move_finalised):
     finalise_computer_move(chess)
     computer_move_finalised = True
     return computer_move_finalised
+
+def handle_en_passant_from_inputfile(chess, from_file, from_rank, to_file, to_rank,
+                                     print_string, attacking_piece_letter, taken):
+    """
+    For testing purposes I read Chess moves from an input file
+    Therefore, if this option is ON
+    Check whether an en passant has been done or attempted
+    """
+
+    # Default: 'pass' as in Python i.e. NOP
+    do_next = "pass"
+    # En Passant move attempted - turned out to be invalid
+    if Game.en_passant_status == constants.INVALID:
+        Game.en_passant_status = constants.NOVALUE  # reset flag
+        Game.message_printed = False  # reset flag
+        do_next = "continue"
+        return do_next
+
+    if Game.en_passant_status == constants.VALID:
+        Game.en_passant_status = constants.NOVALUE  # reset flag
+        Game.message_printed = False  # reset flag
+
+        """
+        The En Passant move that was read from the input file was valid!
+        At this stage we know that no king nor rook has been moved;
+        neither has any pawns been advanced two squares
+        Nor can there be any promotions from this en passant move
+        Convert the en passant move in order to output it
+        Add a 'from_file' to the output chess move if a piece was taken
+        Then output the piece to the output file
+        """
+
+        setup_output_chess_move_add_promotion(constants.PAWN_LETTER, 
+                                              from_file, from_rank, to_file, to_rank,
+                                              constants.PAWN_VALUE)
+        finalise_player_move(from_file, from_rank, to_file, to_rank, just_performed_castling, attacking_piece, taken)
+        do_next = "return"
+        return do_next
+
+    # Otherwise 'pass'
+    return do_next
+
