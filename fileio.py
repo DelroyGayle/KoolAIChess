@@ -635,7 +635,7 @@ def find_the_match(chess, all_matched_list,
         The erroneous text/input is in Game.general_string_result
         """
         e.input_status_message(constants.BAD_CHESS_MOVE_FROM_FILE
-                             + inputstream_previous_contents)
+                               + inputstream_previous_contents)
         return  # Failure
 
     # Match found
@@ -963,7 +963,8 @@ def handle_computer_move_from_inputfile(chess,
     Game.opponent_who_are_you = constants.PLAYER
 
     fetch_chess_move_from_file(chess)
-    print("FILE OK", Game.reading_game_file, Game.move_type, do_castle_move, computer_move_finalised)  # TODO
+    print("FILE OK", Game.reading_game_file, Game.move_type,
+          do_castle_move, computer_move_finalised)  # TODO
 
     # Was there a file input issue?
     # Appropriate error messaging has been displayed

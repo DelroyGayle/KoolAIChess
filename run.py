@@ -32,30 +32,6 @@ class CustomException(Exception):
     pass
 
 
-def goodbye():
-    """
-    End of Game Message
-    """
-
-    print()
-    print("Thank You For Playing")
-    print("Goodbye")
-    quit()
-
-
-def computer_resigns():
-    """
-    Computer has determined that its next course of action is to
-    Resign! It cannot win!
-    """
-
-    print("Kool AI resigns!")
-    output_all_chess_moves(constants.PLAYER_WON)
-    goodbye()
-    # Computer Resigns
-    # *** END PROGRAM ***
-
-
 def handle_internal_error():
     """
     Hopefully this method is not necessary
@@ -67,7 +43,7 @@ def handle_internal_error():
     print("Computer resigns due to an internal error")
     print("Please investigate")
     # output_all_chess_moves(constants.PLAYER_WON) todo
-    goodbye()
+    e.goodbye()
     # Internal Error
     # *** END PROGRAM ***
 
@@ -988,7 +964,7 @@ def execute_computer_move(chess, from_file, from_rank, to_file, to_rank):
     # If the COMPUTER cannot play out of check then resign
     check_flag = in_check(chess, constants.COMPUTER)
     if check_flag:
-        computer_resigns()
+        e.computer_resigns()
         # *** END PROGRAM ***
 
     # Has the king been moved?
@@ -1070,7 +1046,7 @@ def process_computer_move(chess, from_file, from_rank, to_file, to_rank):
     # king on king end game?
     # Stalemate?
     if Game.evaluation_result < constants.STALEMATE_THRESHOLD_SCORE:
-        computer_resigns()
+        e.computer_resigns()
         # *** END PROGRAM ***
 
     # Are the Chess moves currently coming from an input file?
@@ -1162,7 +1138,7 @@ def finalise_player_move(chess,
 # todo            output_all_chess_moves(constants.PLAYER_WON)
 # todo
             print()
-            goodbye()
+            e.goodbye()
             # Checkmate!
             # *** END PROGRAM ***
 
@@ -1197,48 +1173,6 @@ def handle_castling_input(chess, input_string):
     castling_move_is_valid(chess)
     do_next = "return"
     return do_next
-
-
-def handle_player_move_from_keyboard(chess):
-    """
-    Validate the chess move entered by the Player
-    """
-    # Default: 'pass' as in Python i.e. NOP
-    do_next = "pass"
-
-    input_string = input("YOUR MOVE (e.g. e2e4): ").strip()
-
-    if input_string == "R" or input_string == "r":
-        chess.display("Player Resigned")
-        # output_all_chess_moves(chess.COMPUTER_WON) todo
-        goodbye()
-        # Player Resigned
-        # *** END PROGRAM ***
-
-    # *** CASTLING ***
-    # Check whether it is a Castling Move
-    do_next = e.handle_castling_input(chess, input_string)
-    if do_next != "pass":
-        return (do_next, None)
-
-    # General User Input Validation
-    if input_string == "":
-        chess.display("Null Input! Enter 'R' to Resign")
-        do_next = "continue"
-        return (do_next, None)
-
-    lower_string = input_string.lower()
-    if (len(lower_string) != 4
-        #               Pattern: ([a-h][1-8]){2}
-       or not constants.chess_move_pattern.match(lower_string)):
-        chess.display("")
-        print("I do not understand this input:", input_string)
-        print("Format of Chess moves ought to be 4 characters e.g. e2e4")
-        print("Files should be a letter from a to h")
-        print("Ranks should be a number from 1 to 8")
-        do_next = "continue"
-
-    return (do_next, lower_string)
 
 
 def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
@@ -1298,7 +1232,7 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
 
         if not Game.reading_game_file:
             # fetch the next move from the player from the keyboard
-            (do_next, lower_string) = handle_player_move_from_keyboard(chess)
+            (do_next, lower_string) = e.handle_player_move_from_keyboard(chess)
             if do_next == "return":
                 return
             elif do_next == "continue":
@@ -1351,17 +1285,19 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
             e.is_error_from_input_file()
             continue
 
-        do_next = handle_player_move_from_keyboard(chess, from_file, from_rank,
-                                                   to_file, to_rank,
-                                                   print_string,
-                                                   attacking_piece_letter,
-                                                   taken)
+        # Check whether the Player entered an en passant move
+        do_next = m.handle_en_passant_from_keyboard(chess, from_file, from_rank,
+                                                    to_file, to_rank,
+                                                    print_string,
+                                                    attacking_piece_letter,
+                                                    taken)
         if do_next == "return":
             return
         elif do_next == "continue":
             continue
         # else do_next is "pass"
 
+        # Check legality of Player's move
         (illegal,
          illegal_because_in_check,
          taken) = is_player_move_illegal(chess,

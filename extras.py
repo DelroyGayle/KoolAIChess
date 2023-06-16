@@ -14,6 +14,30 @@ from game import Game
 import moves as m
 
 
+def goodbye():
+    """
+    End of Game Message
+    """
+
+    print()
+    print("Thank You For Playing")
+    print("Goodbye")
+    quit()
+
+
+def computer_resigns():
+    """
+    Computer has determined that its next course of action is to
+    Resign! It cannot win!
+    """
+
+    print("Kool AI resigns!")
+    output_all_chess_moves(constants.PLAYER_WON)
+    goodbye()
+    # Computer Resigns
+    # *** END PROGRAM ***
+
+
 def append_to_output_stream(astring):
     """
     append string to Game.output_stream

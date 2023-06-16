@@ -316,7 +316,8 @@ def castling_movement_done_already(who_are_you):
         return False
 
 
-def check_adjacent_squares(chess, who_are_you, which_castle_side, king_rook_rank):
+def check_adjacent_squares(chess,
+                           who_are_you, which_castle_side, king_rook_rank):
     """
     Castling:
     Test 4 of 6 - Has the chosen rook been moved already?
@@ -764,29 +765,30 @@ def record_pawn_that_advanced_by2(chess, who_are_you,
         print("YES/computer")  #todo
         computer_pawn_2squares_advanced_file = current_file
         computer_pawn_2squares_advanced_rank = current_rank
-    
+
     else:
-# Since this chess move is not a pawn that has advanced two squares
-# Ensure that previous values for this colour have been reset
+        # Since this chess move is not a pawn that has advanced two squares
+        # Ensure that previous values for this colour have been reset
         reset_2squares_pawn_positions(who_are_you)
 
 
 def indicate_en_passant_done(who_are_you):
     """
     At this point, en passant has been executed.
-    A post-examination of the move has been done to ensure that the king in question is not in Check
+    A post-examination of the move has been done
+    to ensure that the king in question is not in Check
     Therefore it is a legal en passant move - no need for any further checks
     Reset variables holding opponent's advanced-by-2 pawn positions
     Display a message
     Update new values
     """
-    
+
     if who_are_you == constants.PLAYER:
-            print("Player Took Pawn En Passant")
-            reset_2squares_pawn_positions(constants.COMPUTER)
+        print("Player Took Pawn En Passant")
+        reset_2squares_pawn_positions(constants.COMPUTER)
     else:
-            print("Computer Took Pawn En Passant")
-            reset_2squares_pawn_positions(constants.PLAYER)
+        print("Computer Took Pawn En Passant")
+        reset_2squares_pawn_positions(constants.PLAYER)
 
     print()
     Game.new_from_file = from_file
@@ -850,7 +852,7 @@ def validate_and_perform_en_passant(chess, from_file, from_rank, to_file, to_ran
     """
 
     if chess.piece_value(to_file, to_rank) != constants.BLANK:
-    # destination square is occupied so cannot be an en passant move
+        # destination square is occupied so cannot be an en passant move
         return False
   
 
@@ -864,11 +866,13 @@ def validate_and_perform_en_passant(chess, from_file, from_rank, to_file, to_ran
     # Is there a black pawn (which advanced 2 squares) adjacent to the white pawn?
     if (Game.opponent_who_are_you == constants.COMPUTER
         and Game.computer_pawn_2squares_advanced_file == to_file
-        and Game.computer_pawn_2squares_advanced_rank == str(int(to_rank + 1))):
+        and Game.computer_pawn_2squares_advanced_rank 
+            == str(int(to_rank + 1))):
             print("YES/ OPP = COMPUTER EP")
             print("X", from_file)
             print("Y", from_rank) # todo
-            print("PAWN/c", chess.piece_value(Game.computer_pawn_2squares_advanced_file, Game.computer_pawn_2squares_advanced_rank), constants.PAWN_VALUE * Game.who_are_you, Game.who_are_you, Game.opponent_who_are_you)
+            print("PAWN/c", chess.piece_value(Game.computer_pawn_2squares_advanced_file, 
+            Game.computer_pawn_2squares_advanced_rank), constants.PAWN_VALUE * Game.who_are_you, Game.who_are_you, Game.opponent_who_are_you)
             the_file = Game.computer_pawn_2squares_advanced_file
             the_rank = str(int(to_rank + 1))
             print("DEST FILE", the_file)
@@ -879,8 +883,9 @@ def validate_and_perform_en_passant(chess, from_file, from_rank, to_file, to_ran
 # Computer is Black
 # Is there a white pawn (which advanced 2 squares) adjacent to the black pawn?
     elif (Game.opponent_who_are_you == constants.PLAYER
-         and Game.player_pawn_2squares_advanced_file == to_file
-         and Game.player_pawn_2squares_advanced_rank == str(int(to_rank - 1))):
+          and Game.player_pawn_2squares_advanced_file == to_file
+          and Game.player_pawn_2squares_advanced_rank
+          == str(int(to_rank - 1))):
             print("YES/OPP = PLAYER EP")
             print("X", from_file)
             print("Y", from_rank)
@@ -893,7 +898,8 @@ def validate_and_perform_en_passant(chess, from_file, from_rank, to_file, to_ran
             save_rank = Game.player_pawn_2squares_advanced_rank
 
     else:
-        # Destination Square does not match the opponent's 2-square pawn advanced coordinates
+        # Destination Square does not match 
+        # the opponent's 2-square pawn advanced coordinates
         # Therefore, definitely not an en passant move
         return False
 
@@ -909,21 +915,27 @@ def validate_and_perform_en_passant(chess, from_file, from_rank, to_file, to_ran
 
     # At this point, determined that it is an en passant move
     # So, Redisplay the Board
-    chess.display(output_attacking_move(chess, Game.who_are_you, from_file, from_rank, to_file, to_rank))
+    chess.display(output_attacking_move(chess, Game.who_are_you,
+                                        from_file, from_rank,
+                                        to_file, to_rank))
 
     # Defensive Programming
     # Add a failsafe just to:
     # 1) Double-check that the attacking piece is a pawn of the right colour
-    if chess.piece_value(from_file, from_rank) != constants.PAWN_VALUE * Game.who_are_you:
+    if (chess.piece_value(from_file, from_rank) !=
+       constants.PAWN_VALUE * Game.who_are_you):
         # Redisplay the Board
-        output_error_message = ("INTERNAL ERROR: Expected the Attacking Piece to be a Pawn\n"
-                               "of the right colour for the en passant move;\n"
-                               f"Instead, Value: {chess.piece_value(from_file, from_rank)}")
+        format_string = (f"Instead, Value: "
+                         "{chess.piece_value(from_file, from_rank)}")
+        output_error_message = ("INTERNAL ERROR: Expected the Attacking "
+                                "Piece to be a Pawn\n"
+                                "of the right colour for "
+                                "the en passant move;\n")
+        output_error_message += format_string
         if Game.reading_game_file:
             f.input_status_message(output_error_message)
         else:
-            print(output_error_message)
-            print()
+            display(output_error_message)
 
         sleep(constants.SLEEP_VALUE)
         Game.en_passant_status = constants.INVALID
@@ -931,29 +943,33 @@ def validate_and_perform_en_passant(chess, from_file, from_rank, to_file, to_ran
         return False
 
     # 2) Double-check that the captured piece is a pawn of the right colour
-    # That is, is the 'attacked piece' an actual opponent pawn of the right colour?
-    if chess.piece_value(save_col, save_rank) != constants.PAWN_VALUE * Game.opponent_who_are_you:
+    # That is, is the 'attacked piece'
+    # an actual opponent pawn of the right colour?
+    if (chess.piece_value(save_col, save_rank) !=
+       constants.PAWN_VALUE * Game.opponent_who_are_you):
         # Redisplay the Board
-        showboard()
-        output_error_message = ("INTERNAL ERROR: Expected the Captured Piece to be a Pawn\n"
-                               "of the right colour for the en passant move;\n"
-                               f"Instead, Value: {chess.piece_value(from_file, from_rank)}")
+        format_string = (f"Instead, Value: "
+                         "{chess.piece_value(from_file, from_rank)}")
+        output_error_message = ("INTERNAL ERROR: Expected the Captured Piece "
+                                "to be a Pawn\n"
+                                "of the right colour for "
+                                "the en passant move;\n")
         if Game.reading_game_file:
             f.input_status_message(output_error_message)
         else:
-            print(output_error_message)
-            print()
+            display(output_error_message)
 
         sleep(constants.SLEEP_VALUE)
         Game.en_passant_status = constants.INVALID
         Game.message_printed = True
         return False
- 
+
 # Otherwise perform the en passant
     return perform_en_passant(chess, from_file, from_rank, to_file, to_rank)
 
 
-def validate_player_en_passant_move(chess, from_file, from_rank, to_file, to_rank):
+def validate_player_en_passant_move(chess, from_file, from_rank,
+                                    to_file, to_rank):
     """
     Validate the Player's en passant move
     This is the human opponent's move, not the Computer's!
@@ -963,9 +979,12 @@ def validate_player_en_passant_move(chess, from_file, from_rank, to_file, to_ran
     Game.who_are_you = constants.PLAYER
     Game.opponent_who_are_you = constants.COMPUTER
 
-    is_it_an_en_passant_move = validate_and_perform_en_passant(from_file, from_rank, to_file, to_rank)
+    is_it_an_en_passant_move = validate_and_perform_en_passant(from_file,
+                                                               from_rank,
+                                                               to_file,
+                                                               to_rank)
     if is_it_an_en_passant_move:
-    # Valid en passant move
+        # Valid en passant move
         return True
 
     # Illegal En Passant Move
@@ -988,21 +1007,28 @@ def check_if_inputfile_is_en_passant_move(chess, source, target):
     target_rank = target[1]  # EG '6' for 'E6'
     source_file = source[0]
 
-    is_it_an_en_passant_move = validate_and_perform_en_passant(chess, source_file, constants.NOVALUE, target_file, target_rank)
+    is_it_an_en_passant_move = validate_and_perform_en_passant(
+                                                      chess,
+                                                      source_file,
+                                                      constants.NOVALUE,
+                                                      target_file,
+                                                      target_rank)
     if is_it_an_en_passant_move:
-    # Valid en passant move has been performed
+        # Valid en passant move has been performed
         return True  # Successful en passant move
 
     if Game.en_passant_status == constants.INVALID:
-    # Illegal En Passant Move has been determined
+        # Illegal En Passant Move has been determined
         if Game.message_printed:
             # This indicates that an 'internal error" occurred
             # Hopefully Doubtful!
             pass
         else:
             # No Internal Error message printed - as expected!
-            # Therefore display message indicating that the en passant move from file is erroneous
-            f.input_status_message(constants.BAD_EN_PASSANT_FROM_FILE + inputstream_previous_contents)
+            # Therefore display message indicating that
+            # the en passant move from file is erroneous
+            f.input_status_message(constants.BAD_EN_PASSANT_FROM_FILE
+                                   + inputstream_previous_contents)
             g_message_printed = True
             sleep(constants.SLEEP_VALUE)
 
@@ -1014,7 +1040,7 @@ def handle_evaluated_castling_move(chess, computer_move_finalised):
     """
     If the 'evaluate' function generated a Castling Move then perform it
     """
-    test = (Game.evaluate_castle_move != "" 
+    test = (Game.evaluate_castle_move != ""
             and not Game.reading_game_file
             and not computer_move_finalised)
     if not test:
@@ -1028,21 +1054,26 @@ def handle_evaluated_castling_move(chess, computer_move_finalised):
 
     just_performed_castling = perform_castling(chess, constants.COMPUTER)
     if not just_performed_castling:
-        # The Castling that was generated by 'The Evaluate Function' was invalid!
+        # The Castling that was generated by
+        # 'The Evaluate Function' was invalid!
         # At this stage, this should not happen!
-        # 'perform_castling() redisplays the Board and displays the appropriate error messaging
+        # 'perform_castling() redisplays the Board
+        # and displays the appropriate error messaging
         # Therefore, End the Program
-        print("INTERNAL ERROR OCCURRED - VALID CASTLE MOVE EXPECTED", Game.general_string.result)
+        print("INTERNAL ERROR OCCURRED - VALID CASTLE MOVE EXPECTED",
+              Game.general_string.result)
         print(from_file, from_rank, to_file, to_rank)
         print()
         handle_internal_error()
         # *** END PROGRAM ***
 
     # Otherwise
-    # The Castling that was generated by 'The Evaluate Function' was valid! 
+    # The Castling that was generated by 'The Evaluate Function' was valid!
     # As expected seeing that checks were done beforehand.
-    # Castling Validation has already been done to see whether Castling would put the Player in Check
-    # 'indicate_castling_done()' displays the appropriate messaging regarding the Castling
+    # Castling Validation has already been done to see whether
+    # Castling would put the Player in Check
+    # 'indicate_castling_done()' displays
+    # the appropriate messaging regarding the Castling
 
     # Since this chess move is not a pawn that has advanced two squares
     # Ensure that previous values for 'Computer' have been reset
@@ -1053,12 +1084,17 @@ def handle_evaluated_castling_move(chess, computer_move_finalised):
     return computer_move_finalised
 
 
-def finalise_en_passant_move_from_inputfile(chess, from_file, from_rank, to_file, to_rank,
-                                            print_string, attacking_piece_letter, taken):
+def finalise_en_passant_move_from_inputfile(chess,
+                                            from_file, from_rank,
+                                            to_file, to_rank,
+                                            print_string,
+                                            attacking_piece_letter,
+                                            taken):
     """
     For testing purposes I read Chess moves from an input file
     Therefore, if this option is ON
-    Check whether the 'read move' was an en passant move that has been performed or attempted
+    Check whether the 'read move' was an en passant move
+    that has been performed or attempted
     """
 
     # Default: 'pass' as in Python i.e. NOP
@@ -1084,11 +1120,12 @@ def finalise_en_passant_move_from_inputfile(chess, from_file, from_rank, to_file
         Then output the piece to the output file
         """
 
-        # setup_output_chess_move_add_promotion(constants.PAWN_LETTER, 
-        #                                       from_file, from_rank, to_file, to_rank,
-        #                                       constants.PAWN_VALUE)
+        # setup_output_chess_move_add_promotion(constants.PAWN_LETTER,
+        #                               from_file, from_rank, to_file, to_rank,
+        #                                   constants.PAWN_VALUE)
         # TODO - REOVE ABOVE, TEST BELOW
-        finalise_player_move(from_file, from_rank, to_file, to_rank, print_string, attacking_piece, taken)
+        finalise_player_move(from_file, from_rank, to_file, to_rank,
+                             print_string, attacking_piece, taken)
         do_next = "return"
         return do_next
 
@@ -1097,8 +1134,10 @@ def finalise_en_passant_move_from_inputfile(chess, from_file, from_rank, to_file
     return do_next
 
 
-def handle_en_passant_from_keyboard(chess, from_file, from_rank, to_file, to_rank,
-                                     print_string, attacking_piece_letter, taken):
+def handle_en_passant_from_keyboard(chess, from_file, from_rank,
+                                    to_file, to_rank,
+                                    print_string, attacking_piece_letter,
+                                    taken):
     """
     Check whether the Player has entered an en passant move
     If so, validate and process it
@@ -1106,16 +1145,17 @@ def handle_en_passant_from_keyboard(chess, from_file, from_rank, to_file, to_ran
 
     # Default: 'pass' as in Python i.e. NOP
     do_next = "pass"
- 
+
     # Check whether the Player entered an en passant move
     if (chess.piece_value(from_file, from_rank) == constants.PAWN_VALUE
-        and chess.piece_value(to_file, to_rank) == constants.BLANK
-        and from_file != to_file):
+       and chess.piece_value(to_file, to_rank) == constants.BLANK
+       and from_file != to_file):
         # [from_file, from_rank] is the square for the player's pawn
         # and [to_file, to_rank] is a blank square
         # Assuming it is an en passant move - validate
-        legal = validate_player_en_passant_move(chess, from_file, from_rank, to_file, to_rank)
-        Game.message_printed = False
+        legal = validate_player_en_passant_move(chess, from_file, from_rank,
+                                                to_file, to_rank)
+        Game.message_printed = False  # reset flag
         if legal:
             Game.en_passant_status = constants.NOVALUE  # reset flag
             finalise_player_move(from_file, from_rank, to_file, to_rank,
