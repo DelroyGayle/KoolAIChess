@@ -52,12 +52,12 @@ PIECE_BOTH_SQUARES = 6   # EG  Nd2xe4
 LONG_NOTATION = 7  # EG Ng1f3
 CASTLING_MOVE = 8  # O-O or O-O-O
 
-PLAYER_SIDE_RANK =   "1"   # White - Bottom row
-COMPUTER_SIDE_RANK = "8" # Black - Top row
+PLAYER_SIDE_RANK = "1"    # White - Bottom row
+COMPUTER_SIDE_RANK = "8"  # Black - Top row
 
 # REMOVE?? TODO
-# kingside rook must be present in file 'h' in order to be castled
-KINGSIDE_ROOK_FILE =  "h"
+# kingside rook  must be present in file 'h' in order to be castled
+KINGSIDE_ROOK_FILE = "h"
 # queenside rook must be present in file "a" in order to be castled
 QUEENSIDE_ROOK_FILE = "a"
 # A king must be present in file 'e' in order to be castled
@@ -141,30 +141,30 @@ move_number_pattern = re.compile(r"\A[0-9]+[. ]*")
 move_number_suffix_pattern = re.compile(r"\A[.][ \n]*")
 game_termination_pattern = re.compile(r"\A((1-0)|(0-1)|(1/2-1/2)|[*])")
 
-#7
+# 7
 long_notation_pattern = re.compile(r"\A([KQRBN]?)([a-h][1-8])([a-h][1-8])",
-                                     flags=re.IGNORECASE | re.ASCII)
+                                   flags=re.IGNORECASE | re.ASCII)
 
-#6
+# 6
 capture_2squares_pattern = re.compile(r"\A([KQRBN]?)([a-h][1-8])x([a-h][1-8])",
-                                     flags=re.IGNORECASE | re.ASCII)
-#1
+                                      flags=re.IGNORECASE | re.ASCII)
+# 1
 one_square_pattern = re.compile(r"\A([KQRBN]?)([a-h][1-8])",
-                                     flags=re.IGNORECASE | re.ASCII)
-#2
+                                flags=re.IGNORECASE | re.ASCII)
+# 2
 pawn_capture_pattern = re.compile(r"\A([a-h])x?([a-h][1-8])",
-                                     flags=re.IGNORECASE | re.ASCII)
-#3
+                                  flags=re.IGNORECASE | re.ASCII)
+# 3
 nonpawn_capture_pattern = re.compile(r"\A([KQRBN])x([a-h][1-8])",
                                      flags=re.IGNORECASE | re.ASCII)
 
-#4
+# 4
 file_pattern = re.compile(r"\A([KQRBN])([a-h])x?([a-h][1-8])",
-                                     flags=re.IGNORECASE | re.ASCII)
+                          flags=re.IGNORECASE | re.ASCII)
 
-#5
+# 5
 rank_pattern = re.compile(r"\A([KQRBN])([1-8])x?([a-h][1-8])",
-                                     flags=re.IGNORECASE | re.ASCII)
+                          flags=re.IGNORECASE | re.ASCII)
 
 castling_inputfile_pattern = re.compile(r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))")
 

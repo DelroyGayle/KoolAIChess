@@ -745,10 +745,10 @@ def perform_en_passant(chess, from_file, from_rank, to_file, to_rank):
     if incheck(Game.who_are_you):
         # If so, then this en passant is invalid
         # Restore the pieces back to their original squares/positions
-        # TODO FOR PBBASIC
         chess[from_square] = chess[to_square]
-        chess[to_square] = None
         chess.board[save_square] = save_captured_pawn
+        chess[to_square] = None
+
         # Redisplay the Board
         chess.display("Invalid en passant - The king must not end up in check")
         Game.en_passant_status = constants.INVALID
@@ -968,12 +968,13 @@ def handle_evaluated_castling_move(chess, computer_move_finalised):
     computer_move_finalised = True
     return computer_move_finalised
 
-def handle_en_passant_from_inputfile(chess, from_file, from_rank, to_file, to_rank,
-                                     print_string, attacking_piece_letter, taken):
+
+def finalise_en_passant_move_from_inputfile(chess, from_file, from_rank, to_file, to_rank,
+                                            print_string, attacking_piece_letter, taken):
     """
     For testing purposes I read Chess moves from an input file
     Therefore, if this option is ON
-    Check whether an en passant has been done or attempted
+    Check whether the 'read move' was an en passant move that has been performed or attempted
     """
 
     # Default: 'pass' as in Python i.e. NOP
@@ -995,18 +996,20 @@ def handle_en_passant_from_inputfile(chess, from_file, from_rank, to_file, to_ra
         neither has any pawns been advanced two squares
         Nor can there be any promotions from this en passant move
         Convert the en passant move in order to output it
-        Add a 'from_file' to the output chess move if a piece was taken
+        Add a 'x' to the output chess move if a piece was taken
         Then output the piece to the output file
         """
 
-        setup_output_chess_move_add_promotion(constants.PAWN_LETTER, 
-                                              from_file, from_rank, to_file, to_rank,
-                                              constants.PAWN_VALUE)
-        finalise_player_move(from_file, from_rank, to_file, to_rank, just_performed_castling, attacking_piece, taken)
+        # setup_output_chess_move_add_promotion(constants.PAWN_LETTER, 
+        #                                       from_file, from_rank, to_file, to_rank,
+        #                                       constants.PAWN_VALUE)
+        # TODO - REOVE ABOVE, TEST BELOW
+        finalise_player_move(from_file, from_rank, to_file, to_rank, print_string, attacking_piece, taken)
         do_next = "return"
         return do_next
 
     # Otherwise 'pass'
+    # It was not an en passant move
     return do_next
 
 
@@ -1030,16 +1033,17 @@ def handle_en_passant_from_keyboard(chess, from_file, from_rank, to_file, to_ran
         legal = validate_player_en_passant_move(chess, from_file, from_rank, to_file, to_rank)
         Game.message_printed = False
         if legal:
-            Game.en_passant_status = constants.NOVALUE
+            Game.en_passant_status = constants.NOVALUE  # reset flag
             finalise_player_move(from_file, from_rank, to_file, to_rank,
                                  print_string, attacking_piece_letter, taken)
             do_next = "return"
             return do_next
 
         else:
-            Game.en_passant_status = constants.NOVALUE
+            Game.en_passant_status = constants.NOVALUE  # reset flag
             do_next = "continue"
             return do_next
 
     # Otherwise 'pass'
+    # It was not an en passant move
     return do_next

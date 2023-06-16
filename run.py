@@ -1380,7 +1380,10 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         # If so, fetch the next move from there
         # Note: If the move that is read is an en passant move
         # Then it is performed at this stage by 'handle_player_move_from_inputfile'
-        # TODO
+        #       Game.en_passant_status is
+        #       set to either 'constants.VALID' for a valid en passant move
+        #        or to 'constants.INVALID' for an illegal en passant move
+
         do_next = handle_player_move_from_inputfile(chess, from_file, from_rank, to_file, to_rank)
         if do_next == "return":
             return
@@ -1389,10 +1392,10 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         # else do_next is "pass"
 
         # *** EN PASSANT ***
-        # At this point, a chess move as successful been read and parsed from the input game file
-        # Is this chess move, an en passant move?
-        do_next = m.handle_en_passant_from_inputfile(chess, from_file, from_rank, to_file, to_rank,
-                                                     print_string, attacking_piece_letter, taken)
+        # At this point, a chess move has successfully been read and parsed from the input game file
+        # Was this chess move, an en passant move?
+        do_next = m.finalise_en_passant_move_from_inputfile(chess, from_file, from_rank, to_file, to_rank,
+                                                            print_string, constants.PAWN_LETTER, constants.PAWN_VALUE)
         if do_next == "return":
             # The en passant move was valid and it has been performed
             return
