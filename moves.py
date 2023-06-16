@@ -353,7 +353,7 @@ def check_adjacent_squares(chess,
         elif (not does_value_match(chess, constants.KINGSIDE_ROOK_FILE,
                                    king_rook_rank, -1, constants.BLANK)
               or not does_value_match(chess, constants.KINGSIDE_ROOK_FILE,
-                                     king_rook_rank, -2, constants.BLANK)):
+                                      king_rook_rank, -2, constants.BLANK)):
             produce_error_message(constants.NOT_ALL_BLANK)
 
         else:  # Valid!
@@ -455,8 +455,10 @@ def calculate_new_file(file, number):
     new_file = chr(ord(file) + number)
     # Defensive Programming
     if not ("a" <= new_file <= "h"):
-        raise CustomException(f"Internal Error: File is Off-board "
-                              "{newfile} = {file} + {number}")
+        raise CustomException(("Internal Error: File is Off-board "
+                              "{} = {} + {}").format(newfile,
+                                                     file,
+                                                     number))
 
     return new_file
 
@@ -762,7 +764,7 @@ def record_pawn_that_advanced_by2(chess, who_are_you,
     elif (who_are_you == constants.COMPUTER
           and previous_rank == constants.COMPUTER_PAWNS_RANK
           and current_rank == constants.FIFTH_RANK):
-        print("YES/computer")  #todo
+        print("YES/computer")  #  todo
         computer_pawn_2squares_advanced_file = current_file
         computer_pawn_2squares_advanced_rank = current_rank
 
@@ -846,7 +848,8 @@ def perform_en_passant(chess, from_file, from_rank, to_file, to_rank):
     return True
 
 
-def validate_and_perform_en_passant(chess, from_file, from_rank, to_file, to_rank):
+def validate_and_perform_en_passant(chess, from_file, from_rank, 
+                                    to_file, to_rank):
     """
     If an en passant move is possible, perform it
     """
@@ -854,8 +857,7 @@ def validate_and_perform_en_passant(chess, from_file, from_rank, to_file, to_ran
     if chess.piece_value(to_file, to_rank) != constants.BLANK:
         # destination square is occupied so cannot be an en passant move
         return False
-  
-
+ 
     print("EPFIRST ? R> " + from_file + "C" + from_rank + "TO R " + to_file + "C " + to_rank)
     print("COMP CR>", Game.computer_pawn_2squares_advanced_file, Game.computer_pawn_2squares_advanced_rank)
     print("PLAY CR>", Game.player_pawn_2squares_advanced_file, Game.player_pawn_2squares_advanced_rank)
@@ -898,19 +900,20 @@ def validate_and_perform_en_passant(chess, from_file, from_rank, to_file, to_ran
             save_rank = Game.player_pawn_2squares_advanced_rank
 
     else:
-        # Destination Square does not match 
+        # Destination Square does not match
         # the opponent's 2-square pawn advanced coordinates
         # Therefore, definitely not an en passant move
         return False
 
     # Is the 'From' Rank known? That is, is the Rank of this piece known?
     if from_rank == constants.NOVALUE:
-        # No! Therefore, the rank would be the same as the potential captured pawn's rank
+        # No! Therefore, the rank would be the same as
+        # the potential captured pawn's rank
         from_rank = save_rank
 
     # Is the attacking piece, a pawn?
     if chess.piece_letter(from_file, from_rank) != constants.PAWN_LETTER:
-    # No! - Therefore, definitely not an en passant move
+        # No! - Therefore, definitely not an en passant move
         return False
 
     # At this point, determined that it is an en passant move
@@ -925,13 +928,13 @@ def validate_and_perform_en_passant(chess, from_file, from_rank, to_file, to_ran
     if (chess.piece_value(from_file, from_rank) !=
        constants.PAWN_VALUE * Game.who_are_you):
         # Redisplay the Board
-        format_string = (f"Instead, Value: "
-                         "{chess.piece_value(from_file, from_rank)}")
+        outstring = "Instead, Value: {}".format(chess.piece_value(from_file,
+                                                                  from_rank))
         output_error_message = ("INTERNAL ERROR: Expected the Attacking "
                                 "Piece to be a Pawn\n"
                                 "of the right colour for "
                                 "the en passant move;\n")
-        output_error_message += format_string
+        output_error_message += outstring
         if Game.reading_game_file:
             f.input_status_message(output_error_message)
         else:
@@ -948,12 +951,12 @@ def validate_and_perform_en_passant(chess, from_file, from_rank, to_file, to_ran
     if (chess.piece_value(save_col, save_rank) !=
        constants.PAWN_VALUE * Game.opponent_who_are_you):
         # Redisplay the Board
-        format_string = (f"Instead, Value: "
-                         "{chess.piece_value(from_file, from_rank)}")
+        format_string = "Instead, Value: {}"
         output_error_message = ("INTERNAL ERROR: Expected the Captured Piece "
                                 "to be a Pawn\n"
                                 "of the right colour for "
                                 "the en passant move;\n")
+        output_error_message += format_string
         if Game.reading_game_file:
             f.input_status_message(output_error_message)
         else:

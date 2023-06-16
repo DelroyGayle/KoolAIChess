@@ -118,6 +118,13 @@ def open_input_file():
     except IOError:
         file_contents = ""
 
+    if len(file_contents) > constants.FILE_SIZE_LIMIT or True:
+        e.input_status_message(("Input file too big - larger than "
+                               "{} characters")
+                               .format(constants.FILE_SIZE_LIMIT))
+        sleep(5)
+        return
+
     if len(file_contents) == 0:
         # Empty file
         Game.reading_game_file = False
@@ -129,8 +136,9 @@ def open_input_file():
         return
 
     if len(file_contents) > constants.FILE_SIZE_LIMIT:
-        e.input_status_message(f"Input file too big - larger than "
-                               "{constants.FILE_SIZE_LIMIT} characters")
+        e.input_status_message(("Input file too big - larger than "
+                               "{} characters")
+                               .format(constants.FILE_SIZE_LIMIT))
         return
 
     Game.input_stream = cleanup_input_stream(file_contents)
@@ -153,7 +161,7 @@ def regexp_loop():
         # Remove any spaces
         Game.input_stream = Game.input_stream.lstrip()
         if len(Game.input_stream) == 0:
-            e.input_status_message(f"Finished reading "
+            e.input_status_message("Finished reading "
                                    "all the moves from the input file")
             return True
 
@@ -179,7 +187,7 @@ def regexp_loop():
 # Remove any leading whitespace i.e. including \n
         Game.input_stream = Game.input_stream.lstrip(" \n\t")
         if len(Game.input_stream) == 0:
-            e.input_status_message(f"Finished reading "
+            e.input_status_message("Finished reading "
                                    "all the moves from the input file")
             return True
 
@@ -830,8 +838,8 @@ def determine_move_both_file_rank(chess):
 
     else:
         # Defensive Programming
-        raise CustomException(f"Internal Error: Unknown Move Type "
-                              "{Game.move_type}")
+        raise CustomException(("Internal Error: Unknown Move Type {}")
+                              .format(Game.move_type))
 
 
 def handle_move_text(chess):
