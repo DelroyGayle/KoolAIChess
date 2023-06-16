@@ -30,6 +30,7 @@ class CustomException(Exception):
     """
     pass
 
+
 def goodbye():
     """
     End of Game Message
@@ -992,7 +993,7 @@ def execute_computer_move(chess, from_file, from_rank, to_file, to_rank):
     # Has the king been moved?
     # Has a rook been moved
     m.record_if_king_or_rook_has_moved(chess, constants.COMPUTER,
-                                        from_file, from_rank, to_file, to_rank)
+                                       from_file, from_rank, to_file, to_rank)
 
     # As the opponent advanced a pawn two squares?
     # If yes, record the pawn's position
@@ -1004,8 +1005,8 @@ def execute_computer_move(chess, from_file, from_rank, to_file, to_rank):
     # Add the promoted piece if a promotion took place
     # Then output the piece to the output file
     m.setup_output_chess_move_add_promotion(attacking_piece_letter,
-                                          from_file, from_rank,
-                                          to_file, to_rank, taken)
+                                            from_file, from_rank,
+                                            to_file, to_rank, taken)
 
 
 def finalise_computer_move(chess):
@@ -1031,9 +1032,10 @@ def finalise_computer_move(chess):
         if check_flag:
             print("Checkmate!! I Win!")
             sleep(constants.SLEEP_VALUE)
-            print("PLEASE CHECK:",Game.output_chess_move) # todo
-            # Keep Linter happy
+            print("PLEASE CHECK:", Game.output_chess_move) # todo
+            # Keep Linter happy - shorten name
             chess_move = Game.output_chess_move
+
             Game.output_chess_move = m.add_checkmate_to_output(chess_move)
             # Checkmate! However do not end the program
             # Rather, the Player has to resign!
@@ -1044,7 +1046,9 @@ def finalise_computer_move(chess):
     print()
 
 
-def handle_computer_move_from_inputfile(chess, from_file, from_rank, to_file, to_rank):
+def handle_computer_move_from_inputfile(chess,
+                                        from_file, from_rank,
+                                        to_file, to_rank):
     """
     For testing purposes I read Chess moves from an input file
     Therefore, if this option is ON
@@ -1073,20 +1077,24 @@ def handle_computer_move_from_inputfile(chess, from_file, from_rank, to_file, to
 
     # No file input issue ... Continue
     if Game.move_type == constants.CASTLING_MOVE:
-    # A Castling Move has been read from the file - process it
+        # A Castling Move has been read from the file - process it
         just_performed_castling = m.perform_castling(chess, constants.COMPUTER)
         if not just_performed_castling:
-        # The Castling that was read from the input file was invalid!
-        # 'perform_castling() redisplays the Board and displays the appropriate error messaging
-            print("Computer from this point onwards will now generate its own moves")
+            # The Castling that was read from the input file was invalid!
+            # 'perform_castling() redisplays the Board
+            # and displays the appropriate error messaging
+            print("Computer from this point onwards "
+                  "will now generate its own moves")
             print()
             sleep(constants.SLEEP_VALUE)
             return (False, from_file, from_rank, to_file, to_rank)
 
         else:
             # The Castling that was read from the input file was valid!
-            # Castling Validation has already been done to see whether Castling would put the Player in Check
-            # 'indicate_castling_done()' displays the appropriate messaging regarding the Castling
+            # Castling Validation has already been done
+            # to see whether Castling would put the Player in Check
+            # 'indicate_castling_done()' displays the appropriate messaging
+            # regarding the Castling move
 
             # Since this chess move is not a pawn that has advanced two squares
             # Ensure that previous values for 'Computer' have been reset
@@ -1109,7 +1117,8 @@ def handle_computer_move_from_inputfile(chess, from_file, from_rank, to_file, to
 def process_computer_move(chess, from_file, from_rank, to_file, to_rank):
     """
     This routine handles the playing of the Computer's move
-    Note: returns 'computer_move_finalised, just_performed_castling, attacking_piece_letter, taken'
+    Note: returns 'computer_move_finalised, just_performed_castling,
+                   attacking_piece_letter, taken'
     """
 
     computer_move_finalised = False
@@ -1134,10 +1143,12 @@ def process_computer_move(chess, from_file, from_rank, to_file, to_rank):
     # Are the Chess move currently come from an input file?
     # If so, fetch the next move from there
     if Game.reading_game_file:
-        tuple = handle_computer_move_from_inputfile(chess, from_file, from_rank, to_file, to_rank)
+        tuple = handle_computer_move_from_inputfile(chess,
+                                                    from_file, from_rank,
+                                                    to_file, to_rank)
         (computer_move_finalised,
          from_file, from_rank,
-         to_file, to_rank) = tuple 
+         to_file, to_rank) = tuple
 
     """
     At this stage, three possibilities
@@ -1145,9 +1156,12 @@ def process_computer_move(chess, from_file, from_rank, to_file, to_rank):
     # 2) No longer reading Chess Moves from an input file
     # 3) No Chess Move has been finalised
     """
-    
+
     # Handle 1) Castling Move if one was generated by the 'evaluate' function
-    computer_move_finalised = m.handle_evaluated_castling_move(chess, computer_move_finalised)
+    # Keep linter happy - shorten name
+    c = m.handle_evaluated_castling_move(chess, computer_move_finalised)
+
+    computer_move_finalised = c
 
     # Handle 2 and 3
     # Validate, Execute then Finalise the Computer Chess Move
@@ -1159,8 +1173,11 @@ def process_computer_move(chess, from_file, from_rank, to_file, to_rank):
     return
 
 
-def finalise_player_move(chess, from_file=None, from_rank=None, to_file=None, to_rank=None,
-                         print_string="", attacking_piece_letter="", taken=None):
+def finalise_player_move(chess,
+                         from_file=None, from_rank=None,
+                         to_file=None, to_rank=None,
+                         print_string="", attacking_piece_letter="",
+                         taken=None):
     """
     Now that the Player's move has been performed
     Increment the move count
@@ -1172,7 +1189,7 @@ def finalise_player_move(chess, from_file=None, from_rank=None, to_file=None, to
 
     # Increment Move Number
     if not Game.move_count_incremented:
-        Game.move_count+=1
+        Game.move_count += 1
 
     Game.move_count_incremented = False
     # keep this flag unset from now on; so that the move count is incremented
@@ -1203,8 +1220,9 @@ def finalise_player_move(chess, from_file=None, from_rank=None, to_file=None, to
         m.add_check_to_output()
         check_flag = is_it_checkmate(chess, constants.COMPUTER)
         if check_flag:
-            # Keep Linter happy
+            # Keep Linter happy - shorten name
             chess_move = Game.output_chess_move
+
             Game.output_chess_move = m.add_checkmate_to_output(chess_move)
             print("Checkmate!! You Win!")
             append_to_output_stream(Game.output_chess_move + constants.SPACE)
@@ -1218,10 +1236,10 @@ def finalise_player_move(chess, from_file=None, from_rank=None, to_file=None, to
 
 def castling_move_is_valid(chess):
     """
-    Castling Validation has already been performed 
+    Castling Validation has already been performed
     to see whether Castling would put the Player in Check
-    'indicate_castling_done()' displays the appropriate messaging 
-    regarding the Castling
+    'indicate_castling_done()' displays the appropriate messaging
+    regarding the Castling move
 
     Since this chess move is not a pawn that has advanced two squares
     Ensure that previous values for 'Player' have been reset
@@ -1237,7 +1255,8 @@ def castling_move_is_valid(chess):
     finalise_player_move(chess)
 
 
-def handle_player_move_from_inputfile(chess, from_file, from_rank, to_file, to_rank):
+def handle_player_move_from_inputfile(chess,
+                                      from_file, from_rank, to_file, to_rank):
     """
     For testing purposes I read Chess moves from an input file
     Therefore, if this option is ON
@@ -1256,7 +1275,7 @@ def handle_player_move_from_inputfile(chess, from_file, from_rank, to_file, to_r
     # PLAYER'S MOVE against COMPUTER
     Game.who_are_you = constants.PLAYER
     Game.opponent_who_are_you = constants.COMPUTER
-    
+
     f.fetch_chess_move_from_file(chess)
 
     # Was there a file input issue?
@@ -1274,8 +1293,10 @@ def handle_player_move_from_inputfile(chess, from_file, from_rank, to_file, to_r
 
         if not just_performed_castling:
             # The Castling that was read from the input file was invalid!
-            # 'perform_castling() redisplays the Board and displays the appropriate error messaging
-            # No further moves are read from the input file - rather fetch moves from the user
+            # 'perform_castling() redisplays the Board
+            # and displays the appropriate error messaging
+            # No further moves are read from the input file -
+            # rather fetch moves from the user
             do_next = "continue"
             return do_next
 
@@ -1309,7 +1330,8 @@ def handle_castling_input(chess, input_string):
     just_performed_castling = m.perform_castling(chess, constants.PLAYER)
     if not just_performed_castling:
         # This Castling move is invalid!
-        # 'perform_castling() redisplays the Board and displays the appropriate error messaging
+        # 'perform_castling() redisplays the Board
+        # and displays the appropriate error messaging
         do_next = "continue"
         return do_next
 
@@ -1348,8 +1370,8 @@ def handle_player_move_from_keyboard(chess):
 
     lower_string = input_string.lower()
     if (len(lower_string) != 4
-    # Pattern: ([a-h][1-8]){2}
-    or not constants.chess_move_pattern.match(lower_string)):
+        #               Pattern: ([a-h][1-8]){2}
+       or not constants.chess_move_pattern.match(lower_string)):
         chess.display("")
         print("I do not understand this input:", input_string)
         print("Format of Chess moves ought to be 4 characters e.g. e2e4")
@@ -1379,12 +1401,15 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         # Are the moves being read from the input game file?
         # If so, fetch the next move from there
         # Note: If the move that is read is an en passant move
-        # Then it is performed at this stage by 'handle_player_move_from_inputfile'
+        # Then it is performed at this stage by
+        # 'handle_player_move_from_inputfile'
         #       Game.en_passant_status is
         #       set to either 'constants.VALID' for a valid en passant move
         #        or to 'constants.INVALID' for an illegal en passant move
 
-        do_next = handle_player_move_from_inputfile(chess, from_file, from_rank, to_file, to_rank)
+        do_next = handle_player_move_from_inputfile(chess,
+                                                    from_file, from_rank,
+                                                    to_file, to_rank)
         if do_next == "return":
             return
         elif do_next == "continue":
@@ -1392,10 +1417,16 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         # else do_next is "pass"
 
         # *** EN PASSANT ***
-        # At this point, a chess move has successfully been read and parsed from the input game file
+        # At this point, a chess move has successfully been read and parsed
+        # from the input game file
         # Was this chess move, an en passant move?
-        do_next = m.finalise_en_passant_move_from_inputfile(chess, from_file, from_rank, to_file, to_rank,
-                                                            print_string, constants.PAWN_LETTER, constants.PAWN_VALUE)
+
+        # Keep linter happy - shorten name
+        funcname = m.finalise_en_passant_move_from_inputfile
+
+        do_next = funcname(chess, from_file, from_rank, to_file, to_rank,
+                           print_string, constants.PAWN_LETTER,
+                           constants.PAWN_VALUE)
         if do_next == "return":
             # The en passant move was valid and it has been performed
             return
@@ -1423,9 +1454,12 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
             print(lower_string)  # todo
 
         else:
-            # If the move was read from the input file populate the relevant values
-            # Note: although it is fair to assume that ALL the Chess Moves in the input file are legal
-            # Nevertheless the moves will be validated as if the user had entered them
+            # If the move was read from the input file
+            # populate the relevant values
+            # Note: although it is fair to assume that ALL the Chess Moves
+            # in the input file are legal
+            # Nevertheless the moves will be validated
+            # as if the user had entered them
             from_file = Game.new_from_file
             from_rank = Game.new_from_rank
             to_file = Game.new_to_file
@@ -1457,8 +1491,11 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
             f.is_error_from_input_file()
             continue
 
-        do_next = handle_en_passant_from_keyboard(chess, from_file, from_rank, to_file, to_rank,
-                                                  print_string, attacking_piece_letter, taken)
+        do_next = handle_en_passant_from_keyboard(chess, from_file, from_rank,
+                                                  to_file, to_rank,
+                                                  print_string,
+                                                  attacking_piece_letter,
+                                                  taken)
         if do_next == "return":
             return
         elif do_next == "continue":
@@ -1487,12 +1524,14 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         # Has the king been moved?
         # Has a rook been moved
         m.record_if_king_or_rook_has_moved(chess, constants.PLAYER,
-                                            from_file, from_rank, to_file, to_rank)
+                                           from_file, from_rank,
+                                           to_file, to_rank)
 
         # As the opponent advanced a pawn two squares?
         # If yes, record the pawn's position
         m.record_pawn_that_advanced_by2(constants.PLAYER,
-               from_file, from_rank, to_file, to_rank)
+                                        from_file, from_rank,
+                                        to_file, to_rank)
 
         # Increment the move count
         # Determine whether the Computer is in Check
@@ -1517,11 +1556,11 @@ def play_2_moves(chess, from_file, from_rank, to_file, to_rank, result):
     1) Play and show the result of the Computer move
     2) Then get, validate and play the Player's move
     """
-    
+
     process_computer_move(chess, from_file, from_rank, to_file, to_rank)
-    
+
     player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank)
-#TODO                                just_performed_castling, attacking_piece_letter, taken)
+#  TODO             just_performed_castling, attacking_piece_letter, taken)
 
 
 def main_part2():
@@ -1583,6 +1622,7 @@ def main():
         quit()
     except Exception as error:
         raise error
+
 
 if __name__ == "__main__":
     main()
