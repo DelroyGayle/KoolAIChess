@@ -903,7 +903,9 @@ def handle_move_text(chess):
     print("BEFORE1", Game.reading_game_file)
     # TODO
     # Note: If the resultant move is an en passant move
-    #       Then it is performed at this stage by 'determine_move_both_file_rank'
+    #       Then it is performed at this stage by
+    #       'determine_move_both_file_rank'
+
     #       Game.en_passant_status is
     #       set to either 'constants.VALID' for a valid en passant move
     #        or to 'constants.INVALID' for an illegal en passant move
