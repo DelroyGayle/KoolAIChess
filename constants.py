@@ -55,7 +55,6 @@ CASTLING_MOVE = 8  # O-O or O-O-O
 PLAYER_SIDE_RANK = "1"    # White - Bottom row
 COMPUTER_SIDE_RANK = "8"  # Black - Top row
 
-# REMOVE?? TODO
 # kingside rook  must be present in file 'h' in order to be castled
 KINGSIDE_ROOK_FILE = "h"
 # queenside rook must be present in file "a" in order to be castled

@@ -2,9 +2,6 @@
 moves.py
 This module contains the routines related to
 Castling and En Passant
-
-Also all other extra and miscellaneous routines relating to
-the formatting, displaying and output of chess moves are placed here
 """
 
 import constants
@@ -707,6 +704,27 @@ def perform_castling(chess, who_are_you):
     return True
 
 
+def castling_move_is_valid(chess):
+    """
+    Castling Validation has already been performed
+    to see whether Castling would put the Player in Check
+    'indicate_castling_done()' displays the appropriate messaging
+    regarding the Castling move
+
+    Since this chess move is not a pawn that has advanced two squares
+    Ensure that previous values for 'Player' have been reset
+    """
+
+    reset_2squares_pawn_positions(constants.PLAYER)
+
+    # Increment the move count
+    # Convert player's chess move for output
+    # Output the chess move
+    # The Chessboard and move has already been displayed
+    # There is no 'attacking_piece_letter' nor 'taken' for Castling moves
+    finalise_player_move(chess)
+
+
 """
 ************ EN PASSANT ************
 
@@ -736,21 +754,21 @@ def record_pawn_that_advanced_by2(chess, who_are_you,
     if (who_are_you == constants.PLAYER
        and previous_rank == constants.PLAYER_PAWNS_RANK
        and current_rank == constants.FOURTH_RANK):
-            print("YES/player")  # todo
+        print("YES/player")  # todo
         player_pawn_2squares_advanced_file = current_file
         player_pawn_2squares_advanced_rank = current_rank
 
     elif (who_are_you == constants.COMPUTER
           and previous_rank == constants.COMPUTER_PAWNS_RANK
           and current_rank == constants.FIFTH_RANK):
-            print("YES/computer")  #todo
+        print("YES/computer")  #todo
         computer_pawn_2squares_advanced_file = current_file
         computer_pawn_2squares_advanced_rank = current_rank
     
     else:
 # Since this chess move is not a pawn that has advanced two squares
 # Ensure that previous values for this colour have been reset
-           reset_2squares_pawn_positions(who_are_you)
+        reset_2squares_pawn_positions(who_are_you)
 
 
 def indicate_en_passant_done(who_are_you):
@@ -963,7 +981,7 @@ def check_if_inputfile_is_en_passant_move(chess, source, target):
     """
     Whilst trying to identify the chess move
     that was read from an input file
-    Check whether it is an en passant move?
+    Check whether it is an en passant move
     """
 
     target_file = target[0]  # EG 'E' for 'E6' ' TODO need a dest

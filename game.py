@@ -48,6 +48,7 @@ class Game:
     error_message = ""
     message_printed = False
     computer_print_string = ""
+    # REMOVE?? TODO
     show_taken_message = ""
 
     promoted_piece = ""

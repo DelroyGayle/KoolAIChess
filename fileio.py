@@ -8,53 +8,8 @@ from a file and their validation.
 
 import constants
 from game import Game
-from extras import append_to_output_stream
-
-
-def output_message(message):
-    """
-    Output a message after first removing any superfluous blank lines
-    """
-    lines = message.splitlines()
-
-    # Based on
-    # https://stackoverflow.com/questions/3845423/
-    # remove-empty-strings-from-a-list-of-strings
-    stripped = [line.strip() for line in lines if line.strip()]
-
-    if not stripped:
-        # Print a blank line
-        print()
-        return
-
-    for m in range(len(stripped)):
-        print(stripped[m])
-        return
-
-
-def input_status_message(message):
-    """
-    Print a message, that is, inform the user
-    regarding the status of the contents of the input file
-    Reset flag accordingly
-    """
-    output_message(message)
-    print(f"There will be no further input from '{constants.INPUT_PGN_NAME}'")
-    print()
-    # Reset Flag
-    Game.reading_game_file = False
-
-
-def is_error_from_input_file():
-    """
-    Display a general message if an erroneous chess move
-    came from the input file
-    """
-    if Game.reading_game_file:
-        input_status_message(
-                        "Since This Illegal Move came from the input file\n"
-                        "moves will hereafter come "
-                        "from your input via the keyboard")
+import extras as e
+from time import sleep
 
 
 def cleanup_input_stream(in_string):
@@ -94,7 +49,7 @@ def ignore_group_comment(open_char, close_char):
     if not position:
         astring = ("Found " + open_char + " however cannot determine where "
                    + close_char + " ends")
-        input_status_message(astring)
+        e.input_status_message(astring)
         return False
 
     Game.input_stream = Game.input_stream[position + 1:]
@@ -174,8 +129,8 @@ def open_input_file():
         return
 
     if len(file_contents) > constants.FILE_SIZE_LIMIT:
-        input_status_message(f"Input file too big - larger than "
-                             "{constants.FILE_SIZE_LIMIT} characters")
+        e.input_status_message(f"Input file too big - larger than "
+                               "{constants.FILE_SIZE_LIMIT} characters")
         return
 
     Game.input_stream = cleanup_input_stream(file_contents)
@@ -198,8 +153,8 @@ def regexp_loop():
         # Remove any spaces
         Game.input_stream = Game.input_stream.lstrip()
         if len(Game.input_stream) == 0:
-            input_status_message(f"Finished reading "
-                                 "all the moves from the input file")
+            e.input_status_message(f"Finished reading "
+                                   "all the moves from the input file")
             return True
 
         # % Escape mechanism - This mechanism is triggered
@@ -224,8 +179,8 @@ def regexp_loop():
 # Remove any leading whitespace i.e. including \n
         Game.input_stream = Game.input_stream.lstrip(" \n\t")
         if len(Game.input_stream) == 0:
-            input_status_message(f"Finished reading "
-                                 "all the moves from the input file")
+            e.input_status_message(f"Finished reading "
+                                   "all the moves from the input file")
             return True
 
         # Just in case any found - remove an 'en passant' annotation,
@@ -299,8 +254,8 @@ def regexp_loop():
                 Game.input_stream = Game.input_stream[len(matched.group(0)):]
                 continue
 
-            input_status_message("Cannot determine this NAG: "
-                                 + Game.input_stream[0:6])
+            e.input_status_message("Cannot determine this NAG: "
+                                   + Game.input_stream[0:6])
             return False
 
         else:
@@ -421,7 +376,7 @@ def parse_chess_move():
 
     *** HANDLE e4 Ng2 ***
     Note: This program does NOT support En Passant captures of the form EG d6
-    En Passant captures must contain a 'from_file' EG exd6
+    En Passant captures must contain a 'x' EG exd6
     tuple format: (the piece optional , the destination square)
     """
 
@@ -530,8 +485,8 @@ def parse_chess_move():
         return True  # Indicate success
 
 # Unknown Chess Move
-    input_status_message(constants.BAD_CHESS_MOVE_FROM_FILE
-                         + Game.input_stream[0:20])
+    e.input_status_message(constants.BAD_CHESS_MOVE_FROM_FILE
+                           + Game.input_stream[0:20])
     return False  # Indicate failure
 
 
@@ -547,7 +502,7 @@ def check_game_termination_marker_found():
     matched = constants.move_number_pattern.match(Game.input_stream)
     if matched:
         # Reached the Indicator regarding the Result and the End of the Game
-        input_status_message(
+        e.input_status_message(
                      "Result of the Game has been read from the input file: "
                      + matched.group(0))
         result = True
@@ -563,8 +518,8 @@ def expected_move_number_not_found():
     Report that an expected move number could not be determined
     """
 
-    input_status_message("Expected Move Number " + str(Game.move_count)
-                         + ". Instead: " + Game.input_stream[0:10])
+    e.input_status_message("Expected Move Number " + str(Game.move_count)
+                           + ". Instead: " + Game.input_stream[0:10])
 
 
 def parse_move_text():
@@ -582,7 +537,7 @@ def parse_move_text():
         # r"\A[.]+"
         matched = constants.periods_pattern.match(Game.input_stream)
         if matched:
-            input_status_message(
+            e.input_status_message(
                                "Expected the Player's Chess Move not Periods: "
                                + Game.input_stream[0:10])
             return False
@@ -597,7 +552,7 @@ def parse_move_text():
     Game.move_count_incremented = True
 
     # Output the Move Number
-    append_to_output_stream(str(Game.move_count) + "." + constants.SPACE)
+    e.append_to_output_stream(str(Game.move_count) + "." + constants.SPACE)
 
     # Move Number expected EG '4.' I will allow periods to be optional
     matched = constants.move_number_pattern.match(Game.input_stream)
@@ -679,7 +634,7 @@ def find_the_match(chess, all_matched_list,
         has been read in from the input file
         The erroneous text/input is in Game.general_string_result
         """
-        input_status_message(constants.BAD_CHESS_MOVE_FROM_FILE
+        e.input_status_message(constants.BAD_CHESS_MOVE_FROM_FILE
                              + inputstream_previous_contents)
         return  # Failure
 
@@ -935,3 +890,125 @@ def fetch_chess_move_from_file(chess):
     # Could be either a Move Number or a Chess Piece
 
     handle_move_text(chess)
+
+
+def handle_player_move_from_inputfile(chess,
+                                      from_file, from_rank, to_file, to_rank):
+    """
+    For testing purposes I read Chess moves from an input file
+    Therefore, if this option is ON
+    Fetch the Player's next move from the input file's stream
+    """
+
+    # Default: 'pass' as in Python i.e. NOP
+    do_next = "pass"
+    if not Game.reading_game_file:
+        # No File Handling. Fetch the chess move from the user
+        # from the keyboard
+        return do_next
+
+    # File Input ... Continue
+    # Ensure that these are set correctly
+    # PLAYER'S MOVE against COMPUTER
+    Game.who_are_you = constants.PLAYER
+    Game.opponent_who_are_you = constants.COMPUTER
+
+    fetch_chess_move_from_file(chess)
+
+    # Was there a file input issue?
+    # If so, appropriate error messaging has been displayed
+    # Pause the computer so that the Player can read it
+    # From this point, fetch user's input from keyboard
+
+    if not Game.reading_game_file:
+        sleep(constants.SLEEP_VALUE)
+        return do_next  # "pass"
+
+    # Was a castling move read from the file? If so, process it
+    if Game.reading_game_file and Game.move_type == constants.CASTLING_MOVE:
+        just_performed_castling = m.perform_castling(chess, constants.PLAYER)
+
+        if not just_performed_castling:
+            # The Castling that was read from the input file was invalid!
+            # 'perform_castling() redisplays the Board
+            # and displays the appropriate error messaging
+            # No further moves are read from the input file -
+            # rather fetch moves from the user
+            do_next = "continue"
+            return do_next
+
+        # The Castling that was read from the input file was valid!
+        m.castling_move_is_valid(chess)
+        do_next = "return"
+        return do_next
+
+    # Otherwise 'pass'
+    return do_next
+
+
+def handle_computer_move_from_inputfile(chess,
+                                        from_file, from_rank,
+                                        to_file, to_rank):
+    """
+    For testing purposes I read Chess moves from an input file
+    Therefore, if this option is ON
+    Fetch the Computer's next move from the input file's stream
+    The Chess Move being read from the input file always has priority
+    over the Chess Move generated from 'evaluate'
+    """
+
+    # Ensure that these are set correctly
+    # COMPUTER'S MOVE against PLAYER
+    Game.who_are_you = constants.COMPUTER
+    Game.opponent_who_are_you = constants.PLAYER
+
+    fetch_chess_move_from_file(chess)
+    print("FILE OK", Game.reading_game_file, Game.move_type, do_castle_move, computer_move_finalised)  # TODO
+
+    # Was there a file input issue?
+    # Appropriate error messaging has been displayed
+    # Pause the computer so that the Player can read it
+    # Use the values that were previously generated by 'evaluate'
+    # i.e. from_file, from_rank, to_file, to_rank
+
+    if not Game.reading_game_file:
+        sleep(constants.SLEEP_VALUE)
+        return (False, from_file, from_rank, to_file, to_rank)
+
+    # No file input issue ... Continue
+    if Game.move_type == constants.CASTLING_MOVE:
+        # A Castling Move has been read from the file - process it
+        just_performed_castling = m.perform_castling(chess, constants.COMPUTER)
+        if not just_performed_castling:
+            # The Castling that was read from the input file was invalid!
+            # 'perform_castling() redisplays the Board
+            # and displays the appropriate error messaging
+            print("Computer from this point onwards "
+                  "will now generate its own moves")
+            print()
+            sleep(constants.SLEEP_VALUE)
+            return (False, from_file, from_rank, to_file, to_rank)
+
+        else:
+            # The Castling that was read from the input file was valid!
+            # Castling Validation has already been done
+            # to see whether Castling would put the Player in Check
+            # 'indicate_castling_done()' displays the appropriate messaging
+            # regarding the Castling move
+
+            # Since this chess move is not a pawn that has advanced two squares
+            # Ensure that previous values for 'Computer' have been reset
+
+            m.reset_2squares_pawn_positions(constants.COMPUTER)
+            finalise_computer_move(chess)
+            computer_move_finalised = True
+            return (computer_move_finalised,
+                    from_file, from_rank, to_file, to_rank)
+
+    # Not a Castling move therefore
+    # Fetch new values for 'from_file,from_rank,to_file,to_rank'
+    # from what was read in the input game file
+    Game.en_passant_status = constants.NOVALUE
+    return (False,
+            Game.new_from_file, Game.new_from_rank,
+            Game.new_to_file, Game.new_to_rank)
