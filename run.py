@@ -1260,9 +1260,9 @@ def handle_player_move_from_inputfile(chess, from_file, from_rank, to_file, to_r
     f.fetch_chess_move_from_file(chess)
 
     # Was there a file input issue?
-    # Appropriate error messaging has been displayed
+    # If so, appropriate error messaging has been displayed
     # Pause the computer so that the Player can read it
-    # From this points fetch user's input from keyboard
+    # From this point, fetch user's input from keyboard
 
     if not Game.reading_game_file:
         sleep(constants.SLEEP_VALUE)
@@ -1378,6 +1378,9 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
 
         # Are the moves being read from the input game file?
         # If so, fetch the next move from there
+        # Note: If the move that is read is an en passant move
+        # Then it is performed at this stage by 'handle_player_move_from_inputfile'
+        # TODO
         do_next = handle_player_move_from_inputfile(chess, from_file, from_rank, to_file, to_rank)
         if do_next == "return":
             return

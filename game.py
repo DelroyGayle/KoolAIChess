@@ -4,6 +4,7 @@ import constants
 import piece
 import os
 
+
 class Game:
     """
     A class that represents the status of the Chess Game

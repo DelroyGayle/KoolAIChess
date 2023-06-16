@@ -766,9 +766,11 @@ def determine_move_both_file_rank(chess):
     # Depending on the 'move_type' check whether 
     # an en passant move is possible
     # And if so, perform it
+    # Game.en_passant_status is set to either constants.VALID for a valid en passant move
+    #                            or to 'constants.INVALID' for an illegal en passant move
     if (Game.move_type == constants.PAWN_CAPTURE_FILE
         or Game.move_type == constants.LONG_NOTATION):
-        result = m.check_if_inputfile_en_passant_move(chess, source, target)
+        result = m.check_if_inputfile_is_en_passant_move(chess, source, target)
         
         """
         There are three possible outcomes
@@ -788,7 +790,7 @@ def determine_move_both_file_rank(chess):
             return # Successful en passant move
     
         if g_en_passant_status == constants.INVALID:
-            return # Unsuccessful
+            return # Unsuccessful en passant move
 
         # Otherwise not an en passant move - Continue
 
@@ -850,6 +852,10 @@ def handle_move_text(chess):
     # Yes! 
     print("BEFORE1", Game.reading_game_file)
     # TODO
+    # Note: If the resultant move is an en passant move
+    # Then it is performed at this stage by 'determine_move_both_file_rank'
+    # Game.en_passant_status is set to either constants.VALID for a valid en passant move
+    #                            or to 'constants.INVALID' for an illegal en passant move
     result = determine_move_both_file_rank(chess)
     print("test result", Game.reading_game_file, result)  # todo
     # todo RESULT NOT NEEDED TODO SUB NOT FUNCTION

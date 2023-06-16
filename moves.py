@@ -694,6 +694,7 @@ def indicate_en_passant_done(who_are_you):
     Therefore it is a legal en passant move - no need for any further checks
     Reset variables holding opponent's advanced-by-2 pawn positions
     Display a message
+    Update new values
     """
     
     if who_are_you == constants.PLAYER:
@@ -704,6 +705,11 @@ def indicate_en_passant_done(who_are_you):
             reset_2squares_pawn_positions(constants.PLAYER)
 
     print()
+    Game.new_from_file = from_file
+    Game.new_from_rank = from_rank
+    Game.new_to_file = to_file
+    Game.new_to_rank = to_rank
+    Game.en_passant_status = constants.VALID
 
 
 def perform_en_passant(chess, from_file, from_rank, to_file, to_rank):
@@ -749,13 +755,8 @@ def perform_en_passant(chess, from_file, from_rank, to_file, to_rank):
         sleep(constants.SLEEP_VALUE)
         return False
 
-    # Otherwise successful en passant - update values
+    # Otherwise successful en passant - update new values
     indicate_en_passant_done(Game.who_are_you)
-    Game.new_from_file = from_file
-    Game.new_from_rank = from_rank
-    Game.new_to_file = to_file
-    Game.new_to_rank = to_rank
-    Game.en_passant_status = constants.VALID
     return True
 
 
@@ -892,7 +893,7 @@ def validate_player_en_passant_move(chess, from_file, from_rank, to_file, to_ran
     return False
 
 
-def check_if_inputfile_en_passant_move(chess, source, target):
+def check_if_inputfile_is_en_passant_move(chess, source, target):
     """
     Whilst trying to identify the chess move
     that was read from an input file
