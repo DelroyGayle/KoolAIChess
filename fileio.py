@@ -601,36 +601,6 @@ def parse_move_text():
     return parse_chess_move()
 
 
-def check_for_en_passant_first(chess, source, target):
-    """
-    Whilst trying to identify the chess move
-    that was read from an input file
-    Firstly, check whether it is an en passant move?
-    """
-
-    target_file = target[0]  # EG 'E' for 'E6' ' TODO need a dest
-    target_rank = target[1]  # EG '6' for 'E6'
-    source_file = source[0]
-
-    is_it_an_en_passant_move = validate_and_perform_en_passant(chess, source_file, constants.NOVALUE, target_file, target_rank)
-    if is_it_an_en_passant_move:
-    # Valid en passant move has been performed
-        return True  # Successful en passant move
-
-    if Game.en_passant_status == constants.INVALID:
-    # Illegal En Passant Move has been determined
-        if g_message_printed:
-            # Hopefully Doubtful!
-            pass
-        else:
-            input_status_message(constants.BAD_EN_PASSANT_FROM_FILE + inputstream_previous_contents)
-            g_message_printed = True
-
-        return
-
-    # This chess move is not an en passant move
-    return
-
 def find_the_match(chess, all_matched_list,
                    from_file, from_rank,
                    to_file, to_rank):
@@ -798,7 +768,7 @@ def determine_move_both_file_rank(chess):
     # And if so, perform it
     if (Game.move_type == constants.PAWN_CAPTURE_FILE
         or Game.move_type == constants.LONG_NOTATION):
-        result = check_for_en_passant_first(chess, source, target)
+        result = m.check_if_inputfile_en_passant_move(chess, source, target)
         
         """
         There are three possible outcomes

@@ -14,7 +14,7 @@ Menezes' QBASIC program can be found at
 import constants
 import piece
 from game import Game
-import other_moves as m
+import moves as m
 import fileio as f
 import os
 import re
@@ -1232,7 +1232,6 @@ def castling_move_is_valid(chess):
     # Increment the move count
     # Convert player's chess move for output
     # Output the chess move
-    # Determine whether the Computer is in Check
     # The Chessboard and move has already been displayed
     # There is no 'attacking_piece_letter' nor 'taken' for Castling moves
     finalise_player_move(chess)
@@ -1302,7 +1301,7 @@ def handle_castling_input(chess, input_string):
     do_next = "pass"
     input_string = input_string.upper()
     if not constants.castling_keyboard_pattern.match(input_string):
-            # \A((O-O-O)|(O-O)|(0-0-0)|(0-0))\Z"
+        # r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))\Z"
         # No Castling move. Determine what this chess move is
         return do_next
 
@@ -1387,14 +1386,18 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         # else do_next is "pass"
 
         # *** EN PASSANT ***
-        # Was an en passant move read from the input game file?
+        # At this point, a chess move as successful been read and parsed from the input game file
+        # Is this chess move, an en passant move?
         do_next = m.handle_en_passant_from_inputfile(chess, from_file, from_rank, to_file, to_rank,
                                                      print_string, attacking_piece_letter, taken)
         if do_next == "return":
+            # The en passant move was valid and it has been performed
             return
         elif do_next == "continue":
+            # The en passant move was invalid!
             continue
         # else do_next is "pass"
+        # It was not an en passant move
 
         if not Game.reading_game_file:
             # fetch the next move from the player from the keyboard
@@ -1404,6 +1407,7 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
             elif do_next == "continue":
                 continue
             # else do_next is "pass"
+
             # Determine the file and rank of each board name
             # e.g. e2 ==> file 'e', rank '2'
             from_file = lower_string[0]
@@ -1432,20 +1436,28 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         piece_value = chess.piece_value(from_file, from_rank)
 
         # Loop until a valid move is played
+        # If an erroneous move was read from the input file,
+        # then there will be no further input from this file
 
         if piece_value == constants.BLANK:  # BLANK SQUARE
             chess.display(print_string)
             print("There is no piece to be played, instead a Blank Square")
-            # todo
-            ...
+            f.is_error_from_input_file()
             continue
 
         if piece_value < 0:  # negative numbers are the Computer's Pieces
             chess.display(print_string)
             print("This is not your piece to move")
-            # todo
-            ...
+            f.is_error_from_input_file()
             continue
+
+        do_next = handle_en_passant_from_keyboard(chess, from_file, from_rank, to_file, to_rank,
+                                                  print_string, attacking_piece_letter, taken)
+        if do_next == "return":
+            return
+        elif do_next == "continue":
+            continue
+        # else do_next is "pass"
 
         (illegal,
          illegal_because_in_check,
@@ -1459,14 +1471,11 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
             else:
                 chess.display(print_string)
                 print("Illegal move because it is Checkmate!")
-            # todo
-            ...
             continue
+
         elif illegal:
             chess.display(print_string)
             print("Illegal move")
-            # todo
-            ...
             continue
 
         # Has the king been moved?
@@ -1476,8 +1485,8 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
 
         # As the opponent advanced a pawn two squares?
         # If yes, record the pawn's position
-        # TODO record_pawn_that_advanced_by2(constants.PLAYER,
-        #       from_file, from_rank, to_file, to_rank)
+        m.record_pawn_that_advanced_by2(constants.PLAYER,
+               from_file, from_rank, to_file, to_rank)
 
         # Increment the move count
         # Determine whether the Computer is in Check
@@ -1485,13 +1494,8 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         # Output the chess move
         finalise_player_move(chess, from_file, from_rank, to_file, to_rank,
                              print_string, attacking_piece_letter, taken)
-        # TODO just_performed_castling, attacking_piece_letter, taken)
 
         # Valid move has been played - show the updated board
-        # todo - REMOVE
-        # os.system("clear")
-        # chess.showboard()
-
         # Display the Player's Move
         chess.display(print_string)
         # Pause so that the Player
