@@ -7,6 +7,7 @@ Will place any other miscellaneous routines here
 
 from game import Game
 
+
 def append_to_output_stream(astring):
     """
     append string to Game.output_stream
@@ -14,4 +15,4 @@ def append_to_output_stream(astring):
     Game.output_stream += astring
 
     # debugging TODO
-    print("OS",Game.output_stream, Game.output_chess_move)
+    print("OS", Game.output_stream, Game.output_chess_move)
