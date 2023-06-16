@@ -6,6 +6,7 @@ https://github.com/xsanon/chess/blob/main/src/piece.py
 
 import constants
 
+
 class Piece():
     """
     A class to represent a piece in chess
