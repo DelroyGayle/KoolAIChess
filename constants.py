@@ -136,7 +136,7 @@ en_passant_pattern = re.compile(r"\A(e\.p\.[ \n]*)+")
 nag_pattern = re.compile(r"\A\$[0-9]+")
 parens_pattern = re.compile(r"[()]")
 periods_pattern = re.compile(r"\A[.]+")
-move_number_pattern = re.compile(r"\A[0-9]+[. ]*")
+move_number_pattern = re.compile(r"\A([0-9]+)[. ]*")
 move_number_suffix_pattern = re.compile(r"\A[.][ \n]*")
 game_termination_pattern = re.compile(r"\A((1-0)|(0-1)|(1/2-1/2)|[*])")
 

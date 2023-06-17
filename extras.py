@@ -165,7 +165,7 @@ def handle_player_move_from_keyboard(chess):
         print("Files should be a letter from a to h")
         print("Ranks should be a number from 1 to 8")
         print("\nEnter O-O for Queenside Castling; enter O-O-O for Kingside Castling")
-        print("Enter R to Resign")
+        print("Enter r to Resign")
         do_next = "continue"
 
     return (do_next, lower_string)

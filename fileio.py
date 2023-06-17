@@ -122,7 +122,7 @@ def open_input_file():
         # TODO DG
         print(100)
         # ABC
-        Game.input_stream = "e.p. e.p.2{Testing Various Annotations} ((ABC)) e.p."
+        Game.input_stream = "1. {One Chess move} e4"
 
         Game.reading_game_file = True
         return
@@ -301,7 +301,7 @@ def triple_tuple(matched):
     Game.general_string_result = matched.group(0)
 
     #                                PIECE
-    Game.chess_move_tuple = tuple(matched.group(1),
+    Game.chess_move_tuple =      (matched.group(1),
                                   #  FROM
                                   matched.group(2),
                                   #  TO
@@ -319,7 +319,7 @@ def double_tuple(matched):
 
     Game.general_string_result = matched.group(0)
     #                             PIECE            FROM TO
-    Game.chess_move_tuple = tuple(matched.group(1), "", matched.group(2))
+    Game.chess_move_tuple = (matched.group(1), "", matched.group(2))
     handle_move_suffix(matched)
 
 
@@ -551,9 +551,7 @@ def parse_move_text():
                                + Game.input_stream[0:10])
             return False
 
-        input(f">{Game.input_stream}<")
         # Otherwise
-        input(f">{Game.input_stream}<")
         return parse_chess_move()
 
     # Therefore Game.whose_move is == constants.PLAYER
@@ -567,6 +565,7 @@ def parse_move_text():
 
     input(f">{Game.input_stream}<")
     # Move Number expected EG '4.' I will allow periods to be optional
+    #                   r"\A([0-9]+)[. ]*"
     matched = constants.move_number_pattern.match(Game.input_stream)
     if not matched:
         expected_move_number_not_found()
@@ -575,7 +574,7 @@ def parse_move_text():
     # Determine the move number that was read by conversion
 
     try:
-        move_number = int(matched.group(0))
+        move_number = int(matched.group(1))
     except ValueError:
         expected_move_number_not_found()
         return False
@@ -613,7 +612,6 @@ def parse_move_text():
 
 
 def find_the_match(chess, all_matched_list,
-                   from_file, from_rank,
                    to_file, to_rank):
     """
     Go through each filtered square
@@ -673,29 +671,30 @@ def find_the_match(chess, all_matched_list,
 
 def determine_the_move(chess, piece, to_square):
     """
-    Using 'piece' and 'to_square' to determine what the 'from' square is
+    Use 'piece' and 'to_square' to determine what the 'from' square is
     """
 
     to_file = to_square[0]
     to_rank = to_square[1]
 
+    print(101,piece, to_square)
     # Filter all the squares where both the colour and the piece match
     all_matched_list = [index for index in constants.PRESET_CHESSBOARD
                         if chess.piece_sign(index) == Game.global_piece_sign
                         and chess.piece_letter(index) == piece]
 
+    print(102, all_matched_list)
     # Go through each filtered square,
     # generated all the moves for the piece on a filtered square
     # and find the move with the matching 'target' destination
 
     return find_the_match(chess, all_matched_list,
-                          from_file, from_rank,
                           to_file, to_rank)
 
 
 def determine_the_capture_by_file(chess, piece, from_file, to_square):
     """
-    Using 'piece', 'from_file' and 'to_square'
+    Use 'piece', 'from_file' and 'to_square'
     to determine what the 'from' rank is
     """
 
@@ -714,13 +713,12 @@ def determine_the_capture_by_file(chess, piece, from_file, to_square):
     # and find the move with the matching 'target' destination
 
     return find_the_match(chess, all_matched_list,
-                          from_file, from_rank,
                           to_file, to_rank)
 
 
 def determine_the_capture_by_rank(chess, piece, from_rank, to_square):
     """
-    Using 'piece', 'from_rank' and 'to_square'
+    Use 'piece', 'from_rank' and 'to_square'
     to determine what the 'from' file is
     """
 
@@ -739,14 +737,13 @@ def determine_the_capture_by_rank(chess, piece, from_rank, to_square):
     # and find the move with the matching 'target' destination
 
     return find_the_match(chess, all_matched_list,
-                          from_file, from_rank,
                           to_file, to_rank)
 
 
 def determine_the_capture_by_both_squares(chess,
                                           piece, from_square, to_square):
     """
-    Using 'piece', 'from_square' and 'to_square'
+    Use 'piece', 'from_square' and 'to_square'
     Check that the move is possible for this piece
     """
 
@@ -760,7 +757,6 @@ def determine_the_capture_by_both_squares(chess,
         # and find the move with the matching 'target' destination
 
         return find_the_match(chess, all_matched_list,
-                              from_file, from_rank,
                               to_file, to_rank)
 
     return  # Failure

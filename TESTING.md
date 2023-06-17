@@ -219,17 +219,36 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 
         So, all that is parsed is the move number **1** followed by a comment i.e. null input, which in turn, is ignored. 
     
-1. **Test a) re. Move Numbers** - The PGN file should have consecutive numbered pairs of chess moves **beginning with 1**.<p>
+1. **Test Move Numbers** - The PGN file should have consecutive numbered pairs of chess moves **starting with Number 1**.<p>
     * *Method Used*
         
         I set *input.pgn* contents to have various annotations:<br>
-        * "e.p. e.p.**2**{Testing Various Annotations} ((ABC)) e.p."<p>
+        * "e.p. e.p.**2.**{Testing Various Annotations} ((ABC)) e.p."<p>
     
     * *The Output*
         
-Expected Move Number 1. Instead: 2{Testing
-There will be no further input from 'input.pgn'
+        Expected Move Number 1. **Instead: 2.**{Testing
+        There will be no further input from 'input.pgn'
 
+    * *Solution*
+
+        The PGN file must start with *White's move numbered 1.* 
+    
+1. **Test Move Numbers, Comments and Moves** - Test one line of movetext with all three elements.<p>
+    Move numbers should be an integer followed by (optionally) a period. Then there should be a **chess move** and optionally, annotations as well. All annotations are to be ignored except for **Game Termination Markers**
+    * *Method Used*
+        
+        I set *input.pgn* contents to have all three elements as follows:<br>
+        * "1. {One Chess move} e4"<p>
+    
+    * *The Output*
+        
+        Expected Move Number 1. **Instead: 2.**{Testing
+        There will be no further input from 'input.pgn'
+
+    * *Solution*
+
+        The PGN file must start with *White's move numbered 1.* 
 1. **Test** - Empty file should be ignored. Instead prompt user for input.
 Used various strings that are interpreted as comments in SAN
     * *Method Used*
