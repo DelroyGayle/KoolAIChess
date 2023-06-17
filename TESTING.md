@@ -223,7 +223,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     * *Method Used*
         
         I set *input.pgn* contents to have various annotations:<br>
-        * "e.p. e.p.1{Testing Various Annotations} ((ABC)) e.p."<p>
+        * "e.p. e.p.**2**{Testing Various Annotations} ((ABC)) e.p."<p>
     
     * *The Output*
         
