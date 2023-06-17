@@ -46,7 +46,7 @@ def ignore_group_comment(open_char, close_char):
     """
 
     position = Game.input_stream.find(close_char)
-    if not position:
+    if position < 0:
         astring = ("Found " + open_char + " however cannot determine where "
                    + close_char + " ends")
         e.input_status_message(astring)
@@ -64,7 +64,7 @@ def ignore_rav():
     """
 
     LPAREN = "("
-    count = 1  # Found the first parenthesis
+    count = 1  # Already found the first parenthesis
     position = 1  # So start the search to the right of it
     print(Game.input_stream[0:],0)
     print(Game.input_stream[1:],1)
@@ -76,20 +76,22 @@ def ignore_rav():
 
         elif matched.group(0) == LPAREN:
             count += 1
-            position += 1
+            position = matched.end(0)
             continue
 
         else:  # must be the right parenthesis
             count -= 1
             if count == 0:
                 # Found the matching RAV ( ... ) - remove it
-                Game.input_stream = Game.input_stream[matched.end(0) + 1:]
+                Game.input_stream = Game.input_stream[matched.end(0):]
                 return True
 
-            position += 1
+            position = matched.end(0)
             continue
 
     # No closing parenthesis found
+    e.input_status_message("Cannot determine where this RAV closes: "
+                           + Game.input_stream[0:20])
     return False
 
 
@@ -121,8 +123,9 @@ def open_input_file():
         # Game.input_stream already set to ""
         # TODO DG
         print(100)
-        Game.input_stream = ";ABCDEF;\n"
-        # Game.input_stream = ";ABC;DEF;\n{comments}((RAV COMMENT)TESTING)"
+        # ABC
+        Game.input_stream = "{Testing NAGs} ${OK?}"
+   
         Game.reading_game_file = True
         return
 
@@ -173,7 +176,7 @@ def regexp_loop():
         if matched:
             # The length is either 1 or 2 -
             # the correct starting position for the 'find'
-            position = Game.input_stream.find("\n", length(matched.group(0)))
+            position = Game.input_stream.find("\n", len(matched.group(0)))
             if position < 0:  # No \n found - therefore remove entire contents
                 Game.input_stream = ""
                 continue
@@ -254,10 +257,10 @@ def regexp_loop():
             # with a non-negative decimal integer suffix
 
             # r"\A\$[0-9]+"
-            matched = constants.percent_pattern.match(Game.input_stream)
+            matched = constants.nag_pattern.match(Game.input_stream)
             if matched:
                 # Ignore $nnn
-                Game.input_stream = Game.input_stream[len(matched.group(0)):]
+                Game.input_stream = Game.input_stream[matched.end(0):]
                 continue
 
             e.input_status_message("Cannot determine this NAG: "
@@ -281,7 +284,7 @@ def handle_move_suffix(matched):
     Therefore ignore suffix text such as =Q+
     """
 
-    Game.input_stream = Game.input_stream[len(matched.group(0)):]
+    Game.input_stream = Game.input_stream[matched.end(0):]
     # r"\A[A-Za-z0-9+#=:\-]*"
     Game.input_stream = constants.chess_move_suffix_pattern.sub(
                                                             "",
@@ -487,7 +490,7 @@ def parse_chess_move():
         Game.move_type = constants.CASTLING_MOVE
         Game.general_string_result = matched.group(0)
         handle_move_suffix(matched)
-        print("OO>", Game.general_string_result, position, length)  # todo
+        print("OO>", Game.general_string_result, matched.group(0), len(matched.group(0)))  # todo
         return True  # Indicate success
 
 # Unknown Chess Move

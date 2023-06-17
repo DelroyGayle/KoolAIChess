@@ -31,6 +31,7 @@ class Game:
     new_to_file = ""
     new_to_rank = ""
 
+    # REMOVE?? TODO
     # todo check_flag
     # True means that one is currently in Check
     check_flag = False
