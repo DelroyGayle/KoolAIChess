@@ -63,8 +63,11 @@ def ignore_rav():
     Note: the parentheses can be nested
     """
 
+    LPAREN = "("
     count = 1  # Found the first parenthesis
     position = 1  # So start the search to the right of it
+    print(Game.input_stream[0:],0)
+    print(Game.input_stream[1:],1)
     while True:
         # r"[()]"
         matched = constants.parens_pattern.search(Game.input_stream, position)
@@ -99,12 +102,6 @@ def open_input_file():
     or the file is empty,
     Set file_contents and input_stream to ""
     """
-    LPAREN = "("
-    RPAREN = ")"
-    LBRACKET = "["
-    RBRACKET = "]"
-    OA_BRACKET = "<"  # open angled bracket
-    CA_BRACKET = ">"  # close angled bracket
 
     Game.input_stream = ""
 
@@ -118,20 +115,14 @@ def open_input_file():
     except IOError:
         file_contents = ""
 
-    if len(file_contents) > constants.FILE_SIZE_LIMIT or True:
-        e.input_status_message(("Input file too big - larger than "
-                               "{} characters")
-                               .format(constants.FILE_SIZE_LIMIT))
-        sleep(5)
-        return
-
     if len(file_contents) == 0:
         # Empty file
         Game.reading_game_file = False
         # Game.input_stream already set to ""
         # TODO DG
         print(100)
-        Game.input_stream = ";;"
+        Game.input_stream = ";ABCDEF;\n"
+        # Game.input_stream = ";ABC;DEF;\n{comments}((RAV COMMENT)TESTING)"
         Game.reading_game_file = True
         return
 
@@ -139,6 +130,7 @@ def open_input_file():
         e.input_status_message(("Input file too big - larger than "
                                "{} characters")
                                .format(constants.FILE_SIZE_LIMIT))
+        sleep(5)
         return
 
     Game.input_stream = cleanup_input_stream(file_contents)
@@ -155,6 +147,12 @@ def regexp_loop():
     This will loop until a potential chess move string is found
     or end of string
     """
+
+    LPAREN = "("
+    LBRACE = "{"
+    RBRACE = "}"
+    OA_BRACKET = "<"  # open angled bracket
+    CA_BRACKET = ">"  # close angled bracket
 
     while True:
 
@@ -234,7 +232,7 @@ def regexp_loop():
             else:
                 continue
 
-        elif firstchar == constants.LPAREN:  # I.E. LEFT PARENTHESIS
+        elif firstchar == LPAREN:  # I.E. LEFT PARENTHESIS
             # An RAV (Recursive Annotation Variation)
             # is a sequence of movetext containing
             # one or more moves enclosed in parentheses.
@@ -593,7 +591,9 @@ def parse_move_text():
 
     # Handle any comments
     # If empty don't continue
-    if Game.input_stream == "" or not regexp_loop():
+    # Note: the order of this 'or' expression is significant
+    # Call regexp_loop first!
+    if not regexp_loop() or Game.input_stream == "":
         return False
 
     # is it "1-0" (White wins), "0-1" (Black wins),
@@ -881,7 +881,9 @@ def fetch_chess_move_from_file(chess):
     """
     Read a chess move from the input file stream and parse it
     """
-    if Game.input_stream == "" or not regexp_loop():
+    # Note: the order of this 'or' expression is significant
+    # Call regexp_loop first!
+    if not regexp_loop() or Game.input_stream == "":
         # Empty or Erroneous input
         return
 
