@@ -556,7 +556,7 @@ def parse_move_text():
 
     # Therefore Game.whose_move is == constants.PLAYER
     # Increment the Move Counter
-    global_piece_sign = constants.PLAYER
+    Game.global_piece_sign = constants.PLAYER
     Game.move_count += 1
     Game.move_count_incremented = True
 
@@ -612,7 +612,7 @@ def parse_move_text():
 
 
 def find_the_match(chess, all_matched_list,
-                   to_file, to_rank):
+                   to_file, to_rank, piece):
     """
     Go through each filtered square
     Regarding the piece on the square
@@ -625,10 +625,10 @@ def find_the_match(chess, all_matched_list,
     for index in all_matched_list:
         from_file = index[0]
         from_rank = index[1]
-        all_the_moves = movelist(chess, from_file, from_rank,
-                                 Game.global_piece_sign, False)
+        all_the_moves = e.movelist(chess, from_file, from_rank,
+                                   Game.global_piece_sign, False)
 
-        for m in all_the_moves:
+        for m in range(len(all_the_moves)):
             target_file = all_the_moves[m][0]
             target_rank = all_the_moves[m][1]
             if target_file == to_file and target_rank == to_rank:
@@ -665,7 +665,7 @@ def find_the_match(chess, all_matched_list,
         Game.output_chess_move = piece
 
     Game.output_chess_move += found_target
-    print("OCM", output_chess_move)  # todo
+    print("OCM", Game.output_chess_move)  # todo
     return  # Success
 
 
@@ -689,7 +689,7 @@ def determine_the_move(chess, piece, to_square):
     # and find the move with the matching 'target' destination
 
     return find_the_match(chess, all_matched_list,
-                          to_file, to_rank)
+                          to_file, to_rank, piece)
 
 
 def determine_the_capture_by_file(chess, piece, from_file, to_square):
@@ -713,7 +713,7 @@ def determine_the_capture_by_file(chess, piece, from_file, to_square):
     # and find the move with the matching 'target' destination
 
     return find_the_match(chess, all_matched_list,
-                          to_file, to_rank)
+                          to_file, to_rank, piece)
 
 
 def determine_the_capture_by_rank(chess, piece, from_rank, to_square):
@@ -737,7 +737,7 @@ def determine_the_capture_by_rank(chess, piece, from_rank, to_square):
     # and find the move with the matching 'target' destination
 
     return find_the_match(chess, all_matched_list,
-                          to_file, to_rank)
+                          to_file, to_rank, piece)
 
 
 def determine_the_capture_by_both_squares(chess,
@@ -747,7 +747,7 @@ def determine_the_capture_by_both_squares(chess,
     Check that the move is possible for this piece
     """
 
-    if (chess.piece_sign(from_square) == global_piece_sign
+    if (chess.piece_sign(from_square) == Game.global_piece_sign
        and chess.piece_letter(from_square) == piece):
         to_file = to_square[0]
         to_rank = to_square[1]
@@ -757,7 +757,7 @@ def determine_the_capture_by_both_squares(chess,
         # and find the move with the matching 'target' destination
 
         return find_the_match(chess, all_matched_list,
-                              to_file, to_rank)
+                              to_file, to_rank, piece)
 
     return  # Failure
 

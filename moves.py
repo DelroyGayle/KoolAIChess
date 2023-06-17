@@ -177,7 +177,7 @@ def record_if_king_or_rook_has_moved(chess, who_are_you,
         self.board["a8"].queenside = True
         self.board["a1"].queenside = True
     """
-    print("CAME IN R" + previous_rank + "C" + previous_file + "CR" + current_rank + "CC" + current_file)
+    print("CAME IN R " + previous_rank + "C " + previous_file + "CR " + current_rank + "CC " + current_file)
     print("WHO", who_are_you, "KING?", chess.piece_value(current_file, current_rank), 
         "ROOK?", chess.piece_value(current_file, current_rank))
     # todo
