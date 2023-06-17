@@ -132,7 +132,7 @@ SLEEP_VALUE = 2  # Pause 2 seconds
 
 # Regular Expressions
 percent_pattern = re.compile(r"(\A%)|(\n%)")
-en_passant_pattern = re.compile(r"\Ae\.p\.[ \n]*")
+en_passant_pattern = re.compile(r"\A(e\.p\.[ \n]*)+")
 nag_pattern = re.compile(r"\A\$[0-9]+")
 parens_pattern = re.compile(r"[()]")
 periods_pattern = re.compile(r"\A[.]+")

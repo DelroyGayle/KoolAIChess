@@ -196,17 +196,40 @@ Comments should always be ignored when parsing input.
         *There will be no further input from 'input.pgn'*<br>
         Then the user is prompted:<br>
         *YOUR MOVE (e.g. e2e4):*    
-    
-1. **Test - Empty File:** - Empty file should be ignored. Instead prompt user for input.
+
+        **Please Note: To save repetition**, in all the tests following:
+        1. The chessboard is always displayed
+        2. Followed by a relevant message regarding the failure of parsing a file input
+        3. Then the message: *There will be no further input from 'input.pgn'*
+        4. Followed by the user prompt, *YOUR MOVE (e.g. e2e4):*<p>
+1. **Test - Ignore e.p.** - Although not allowed according to the *PGN standard*,<br> sometimes the en passant move
+annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ignored.<br>
     * *Method Used*
         
-        I modified *open_input_file()* to make it think it had an empty file e.g.<br>
-         if len(file_contents) == 0 *or True*:<br>
-        **# The above if will always be True**
+        I set *input.pgn* contents to have various annotations:<br>
+        * "e.p. e.p.1{Testing Various Annotations} ((ABC)) e.p."<p>
+
     * *The Output*
         
-        Chessboard displayed with the prompt:<br>
-        *YOUR MOVE (e.g. e2e4):*    
+        The Chessboard is displayed followed by:<p>
+        ```
+        Finished reading all the moves from the input file
+        ```
+        etc.
+
+        So, all that is parsed is the move number **1** followed by a comment i.e. null input, which in turn, is ignored. 
+    
+1. **Test a) re. Move Numbers** - The PGN file should have consecutive numbered pairs of chess moves **beginning with 1**.<p>
+    * *Method Used*
+        
+        I set *input.pgn* contents to have various annotations:<br>
+        * "e.p. e.p.1{Testing Various Annotations} ((ABC)) e.p."<p>
+    
+    * *The Output*
+        
+Expected Move Number 1. Instead: 2{Testing
+There will be no further input from 'input.pgn'
+
 1. **Test** - Empty file should be ignored. Instead prompt user for input.
 Used various strings that are interpreted as comments in SAN
     * *Method Used*

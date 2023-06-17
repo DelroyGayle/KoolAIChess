@@ -151,7 +151,7 @@ def handle_player_move_from_keyboard(chess):
 
     # General User Input Validation
     if input_string == "":
-        chess.display("Null Input! Enter 'R' to Resign")
+        chess.display("Null Input! Enter R to Resign")
         do_next = "continue"
         return (do_next, None)
 
@@ -164,6 +164,8 @@ def handle_player_move_from_keyboard(chess):
         print("Format of Chess moves ought to be 4 characters e.g. e2e4")
         print("Files should be a letter from a to h")
         print("Ranks should be a number from 1 to 8")
+        print("\nEnter O-O for Queenside Castling; enter O-O-O for Kingside Castling")
+        print("Enter R to Resign")
         do_next = "continue"
 
     return (do_next, lower_string)

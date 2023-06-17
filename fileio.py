@@ -66,10 +66,8 @@ def ignore_rav():
     LPAREN = "("
     count = 1  # Already found the first parenthesis
     position = 1  # So start the search to the right of it
-    print(Game.input_stream[0:],0)
-    print(Game.input_stream[1:],1)
     while True:
-        # r"[()]"
+        #                   r"[()]"
         matched = constants.parens_pattern.search(Game.input_stream, position)
         if not matched:
             break
@@ -124,8 +122,8 @@ def open_input_file():
         # TODO DG
         print(100)
         # ABC
-        Game.input_stream = "{Testing NAGs} ${OK?}"
-   
+        Game.input_stream = "e.p. e.p.2{Testing Various Annotations} ((ABC)) e.p."
+
         Game.reading_game_file = True
         return
 
@@ -171,7 +169,7 @@ def regexp_loop():
         # in the first column of a line;
         # the data on the rest of the line is ignored up to the next \n
 
-        # r"(\A%)|(\n%)"
+        #                   r"(\A%)|(\n%)"
         matched = constants.percent_pattern.match(Game.input_stream)
         if matched:
             # The length is either 1 or 2 -
@@ -181,23 +179,24 @@ def regexp_loop():
                 Game.input_stream = ""
                 continue
 
-# Remove everything up to and including the \n
+        # Remove everything up to and including the \n
             Game.input_stream = Game.input_stream[position + 1:]
             continue
 
-# Remove any leading whitespace i.e. including \n
+        # Remove any leading whitespace i.e. including \n
         Game.input_stream = Game.input_stream.lstrip(" \n\t")
+
+        # Just in case any found - remove an 'en passant' annotation,
+        # that is 'e.p.'
+        #                             r"\A(e\.p\.[ \n]*)+"
+        Game.input_stream = constants.en_passant_pattern.sub("",
+                                                             Game.input_stream,
+                                                             count=1)
+
         if len(Game.input_stream) == 0:
             e.input_status_message("Finished reading "
                                    "all the moves from the input file")
             return True
-
-        # Just in case any found - remove an 'en passant' annotation,
-        # that is 'e.p.'
-        # r"\Ae\.p\.[ \n]*"
-        Game.input_stream = constants.en_passant_pattern.sub("",
-                                                             Game.input_stream,
-                                                             count=1)
 
         firstchar = Game.input_stream[0:1]
 
@@ -256,7 +255,7 @@ def regexp_loop():
             # An NAG is formed from a dollar sign ("$")
             # with a non-negative decimal integer suffix
 
-            # r"\A\$[0-9]+"
+            #                   r"\A\$[0-9]+"
             matched = constants.nag_pattern.match(Game.input_stream)
             if matched:
                 # Ignore $nnn
@@ -285,7 +284,7 @@ def handle_move_suffix(matched):
     """
 
     Game.input_stream = Game.input_stream[matched.end(0):]
-    # r"\A[A-Za-z0-9+#=:\-]*"
+    #                             r"\A[A-Za-z0-9+#=:\-]*"
     Game.input_stream = constants.chess_move_suffix_pattern.sub(
                                                             "",
                                                             Game.input_stream,
@@ -352,7 +351,7 @@ def parse_chess_move():
     tuple format: (the piece, the source square, the destination square)
     """
 
-    # r"\A([KQRBN]?)([a-h][1-8])([a-h][1-8])
+    #                   r"\A([KQRBN]?)([a-h][1-8])([a-h][1-8])
     matched = constants.long_notation_pattern.match(Game.input_stream)
     if matched:
         # That is, the piece, the source square, the destination square
@@ -371,7 +370,7 @@ def parse_chess_move():
     tuple format: (the piece, the source square, the destination square)
     """
 
-    # r"\A([KQRBN]?)([a-h][1-8])x([a-h][1-8])"
+    #                   r"\A([KQRBN]?)([a-h][1-8])x([a-h][1-8])"
     matched = constants.capture_2squares_pattern.match(Game.input_stream)
     if matched:
         # That is, the piece, the source square, the destination square
@@ -389,7 +388,7 @@ def parse_chess_move():
     tuple format: (the piece optional , the destination square)
     """
 
-    # r"\A([KQRBN]?)([a-h][1-8])"
+    #                   r"\A([KQRBN]?)([a-h][1-8])"
     matched = constants.one_square_pattern.match(Game.input_stream)
     if matched:
         # That is, just piece and the destination square only
@@ -407,7 +406,7 @@ def parse_chess_move():
     tuple format: (the file , the destination square)
     """
 
-    # r"\A([a-h])x?([a-h][1-8])"
+    #                   r"\A([a-h])x?([a-h][1-8])"
     matched = constants.pawn_capture_pattern.match(Game.input_stream)
     if matched:
         # That is, just the file and the destination square only
@@ -424,7 +423,7 @@ def parse_chess_move():
     tuple format: (the piece, the destination square)
     """
 
-    # r"\A([KQRBN])x([a-h][1-8])"
+    #                   r"\A([KQRBN])x([a-h][1-8])"
     matched = constants.nonpawn_capture_pattern.match(Game.input_stream)
     if matched:
         # That is, the piece and the destination square
@@ -446,7 +445,7 @@ def parse_chess_move():
     tuple format: (the piece, the file, the destination square)
     """
 
-    # r"\A([KQRBN])([a-h])x?([a-h][1-8])
+    #                   r"\A([KQRBN])([a-h])x?([a-h][1-8])
     matched = constants.file_pattern.match(Game.input_stream)
     if matched:
         # That is, the piece, the file and the destination square
@@ -467,7 +466,7 @@ def parse_chess_move():
     tuple format: (the piece, the rank, the destination square)
     """
 
-    # r"\A([KQRBN])([1-8])x?([a-h][1-8])
+    #                   r"\A([KQRBN])([1-8])x?([a-h][1-8])
     matched = constants.rank_pattern.match(Game.input_stream)
     if matched:
         # That is, the piece, the rank and the destination square
@@ -484,8 +483,8 @@ def parse_chess_move():
     in order to later convert 0-0-0 to O-O-O or 0-0 to O-O
     """
 
-    # r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))"
-    matched = constants.castling_inputfile_pattern(Game.input_stream)
+    #                   r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))"
+    matched = constants.castling_inputfile_pattern.match(Game.input_stream)
     if matched:
         Game.move_type = constants.CASTLING_MOVE
         Game.general_string_result = matched.group(0)
@@ -494,7 +493,7 @@ def parse_chess_move():
         return True  # Indicate success
 
 # Unknown Chess Move
-    e.input_status_message(constants.BAD_CHESS_MOVE_FROM_FILE
+    e.input_status_message(constants.BAD_CHESS_MOVE_FROMFILE
                            + Game.input_stream[0:20])
     return False  # Indicate failure
 
@@ -507,8 +506,8 @@ def check_game_termination_marker_found():
     """
 
     result = False
-    # r"\A((1-0)|(0-1)|(1/2-1/2)|[*])"'
-    matched = constants.move_number_pattern.match(Game.input_stream)
+    #                   r"\A((1-0)|(0-1)|(1/2-1/2)|[*])"'
+    matched = constants.game_termination_pattern.match(Game.input_stream)
     if matched:
         # Reached the Indicator regarding the Result and the End of the Game
         e.input_status_message(
@@ -537,13 +536,14 @@ def parse_move_text():
     (the piece optional, the destination square)
     The result is placed in Game.general_string_result
     TODO
+    todo - test ...
     """
 
     if Game.whose_move == constants.COMPUTER:
         Game.global_piece_sign = constants.COMPUTER
         # For parsing a Computer's move, check that
         # it is not a string of periods e.g. ...
-        # r"\A[.]+"
+        #                   r"\A[.]+"
         matched = constants.periods_pattern.match(Game.input_stream)
         if matched:
             e.input_status_message(
@@ -551,7 +551,9 @@ def parse_move_text():
                                + Game.input_stream[0:10])
             return False
 
+        input(f">{Game.input_stream}<")
         # Otherwise
+        input(f">{Game.input_stream}<")
         return parse_chess_move()
 
     # Therefore Game.whose_move is == constants.PLAYER
@@ -563,16 +565,17 @@ def parse_move_text():
     # Output the Move Number
     e.append_to_output_stream(str(Game.move_count) + "." + constants.SPACE)
 
+    input(f">{Game.input_stream}<")
     # Move Number expected EG '4.' I will allow periods to be optional
     matched = constants.move_number_pattern.match(Game.input_stream)
     if not matched:
         expected_move_number_not_found()
         return False
-
+    input(f">afternum{Game.input_stream}<")
     # Determine the move number that was read by conversion
 
     try:
-        move_number = int(matched(0))
+        move_number = int(matched.group(0))
     except ValueError:
         expected_move_number_not_found()
         return False
@@ -585,8 +588,9 @@ def parse_move_text():
 
     # Skip the move number and determine the Chess Move
     # That is, parse any periods and whitespace; then parse the Chess Move
+    Game.input_stream = Game.input_stream[matched.end(0):]
 
-    # r"\A[.][ \n]*"
+    #                             r"\A[.][ \n]*"
     Game.input_stream = constants.move_number_suffix_pattern.sub(
                                                 "",
                                                 Game.input_stream,
@@ -645,7 +649,7 @@ def find_the_match(chess, all_matched_list,
         has been read in from the input file
         The erroneous text/input is in Game.general_string_result
         """
-        e.input_status_message(constants.BAD_CHESS_MOVE_FROM_FILE
+        e.input_status_message(constants.BAD_CHESS_MOVE_FROMFILE
                                + inputstream_previous_contents)
         return  # Failure
 
