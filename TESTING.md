@@ -14,10 +14,10 @@ I am a novice chess player. I simply do not know enough chess to ensure that my 
 Therefore, if there is a **input.pgn** in the KOOLAICHESS directory: 
 * the program will first open this file,
 * parse it contents, 
-* and then **play the Chess moves as found in this file 
-* *as if** both a human user and the computer were playing both *White and Black* moves.**
+* and then **play the Chess moves as found in this file**
+* ***as if* both a human player and the computer were playing both *White and Black* moves.**
 
-Therefore, essentially *Chess-Playing Automation!*<br> 
+Therefore, essentially ***Chess-Playing Automation!***<br> 
 
 * I would copy and paste the chess moves from a PGN file into *input.pgn*,
 * run the program, and watch it play each move, displaying the chessboard accordingly.
@@ -26,15 +26,15 @@ Therefore, essentially *Chess-Playing Automation!*<br>
 * Any pieces taken, the progarm ought to take the same pieces.
 * All moves, including *Castling and En Passant*; should be followed in identical fashion. 
 
-The program will read as many chess moves it can find in *input.pgn*.
-When it reaches the end of the file, it will display a suitable message to inform the user that *any further player moves will now come from the user*; likewise, computer moves would be indeed evaluated by the computer according to its algorithm.
+The program will read as many chess moves as present in *input.pgn*.
+When it reaches the end of the file, it will display a suitable message to inform the user that<br>*any further player moves will now come from the user*; likewise, the computer moves would be hereafter evaluated by the computer according to its algorithm.
 
 ## Remove pgn file when deploying
 If there is *no input.pgn file* the program will simply expect keyboard input from the user.<br>
-Therefore, they ought to be *no file I/O* in the deployed version of this project.<br>
-That is, before deployment, remove *input.pgn* from the project.
+There ought to be *no file I/O* in the deployed version of this project.<br>
+That is, before deployment, remove *input.pgn* from the project. This ensures that the program's logic expects all input to be from the user keyboard.
 
-## PGN Notation
+## Portable Game Notation (PGN) Notation
 Portable Game Notation (PGN) is a standard plain text format for recording chess games (both the moves and related data), which can be read by humans and is also supported by most chess software.
 
 ## **Testing input.pgn** 
