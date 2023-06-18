@@ -725,7 +725,7 @@ def castling_move_is_valid(chess):
     # Output the chess move
     # The Chessboard and move has already been displayed
     # There is no 'attacking_piece_letter' nor 'taken' for Castling moves
-    finalise_player_move(chess)
+    finalise_player_move(chess, True)
 
 
 """
@@ -1052,7 +1052,7 @@ def handle_evaluated_castling_move(chess, computer_move_finalised):
     # The Evaluate Function generated a Castle Move! Perform it
     # Set up variables for Castling
     Game.move_type = constants.CASTLING_MOVE
-    Game.general_string.result = do_castle_move
+    Game.general_string.result = Game.evaluate_castle_move
     Game.evaluate_castle_move = ""  # reset
 
     just_performed_castling = perform_castling(chess, constants.COMPUTER)
@@ -1126,8 +1126,8 @@ def finalise_en_passant_move_from_inputfile(chess,
         # setup_output_chess_move_add_promotion(constants.PAWN_LETTER,
         #                               from_file, from_rank, to_file, to_rank,
         #                                   constants.PAWN_VALUE)
-        # TODO - REOVE ABOVE, TEST BELOW
-        finalise_player_move(from_file, from_rank, to_file, to_rank,
+        # TODO - REMOVE ABOVE, TEST BELOW
+        finalise_player_move(chess, False, from_file, from_rank, to_file, to_rank,
                              print_string, attacking_piece, taken)
         do_next = "return"
         return do_next
@@ -1161,7 +1161,8 @@ def handle_en_passant_from_keyboard(chess, from_file, from_rank,
         Game.message_printed = False  # reset flag
         if legal:
             Game.en_passant_status = constants.NOVALUE  # reset flag
-            finalise_player_move(from_file, from_rank, to_file, to_rank,
+            finalise_player_move(chess, False,
+                                 from_file, from_rank, to_file, to_rank,
                                  print_string, attacking_piece_letter, taken)
             do_next = "return"
             return do_next

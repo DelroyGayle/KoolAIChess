@@ -594,6 +594,8 @@ def finalise_computer_move(chess):
             # Rather, the Player has to resign!
 
     e.append_to_output_stream(Game.output_chess_move + constants.SPACE)
+    print("OS comp/app<", Game.output_stream, Game.output_chess_move) # TODO
+    print("CM",Game.output_chess_move)
     # keep this flag unset from now on; so that the move count is incremented
     Game.move_count_incremented = False
     print()
@@ -658,38 +660,41 @@ def process_computer_move(chess, from_file, from_rank, to_file, to_rank):
     return
 
 
-def finalise_player_move(chess,
+def finalise_player_move(chess, it_is_a_castling_move,
                          from_file=None, from_rank=None,
                          to_file=None, to_rank=None,
                          print_string="", attacking_piece_letter="",
                          taken=None):
     """
     Now that the Player's move has been performed
-    Increment the move count
+    Increment the move count (if not reading from a file)
+    Display the chess move to the Player
     Output the chess move to the output stream
     Determine whether the Computer is in Check
     If so, determine to see if the Player has won
     That is, is it Checkmate?
     """
 
-    # Increment Move Number
-    if not Game.move_count_incremented:
-        Game.move_count += 1
+    if not Game.reading_game_file:
+        # Increment Move Number
+        if not Game.move_count_incremented:
+            Game.move_count += 1
 
-    Game.move_count_incremented = False
-    # keep this flag unset from now on; so that the move count is incremented
+        # keep this flag unset from now on; so that the move count is incremented
+        Game.move_count_incremented = False
 
-    # Output the Move Number
-    e.append_to_output_stream(str(Game.move_count) + "." + constants.SPACE)
+        # Output the Move Number
+        e.append_to_output_stream(str(Game.move_count) + "." + constants.SPACE)
 
+    if not it_is_a_castling_move:
     # Convert the chess move in order to output it
     # Add a 'x' to the output chess move if a piece was taken
     # Add the promoted piece if a promotion took place
-    # Then output the piece to the output file
-    m.setup_output_chess_move_add_promotion(attacking_piece_letter,
-                                            from_file, from_rank,
-                                            to_file, to_rank, taken)
-
+    # (The above does not apply to the Castling move) 
+        m.setup_output_chess_move_add_promotion(attacking_piece_letter,
+                                                from_file, from_rank,
+                                                to_file, to_rank, taken)
+    # Then display the chess move to the Player
     if print_string:
         # Display the move
         chess.display(print_string)
@@ -710,6 +715,7 @@ def finalise_player_move(chess,
 
             Game.output_chess_move = m.add_checkmate_to_output(chess_move)
             print("Checkmate!! You Win!")
+            # Then output the chess move to the output file
             e.append_to_output_stream(Game.output_chess_move + constants.SPACE)
 # todo            output_all_chess_moves(constants.PLAYER_WON)
 # todo
@@ -717,6 +723,9 @@ def finalise_player_move(chess,
             e.goodbye()
             # Checkmate!
             # *** END PROGRAM ***
+
+    # Then output the chess move to the output stream
+    e.append_to_output_stream(Game.output_chess_move + constants.SPACE)
 
 
 def handle_castling_input(chess, input_string):
@@ -746,7 +755,7 @@ def handle_castling_input(chess, input_string):
         return do_next
 
     # The Castling move was valid!
-    castling_move_is_valid(chess)
+    m.castling_move_is_valid(chess)
     do_next = "return"
     return do_next
 
@@ -909,7 +918,8 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         # Determine whether the Computer is in Check
         # Convert player's chess move for output
         # Output the chess move
-        finalise_player_move(chess, from_file, from_rank, to_file, to_rank,
+        finalise_player_move(chess, False,
+                             from_file, from_rank, to_file, to_rank,
                              print_string, attacking_piece_letter, taken)
 
         # Valid move has been played - show the updated board
@@ -919,7 +929,8 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         # can see the description of the move that the Player chose
         sleep(constants.SLEEP_VALUE)
         # Inform Player that Kool AI is thinking!
-        print("I am evaluating my next move...")
+        if not Game.reading_game_file:
+            print("I am evaluating my next move...")
         return
 
 

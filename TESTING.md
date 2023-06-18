@@ -234,7 +234,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 
         The PGN file must start with *White's move numbered 1.* 
     
-1. **Test Move Numbers, Comments and Moves** - Test one line of movetext with all three elements.<p>
+1. **Test One Move: Move Number, Comment and Move** - Test one line of movetext with all three elements.<p>
     Move numbers should be an integer followed by (optionally) a period. Then there should be a **chess move** and optionally, annotations as well. All annotations are to be ignored except for **Game Termination Markers**
     * *Method Used*
         
@@ -242,13 +242,57 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
         * "1. {One Chess move} e4"<p>
     
     * *The Output*
+    ```    
+    I am evaluating my next move...
+    Finished reading all the moves from the input file
+    There will be no further input from 'input.pgn'
+    ```
+    * Then a 3 second delay, in addition to the general *2 second delay, hence a total delay of 5 seconds*
+    * This gives the user,  plenty of time to see that *there is no longer any futher PGN file input*
+    * The Computer then displays the updated chessboard with its own move of 
+    * **Computer moves e7-e6 Piece: Pawn**
+
+    * *Summary*
+
+        1. The Computer successfully parsed all three elements: *the number 1, a comment, the move e4*
+        2. It converted e4 to *e2e4* then played White's move of *e2e4*
+        3. Updated the chessboard and displayed it with White's move
+        4. Then proceeded to fetch the next move from the input file.
+        5. No further input therefore the Computer evaluated its own move - in this case *e7e5*
+        6. Then played Black's move of *e7e5*
+        7. Updated the chessboard and displayed it with Black's move
+        8. Then prompted the Player for the next move; expecting all further moves to be from the keyboard<p>
+
+1. **Test Two Moves: Move Number, Comments and Move** - Test that it can play two moves from the input file<p>
+    The format is *move number, White's move, Black's move*
+    All annotations are to be ignored except for **Game Termination Markers**
+    * *Method Used*
         
-        Expected Move Number 1. **Instead: 2.**{Testing
-        There will be no further input from 'input.pgn'
+        I set *input.pgn* contents to have all three elements as follows:<br>
+        * "1. {First move} e4 (2nd move) h5"<p>
+    
+    * *The Output*
+    ```    
+    I am evaluating my next move...
+    Finished reading all the moves from the input file
+    There will be no further input from 'input.pgn'
+    ```
+    * Then a 3 second delay, in addition to the general *2 second delay, hence a total delay of 5 seconds*
+    * This gives the user,  plenty of time to see that *there is no longer any futher PGN file input*
+    * The Computer then displays the updated chessboard with its own move of 
+    * **Computer moves e7-e6 Piece: Pawn**
 
-    * *Solution*
+    * *Summary*
 
-        The PGN file must start with *White's move numbered 1.* 
+        1. The Computer successfully parsed all three elements: *the number 1, a comment, the move e4*
+        2. It converted e4 to *e2e4* then played White's move of *e2e4*
+        3. Updated the chessboard and displayed it with White's move
+        4. Then proceeded to fetch the next move from the input file.
+        5. No further input therefore the Computer evaluated its own move - in this case *e7e5*
+        6. Then played Black's move of *e7e5*
+        7. Updated the chessboard and displayed it with Black's move
+        8. Then prompted the Player for the next move; expecting all further moves to be from the keyboard<p>
+
 1. **Test** - Empty file should be ignored. Instead prompt user for input.
 Used various strings that are interpreted as comments in SAN
     * *Method Used*

@@ -123,6 +123,7 @@ def open_input_file():
         print(100)
         # ABC
         Game.input_stream = "1. {One Chess move} e4"
+        Game.input_stream = "1. {First move} e4 (2nd move) h5"
 
         Game.reading_game_file = True
         return
@@ -538,7 +539,8 @@ def parse_move_text():
     TODO
     todo - test ...
     """
-
+    print("TEST105", Game.whose_move)
+    input("106")
     if Game.whose_move == constants.COMPUTER:
         Game.global_piece_sign = constants.COMPUTER
         # For parsing a Computer's move, check that
@@ -562,7 +564,7 @@ def parse_move_text():
 
     # Output the Move Number
     e.append_to_output_stream(str(Game.move_count) + "." + constants.SPACE)
-
+    print("APPEND", str(Game.move_count) + "." + constants.SPACE)
     input(f">{Game.input_stream}<")
     # Move Number expected EG '4.' I will allow periods to be optional
     #                   r"\A([0-9]+)[. ]*"
@@ -858,6 +860,7 @@ def handle_move_text(chess):
 
     result = parse_move_text()
     # Alternate the players for the next time; that is, negate the sign
+    print(104, -Game.whose_move)
     Game.whose_move = -Game.whose_move
 
     # Was the parsing successful?
@@ -977,7 +980,7 @@ def handle_computer_move_from_inputfile(chess,
 
     fetch_chess_move_from_file(chess)
     print("FILE OK", Game.reading_game_file, Game.move_type,
-          do_castle_move, computer_move_finalised)  # TODO
+          Game.evaluate_castle_move)  # TODO
 
     # Was there a file input issue?
     # Appropriate error messaging has been displayed

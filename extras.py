@@ -12,7 +12,7 @@ Will place any other miscellaneous routines here
 import constants
 from game import Game
 import moves as m
-
+from time import sleep
 
 def advance_vertical(rank, steps):
     """
@@ -467,10 +467,12 @@ def append_to_output_stream(astring):
     """
     append string to Game.output_stream
     """
+    print("about to add",astring,"TO",Game.output_stream)    # TODO
     Game.output_stream += astring
-
+    input("ADDED")
+    
     # debugging TODO
-    print("OS", Game.output_stream, Game.output_chess_move)
+    print("OSap>", Game.output_stream, Game.output_chess_move)
 
 
 def output_message(message):
@@ -505,6 +507,9 @@ def input_status_message(message):
     print()
     # Reset Flag
     Game.reading_game_file = False
+
+    # There is the need for a further delay here
+    sleep(3)
 
 
 def is_error_from_input_file():
