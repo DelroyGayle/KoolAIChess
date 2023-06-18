@@ -311,20 +311,3 @@ Used various strings that are interpreted as comments in SAN
     *  *Solution Found:*
         *  .
 
-1. **Test** - 
-    * *Method Used*
-        * .
-    * *The Output*
-        * .
-    * *Issues Found*
-    * *Solution Found:*
-        * .
-1. **Test** - 
-    * *Method Used*
-        * .
-    * *The Output*
-        * .
-    * *Issues Found*
-    * *Solution Found*
-        * .
-        * 
