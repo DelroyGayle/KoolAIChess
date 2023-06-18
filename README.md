@@ -537,4 +537,4 @@ The project is deployed on Heroku. These are the steps in order to deploy on Her
 +  I would like to acknowledge the *Pythoneer* [X.S.](https://xsanon.medium.com/)
 +  X.S.'s article *[How to Code a Simple Chess Game in Python](https://medium.com/codex/how-to-code-a-simple-chess-game-in-python-9a9cb584f57)*
 +  X.S.'s *Pythonic* style of coding can be seen in the following [Chess Program](https://github.com/xsanon/chess).
-+ I would like to acknowledge Steven J. Edwards who designed and specified [Portable Game Notation](https://en.wikipedia.org/wiki/Portable_Game_Notation) in order to record chess games
++ I would like to acknowledge Steven J. Edwards who designed [Portable Game Notation](https://en.wikipedia.org/wiki/Portable_Game_Notation) in order to record chess games
