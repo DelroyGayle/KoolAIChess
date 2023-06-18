@@ -176,7 +176,7 @@ In this scenario, the Player entered the word, *hello*
 
 5. Trying to play an illegal move for a piece
 
-This is the general catchall response.
+This is the general *catchall* response.
 Kool AI's algorithm will examine the Player's move against all the possible moves for the chosen piece.
 If the Player's move does not appear in the list of all possible moves it will display **an Illegal Move** message.
 In such a scenario it would be up to the user to determine why such a move cannot be played.
@@ -231,9 +231,9 @@ Resignation immediately ends the game.<br>
 To resign, the Player has to enter **either R or r to resign.**
 Please note however:
 1.  Kool AI's algorithm will score each of **its own** potential moves before its play and if the score of a move is *too low, Kool AI* will resign.
-2.  Unfortunately, my program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the human user to end the game by *entering 'r' to resign*.
+2.  Unfortunately, the program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the human user to end the game by *entering 'r' to resign*.
 3. Also, I am a novice chess player. So in writing this program, there is the distinct possibility that my program may declare **Checkmate** against the human opponent when in fact, it is not!<br>(Personally, throughout my testing I have not come across such a scenario!)<br>
-Therefore, in considering the possibility of such a scenario; even after declaring **Checkmate**; I leave it up to the user to resign.<br>That is, my program does **not** force the end of the game - *the player can play on!*
+Therefore, in considering the possibility of such a scenario; even after declaring **Checkmate**; I leave it up to the user to resign.<br>That is, this program does **not** force the end of the game - *the player can play on!*
 ------
 
 ## Future Features
@@ -356,7 +356,7 @@ So instead of *global* variables I use *Class Variables* belonging to this Class
 #### 3. Class: CustomException(Exception)
 
 I have tested my program to the best of my ability however I am a novice Chess Player.
-So just in case my program does some absurd illegal move such as *trying to take a king or capturing a piece of its own colour*;<br>
+So just in case this program does some absurd illegal move such as *trying to take a king or capturing a piece of its own colour*;<br>
 I have added a Try-Except method to catch a Custom Exception which will be generated if some *strange* chess move occurs.<br>
 *Hopefully this will never happen! :)*
 
@@ -370,12 +370,12 @@ So I suggest an entire new function will need to be written if displaying the ch
 
 ## Modules
 
-This program was originally one file - *run.py*<br>As this project began to grow I realised that *run.py* was getting unwieldy.<br> 
+This program was originally one file - *run.py*<br>As this project began to grow I realised that *run.py* was getting unwieldy<br> 
 Therefore, I split it up into different modules:
 * **constants.py** - Holds all the major constants used in this program
 * **extras.py** - I moved the routines that manage how piece moves are generated - Pawn/Rook/Knight/Bishop/Queen/King - into this module<br>
 Also any routines that caused *import circular issues* with the Python interpreter are placed in extras.py
-* **fileio.py** - My program can *essentially perform Chess-Playing Automation* by playing chess moves read from a *input.pgn* file<br>
+* **fileio.py** - This program can *essentially perform Chess-Playing Automation* by playing chess moves read from a *input.pgn* file<br>
 All routines related to this process are placed in fileio.py<br>(see [TESTING.md](https://github.com/DelroyGayle/KoolAIChess/blob/main/TESTING.md) for more details)
 * **game.py** - The *Game Class* and its related routines
 * **moves.py** - The functionality for chess moves: *Castling and En Passant*
@@ -387,7 +387,7 @@ All routines related to this process are placed in fileio.py<br>(see [TESTING.md
 + Passed the code through the PEP8 linter and confirmed there are no problems.
 + Carried out tests of the program on both the local terminal and the Code Institute Heroku terminal.
 + Added functionality so that this program could read Chess moves from a [PGN](https://en.wikipedia.org/wiki/Portable_Game_Notation) file, namely, *input.pgn*.<br>
-My rationale is, that if my program can play *recorded chess games **identically*** then the chess-playing algorithm works correctly<br>.
+My rationale is, that if my program can play *recorded chess games **identically*** then the chess-playing algorithm works correctly.<br>
 See [TESTING.md](https://github.com/DelroyGayle/KoolAIChess/blob/main/TESTING.md) for further details.
 
 ### Internal Errors
