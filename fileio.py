@@ -10,6 +10,7 @@ import constants
 from game import Game
 import extras as e
 from time import sleep
+import re
 
 
 def cleanup_input_stream(in_string):
@@ -30,8 +31,8 @@ def cleanup_input_stream(in_string):
 # Replace any horizontal tabs with spaces
     work_string = work_string.replace(constants.TAB, constants.SPACE)
 
-# Trim and ensure there is an extra \n at the end, if not null
-    work_string = work_string.strip(work_string, " \n")
+# Trim the string of whitespace and ensure there is an extra \n at the end, if not null
+    work_string = work_string.strip()
     if work_string:
         return work_string + "\n"
 
@@ -119,13 +120,6 @@ def open_input_file():
         # Empty file
         Game.reading_game_file = False
         # Game.input_stream already set to ""
-        # TODO DG
-        print(100)
-        # ABC
-        Game.input_stream = "1. {One Chess move} e4"
-        Game.input_stream = "1. {First move} e4 (2nd move) h5"
-
-        Game.reading_game_file = True
         return
 
     if len(file_contents) > constants.FILE_SIZE_LIMIT:
@@ -158,7 +152,7 @@ def regexp_loop():
 
     while True:
 
-        # Remove any spaces
+        # Remove any leading whitespace
         Game.input_stream = Game.input_stream.lstrip()
         if len(Game.input_stream) == 0:
             e.input_status_message("Finished reading "
@@ -539,8 +533,7 @@ def parse_move_text():
     TODO
     todo - test ...
     """
-    print("TEST105", Game.whose_move)
-    input("106")
+
     if Game.whose_move == constants.COMPUTER:
         Game.global_piece_sign = constants.COMPUTER
         # For parsing a Computer's move, check that
@@ -564,17 +557,15 @@ def parse_move_text():
 
     # Output the Move Number
     e.append_to_output_stream(str(Game.move_count) + "." + constants.SPACE)
-    print("APPEND", str(Game.move_count) + "." + constants.SPACE)
-    input(f">{Game.input_stream}<")
+
     # Move Number expected EG '4.' I will allow periods to be optional
     #                   r"\A([0-9]+)[. ]*"
     matched = constants.move_number_pattern.match(Game.input_stream)
     if not matched:
         expected_move_number_not_found()
         return False
-    input(f">afternum{Game.input_stream}<")
-    # Determine the move number that was read by conversion
 
+    # Determine the move number that was read by conversion
     try:
         move_number = int(matched.group(1))
     except ValueError:
@@ -679,13 +670,11 @@ def determine_the_move(chess, piece, to_square):
     to_file = to_square[0]
     to_rank = to_square[1]
 
-    print(101,piece, to_square)
     # Filter all the squares where both the colour and the piece match
     all_matched_list = [index for index in constants.PRESET_CHESSBOARD
                         if chess.piece_sign(index) == Game.global_piece_sign
                         and chess.piece_letter(index) == piece]
 
-    print(102, all_matched_list)
     # Go through each filtered square,
     # generated all the moves for the piece on a filtered square
     # and find the move with the matching 'target' destination
@@ -860,7 +849,6 @@ def handle_move_text(chess):
 
     result = parse_move_text()
     # Alternate the players for the next time; that is, negate the sign
-    print(104, -Game.whose_move)
     Game.whose_move = -Game.whose_move
 
     # Was the parsing successful?
@@ -1003,7 +991,7 @@ def handle_computer_move_from_inputfile(chess,
             print("Computer from this point onwards "
                   "will now generate its own moves")
             print()
-            sleep(constants.SLEEP_VALUE)
+            sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
             return (False, from_file, from_rank, to_file, to_rank)
 
         else:

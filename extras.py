@@ -469,7 +469,6 @@ def append_to_output_stream(astring):
     """
     print("about to add",astring,"TO",Game.output_stream)    # TODO
     Game.output_stream += astring
-    input("ADDED")
     
     # debugging TODO
     print("OSap>", Game.output_stream, Game.output_chess_move)

@@ -7,7 +7,7 @@ Castling and En Passant
 import constants
 from game import Game
 from run import handle_internal_error
-from run import finalise_computer_move, finalise_player_move
+from run import finalise_computer_move, finalise_player_move, in_check
 import fileio as f
 from time import sleep
 
@@ -511,7 +511,7 @@ def check_castling_valid_part2(chess, who_are_you, which_castle_side,
     """
 
 # Check that the king is not currently in check
-    if incheck(who_are_you):
+    if in_check(chess, who_are_you):
         produce_error_message(constants.KING_IN_CHECK)
         return
 
@@ -540,7 +540,7 @@ def check_castling_valid_part2(chess, who_are_you, which_castle_side,
 
 # The king must not pass through a square
 # that is under attack by opponent pieces
-    if incheck(who_are_you):
+    if in_check(chess, who_are_you):
         produce_error_message(constants.THROUGH_CHECK)
         restore_original_positions(chess, the_king, the_rook,
                                    the_king_square, the_rook_square,
@@ -550,12 +550,11 @@ def check_castling_valid_part2(chess, who_are_you, which_castle_side,
 
 # Move the King again by one square
     new_king_file = move_king_one_square(chess, the_king, new_king_file,
-                                         king_rook_rank, king_rook_rank,
-                                         king_direction)
+                                         king_rook_rank, king_direction)
 
 # The king must not pass through a square
 # that is under attack by opponent pieces
-    if incheck(who_are_you):
+    if in_check(chess, who_are_you):
         produce_error_message(constants.THROUGH_CHECK)
         restore_original_positions(chess, the_king, the_rook,
                                    the_king_square, the_rook_square,
@@ -569,10 +568,10 @@ def check_castling_valid_part2(chess, who_are_you, which_castle_side,
     chess.board[new_rook_file + king_rook_rank] = the_rook
 
 # erase square of rook now vacated
-    chess.board[rook_file + king_rook_rank] = None
+    chess.board[the_rook_file + king_rook_rank] = None
 
 # The king must not end up in check
-    if incheck(who_are_you):
+    if in_check(chess, who_are_you):
         produce_error_message(constants.END_UP_IN_CHECK)
         restore_original_positions(chess, the_king, the_rook,
                                    the_king_square, the_rook_square,
@@ -582,7 +581,7 @@ def check_castling_valid_part2(chess, who_are_you, which_castle_side,
 
 # This Castling move is valid
 # If evaluating, restore regardless
-    if EVALUATING:
+    if evaluating:
         restore_original_positions(chess, the_king, the_rook,
                                    the_king_square, the_rook_square,
                                    king_rook_rank, -rook_direction)
@@ -830,7 +829,7 @@ def perform_en_passant(chess, from_file, from_rank, to_file, to_rank):
     chess[from_square] = None
 
     # The king must not end up in check
-    if incheck(Game.who_are_you):
+    if in_check(chess, Game.who_are_you):
         # If so, then this en passant is invalid
         # Restore the pieces back to their original squares/positions
         chess[from_square] = chess[to_square]
@@ -937,10 +936,11 @@ def validate_and_perform_en_passant(chess, from_file, from_rank,
         output_error_message += outstring
         if Game.reading_game_file:
             f.input_status_message(output_error_message)
+            sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
         else:
             display(output_error_message)
+            sleep(constants.SLEEP_VALUE)
 
-        sleep(constants.SLEEP_VALUE)
         Game.en_passant_status = constants.INVALID
         Game.message_printed = True
         return False
@@ -959,10 +959,11 @@ def validate_and_perform_en_passant(chess, from_file, from_rank,
         output_error_message += format_string
         if Game.reading_game_file:
             f.input_status_message(output_error_message)
+            sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
         else:
             display(output_error_message)
-
-        sleep(constants.SLEEP_VALUE)
+            sleep(constants.SLEEP_VALUE)
+            
         Game.en_passant_status = constants.INVALID
         Game.message_printed = True
         return False
@@ -988,6 +989,8 @@ def validate_player_en_passant_move(chess, from_file, from_rank,
                                                                to_rank)
     if is_it_an_en_passant_move:
         # Valid en passant move
+        # Pause the computer so that the Player can read the move
+        sleep(constants.SLEEP_VALUE)
         return True
 
     # Illegal En Passant Move
@@ -1033,7 +1036,7 @@ def check_if_inputfile_is_en_passant_move(chess, source, target):
             f.input_status_message(constants.BAD_EN_PASSANT_FROM_FILE
                                    + inputstream_previous_contents)
             g_message_printed = True
-            sleep(constants.SLEEP_VALUE)
+            sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
 
     # This chess move is not an en passant move
     # Will return 'None'

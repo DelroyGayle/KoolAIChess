@@ -577,6 +577,11 @@ def finalise_computer_move(chess):
         # Show what piece the Computer took
         print(Game.show_taken_message)
 
+    # If reading from a file
+    # Pause the computer so that the Player can read it
+    if Game.reading_game_file:
+        sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
+
     check_flag = in_check(chess, constants.PLAYER)
     if check_flag:
         print("You are in check")
@@ -595,7 +600,6 @@ def finalise_computer_move(chess):
 
     e.append_to_output_stream(Game.output_chess_move + constants.SPACE)
     print("OS comp/app<", Game.output_stream, Game.output_chess_move) # TODO
-    print("CM",Game.output_chess_move)
     # keep this flag unset from now on; so that the move count is incremented
     Game.move_count_incremented = False
     print()
@@ -927,10 +931,12 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         chess.display(print_string)
         # Pause so that the Player
         # can see the description of the move that the Player chose
-        sleep(constants.SLEEP_VALUE)
         # Inform Player that Kool AI is thinking!
         if not Game.reading_game_file:
             print("I am evaluating my next move...")
+
+        sleep(constants.SLEEP_VALUE)
+
         return
 
 

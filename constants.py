@@ -129,6 +129,9 @@ PRESET_CHESSBOARD = [chr(j+97) + chr(k+49)
 INPUT_PGN_NAME = "input.pgn"
 OUTPUT_PGN_NAME = "output.pgn"
 SLEEP_VALUE = 2  # Pause 2 seconds
+# When reading & playing moves from an input file
+# Pause for 4 seconds
+COMPUTER_FILEIO_SLEEP_VALUE = 4
 
 # Regular Expressions
 percent_pattern = re.compile(r"(\A%)|(\n%)")
