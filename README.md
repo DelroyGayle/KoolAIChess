@@ -36,7 +36,36 @@ For the rules and further information on the game of Chess please refer to the f
 
 Thank You.
 
-## How To Play Against Kool AI
+
+## User Stories
+
+1.  As a user I want to be able to enjoy a game of Chess against a Computer opponent.
+2.  As a user I want to know whether I have entered a correct Chess move. Moreover, if I have not,<br>then an explanation of why a move is incorrect ought to be displayed, if possible.
+3.  As a user, I want to know whether I have placed the Computer *in Check*.
+4.  As a user, I want to know whether I have placed the Computer *in Checkmate*. That is, have I won?
+5.  As a user, I want to know whether I am *in Check*.
+6.  As a user, I want to know whether the Computer has placed me *in Checkmate*. That is, have I lost?
+7.  As a user, I want the option to *Resign* when realising that I cannot beat my opponent or I no longer want to continue the game.
+
+------
+
+## UX
+
+### Design
+
+#### Logic Flow of the Program
+
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/04461b56-96b0-444c-b2b2-f716bd0c6fcb)
+
+### Evaluation Algorithm
+
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/96d70908-f9f3-4309-be9c-b77191987523)
+
+------
+
+## Features
+
+### How To Play Against Kool AI
 
 In the context of this game *the user* is referred to as *The Player*. So I will describe the user in this manner in the following sections.
 
@@ -48,10 +77,10 @@ The Player goes first and is prompted to do so.<br>The Player is designated *Whi
 
 From this point onwards each, that is, *the Player and the Computer*, will play their corresponding moves until one of the following scenarios:
 
-* **The Player beats *Kool AI* ! That is, [Checkmate!](https://en.wikipedia.org/wiki/Checkmate) The Player has Won!**
-* *Kool AI* recognises it cannot win therefore it resigns. **The Player has Won!**
-* ***Kool AI* beats the Player** and informs the Player that the Player is in **[Checkmate](https://en.wikipedia.org/wiki/Checkmate). Kool AI has Won!**
-* The Player resigns because of one of the following reasons:
+1. **The Player beats *Kool AI* ! That is, [Checkmate!](https://en.wikipedia.org/wiki/Checkmate) The Player has Won!**
+2. *Kool AI* recognises it cannot win therefore it resigns. **The Player has Won!**
+3. ***Kool AI* beats the Player** and informs the Player that the Player is in **[Checkmate](https://en.wikipedia.org/wiki/Checkmate). Kool AI has Won!**
+4. The Player resigns because of one of the following reasons:
 * 1. The Player can foresee that *Checkmate* is inevitable.
 * 2. The Player realises that the game is *Stalemate*.<br>([Stalemate](https://en.wikipedia.org/wiki/Stalemate) is a situation in Chess where the player whose turn it is to move is not in Check and has no legal move.)
 * 3. The Player realises that the game is a [Draw](https://en.wikipedia.org/wiki/Draw_(chess)).
@@ -69,20 +98,10 @@ The chessboard at the beginning of the game is shown as:
 
 Therefore, the form of how one enters a Chess move is of the form *\<FromSquare\>\<ToSquare\> e.g. d2d4*<br>That is, pawn *(p)* from square *d2* to square *d4*.<br>
 Another example, would be *g1f3*<br>That is, knight *(n)* from square *g1* to square *f3*.<br>
+If the Player enters a move in UPPERCASE, the input algorithm will *lowercase* the input in order to process the move<br>
+For checking against a *Castling move, either O-O or O-O-O*, the input algorithm will *UPPERCASE* the input in order to test for Castling
 
 From the outset a prompt **(e.g. e2e4)** is displayed reminding the Player of the format of a Chess move.<br>
-
-Each piece has a letter. Starting from the top of the board:
-* R for Rook
-* N for Knight
-* B for Bishop
-* Q for Queen
-* K for King
-* P for Pawn
-
-The Computer's pieces (Black) are depicted as *uppercase, capital* letters - R, N, B, Q, K, P
-
-The Player's pieces (White) are depicted as *lowercase* letters - r, n, b, q, k, p
 
 Please Note: A description of both the Player's and Computer's moves is always shown.
 The descriptions will be in these formats:<br>
@@ -97,6 +116,18 @@ Therefore, the description will always show:
 * The Piece Played
 
 ### Game Screen
+
+Each piece has a letter. Starting from the top of the board:
+* R for Rook
+* N for Knight
+* B for Bishop
+* Q for Queen
+* K for King
+* P for Pawn
+
+The Computer's pieces (Black) are depicted as *uppercase, capital* letters - R, N, B, Q, K, P
+
+The Player's pieces (White) are depicted as *lowercase* letters - r, n, b, q, k, p
 
 The program will prompt the Player then await the Player's input 
 
@@ -129,11 +160,11 @@ The Player's input will always be validated. Here are some examples:
 1. When it cannot understand the input - that is, it does not fit the Chess move format<br>
 In this scenario, the Player entered the word, *hello*
 
-![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/acbd33e1-d39c-465b-bc2c-68b8e579b59e)
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/661a4bb3-aa52-413a-85ab-f60ff3128760)
 
 2. A null entry
 
-![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/4c2ff854-55ce-47d6-bda7-09e780231ae7)
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/a3bcae23-a679-41ae-aa2d-9919b1d849f1)
 
 3. Trying to play a *Blank Square*
 
@@ -197,52 +228,25 @@ Here is an example of Resignation:
 
 Resignation in Chess is the player conceding the game to their opponent, that is, to acknowledge defeat.<br>
 Resignation immediately ends the game.<br>
+To resign, the Player has to enter **either R or r to resign.**
 Please note however:
-1.  Kool AI's algorithm will score each of **its own** potential moves before its play and if the score of a move is *too low Kool AI* will resign.
-2.  Unfortunately, my program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the human user to end the game by *entering 'R' to resign*.
+1.  Kool AI's algorithm will score each of **its own** potential moves before its play and if the score of a move is *too low, Kool AI* will resign.
+2.  Unfortunately, my program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the human user to end the game by *entering 'r' to resign*.
 3. Also, I am a novice chess player. So in writing this program, there is the distinct possibility that my program may declare **Checkmate** against the human opponent when in fact, it is not!<br>(Personally, throughout my testing I have not come across such a scenario!)<br>
 Therefore, in considering the possibility of such a scenario; even after declaring **Checkmate**; I leave it up to the user to resign.<br>That is, my program does **not** force the end of the game - *the player can play on!*
-
-## User Stories
-
-1.  As a user I want to be welcomed by a start screen with the name of the game.
-2.  As a user I want to be able to enjoy a game of Chess against a Computer opponent.
-3.  As a user I want to know whether I have entered a correct Chess move. Moreover, if I have not,<br>then an explanation of why a move is incorrect ought to be displayed, if possible.
-4.  As a user, I want to know whether I have placed the Computer *in Check*.
-5.  As a user, I want to know whether I have placed the Computer *in Checkmate*. That is, have I won?
-6.  As a user, I want to know whether I am *in Check*.
-7.  As a user, I want to know whether the Computer has placed me *in Checkmate*. That is, have I lost?
-8.  As a user, I want the option to *Resign* when realising that I cannot beat my opponent or I no longer want to continue the game.
-
-------
-
-## UX
-
-### Design
-
-#### Logic Flow of the Program
-
-![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/04461b56-96b0-444c-b2b2-f716bd0c6fcb)
-
-### Evaluation Algorithm
-
-![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/96d70908-f9f3-4309-be9c-b77191987523)
-
-
-
-
-------
-
-## Features
-
 ------
 
 ## Future Features
 * The ability to switch sides
 * Undo/Redo ability when playing moves
 * Saving board positions during the game
+* Loading of saved positions
+* Explore further the possibilities of **Chess-Playing Automation** using the existing functionality
+* Loading and playing of [PGN](https://en.wikipedia.org/wiki/Portable_Game_Notation) chess files
 * A Colour Chessboard using a library such as [Colorama](https://pypi.org/project/colorama/)
 * Better Graphics for the Chess Pieces and the Chessboard
+
+------
 
 ## Data Model
 
@@ -364,11 +368,27 @@ So if this program needs to be amended, this would be the main place to look at 
 The exception is that the function *showboard* in *run.py* uses numbers and strings specific to usage on the ANSI terminal used for this project.
 So I suggest an entire new function will need to be written if displaying the chessboard on a different display media.
 
+## Modules
+
+This program was originally one file - *run.py*<br>As this project began to grow I realised that *run.py* was getting unwieldy.<br> 
+Therefore, I split it up into different modules:
+* **constants.py** - Holds all the major constants used in this program
+* **extras.py** - I moved the routines that manage how piece moves are generated - Pawn/Rook/Knight/Bishop/Queen/King - into this module<br>
+Also any routines that caused *import circular issues* with the Python interpreter are placed in extras.py
+* **fileio.py** - My program can *essentially perform Chess-Playing Automation* by playing chess moves read from a *input.pgn* file<br>
+All routines related to this process are placed in fileio.py<br>(see [TESTING.md](https://github.com/DelroyGayle/KoolAIChess/blob/main/TESTING.md) for more details)
+* **game.py** - The *Game Class* and its related routines
+* **moves.py** - The functionality for chess moves: *Castling and En Passant*
+* **piece.py** - The *Game Piece* and its related routines
+* **run.py** - the main module of the program
+
 ## Testing
 
-+ Passed the code through the PEP8 linter and confirmed there are no problems
-
-+ Carried out tests of the program on both the local terminal and the Code Institute Heroku terminal
++ Passed the code through the PEP8 linter and confirmed there are no problems.
++ Carried out tests of the program on both the local terminal and the Code Institute Heroku terminal.
++ Added functionality so that this program could read Chess moves from a [PGN](https://en.wikipedia.org/wiki/Portable_Game_Notation) file, namely, *input.pgn*.<br>
+My rationale is, that if my program can play *recorded chess games **identically*** then the chess-playing algorithm works correctly<br>.
+See [TESTING.md](https://github.com/DelroyGayle/KoolAIChess/blob/main/TESTING.md) for further details.
 
 ### Internal Errors
 
@@ -447,8 +467,7 @@ When I played the following moves
 ```
 After I played my Bishop move c1h6, **the Computer took 40 seconds to respond with g7h6**!<br>
 So, the Computer algorithm can sometimes be *very slow* to evaluate its next move.<br>
-Whether this is *a bug* or whether it is related to the speed of the Python interpreter.<br>
-At this stage, I cannot tell.
+So, there appears to be an *unresolved bottleneck regarding how long it takes the Computer to play its next move.*
     
 
 ------
@@ -518,3 +537,4 @@ The project is deployed on Heroku. These are the steps in order to deploy on Her
 +  I would like to acknowledge the *Pythoneer* [X.S.](https://xsanon.medium.com/)
 +  X.S.'s article *[How to Code a Simple Chess Game in Python](https://medium.com/codex/how-to-code-a-simple-chess-game-in-python-9a9cb584f57)*
 +  X.S.'s *Pythonic* style of coding can be seen in the following [Chess Program](https://github.com/xsanon/chess).
++ I would like to acknowledge Steven J. Edwards who designed and specified [Portable Game Notation](https://en.wikipedia.org/wiki/Portable_Game_Notation) in order to record chess games
