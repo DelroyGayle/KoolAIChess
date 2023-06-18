@@ -64,14 +64,14 @@ In short,
    *  * White's Chess move
    *  * Black's Chess move
    * It will play each move without human intervention until either
-   * 1. It reads a item of text that it cannot parse whereby it will display a message then proceed to handle chess moves from the Player
-   * 2. The end of the file is reached whereby, in like manner,  it will display a suitable message then proceed to handle chess moves from the Player
-   * 3. A Game Termination Marker is detected: That is, either one of the following strings:
+   * a) It reads a item of text that it cannot parse whereby it will display a message then proceed to handle chess moves from the Player
+   * b) The end of the file is reached whereby, in like manner,  it will display a suitable message then proceed to handle chess moves from the Player
+   * c) A Game Termination Marker is detected: That is, either one of the following strings:
       + **1-0** which means (White wins)
       + **0-1** which means (Black wins)
       + **1/2-1/2** which means (drawn game)
       + **\*** which means (game in progress, result unknown, or game abandoned)
-   * 4. If the program detects any of the above four strings it will perform the EOF action as described in 2.  
+   * d) If the program detects any of the above four strings it will perform the EOF action as described in **b)**.  
    
    
 Now I will describe the relevant parts of the PGN file format citing the above Standard.
@@ -147,7 +147,7 @@ Essentially, a PGN file is divided up into eight *mandatory* parts - a *Seven Ta
 
 ## Testing
 ### **Testing the file-handling of input.pgn** 
-1. **Test - Empty File** - Empty file should be ignored. Should simply proceed with the prompt for user's input.
+1. **Test - Empty File** - An empty file should be ignored. Should simply proceed with the prompt for user's input.
     * *Method Used*
         
         I modified *open_input_file()* to make it think it had an empty file e.g.<br>
@@ -171,10 +171,10 @@ Essentially, a PGN file is divided up into eight *mandatory* parts - a *Seven Ta
         
         Then the Chessboard is displayed and the User is prompted for input of Chess moves<br>
         *YOUR MOVE (e.g. e2e4):*    
-## **Testing SAN Input - Non-Chess Moves** 
+## **Testing PGN Input - Non-Chess Moves** 
 I performed the following testing of ad hoc input of PGN comments and annotations in the following manner.<br>
 Comments should always be ignored when parsing input.
-1. **Test - Comments using ; i.e. semicolon** - <br>With the **;** type comment all input is ignored to the end of the line.<br>
+1. **Test - Comments that begin with ; i.e. semicolon** - <br>With the **;** type comment all input is ignored to the end of the line.<br>
     So, the following entries ought to be all interpreted as empty input.
     * *Method Used*
     
@@ -336,23 +336,25 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
         I set *input.pgn* contents to have various annotations:<br>
         * "e.p. e.p.**2.**{Testing Various Annotations} ((ABC)) e.p."<p>
     
-    * *The Output*
+    * *The Output* - the following error message
         
-        Expected Move Number 1. **Instead: 2.**{Testing
+        Expected Move Number 1. **Instead: 2.**{Testing<br>
         There will be no further input from 'input.pgn'
 
     * *Solution*
 
         The PGN file must start with *White's move numbered 1.* 
     
-1. **Test One Move: Move Number, Comment and Move** - Test one line of movetext with all three elements.<p>
+1. **Test One Move: Move Number, Comment and Chess Move** - Test one line of movetext with all three elements.<p>
     Move numbers should be an integer followed by (optionally) a period. Then there should be a **chess move** and optionally, annotations as well. All annotations are to be ignored except for **Game Termination Markers**
     * *Method Used*
         
         I set *input.pgn* contents to have all three elements as follows:<br>
         * "1. {One Chess move} e4"<p>
     
-    * *The Output*
+    * *The Output*<p>
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/f53e0879-03b4-47d1-812f-15f0c2f4e270)
+         
     ```    
     I am evaluating my next move...
     Finished reading all the moves from the input file
@@ -363,14 +365,18 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     * The Computer then displays the updated chessboard with its own move of 
     * **Computer moves e7-e6 Piece: Pawn**
 
+      ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/38eb7d4c-c313-4f71-8090-d5564a394484)
+       
+
+       
     * *Summary*
 
         1. The Computer successfully parsed all three elements: *the number 1, a comment, the move e4*
         2. It converted e4 to *e2e4* then played White's move of *e2e4*
         3. Updated the chessboard and displayed it with White's move
         4. Then proceeded to fetch the next move from the input file.
-        5. No further input therefore the Computer evaluated its own move - in this case *e7e5*
-        6. Then played Black's move of *e7e5*
+        5. No further input therefore the Computer evaluated its own move - in this case *e7e6*
+        6. Then played Black's move of *e7e6*
         7. Updated the chessboard and displayed it with Black's move
         8. Then prompted the Player for the next move; expecting all further moves to be from the keyboard<p>
 
