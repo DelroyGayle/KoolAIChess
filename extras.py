@@ -580,7 +580,7 @@ def handle_player_move_from_keyboard(chess):
 
     # General User Input Validation
     if input_string == "":
-        chess.display("Null Input! Enter R to Resign")
+        chess.display("Null Input! Enter r to Resign")
         do_next = "continue"
         return (do_next, None)
 
