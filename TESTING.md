@@ -36,6 +36,8 @@ If there is *no input.pgn file* present the program will simply expect keyboard 
 Therefore, there ought to be *no file I/O* in the deployed version of this project.<br>
 That is, before deployment, remove *input.pgn* from the project. This ensures that the program's logic expects all input to be from the user.
 
+-----
+   
 ## **Portable Game Notation (PGN) Notation**
 To quote [Wikipedia](https://en.wikipedia.org/wiki/Portable_Game_Notation)
 >Portable Game Notation (PGN) is a standard plain text format for recording chess games (both the moves and related data), which can be read by humans and is also supported by most chess software.<br>
@@ -145,6 +147,8 @@ Essentially, a PGN file is divided up into eight *mandatory* parts - a *Seven Ta
    Any other kind of text would be flagged by this program as erroneous including brackets ("[" and "]").<br>Hence, the input.pgn file must solely contain *Movetext* data.
    
 
+-----
+   
 ## Testing
 ### **Testing the file-handling of input.pgn** 
 1. **Test - Empty File** - An empty file should be ignored. Should simply proceed with the prompt for user's input.
@@ -171,7 +175,7 @@ Essentially, a PGN file is divided up into eight *mandatory* parts - a *Seven Ta
         
         Then the Chessboard is displayed and the User is prompted for input of Chess moves<br>
         *YOUR MOVE (e.g. e2e4):*    
-## **Testing PGN Input - Non-Chess Moves** 
+### **Testing PGN Input - Non-Chess Moves** 
 I performed the following testing of ad hoc input of PGN comments and annotations in the following manner.<br>
 Comments should always be ignored when parsing input.
 1. **Test - Comments that begin with ; i.e. semicolon** - <br>With the **;** type comment all input is ignored to the end of the line.<br>
@@ -329,7 +333,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 
         So, all that is parsed is the move number **1** followed by a comment i.e. null input, which in turn, is ignored. 
     
-## **Testing SAN Input - Chess Moves** 
+### **Testing SAN Input - Chess Moves** 
 1. **Test Move Numbers** - The PGN file should have consecutive numbered pairs of chess moves **starting with Number 1**.<p>
     * *Method Used*
         
@@ -372,53 +376,88 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     * *Summary*
 
         1. The Computer successfully parsed all three elements: *the number 1, a comment, the move e4*
-        2. It converted e4 to *e2e4* then played White's move of *e2e4*
+        2. It converted e4 to *e2e4* then played it as White's move
         3. Updated the chessboard and displayed it with White's move
-        4. Then proceeded to fetch the next move from the input file.
+        4. Then proceeded to fetch the next move from the input file
         5. No further input therefore the Computer evaluated its own move - in this case *e7e6*
         6. Then played Black's move of *e7e6*
         7. Updated the chessboard and displayed it with Black's move
         8. Then prompted the Player for the next move; expecting all further moves to be from the keyboard<p>
 
 1. **Test Two Moves: Move Number, Comments and Move** - Test that it can play two moves from the input file<p>
-    The format is *move number, White's move, Black's move*
+    The format is *move number, White's move, Black's move*<br>
     All annotations are to be ignored except for **Game Termination Markers**
     * *Method Used*
         
-        I set *input.pgn* contents to have all three elements as follows:<br>
+        I set *input.pgn* contents to have two Chess moves with comments as follows:<br>
         * "1. {First move} e4 (2nd move) h5"<p>
     
     * *The Output*
+           
+      ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/f53e0879-03b4-47d1-812f-15f0c2f4e270)
+           
+ The Computer then reads *h5*. Converts *h5* to *h7h5* and plays it as Black's move
+
+ * *The Output*
+           
+   ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/c38b95e9-9753-4fbd-9ce1-7c7e045be873)
+
     ```    
-    I am evaluating my next move...
     Finished reading all the moves from the input file
     There will be no further input from 'input.pgn'
     ```
-    * Then a 3 second delay, in addition to the general *2 second delay, hence a total delay of 5 seconds*
-    * This gives the user,  plenty of time to see that *there is no longer any futher PGN file input*
-    * The Computer then displays the updated chessboard with its own move of 
-    * **Computer moves e7-e6 Piece: Pawn**
+    * Then a 5 second delay, as described above
+    * Then the Computer prompts the Player for the next move; expecting all further moves to be from the keyboard<p>           
 
+           
     * *Summary*
 
-        1. The Computer successfully parsed all three elements: *the number 1, a comment, the move e4*
-        2. It converted e4 to *e2e4* then played White's move of *e2e4*
+        1. The Computer successfully parsed all both Chess moves
+        2. It converted e4 to *e2e4* then played it as White's move
         3. Updated the chessboard and displayed it with White's move
-        4. Then proceeded to fetch the next move from the input file.
-        5. No further input therefore the Computer evaluated its own move - in this case *e7e5*
-        6. Then played Black's move of *e7e5*
-        7. Updated the chessboard and displayed it with Black's move
-        8. Then prompted the Player for the next move; expecting all further moves to be from the keyboard<p>
+        4. Then proceeded to fetch the next move from the input file
+        5. In this case *h5*. It converted h5 to *h7h5* then played it as Black's move
+        6. Updated the chessboard and displayed it with Black's move
+        4. Then proceeded to fetch the next move from the input file
+        5. No further input therefore the Computer prompts the Player for the next move;<br>expecting all further moves to be from the keyboard<p>
+           
 
-1. **Test** - Empty file should be ignored. Instead prompt user for input.
-Used various strings that are interpreted as comments in SAN
+-----
+
+### Test any number of moves 
+           
+1. **Castling** - Test that user can *Castle*
+           
     * *Method Used*
+    <p>This is the original Movetext that I based this test on
+       
+    ```
+    1. e2e4 c7c6 2. d2d4 d7d5 3. e4e5 Bc8f5 4. Ng1f3 e7e6 5. Bf1e2 Ng8h6 6. O-O Bg6
+    ```
+           
+    * **Note the moves numbered 6. Number 6's White Move is Castling O-O**
+    * So, I solely populate input.pgn with *1. e2e4 c7c6 2. d2d4 d7d5 3. e4e5 Bc8f5 4. Ng1f3 e7e6 5. Bf1e2 Ng8h6*
+    * That is, *without Number 6.* 
+    * Run the program:
+    
     * *The Output*
-        * 
-    * *Issues Found* 
-        * 
-    * *Solution Found*
-        * 
+           
+      ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/abd6e5f1-9563-4514-9b97-fbb7948962c8)
+           
+ * All moves were played successfully without any issues.
+ * As you can see, White's position of pieces are indeed **set up for Castling**
+ * So, I entered **O-O**
+
+ * *The Output*
+           
+   ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/df6ce929-7228-4371-b4fb-1e33a8dd2da4)
+           
+* Success! Incidentally, the Computer responded with:
+           
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/c258e4e7-13a1-472d-9ca2-df9b1bb1f734)
+
+* **Check!**           
+           
 1. **Test** - 
     * *Method Used*
         * .
