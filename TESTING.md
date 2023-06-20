@@ -175,6 +175,9 @@ Essentially, a PGN file is divided up into eight *mandatory* parts - a *Seven Ta
         
         Then the Chessboard is displayed and the User is prompted for input of Chess moves<br>
         *YOUR MOVE (e.g. e2e4):*    
+
+-----
+   
 ### **Testing PGN Input - Non-Chess Moves** 
 I performed the following testing of ad hoc input of PGN comments and annotations in the following manner.<br>
 Comments should always be ignored when parsing input.
@@ -332,7 +335,9 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
         etc.
 
         So, all that is parsed is the move number **1** followed by a comment i.e. null input, which in turn, is ignored. 
-    
+
+-----
+       
 ### **Testing SAN Input - Chess Moves** 
 1. **Test Move Numbers** - The PGN file should have consecutive numbered pairs of chess moves **starting with Number 1**.<p>
     * *Method Used*
@@ -425,12 +430,12 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 
 -----
 
-### **Test any number of moves**
+### **Testing any number of moves**
            
-1. **Test the removal of SAN move suffix annotations** - That is, "!", "?", "!!", "!?", "?!" and "??" DG
+1. **Test the removal of SAN move suffix annotations** - That is, "!", "?", "!!", "!?", "?!" and "??"
            
     * *Method Used*
-    <p>The Movetext used can be found in testdata/file01.pgn DG
+    <p>The Movetext used can be found in testdata/file01.pgn
        
     ```
     1. e4 c6 2. d4? d5 3. e5? Bf5! 4. Nf3 !? e6 5. !? Be2 Nh6!!
@@ -441,14 +446,15 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     
     * *The Output*
            
-      ![image]
+      ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/3abb6084-11e0-4601-8de6-c2190eb00230)
+
            
     * All moves were played successfully without any issues.           
     
 2. **Castling** - Test that user can *Castle*
            
     * *Method Used*
-    <p>The Movetext used can be found in testdata/file02.pgn DG
+    <p>The Movetext used can be found in testdata/file02.pgn
     <p>This is the original Movetext that I based this test on
        
     ```
@@ -456,31 +462,33 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     ```
            
     * **Note the moves numbered 6. Number 6's White Move is Castling O-O**
-    * So, I solely populate input.pgn with 1. e4 c6 2. d4 d5 3. e5 Bf5 4. Nf3 e6 5. Be2 Nh6*
+    * So, I solely populate input.pgn with 1. e4 c6 2. d4 d5 3. e5 Bf5 4. Nf3 e6 5. Be2 Nh6
     * That is, *without Number 6 moves.* 
     * Run the program:
     
     * *The Output*
            
-      ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/abd6e5f1-9563-4514-9b97-fbb7948962c8)
+	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/3abb6084-11e0-4601-8de6-c2190eb00230)
            
- * All moves were played successfully without any issues.
+ * All moves were played successfully without any issues. In fact, identical to **Test 1.**
  * As you can see, White's position of pieces are indeed **set up for (Kingside) Castling**
  * So, I entered **O-O**
 
  * *The Output*
            
-   ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/df6ce929-7228-4371-b4fb-1e33a8dd2da4)
+   ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/ac308bee-3ed5-435b-b2f9-1202dac400e2)
+
            
 * Success! Incidentally, the Computer responded with:
            
-![image]
+	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/1284bad3-255e-4c0c-9667-e52a3dec4055)
+
 
                      
-3. **Test the detection of Game Termination Markers** - That is, "1-0", "0-1", "1/2-1/2" and "*" DG
+3. **Test the detection of Game Termination Markers** - That is, "1-0", "0-1", "1/2-1/2" and "*"
            
     * *Method Used*
-    <p>The Movetext used can be found in testdata/file03.pgn DG
+    <p>The Movetext used can be found in testdata/file03.pgn
        
     ```
     1. e4 c6 2. d4 d5 3. e5 Bf5 4. Nf3 e6 5. Be2 Nh6 6. O-O Bg6 7. c3 Be7 8. Bxh6
@@ -495,55 +503,59 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     
     * *The Output*
            
-      ![image]
+      	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/67bbfffe-dca3-4971-b07e-d763f4c10db4)
+
            
  * All 34 sets of moves were played successfully without any issues.
  * Incidentally, the Computer responded with:
 
+	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/d01f5fcf-326b-4573-b7bb-837c68edc683)
 
-                     
-4. **Can program play its own output? - That is, can it play using Long algebraic notation? DG
+4. **Can program play its own output?** - That is, can it play using Long algebraic notation?
            
    One of the features of this program is that at the end of a game,
-   the program will produce ** all the moves of the game in Long algebraic notation (LAN)**
+   the program will produce **all the moves of the game in Long algebraic notation (LAN)**<p>
    To quote [Wikipedia](https://en.wikipedia.org/wiki/Algebraic_notation_(chess)), 
-   > **In long algebraic notation (LAN), also known as full/fully expanded algebraic notation, 
+   > **In long algebraic notation (LAN), also known as full/fully expanded algebraic notation,<br> 
    both the starting and ending squares are specified**,<br>
    for example: e2e4. Sometimes these are separated by a hyphen, e.g. Nb1-c3, while captures are indicated by an "x", e.g. Rd3xd7.<br>
    Long algebraic notation takes more space and is no longer commonly used in print; however, it has the advantage of clarity. 
    
-   Therefore, this program produces the output of all moves in LAN *without hyphens* so that an user such as I can read the moves clearly without too much difficulty;<br>that is,
+   Therefore, this program produces the output of all moves in LAN *without hyphens* so that an user such as I,<br> can read the moves clearly without too much difficulty;<br>that is,
    *what moves were made from what to where, and what piece was moved.*<p>
    Please note: this is LAN as opposed to strict SAN as expected in the PGN Standard. Nevertheless, PGN files can indeed contain LAN and Chess-playing software should understand LAN.<p>
    The main purpose of this test is that:
-   1. Game moves recorded in SAN are converted to LAN after play, when played by this program.
+   1. Game moves recorded in SAN are converted to LAN when played by this program.
    2. Regardless of notation, **the game-play ought to be identical!**
-   3. Therefore, if the program reads and plays **the same game** using LAN notation, the outcome ought to be identical!
+   3. Therefore, if the program reads and plays **the same game** using LAN notation, the outcome ought to be identical!<p>
       
     * *Method Used*
-    <p>The Movetext used can be found in testdata/file04.pgn DG
-    This pgn file has *no newlines* just to test that lack of newlines is not an issue for the programm
+    <p>The Movetext used can be found in testdata/file04.pgn<br>
+    This pgn file has <em>no newlines</em> just to test that lack of newlines is not an issue for the program.
     
    
     testdata/file05.pgn has the same data with newlines as shown here:
     ```
-	1. e2e4 c7c6 2. d2d4 d7d5 3. e4e5 Bc8f5 4. Ng1f3 e7e6 5. Bf1e2 Ng8h6 6. O-O Bf5g6 7. c2c3 Bf8e7 8. Bc1xh6 g7xh6 9. Qd1c1 h6h5 
-	10. c3c4 d5xc4 11. Be2xc4 Nb8d7 12. Nb1c3 Qd8c7 13. Qc1f4 Nd7b6 14. Bc4b3 O-O-O 15. Ra1c1 Kc8b8 16. Rf1d1 Qc7d7 17. Nf3h4 Rh8f8 
-	18. Nh4xg6 h7xg6 19. Nc3e4 Qd7c7 20. Qf4f3 Nb6d5 21. Ne4c3 Qc7b6 22. h2h3 Qb6b4 23. Nc3e4 Nd5c7 24. Rc1c4 Qb4b6 25. Rd1d3 Nc7d5 
-	26. Rd3d1 Rd8d7 27. Rc4c2 Qb6a5 28. a2a3 Nd5c7 29. Bb3c4 Nc7b5 30. Rc2d2 a7a6 31. Rd2d3 Qa5d8 32. Ne4c5 Be7xc5 33. d4xc5 Rd7xd3 
+	1. e2e4 c7c6 2. d2d4 d7d5 3. e4e5 Bc8f5 4. Ng1f3 e7e6 5. Bf1e2 Ng8h6 6. O-O Bf5g6 7. c2c3 Bf8e7 8. Bc1xh6 g7xh6
+    9. Qd1c1 h6h5 10. c3c4 d5xc4 11. Be2xc4 Nb8d7 12. Nb1c3 Qd8c7 13. Qc1f4 Nd7b6 14. Bc4b3 O-O-O 15. Ra1c1 Kc8b8
+    16. Rf1d1 Qc7d7 17. Nf3h4 Rh8f8 18. Nh4xg6 h7xg6 19. Nc3e4 Qd7c7 20. Qf4f3 Nb6d5 21. Ne4c3 Qc7b6
+    22. h2h3 Qb6b4 23. Nc3e4 Nd5c7 24. Rc1c4 Qb4b6 25. Rd1d3 Nc7d5 26. Rd3d1 Rd8d7 27. Rc4c2 Qb6a5
+    28. a2a3 Nd5c7 29. Bb3c4 Nc7b5 30. Rc2d2 a7a6 31. Rd2d3 Qa5d8 32. Ne4c5 Be7xc5 33. d4xc5 Rd7xd3 
 	34. Rd1xd3
     ```
-    * That is, the same 34 moves as in **Test 5** in LAN
+    * That is, the same 34 moves as in **Test 5** in LAN.
     * Run the program:
     
     * *The Output*
            
-      ![image]
+      	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/d70d82d1-26b9-42dc-973b-0aa14a97f99e)
+
            
  * All moves were played successfully without any issues.
- * Incidentally, the Computer responded  identically with:
-                      
-![image]
+ * With the Computer responded  identically with **Nb5d4**
+ * When I compared the contents of testdata\file04.pgn with the outputted moves of this game *without the computer-generated move Nb5d4 and without newlines* using [Diffchecker](https://www.diffchecker.com/text-compare/), the result was<p>
+   	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/d229c5a4-a792-49e4-8f4c-37d5c0d3ad0b)
+
            
 1. **Test** - 
     * *Method Used*
@@ -559,3 +571,4 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 * [Standard: Portable Game Notation Specification and Implementation Guide - Revised: 1994.03.12](https://ia802908.us.archive.org/26/items/pgn-standard-1994-03-12/PGN_standard_1994-03-12.txt)
 * [HTML version](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm)
 * [Wikipedia - Algebraic notation (chess)](https://en.wikipedia.org/wiki/Algebraic_notation_(chess))
+* [Diffchecker](https://www.diffchecker.com/text-compare/)
