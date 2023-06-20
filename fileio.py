@@ -349,7 +349,7 @@ def parse_chess_move():
     """
     Parse the chess move into a tuple
     Place the tuple into Game.chess_move_tuple
-    Place the string result into Game.general_string_result
+    Place the matched string result into Game.general_string_result
     Note: the order of these regular expression patterns is significant
     """
 
@@ -379,7 +379,7 @@ def parse_chess_move():
         # That is, the piece, the source square, the destination square
         Game.move_type = constants.LONG_NOTATION
         triple_tuple(matched)
-        print(700)
+        print(700) #TODO
         return True  # Indicate success
 
     """
@@ -399,7 +399,7 @@ def parse_chess_move():
         # That is, the piece, the source square, the destination square
         Game.move_type = constants.PIECE_BOTH_SQUARES
         triple_tuple(matched)
-        print(600)
+        print(600) #TODO
         return True  # Indicate success
 
     """
@@ -418,7 +418,7 @@ def parse_chess_move():
         # That is, just piece and the destination square only
         Game.move_type = constants.DESTINATION_SQUARE_ONLY
         double_tuple_with_piece(matched)
-        print(100)
+        print(100) #TODO
         return True  # Indicate success
 
     """
@@ -478,7 +478,7 @@ def parse_chess_move():
         # That is, the piece, the file and the destination square
         Game.move_type = constants.PIECE_FILE_MOVE
         triple_tuple(matched)
-        print(400)
+        print(400) #TODO
         return True  # Indicate success
 
     """
@@ -500,7 +500,7 @@ def parse_chess_move():
         # That is, the piece, the rank and the destination square
         Game.move_type = constants.PIECE_RANK_MOVE
         triple_tuple(matched)
-        print(500)
+        print(500) #TODO
         return True  # Indicate success
 
     """
@@ -563,7 +563,7 @@ def parse_move_text():
     """
     Parse the text into a tuple of the following form:
     (the piece optional, the destination square)
-    The result is placed in Game.general_string_result
+    The parsed chess move string is in Game.general_string_result
     TODO
     todo - test ...
     """
@@ -634,7 +634,8 @@ def parse_move_text():
     if check_game_termination_marker_found():
         return False
 
-    # Otherwise
+    # Otherwise since not a move number,
+    # Expecting to parse a chess move
     return parse_chess_move()
 
 
@@ -661,9 +662,9 @@ def find_the_match(chess, all_matched_list,
             if target_file == to_file and target_rank == to_rank:
                 found_target = all_the_moves[m]
                 # todo
-                print("MATCH/ANSWER", from_file, from_rank, to_file, to_rank)
-                if (Game.move_count > 21): # todo
-                    input()
+                # print("MATCH/ANSWER", from_file, from_rank, to_file, to_rank)
+                # if (Game.move_count > 21): # todo
+                #    input()
                 break
 
         if found_target:
@@ -674,7 +675,6 @@ def find_the_match(chess, all_matched_list,
         This ought not to happen!
         It means: An illegal move or invalid move
         has been read in from the input file
-        The erroneous text/input is in Game.general_string_result
         """
         e.input_status_message(constants.BAD_CHESS_MOVE_FROMFILE
                                + inputstream_previous_contents)
@@ -694,9 +694,9 @@ def find_the_match(chess, all_matched_list,
         Game.output_chess_move = piece
 
     Game.output_chess_move += found_target
-    print("OCM", Game.output_chess_move)  # todo
-    if (Game.move_count > 21): # todo
-        input()
+    # print("OCM", Game.output_chess_move)  # todo
+    # if (Game.move_count > 21): # todo
+    #    input()
     return  # Success
 
 
@@ -719,16 +719,16 @@ def determine_the_move(chess, piece, to_square):
     # generated all the moves for the piece on a filtered square
     # and find the move with the matching 'target' destination
 
-    f= find_the_match(chess, all_matched_list,
-                          to_file, to_rank, piece)    
+    # f= find_the_match(chess, all_matched_list,
+    #                      to_file, to_rank, piece)    
+    # TODO
+    # if Game.move_count > 20:
+    #    print(Game.new_from_file,Game.new_from_rank,Game.new_to_file,Game.new_to_rank)
+    #    input("find_the_match")
+    # return f
 
-    if Game.move_count > 20:
-        print(Game.new_from_file,Game.new_from_rank,Game.new_to_file,Game.new_to_rank)
-        input("find_the_match")
-    return f
-
-    return find_the_match(chess, all_matched_list,
-                          to_file, to_rank, piece)
+    find_the_match(chess, all_matched_list,
+                   to_file, to_rank, piece)
 
 
 def determine_the_capture_by_file(chess, piece, from_file, to_square):
@@ -751,8 +751,8 @@ def determine_the_capture_by_file(chess, piece, from_file, to_square):
     # generated all the moves for the piece on a filtered square
     # and find the move with the matching 'target' destination
 
-    return find_the_match(chess, all_matched_list,
-                          to_file, to_rank, piece)
+    find_the_match(chess, all_matched_list,
+                   to_file, to_rank, piece)
 
 
 def determine_the_capture_by_rank(chess, piece, from_rank, to_square):
@@ -775,8 +775,8 @@ def determine_the_capture_by_rank(chess, piece, from_rank, to_square):
     # generated all the moves for the piece on a filtered square
     # and find the move with the matching 'target' destination
 
-    return find_the_match(chess, all_matched_list,
-                          to_file, to_rank, piece)
+    find_the_match(chess, all_matched_list,
+                   to_file, to_rank, piece)
 
 
 def determine_the_capture_by_both_squares(chess,
@@ -786,19 +786,27 @@ def determine_the_capture_by_both_squares(chess,
     Check that the move is possible for this piece
     """
 
-    if (chess.piece_sign(from_square) == Game.global_piece_sign
-       and chess.piece_letter(from_square) == piece):
-        to_file = to_square[0]
-        to_rank = to_square[1]
+    if not (chess.piece_sign(from_square) == Game.global_piece_sign
+            and chess.piece_letter(from_square) == piece
+            and from_square in constants.PRESET_CHESSBOARD
+            and to_square in constants.PRESET_CHESSBOARD):
+        """
+        This ought not to happen!
+        It means: An illegal move or invalid move
+        has been read in from the input file
+        """
+        e.input_status_message(constants.BAD_CHESS_MOVE_FROMFILE
+                               + inputstream_previous_contents)
+        return  # Failure
 
-        # Go through each filtered square,
-        # generated all the moves for the piece on a filtered square
-        # and find the move with the matching 'target' destination
+    to_file = to_square[0]
+    to_rank = to_square[1]
 
-        return find_the_match(chess, all_matched_list,
-                              to_file, to_rank, piece)
+    # generated all the moves for the piece on 'from_square'
+    # and find the move with the matching 'target' destination
 
-    return  # Failure
+    find_the_match(chess, [from_square],
+                   to_file, to_rank, piece)
 
 
 def determine_move_both_file_rank(chess):
@@ -816,14 +824,14 @@ def determine_move_both_file_rank(chess):
 
     # Depending on the 'move_type' check whether
     # an en passant move is possible
-    # And if so, perform it
+    # And if so, perform the move in this function
     if (Game.move_type == constants.PAWN_CAPTURE_FILE
        or Game.move_type == constants.LONG_NOTATION):
-        print(201,source,202,target)
+        # print(201,source,202,target) TODO
         # Game.en_passant_status is
         # set to either constants.VALID for a valid en passant move
         #  or to 'constants.INVALID' for an illegal en passant move
-        result = m.check_if_inputfile_is_en_passant_move(chess, source, target)
+        result = m.check_if_inputfile_move_is_en_passant(chess, source, target)
 
         """
         There are three possible outcomes
@@ -855,29 +863,34 @@ def determine_move_both_file_rank(chess):
        or Game.move_type == constants.PIECE_DESTINATION_SQUARE):
         # DESTINATION_SQUARE_ONLY  EG h3 OR Ne2
         # PIECE_DESTINATION_SQUARE EG Qxe1
-        return determine_the_move(chess, piece, target)
+        determine_the_move(chess, piece, target)
+        return
 
     elif (Game.move_type == constants.PAWN_CAPTURE_FILE
           or Game.move_type == constants.PIECE_FILE_MOVE):
         # PAWN_CAPTURE_FILE EG exd4
         # PIECE_FILE_MOVE   EG Nfxe4, Rac1
-        return determine_the_capture_by_file(chess, piece, source, target)
+        determine_the_capture_by_file(chess, piece, source, target)
+        return
 
     elif Game.move_type == constants.PIECE_RANK_MOVE:
         # EG N6xe4
-        return determine_the_capture_by_rank(chess, piece, source, target)
+        determine_the_capture_by_rank(chess, piece, source, target)
+        return
 
     elif (Game.move_type == constants.PIECE_BOTH_SQUARES
           or Game.move_type == constants.LONG_NOTATION):
         # PIECE_BOTH_SQUARES EG Nd2xe4
         # LONG_NOTATION EG Ng1f3
-        return determine_the_capture_by_both_squares(chess,
-                                                     piece, source, target)
+        determine_the_capture_by_both_squares(chess,
+                                              piece, source, target)
+        return
 
     elif Game.move_type == constants.LONG_NOTATION:
         # EG Ng1f3
-        return determine_the_capture_by_both_squares(chess,
-                                                     piece, source, target)
+        determine_the_capture_by_both_squares(chess,
+                                              piece, source, target)
+        return
 
     else:
         # Defensive Programming
@@ -887,13 +900,12 @@ def determine_move_both_file_rank(chess):
 
 def handle_move_text(chess):
     """
-    At this pointing looking at either
-    a Move Number or a Chess Piece EG 1. OR e2e4
+    At this point, looking at either
+    a Move Number or a Chess Move EG 1. OR e2e4
     Parse accordingly
-    If the Parsing operation was successful
+    If it is a Chess Move and the Parsing operation was successful,
     Game.general_string_result would be set to
     the value of the matched 'chess move string'
-    Determine the full chess move, both file and rank
     """
 
     result = parse_move_text()
@@ -906,22 +918,25 @@ def handle_move_text(chess):
         return
 
     # Yes!
-    print("BEFORE1", Game.reading_game_file)
+    print("BEFORE1", Game.reading_game_file) # TODO
     if Game.move_type == constants.CASTLING_MOVE:
         return
 
     # TODO
+    # Determine the full chess move, both file and rank
     # Note: If the resultant move is an en passant move
-    #       Then it is performed at this stage by
-    #       'determine_move_both_file_rank'
+    #       Then this move is performed at this stage 
+    # within the functionality of 'determine_move_both_file_rank'
 
-    #       Game.en_passant_status is
-    #       set to either 'constants.VALID' for a valid en passant move
-    #        or to 'constants.INVALID' for an illegal en passant move
-    result = determine_move_both_file_rank(chess)
-    print("test result", Game.reading_game_file, result)  # todo
-    if (Game.move_count > 21): # todo
-        input(str(Game.move_count))
+    #       Game.en_passant_status is:
+    #           set to 'constants.VALID' for a valid en passant move
+    #           set to 'constants.INVALID' for an illegal en passant move
+    #           set to 'constants.NOVALUE' for a non-en-passant move
+    
+    determine_move_both_file_rank(chess)
+    
+    # if (Game.move_count > 21): # todo
+    #    input(str(Game.move_count))
     # todo RESULT NOT NEEDED TODO SUB NOT FUNCTION
 
 
@@ -946,7 +961,6 @@ def fetch_chess_move_from_file(chess):
         return
 
     # Could be either a Move Number or a Chess Piece
-
     handle_move_text(chess)
 
 
@@ -996,12 +1010,13 @@ def handle_player_move_from_inputfile(chess,
             return do_next
 
         # The Castling that was read from the input file was valid!
-        m.castling_move_is_valid(chess)
+        m.castling_move_was_valid(chess)
         do_next = "return"
         return do_next
 
     #if (Game.move_count > 21): # todo
-    #    input(do_next)       
+    #    input(do_next)   
+
     # Otherwise 'pass'
     return do_next
 

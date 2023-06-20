@@ -437,6 +437,7 @@ def determine_generate_move_method(piece_letter):
     themethod = methods_dictionary.get(piece_letter, "Unknown letter: "
                                        + piece_letter)
 
+    # Defensive Programming
     if isinstance(themethod, str):
         raise CustomException("Internal Error: " + themethod)
 
@@ -499,11 +500,11 @@ def append_to_output_stream(astring):
     """
     append string to Game.output_stream
     """
-    print("about to add",astring,"TO",Game.output_stream)    # TODO
+    # print("about to add",astring,"TO",Game.output_stream)    # TODO
     Game.output_stream += astring
     
     # debugging TODO
-    print("OSap>", Game.output_stream, Game.output_chess_move)
+    # print("OSap>", Game.output_stream)
 
 
 def output_message(message):
@@ -778,7 +779,7 @@ def in_check(chess, user_sign):
                         chess.piece_letter(all_the_moves[m]),
                         chess.piece_value(all_the_moves[m]),
                         all_the_moves, )
-                        input("IN CHECK")
+                        # input("IN CHECK")  # todo
                         return True
 
     # Indicate that the Opponent King is not in Check at all
@@ -799,7 +800,8 @@ def finalise_computer_move(chess):
     if (Game.show_taken_message):
         # Show what piece the Computer took
         print(Game.show_taken_message)
-        input("COMPUTER TOOK") # TODO
+
+        # input("COMPUTER TOOK") # TODO
 
     # If reading from a file
     # Pause the computer so that the Player can read it
@@ -823,7 +825,7 @@ def finalise_computer_move(chess):
             # Rather, the Player has to resign!
 
     append_to_output_stream(Game.output_chess_move + constants.SPACE)
-    print("OS comp/app<", Game.output_stream, Game.output_chess_move) # TODO
+    # print("OS comp/app<", Game.output_stream) # TODO
     # keep this flag unset from now on; so that the move count is incremented
     Game.move_count_incremented = False
     print()

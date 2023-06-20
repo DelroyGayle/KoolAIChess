@@ -96,6 +96,7 @@ def is_piece_taken(chess, to_file, to_rank, piece_sign):
 
     index = to_file + to_rank
     Game.show_taken_message = message + chess.board[index].print_string()
+    # input("TEST " + Game.show_taken_message)  #TODO
     return piece_taken
 
 
@@ -135,10 +136,10 @@ def is_player_move_illegal(chess, from_file, from_rank, to_file, to_rank):
     all_possible_moves = e.movelist(chess, from_file, from_rank,
                                     piece_sign, False)
 
-    print("G>>>",Game.reading_game_file)
-    print(all_possible_moves) # todo
-    if Game.move_count > 21:
-        input() # todo
+    # print("G>>>",Game.reading_game_file)
+    # print(all_possible_moves) # todo
+    # if Game.move_count > 21:
+    #     input() # todo
     from_square = from_file + from_rank
     to_square = to_file + to_rank
     print("from/to",from_square,to_square)
@@ -159,13 +160,13 @@ def is_player_move_illegal(chess, from_file, from_rank, to_file, to_rank):
             taken = is_piece_taken(chess, to_file, to_rank, piece_sign)
             # No error raised - so the above test passed
 
-            print("from/to taken",from_square,to_square,taken)
+            # print("from/to taken",from_square,to_square,taken) todo
 
             # store From and To data so that it may be restored
             save_from_square = chess.board[from_square]
             save_to_square = chess.board[to_square]
-            if Game.move_count > 21:
-                input("BEFORE MOVE " + to_square) # todo
+            # if Game.move_count > 21:
+            #     input("BEFORE MOVE " + to_square) # todo
 
             # Make the Player's move
             e.make_move_to_square(chess,
@@ -180,9 +181,6 @@ def is_player_move_illegal(chess, from_file, from_rank, to_file, to_rank):
                 # check_flag todo
                 # checkmate # todo
                 print("You are in Check")
-                if Game.move_count > 21:
-                    print(chess.board[from_square],chess.board[to_square], save_from_square, save_to_square)
-                    input("AFTER MOVE " + to_square) # todo
                 chess.board[from_square] = save_from_square
                 chess.board[to_square] = save_to_square
                 # Indicate that the chosen move placed the Player in Check
@@ -427,8 +425,6 @@ def execute_computer_move(chess, from_file, from_rank, to_file, to_rank):
         e.computer_resigns()
         # *** END PROGRAM ***
 
-    if Game.move_count > 20:
-        input("CHECK - SHOULD BE BL " + Game.computer_print_string) # todo
     # Has the king been moved?
     # Has a rook been moved?
     m.record_if_king_or_rook_has_moved(chess, constants.COMPUTER,
@@ -541,6 +537,7 @@ def finalise_player_move(chess, it_is_a_castling_move,
         m.setup_output_chess_move_add_promotion(attacking_piece_letter,
                                                 from_file, from_rank,
                                                 to_file, to_rank, taken)
+
     # Then display the chess move to the Player
     if print_string:
         # Display the move
@@ -548,10 +545,11 @@ def finalise_player_move(chess, it_is_a_castling_move,
         if (Game.show_taken_message):
             # Show what piece the Player took
             print(Game.show_taken_message)
-            input("PLAYER TAKEN/2")
-    # input("CHECK - SHOULD BE WHITE1> ") # TODO
-# Now that the opponent has played, see if the computer is in Check
 
+            # input("PLAYER TAKEN/2") TODO
+    # input("CHECK - SHOULD BE WHITE1> ") # TODO
+
+    # Now that the Player has played, see if the Computer is in Check
     check_flag = in_check(chess, constants.COMPUTER)
     if check_flag:
         print("I am in Check")
@@ -627,11 +625,14 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         # Are the moves being read from the input game file?
         # If so, fetch the next move from there
         # Note: If the move that is read is an en passant move
-        # Then it is performed at this stage by
+        # Then it is performed at this stage
+        # within the functionality of
         # 'handle_player_move_from_inputfile'
-        #       Game.en_passant_status is
-        #       set to either 'constants.VALID' for a valid en passant move
-        #        or to 'constants.INVALID' for an illegal en passant move
+
+        # Game.en_passant_status is:
+        #   set to 'constants.VALID' for a valid en passant move
+        #   set to 'constants.INVALID' for an illegal en passant move
+        #   set to 'constants.NOVALUE' for a non-en-passant move
 
         do_next = f.handle_player_move_from_inputfile(chess,
                                                       from_file, from_rank,
@@ -649,8 +650,6 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
 
         # Keep linter happy - shorten name
         funcname = m.finalise_en_passant_move_from_inputfile
-        if (Game.move_count > 21): # todo
-            input("FUNCNAME")       
 
         do_next = funcname(chess, from_file, from_rank, to_file, to_rank,
                            print_string, constants.PAWN_LETTER,
@@ -713,8 +712,7 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
             print("There is no piece to be played, instead a Blank Square")
             e.is_error_from_input_file()
             continue
-        if (piece_value >= 0 and False):
-            input("CHECK - SHOULD BE WHITE3> " + str(piece_value)) # todo
+
         if piece_value < 0:  # negative numbers are the Computer's Pieces
             chess.display(print_string)
             print("This is not your piece to move")
@@ -722,9 +720,11 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
             continue
 
         # Check whether the Player entered an en passant move
+        # 'print_string' N/A since the en passant routines
+        # will display their own messages using 
+        # 'attacking_piece_letter' and 'taken'
         do_next = m.handle_en_passant_from_keyboard(chess, from_file, from_rank,
                                                     to_file, to_rank,
-                                                    print_string,
                                                     attacking_piece_letter,
                                                     taken)
         if do_next == "return":
@@ -732,6 +732,7 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         elif do_next == "continue":
             continue
         # else do_next is "pass"
+        # It was not an en passant move
 
         # Check legality of Player's move
         # If legal, the move is played
@@ -777,7 +778,7 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         # Valid move has been played - show the updated board
         # Display the Player's Move
         chess.display(print_string)
-        # input("CHECK - SHOULD BE WHITE/4> ") # TODO
+
         # Pause so that the Player
         # can see the description of the move that the Player chose
         # Inform Player that Kool AI is thinking!
