@@ -14,6 +14,18 @@ from game import Game
 import moves as m
 from time import sleep
 
+
+class CustomException(Exception):
+    """
+    My custom exception class
+    Just in case a Chess Logic Error that I had not anticipated happens!
+    This definition is based on
+    https://www.pythontutorial.net/python-oop/python-custom-exception/
+    """
+    pass
+
+#### ROUTINES THAT GENERATE EACH OF THE PIECE'S MOVES ####
+
 def advance_vertical(rank, steps):
     """
     Calculate the new rank
@@ -177,8 +189,11 @@ def diagonal(chess, file, rank, moves_list, piece_sign):
             # proceed no further
             break
 
-        # Otherwise add the square and continue
+        # Otherwise add the square
         moves_list.append(result)
+        # Reached an occupied square - proceed no further
+        if chess.piece_sign(result) != constants.BLANK:
+            break
 
     # Move from the current piece's position,
     # diagonally bottom-right until reaching a nonblank square
@@ -191,8 +206,11 @@ def diagonal(chess, file, rank, moves_list, piece_sign):
             # proceed no further
             break
 
-        # Otherwise add the square and continue
+        # Otherwise add the square
         moves_list.append(result)
+        # Reached an occupied square - proceed no further
+        if chess.piece_sign(result) != constants.BLANK:
+            break
 
     # Move from the current piece's position,
     # diagonally top-left until reaching a nonblank square
@@ -205,8 +223,11 @@ def diagonal(chess, file, rank, moves_list, piece_sign):
             # proceed no further
             break
 
-        # Otherwise add the square and continue
+        # Otherwise add the square
         moves_list.append(result)
+        # Reached an occupied square - proceed no further
+        if chess.piece_sign(result) != constants.BLANK:
+            break
 
     # Move from the current piece's position,
     # diagonally top-right until reaching a nonblank square
@@ -219,8 +240,11 @@ def diagonal(chess, file, rank, moves_list, piece_sign):
             # proceed no further
             break
 
-        # Otherwise add the square and continue
+        # Otherwise add the square
         moves_list.append(result)
+        # Reached an occupied square - proceed no further
+        if chess.piece_sign(result) != constants.BLANK:
+            break
 
     return moves_list
 
@@ -418,6 +442,7 @@ def determine_generate_move_method(piece_letter):
 
     return themethod
 
+#### THE END OF PIECES' ROUTINES ####
 
 def movelist(chess, from_file, from_rank, piece_sign, evaluating=False):
     """
@@ -431,11 +456,18 @@ def movelist(chess, from_file, from_rank, piece_sign, evaluating=False):
 
     # Determine which function to call
     generate_moves_method = determine_generate_move_method(letter)
+    #if Game.move_count > 20:
+    #    print("LETTER,446,E>", letter,index,chess.board[index].sign) # todo
+    #    input()
     all_the_moves = generate_moves_method(chess,
                                           from_file, from_rank,
                                           [],
                                           chess.board[index].sign)
 
+
+    #if Game.move_count > 20:
+    #    print("done,460,E>", all_the_moves) # todo
+    #    input()
     return all_the_moves
 
 
@@ -598,3 +630,201 @@ def handle_player_move_from_keyboard(chess):
         do_next = "continue"
 
     return (do_next, lower_string)
+
+
+def any_promotion(chess, to_file, to_rank):
+    """
+    Pawn Promotion
+    Promote Pawn Piece if it reaches the board edge
+    """
+
+    to_square = to_file + to_rank
+    if (to_rank == "8"
+       and chess.piece_value(to_square) == constants.PAWN_VALUE):
+
+        # The Player has reached the top of the board
+        # Promote the White Pawn to a White Queen
+        chess.board[to_square].value = constants.QUEEN_VALUE
+        chess.board[to_square].letter = constants.QUEEN_LETTER
+        Game.promoted_piece = constants.QUEEN_LETTER
+
+    elif (to_rank == to_rank == "1"
+          and chess.piece_value(to_square) == -constants.PAWN_VALUE):
+        # The Computer has reached the bottom of the board
+        # Promote the Black Pawn to a Black Queen
+        chess.board[to_square].value = -constants.QUEEN_VALUE
+        chess.board[to_square].letter = constants.QUEEN_LETTER
+        Game.promoted_piece = constants.QUEEN_LETTER
+
+    else:
+        Game.promoted_piece = ""
+
+
+def make_move_to_square(chess, from_square, to_square, to_file, to_rank):
+    """
+    Fill the square taken
+    """
+
+    chess.board[to_square] = chess.board[from_square]
+
+    # erase square vacated
+    chess.board[from_square] = None
+    # promote pawn if it reaches the board edge
+    any_promotion(chess, to_file, to_rank)
+
+
+def test_each_move(chess, who_are_you,
+                   from_square,
+                   to_square):
+    """
+    Go through each possible move
+    To see if there is one whereby the king
+    is no longer 'in check'
+    """
+
+    # store From and To data so that it may be restored
+    save_from_square = chess.board[from_square]
+    save_to_square = chess.board[to_square]
+    to_file = to_square[0]
+    to_rank = to_square[1]
+
+    # Make the move so that it can be tested for 'Check'
+    make_move_to_square(chess,
+                        from_square, to_square, to_file, to_rank)
+    check_flag = in_check(chess, who_are_you)
+
+    # Restore previous squares
+    chess.board[from_square] = save_from_square
+    chess.board[to_square] = save_to_square
+
+    if not check_flag:
+        # A suitable move has been found
+        # Therefore it is not Checkmate
+        return True
+
+    # Otherwise continue the loop i.e. continue testing
+    return False
+
+
+def is_it_checkmate(chess, who_are_you):
+    """
+    Determine whether the opponent is in Checkmate
+    That is, the opponent's king is under attack,
+    and there is no possible chess move available
+    to save the king
+
+    To determine whether Checkmate:
+    This is done by going through each piece of the same colour as the King
+    To see if there is any move generated which does not put the King in check
+    If there is no such move then CHECKMATE!
+    """
+
+    # Filter all the squares containing the same colour
+    same_colour_pieces_list = [index for index in constants.PRESET_CHESSBOARD
+                               if chess.piece_sign(index) == who_are_you]
+
+    # Go through each square and see if a piece can make a play
+    # such that the king is no longer under threat
+    for index in same_colour_pieces_list:
+        from_file = index[0]
+        from_rank = index[1]
+        all_the_moves = movelist(chess, from_file, from_rank,
+                                   who_are_you, False)
+
+        # Loop through each possible move
+        for m in range(len(all_the_moves)):
+            exit_loop = test_each_move(chess, who_are_you,
+                                       index, all_the_moves[m])
+
+            if exit_loop:
+                # Not Checkmate!
+                return False
+
+            # Otherwise continue testing
+            continue
+
+    # No move found so definitely Checkmate!
+    Game.it_is_checkmate = who_are_you
+    return True
+
+
+def in_check(chess, user_sign):
+    """
+    To quote Rod Bird:
+    this function [ scans ] all squares to see if any opposition piece
+    has the King in Check
+    """
+
+    opponent_sign = -user_sign
+    user_king_value = (constants.VALUE_OF_COMPUTER_KING
+                                              if user_sign == constants.COMPUTER
+                                              else constants.VALUE_OF_PLAYER_KING)
+
+    # Go through each square on the board
+    for letter in ["a", "b", "c", "d", "e", "f", "g", "h"]:
+        for number in ["1", "2", "3", "4", "5", "6", "7", "8"]:
+            index = letter + number
+            if chess.piece_sign(index) == opponent_sign:
+                all_the_moves = movelist(chess, letter, number,
+                                           opponent_sign, False)
+                # Start scanning each move
+                for m in range(len(all_the_moves)):
+                    if (chess.piece_letter(all_the_moves[m])
+                       == constants.KING_LETTER 
+                       and chess.piece_value(all_the_moves[m])
+                       == user_king_value):
+                        # User King is in Check!
+                        print(user_sign, opponent_sign, index, all_the_moves[m],
+                        chess.piece_letter(all_the_moves[m]),
+                        chess.piece_value(all_the_moves[m]),
+                        all_the_moves, )
+                        input("IN CHECK")
+                        return True
+
+    # Indicate that the Opponent King is not in Check at all
+    return False
+
+
+def finalise_computer_move(chess):
+    """
+    Now that the Computer's move has been performed
+    Output the chess move to the output stream
+    Determine whether the Computer's move has placed the Player in Check
+    If so, determine to see if the Computer has won
+    That is, is it Checkmate?
+    """
+
+    # Display the Computer's move
+    chess.display(Game.computer_print_string)
+    if (Game.show_taken_message):
+        # Show what piece the Computer took
+        print(Game.show_taken_message)
+        input("COMPUTER TOOK") # TODO
+
+    # If reading from a file
+    # Pause the computer so that the Player can read it
+    if Game.reading_game_file:
+        sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
+
+    check_flag = in_check(chess, constants.PLAYER)
+    if check_flag:
+        print("You are in check")
+        m.add_check_to_output()
+        check_flag = is_it_checkmate(chess, constants.PLAYER)
+        if check_flag:
+            print("Checkmate!! I Win!")
+            sleep(constants.SLEEP_VALUE)
+            print("PLEASE CHECK:", Game.output_chess_move) # todo
+            # Keep Linter happy - shorten name
+            chess_move = Game.output_chess_move
+
+            Game.output_chess_move = m.add_checkmate_to_output(chess_move)
+            # Checkmate! However do not end the program
+            # Rather, the Player has to resign!
+
+    append_to_output_stream(Game.output_chess_move + constants.SPACE)
+    print("OS comp/app<", Game.output_stream, Game.output_chess_move) # TODO
+    # keep this flag unset from now on; so that the move count is incremented
+    Game.move_count_incremented = False
+    print()
+    # TODO WHAT ABOUT? # todo            output_all_chess_moves(constants.COMPUTER_WON)

@@ -145,28 +145,28 @@ game_termination_pattern = re.compile(r"\A((1-0)|(0-1)|(1/2-1/2)|[*])")
 
 # 7
 long_notation_pattern = re.compile(r"\A([KQRBN]?)([a-h][1-8])([a-h][1-8])",
-                                   flags=re.IGNORECASE | re.ASCII)
+                                   flags=re.ASCII)
 
 # 6
 capture_2squares_pattern = re.compile(r"\A([KQRBN]?)([a-h][1-8])x([a-h][1-8])",
-                                      flags=re.IGNORECASE | re.ASCII)
+                                      flags=re.ASCII)
 # 1
 one_square_pattern = re.compile(r"\A([KQRBN]?)([a-h][1-8])",
-                                flags=re.IGNORECASE | re.ASCII)
+                                flags=re.ASCII)
 # 2
-pawn_capture_pattern = re.compile(r"\A([a-h])x?([a-h][1-8])",
-                                  flags=re.IGNORECASE | re.ASCII)
+pawn_capture_pattern = re.compile(r"\A([a-h])x([a-h][1-8])",
+                                  flags=re.ASCII)
 # 3
 nonpawn_capture_pattern = re.compile(r"\A([KQRBN])x([a-h][1-8])",
-                                     flags=re.IGNORECASE | re.ASCII)
+                                     flags=re.ASCII)
 
 # 4
 file_pattern = re.compile(r"\A([KQRBN])([a-h])x?([a-h][1-8])",
-                          flags=re.IGNORECASE | re.ASCII)
+                          flags=re.ASCII)
 
 # 5
 rank_pattern = re.compile(r"\A([KQRBN])([1-8])x?([a-h][1-8])",
-                          flags=re.IGNORECASE | re.ASCII)
+                          flags=re.ASCII)
 
 castling_inputfile_pattern = re.compile(r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))")
 

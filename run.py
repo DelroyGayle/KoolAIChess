@@ -20,17 +20,7 @@ import extras as e
 import os
 import re
 from time import sleep
-
-
-class CustomException(Exception):
-    """
-    My custom exception class
-    Just in case a Chess Logic Error that I had not anticipated happens!
-    This definition is based on
-    https://www.pythontutorial.net/python-oop/python-custom-exception/
-    """
-    pass
-
+from extras import CustomException, in_check, is_it_checkmate, finalise_computer_move
 
 def handle_internal_error():
     """
@@ -105,21 +95,8 @@ def is_piece_taken(chess, to_file, to_rank, piece_sign):
         message = "Player took my "
 
     index = to_file + to_rank
-    Game.show_taken = message + chess.board[index].print_string()
+    Game.show_taken_message = message + chess.board[index].print_string()
     return piece_taken
-
-
-def make_move_to_square(chess, from_square, to_square, to_file, to_rank):
-    """
-    Fill the square taken
-    """
-
-    chess.board[to_square] = chess.board[from_square]
-
-    # erase square vacated
-    chess.board[from_square] = None
-    # promote pawn if it reaches the board edge
-    m.any_promotion(chess, to_file, to_rank)
 
 
 """ TODO
@@ -144,108 +121,6 @@ todo
 """
 
 
-def in_check(chess, user_sign):
-    """
-    To quote Rod Bird:
-    this function [ scans ] all squares to see if any opposition piece
-    has the King in Check
-    """
-
-    opponent_sign = -user_sign
-
-    # Go through each square on the board
-    for letter in ["a", "b", "c", "d", "e", "f", "g", "h"]:
-        for number in ["1", "2", "3", "4", "5", "6", "7", "8"]:
-            index = letter + number
-            if chess.piece_sign(index) == opponent_sign:
-                all_the_moves = e.movelist(chess, letter, number,
-                                           opponent_sign, False)
-                # Start scanning each move
-                for m in range(len(all_the_moves)):
-                    if (chess.piece_letter(all_the_moves[m])
-                       == constants.KING_LETTER):
-                        # Opponent King is in Check!
-                        return True
-
-    # Indicate that the Opponent King is not in Check at all
-    return False
-
-
-def test_each_move(chess, who_are_you,
-                   from_square,
-                   to_square):
-    """
-    Go through each possible move
-    To see if there is one whereby the king
-    is no longer 'in check'
-    """
-
-    # store From and To data so that it may be restored
-    save_from_square = chess.board[from_square]
-    save_to_square = chess.board[to_square]
-    to_file = to_square[0]
-    to_rank = to_square[1]
-
-    # Make the move so that it can be tested for 'Check'
-    make_move_to_square(chess,
-                        from_square, to_square, to_file, to_rank)
-    check_flag = in_check(chess, who_are_you)
-
-    # Restore previous squares
-    chess.board[from_square] = save_from_square
-    chess.board[to_square] = save_to_square
-
-    if not check_flag:
-        # A suitable move has been found
-        # Therefore it is not Checkmate
-        return True
-
-    # Otherwise continue the loop i.e. continue testing
-    return False
-
-
-def is_it_checkmate(chess, who_are_you):
-    """
-    Determine whether the opponent is in Checkmate
-    That is, the opponent's king is under attack,
-    and there is no possible chess move available
-    to save the king
-
-    To determine whether Checkmate:
-    This is done by going through each piece of the same colour as the King
-    To see if there is any move generated which does not put the King in check
-    If there is no such move then CHECKMATE!
-    """
-
-    # Filter all the squares containing the same colour
-    same_colour_pieces_list = [index for index in constants.PRESET_CHESSBOARD
-                               if chess.piece_sign(index) == who_are_you]
-
-    # Go through each square and see if a piece can make a play
-    # such that the king is no longer under threat
-    for index in same_colour_pieces_list:
-        from_file = index[0]
-        from_rank = index[1]
-        all_the_moves = e.movelist(chess, from_file, from_rank,
-                                   who_are_you, False)
-
-        # Loop through each possible move
-        for m in range(len(all_the_moves)):
-            exit_loop = test_each_move(chess, who_are_you,
-                                       index, all_the_moves[m])
-
-            if exit_loop:
-                # Not Checkmate!
-                return False
-
-            # Otherwise continue testing
-            continue
-
-    # No move found so definitely Checkmate!
-    Game.it_is_checkmate = who_are_you
-    return True
-
-
 def is_player_move_illegal(chess, from_file, from_rank, to_file, to_rank):
 
     """
@@ -260,8 +135,13 @@ def is_player_move_illegal(chess, from_file, from_rank, to_file, to_rank):
     all_possible_moves = e.movelist(chess, from_file, from_rank,
                                     piece_sign, False)
 
+    print("G>>>",Game.reading_game_file)
+    print(all_possible_moves) # todo
+    if Game.move_count > 21:
+        input() # todo
     from_square = from_file + from_rank
     to_square = to_file + to_rank
+    print("from/to",from_square,to_square)
     # Start scanning each move
     for m in range(len(all_possible_moves)):
         if all_possible_moves[m] == to_square:
@@ -279,16 +159,17 @@ def is_player_move_illegal(chess, from_file, from_rank, to_file, to_rank):
             taken = is_piece_taken(chess, to_file, to_rank, piece_sign)
             # No error raised - so the above test passed
 
-            from_square = from_file + from_rank
-            to_square = to_file + to_rank
+            print("from/to taken",from_square,to_square,taken)
 
             # store From and To data so that it may be restored
             save_from_square = chess.board[from_square]
             save_to_square = chess.board[to_square]
+            if Game.move_count > 21:
+                input("BEFORE MOVE " + to_square) # todo
 
             # Make the Player's move
-            make_move_to_square(chess,
-                                from_square, to_square, to_file, to_rank)
+            e.make_move_to_square(chess,
+                                  from_square, to_square, to_file, to_rank)
 
             # Does this PLAYER's move place the PLAYER in Check?
             # If so, illegal move!
@@ -299,6 +180,9 @@ def is_player_move_illegal(chess, from_file, from_rank, to_file, to_rank):
                 # check_flag todo
                 # checkmate # todo
                 print("You are in Check")
+                if Game.move_count > 21:
+                    print(chess.board[from_square],chess.board[to_square], save_from_square, save_to_square)
+                    input("AFTER MOVE " + to_square) # todo
                 chess.board[from_square] = save_from_square
                 chess.board[to_square] = save_to_square
                 # Indicate that the chosen move placed the Player in Check
@@ -356,8 +240,8 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
     targetvalue = chess.piece_value(to_square)
     (to_file_number, to_rank_number) = coords_formula(to_file, to_rank)
     # Make the move so that it can be evaluated
-    make_move_to_square(chess,
-                        from_square, to_square, to_file, to_rank)
+    e.make_move_to_square(chess,
+                          from_square, to_square, to_file, to_rank)
 
     # negamax formula
     if level < constants.MAXLEVEL:
@@ -535,7 +419,7 @@ def execute_computer_move(chess, from_file, from_rank, to_file, to_rank):
     # No error raised - so the above test passed
 
     # Make the Computer's move
-    make_move_to_square(chess, from_square, to_square, to_file, to_rank)
+    e.make_move_to_square(chess, from_square, to_square, to_file, to_rank)
 
     # If the COMPUTER cannot play out of check then resign
     check_flag = in_check(chess, constants.COMPUTER)
@@ -543,6 +427,8 @@ def execute_computer_move(chess, from_file, from_rank, to_file, to_rank):
         e.computer_resigns()
         # *** END PROGRAM ***
 
+    if Game.move_count > 20:
+        input("CHECK - SHOULD BE BL " + Game.computer_print_string) # todo
     # Has the king been moved?
     # Has a rook been moved?
     m.record_if_king_or_rook_has_moved(chess, constants.COMPUTER,
@@ -561,49 +447,6 @@ def execute_computer_move(chess, from_file, from_rank, to_file, to_rank):
                                             from_file, from_rank,
                                             to_file, to_rank, taken)
 
-
-def finalise_computer_move(chess):
-    """
-    Now that the Computer's move has been performed
-    Output the chess move to the output stream
-    Determine whether the Computer's move has placed the Player in Check
-    If so, determine to see if the Computer has won
-    That is, is it Checkmate?
-    """
-
-    # Display the Computer's move
-    chess.display(Game.computer_print_string)
-    if (Game.show_taken_message):
-        # Show what piece the Computer took
-        print(Game.show_taken_message)
-
-    # If reading from a file
-    # Pause the computer so that the Player can read it
-    if Game.reading_game_file:
-        sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
-
-    check_flag = in_check(chess, constants.PLAYER)
-    if check_flag:
-        print("You are in check")
-        m.add_check_to_output()
-        check_flag = is_it_checkmate(chess, constants.PLAYER)
-        if check_flag:
-            print("Checkmate!! I Win!")
-            sleep(constants.SLEEP_VALUE)
-            print("PLEASE CHECK:", Game.output_chess_move) # todo
-            # Keep Linter happy - shorten name
-            chess_move = Game.output_chess_move
-
-            Game.output_chess_move = m.add_checkmate_to_output(chess_move)
-            # Checkmate! However do not end the program
-            # Rather, the Player has to resign!
-
-    e.append_to_output_stream(Game.output_chess_move + constants.SPACE)
-    print("OS comp/app<", Game.output_stream, Game.output_chess_move) # TODO
-    # keep this flag unset from now on; so that the move count is incremented
-    Game.move_count_incremented = False
-    print()
-    # TODO WHAT ABOUT? # todo            output_all_chess_moves(constants.COMPUTER_WON)
 
 def process_computer_move(chess, from_file, from_rank, to_file, to_rank):
     """
@@ -705,7 +548,8 @@ def finalise_player_move(chess, it_is_a_castling_move,
         if (Game.show_taken_message):
             # Show what piece the Player took
             print(Game.show_taken_message)
-
+            input("PLAYER TAKEN/2")
+    # input("CHECK - SHOULD BE WHITE1> ") # TODO
 # Now that the opponent has played, see if the computer is in Check
 
     check_flag = in_check(chess, constants.COMPUTER)
@@ -805,6 +649,8 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
 
         # Keep linter happy - shorten name
         funcname = m.finalise_en_passant_move_from_inputfile
+        if (Game.move_count > 21): # todo
+            input("FUNCNAME")       
 
         do_next = funcname(chess, from_file, from_rank, to_file, to_rank,
                            print_string, constants.PAWN_LETTER,
@@ -867,7 +713,8 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
             print("There is no piece to be played, instead a Blank Square")
             e.is_error_from_input_file()
             continue
-
+        if (piece_value >= 0 and False):
+            input("CHECK - SHOULD BE WHITE3> " + str(piece_value)) # todo
         if piece_value < 0:  # negative numbers are the Computer's Pieces
             chess.display(print_string)
             print("This is not your piece to move")
@@ -887,6 +734,7 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         # else do_next is "pass"
 
         # Check legality of Player's move
+        # If legal, the move is played
         (illegal,
          illegal_because_in_check,
          taken) = is_player_move_illegal(chess,
@@ -929,6 +777,7 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         # Valid move has been played - show the updated board
         # Display the Player's Move
         chess.display(print_string)
+        # input("CHECK - SHOULD BE WHITE/4> ") # TODO
         # Pause so that the Player
         # can see the description of the move that the Player chose
         # Inform Player that Kool AI is thinking!

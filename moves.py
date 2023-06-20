@@ -7,7 +7,8 @@ Castling and En Passant
 import constants
 from game import Game
 from run import handle_internal_error
-from run import finalise_computer_move, finalise_player_move, in_check
+from run import finalise_player_move
+from extras import in_check, finalise_computer_move
 import fileio as f
 from time import sleep
 
@@ -112,34 +113,6 @@ def setup_output_chess_move_add_promotion(letter, from_file, from_rank,
     # Add the promoted piece if a promotion took place
     # this is denoted as =Q e.g. f1xg1=Q
     add_capture_promotion(taken)
-
-
-def any_promotion(chess, to_file, to_rank):
-    """
-    Pawn Promotion
-    Promote Pawn Piece if it reaches the board edge
-    """
-
-    to_square = to_file + to_rank
-    if (to_rank == "8"
-       and chess.piece_value(to_square) == constants.PAWN_VALUE):
-
-        # The Player has reached the top of the board
-        # Promote the White Pawn to a White Queen
-        chess.board[to_square].value = constants.QUEEN_VALUE
-        chess.board[to_square].letter = constants.QUEEN_LETTER
-        Game.promoted_piece = constants.QUEEN_LETTER
-
-    elif (to_rank == to_rank == "1"
-          and chess.piece_value(to_square) == -constants.PAWN_VALUE):
-        # The Computer has reached the bottom of the board
-        # Promote the Black Pawn to a Black Queen
-        chess.board[to_square].value = -constants.QUEEN_VALUE
-        chess.board[to_square].letter = constants.QUEEN_LETTER
-        Game.promoted_piece = constants.QUEEN_LETTER
-
-    else:
-        Game.promoted_piece = ""
 
 
 """
@@ -1012,7 +985,7 @@ def check_if_inputfile_is_en_passant_move(chess, source, target):
     target_file = target[0]  # EG 'E' for 'E6' ' TODO need a dest
     target_rank = target[1]  # EG '6' for 'E6'
     source_file = source[0]
-
+    print(1014, source, target)
     is_it_an_en_passant_move = validate_and_perform_en_passant(
                                                       chess,
                                                       source_file,
