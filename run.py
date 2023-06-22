@@ -96,7 +96,6 @@ def is_piece_taken(chess, to_file, to_rank, piece_sign):
 
     index = to_file + to_rank
     Game.show_taken_message = message + chess.board[index].print_string()
-    # input("TEST " + Game.show_taken_message)  #TODO
     return piece_taken
 
 
@@ -142,7 +141,7 @@ def is_player_move_illegal(chess, from_file, from_rank, to_file, to_rank):
     #     input() # todo
     from_square = from_file + from_rank
     to_square = to_file + to_rank
-    print("from/to",from_square,to_square)
+
     # Start scanning each move
     for m in range(len(all_possible_moves)):
         if all_possible_moves[m] == to_square:
@@ -552,6 +551,7 @@ def finalise_player_move(chess, it_is_a_castling_move,
     # Now that the Player has played, see if the Computer is in Check
     check_flag = in_check(chess, constants.COMPUTER)
     if check_flag:
+        # input("CF") todo
         print("I am in Check")
         m.add_check_to_output()
         check_flag = is_it_checkmate(chess, constants.COMPUTER)
@@ -569,7 +569,7 @@ def finalise_player_move(chess, it_is_a_castling_move,
             e.goodbye()
             # Checkmate!
             # *** END PROGRAM ***
-
+        # input("CF2")
     # Then output the chess move to the output stream
     e.append_to_output_stream(Game.output_chess_move + constants.SPACE)
 
@@ -601,7 +601,7 @@ def handle_castling_input(chess, input_string):
         return do_next
 
     # The Castling move was valid!
-    m.castling_move_is_valid(chess)
+    m.castling_move_was_valid(chess)
     do_next = "return"
     return do_next
 
@@ -777,8 +777,13 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
 
         # Valid move has been played - show the updated board
         # Display the Player's Move
-        chess.display(print_string)
-
+        
+        #chess.display(print_string)
+        #if (Game.show_taken_message):
+            # Show what piece the Player took
+        #    print(Game.show_taken_message)
+        # CF3 TODO
+        
         # Pause so that the Player
         # can see the description of the move that the Player chose
         # Inform Player that Kool AI is thinking!
@@ -786,7 +791,6 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
             print("I am evaluating my next move...")
 
         sleep(constants.SLEEP_VALUE)
-
         return
 
 
@@ -797,8 +801,12 @@ def play_2_moves(chess, from_file, from_rank, to_file, to_rank, result):
     """
 
     process_computer_move(chess, from_file, from_rank, to_file, to_rank)
+    # if (Game.move_count > 15): # todo
+    #   input("GO")
 
     player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank)
+    # if (Game.move_count > 15): # todo
+    #     input("GO/2")
 #  TODO             just_performed_castling, attacking_piece_letter, taken)
 
 

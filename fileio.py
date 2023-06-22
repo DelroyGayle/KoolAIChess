@@ -355,8 +355,8 @@ def parse_chess_move():
 
     print(">" + Game.input_stream[0:20])  # todo
 
-    inputstream_previous_contents = Game.input_stream[0:20]
-    print(336,"MATCHED",inputstream_previous_contents) # TODO
+    Game.input_stream_previous_contents = Game.input_stream[0:20]
+    print(336,"MATCHED",Game.input_stream_previous_contents) # TODO
     # EIGHT REGEXPS
 
     """
@@ -663,8 +663,8 @@ def find_the_match(chess, all_matched_list,
                 found_target = all_the_moves[m]
                 # todo
                 # print("MATCH/ANSWER", from_file, from_rank, to_file, to_rank)
-                # if (Game.move_count > 21): # todo
-                #    input()
+                # if (Game.move_count > 15): # todo
+                #     input()
                 break
 
         if found_target:
@@ -677,7 +677,7 @@ def find_the_match(chess, all_matched_list,
         has been read in from the input file
         """
         e.input_status_message(constants.BAD_CHESS_MOVE_FROMFILE
-                               + inputstream_previous_contents)
+                               + Game.input_stream_previous_contents)
         return  # Failure
 
     # Match found
@@ -1006,6 +1006,7 @@ def handle_player_move_from_inputfile(chess,
             # and displays the appropriate error messaging
             # No further moves are read from the input file -
             # rather fetch moves from the user
+            e.is_error_from_input_file()
             do_next = "continue"
             return do_next
 

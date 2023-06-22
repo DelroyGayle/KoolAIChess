@@ -8,7 +8,7 @@ import constants
 from game import Game
 from run import handle_internal_error
 from run import finalise_player_move
-from extras import in_check, finalise_computer_move
+from extras import in_check, finalise_computer_move, CustomException
 import fileio as f
 from time import sleep
 
@@ -426,7 +426,7 @@ def calculate_new_file(file, number):
     # Defensive Programming
     if not ("a" <= new_file <= "h"):
         raise CustomException(("Internal Error: File is Off-board "
-                              "{} = {} + {}").format(newfile,
+                              "{} = {} + {}").format(new_file,
                                                      file,
                                                      number))
 
@@ -459,13 +459,14 @@ def restore_original_positions(chess, the_king, the_rook,
 
     chess.board[the_king_square] = the_king
     chess.board[the_rook_square] = the_rook
+
     # Erase the other squares
     current_square = the_rook_square
-    new_file = the_rook_square[0]
+    new_file = the_king_square[0]
     while True:
-        new_file = calculate_new_file(new_king_file, direction)
+        new_file = calculate_new_file(new_file, direction)
         new_square = new_file + king_rook_rank
-        if new_square == the_king_square:
+        if new_square == the_rook_square:
             return
         chess.board[new_square] = None
 

@@ -72,6 +72,8 @@ def check_horizontally(chess, file_start, limit, step, rank,
             moves_list.append(newfile + rank)
 
         # Reached an occupied square - proceed no further
+        if Game.move_count>15: # TODO
+            print("H>",newfile, rank, square_sign,piece_sign)
         if square_sign != constants.BLANK:
             return moves_list
 
@@ -98,6 +100,8 @@ def check_vertically(chess, rank_start, limit, step,
             moves_list.append(file + newrank)
 
         # Reached an occupied square - proceed no further
+        if Game.move_count>15: # TODO
+            print("V>",file, newrank, square_sign,piece_sign)
         if square_sign != constants.BLANK:
             return moves_list
 
@@ -122,7 +126,7 @@ def horizontal_vertical(chess, file, rank, moves_list, piece_sign):
     # Move from the current piece's position,
     # towards the right until reaching a nonblank square
     # or the edge of the board
-    moves_list = check_horizontally(chess, base_file_number + 1, 8, 1,
+    moves_list = check_horizontally(chess, base_file_number + 1, 9, 1,
                                     rank, moves_list, piece_sign)
 
     # Convert 'rank' i.e. '1' to '8' to a number between 1 to 8
@@ -137,7 +141,7 @@ def horizontal_vertical(chess, file, rank, moves_list, piece_sign):
     # Move from the current piece's position,
     # towards the top until reaching a nonblank square
     # or the edge of the board
-    moves_list = check_vertically(chess, base_rank_number + 1, 8, 1,
+    moves_list = check_vertically(chess, base_rank_number + 1, 9, 1,
                                   file, moves_list, piece_sign)
 
     return moves_list
@@ -551,7 +555,7 @@ def is_error_from_input_file():
     """
     if Game.reading_game_file:
         input_status_message(
-                        "Since This Illegal Move came from the input file\n"
+                        "Since this Illegal Move came from the input file\n"
                         "moves will hereafter come "
                         "from your input via the keyboard")
 
@@ -584,7 +588,7 @@ def handle_castling_input(chess, input_string):
         return do_next
 
     # The Castling move was valid!
-    m.castling_move_is_valid(chess)
+    m.castling_move_was_valid(chess)
     do_next = "return"
     return do_next
 
@@ -659,6 +663,44 @@ def any_promotion(chess, to_file, to_rank):
 
     else:
         Game.promoted_piece = ""
+
+
+def in_check(chess, user_sign):
+    """
+    To quote Rod Bird:
+    this function [ scans ] all squares to see if any opposition piece
+    has the King in Check
+    """
+
+    opponent_sign = -user_sign
+    user_king_value = (constants.VALUE_OF_COMPUTER_KING
+                                              if user_sign == constants.COMPUTER
+                                              else constants.VALUE_OF_PLAYER_KING)
+
+    # Go through each square on the board
+    for letter in ["a", "b", "c", "d", "e", "f", "g", "h"]:
+        for number in ["1", "2", "3", "4", "5", "6", "7", "8"]:
+            index = letter + number
+            if chess.piece_sign(index) == opponent_sign:
+                all_the_moves = movelist(chess, letter, number,
+                                           opponent_sign, False)
+                # Start scanning each move
+                for m in range(len(all_the_moves)):
+                    if (chess.piece_letter(all_the_moves[m])
+                       == constants.KING_LETTER 
+                       and chess.piece_value(all_the_moves[m])
+                       == user_king_value):
+                        # User King is in Check!
+                        # # TODO
+                        # print(user_sign, opponent_sign, index, all_the_moves[m],
+                        # chess.piece_letter(all_the_moves[m]),
+                        # chess.piece_value(all_the_moves[m]),
+                        # all_the_moves, )
+                        # input("IN CHECK")  # todo
+                        return True
+
+    # Indicate that the Opponent King is not in Check at all
+    return False
 
 
 def make_move_to_square(chess, from_square, to_square, to_file, to_rank):
@@ -747,43 +789,6 @@ def is_it_checkmate(chess, who_are_you):
     # No move found so definitely Checkmate!
     Game.it_is_checkmate = who_are_you
     return True
-
-
-def in_check(chess, user_sign):
-    """
-    To quote Rod Bird:
-    this function [ scans ] all squares to see if any opposition piece
-    has the King in Check
-    """
-
-    opponent_sign = -user_sign
-    user_king_value = (constants.VALUE_OF_COMPUTER_KING
-                                              if user_sign == constants.COMPUTER
-                                              else constants.VALUE_OF_PLAYER_KING)
-
-    # Go through each square on the board
-    for letter in ["a", "b", "c", "d", "e", "f", "g", "h"]:
-        for number in ["1", "2", "3", "4", "5", "6", "7", "8"]:
-            index = letter + number
-            if chess.piece_sign(index) == opponent_sign:
-                all_the_moves = movelist(chess, letter, number,
-                                           opponent_sign, False)
-                # Start scanning each move
-                for m in range(len(all_the_moves)):
-                    if (chess.piece_letter(all_the_moves[m])
-                       == constants.KING_LETTER 
-                       and chess.piece_value(all_the_moves[m])
-                       == user_king_value):
-                        # User King is in Check!
-                        print(user_sign, opponent_sign, index, all_the_moves[m],
-                        chess.piece_letter(all_the_moves[m]),
-                        chess.piece_value(all_the_moves[m]),
-                        all_the_moves, )
-                        # input("IN CHECK")  # todo
-                        return True
-
-    # Indicate that the Opponent King is not in Check at all
-    return False
 
 
 def finalise_computer_move(chess):
