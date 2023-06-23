@@ -473,6 +473,17 @@ def movelist(chess, from_file, from_rank, piece_sign, evaluating=False):
     return all_the_moves
 
 
+def append_to_output_stream(astring):
+    """
+    append string to Game.output_stream
+    """
+    # print("about to add",astring,"TO",Game.output_stream)    # TODO
+    Game.output_stream += astring
+    
+    # debugging TODO
+    # print("OSap>", Game.output_stream)
+
+
 def goodbye():
     """
     End of Game Message
@@ -496,18 +507,6 @@ def computer_resigns():
     goodbye()
     # Computer Resigns
     # *** END PROGRAM ***
-
-
-def append_to_output_stream(astring):
-    """
-    append string to Game.output_stream
-    """
-    # print("about to add",astring,"TO",Game.output_stream)    # TODO
-    Game.output_stream += astring
-    print("G=", Game.output_stream) # todo
-    
-    # debugging TODO
-    # print("OSap>", Game.output_stream)
 
 
 def output_message(message):
@@ -602,6 +601,13 @@ def handle_player_move_from_keyboard(chess):
     input_string = input("YOUR MOVE (e.g. e2e4): ").strip()
 
     if input_string == "R" or input_string == "r":
+        """
+        If the Player Resigns at this point,
+        a chess move has not yet been entered;
+        the output stream ends with the move number - remove it!
+        """
+        Game.output_stream = f.remove_the_suffix(Game.output_stream,
+                                                 str(Game.move_count))
         chess.display("Player Resigned")
         if not Game.it_is_checkmate:
             # Since it was not Checkmate, Deem it a draw!

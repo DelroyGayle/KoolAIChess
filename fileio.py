@@ -174,8 +174,6 @@ def output_all_chess_moves():
     2) Print outtable's contents to the screen
     """
 
-    print(Game.output_stream)
-    input()
     thelist = Game.output_stream.split()
     if not thelist:  # empty?
         return
@@ -199,17 +197,14 @@ def output_all_chess_moves():
     try:
         output_filename = (Game.directory_of_open_inputfile 
                            + constants.OUTPUT_PGN_NAME)
-        print("OUTN", output_filename)
-        input() # todo
-        with open(constants.INPUT_PGN_NAME, "w") as pgn_input_file:
+
+        with open(output_filename, "w") as pgn_output_file:
             for i in range(len(outtable)):
-                pgn_input_file.write(outtable[i])
+                pgn_output_file.write(outtable[i] + "\n")
         output_ok = True
     except IOError:
         # Ignore any output errors - rather, write to the screen instead
         pass
-        print("NOPE")
-        input()
 
     print("The moves of this Chess Game are as follows:")
     print()
@@ -218,6 +213,7 @@ def output_all_chess_moves():
     print()
     if output_ok:
         print(f"These moves have also been written to {output_filename}")
+        # print(os.path.realpath(pgn_output_file.name))  todo
         print()
 
 def regexp_loop():
@@ -907,7 +903,7 @@ def determine_move_both_file_rank(chess):
     # And if so, perform the move in this function
     if (Game.move_type == constants.PAWN_CAPTURE_FILE
        or Game.move_type == constants.LONG_NOTATION):
-        # print(201,source,202,target) TODO
+        print(201,source,202,target) # TODO
         # Game.en_passant_status is
         # set to either constants.VALID for a valid en passant move
         #  or to 'constants.INVALID' for an illegal en passant move
