@@ -1,3 +1,12 @@
+{
+[White "Motylev, Alexander"]
+[Black "Artemiev, Vladislav"]
+[Result "1/2-1/2"]
+
+SOURCE: LINE 2145 ONWARDS FROM
+https://github.com/fsmosca/chess-artist/blob/master/PGN/iommast19.pgn
+}
+
 1. e4 c6 2. d4 d5 3. e5 Bf5 4. Nf3 e6 5. Be2 Nh6 6. O-O Bg6 7. c3 Be7 8. Bxh6
 gxh6 9. Qc1 h5 10. c4 dxc4 11. Bxc4 Nd7 12. Nc3 Qc7 13. Qf4 Nb6 14. Bb3 O-O-O
 15. Rac1 Kb8 16. Rfd1 Qd7 17. Nh4 Rhf8 18. Nxg6 hxg6 19. Ne4 Qc7 20. Qf3 Nd5 21.

@@ -105,6 +105,7 @@ BAD_EN_PASSANT_FROMFILE = "Illegal En Passant Read From Input File: "
 
 PLAYER_WON = "1-0"
 COMPUTER_WON = "0-1"
+DRAW = "1/2-1/2"
 
 KING_LETTER = "K"
 QUEEN_LETTER = "Q"

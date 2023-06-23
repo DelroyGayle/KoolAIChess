@@ -12,6 +12,7 @@ import extras as e
 import moves as m
 from time import sleep
 import re
+import os
 from extras import CustomException, finalise_computer_move
 
 
@@ -98,6 +99,17 @@ def ignore_rav():
     return False
 
 
+def remove_the_suffix(text, suffix):
+    """
+    A Function To Remove a Suffix in Python
+    Taken from https://datagy.io/python-remove-prefix-suffix/
+    """
+    if text.endswith(suffix):
+        return text[:-len(suffix)]
+    else:
+        return text
+
+
 def open_input_file():
     """
     The file 'input.pgn' will be used to hold
@@ -112,6 +124,9 @@ def open_input_file():
 
     try:
         with open(constants.INPUT_PGN_NAME) as pgn_input_file:
+            Game.directory_of_open_inputfile = (
+                    remove_the_suffix(os.path.realpath(pgn_input_file.name),
+                                      constants.INPUT_PGN_NAME))
             file_contents = pgn_input_file.read()
             if len(file_contents) != 0:
                 Game.input_stream = file_contents
@@ -139,6 +154,71 @@ def open_input_file():
         Game.reading_game_file = False
         # Game.input_stream already set to ""
 
+
+def output_all_chess_moves():
+
+    """
+    Divide the string up into a list
+    EG 1. e2e4 c7c6 2. d2d4 d7d5
+    INTO 'thelist'
+    ["1.", "e2e4", "c7c6", "2.", "d2d4", "d7d5"]
+    Add items from 'thelist' to the output string 'line' up to 
+    the length of constants.LINESIZE (currently 73)
+    Once this length as been exceeded, print 'line'
+    and then set 'line' to the current item
+    and repeat the process until the entire list has been processed
+
+    Then 
+    1) Print outtable's contents to the output file 'output.pgn'
+    in input.pgn's directory or the current working directory
+    2) Print outtable's contents to the screen
+    """
+
+    print(Game.output_stream)
+    input()
+    thelist = Game.output_stream.split()
+    if not thelist:  # empty?
+        return
+
+    outtable = []
+    line = ""
+    surplus = ""
+    while thelist:
+        # Remove the first item of the list
+        surplus = thelist.pop(0) + " " 
+        if len(line) + len(surplus) <= constants.LINESIZE:
+            line += surplus
+        else:
+            outtable.append(line.rstrip())
+            line = surplus
+
+    # Last item
+    outtable.append(line.rstrip())
+
+    output_ok = False
+    try:
+        output_filename = (Game.directory_of_open_inputfile 
+                           + constants.OUTPUT_PGN_NAME)
+        print("OUTN", output_filename)
+        input() # todo
+        with open(constants.INPUT_PGN_NAME, "w") as pgn_input_file:
+            for i in range(len(outtable)):
+                pgn_input_file.write(outtable[i])
+        output_ok = True
+    except IOError:
+        # Ignore any output errors - rather, write to the screen instead
+        pass
+        print("NOPE")
+        input()
+
+    print("The moves of this Chess Game are as follows:")
+    print()
+    for i in range(len(outtable)):
+        print(outtable[i])
+    print()
+    if output_ok:
+        print(f"These moves have also been written to {output_filename}")
+        print()
 
 def regexp_loop():
     """
@@ -796,7 +876,7 @@ def determine_the_capture_by_both_squares(chess,
         has been read in from the input file
         """
         e.input_status_message(constants.BAD_CHESS_MOVE_FROMFILE
-                               + inputstream_previous_contents)
+                               + Game.input_stream_previous_contents)
         return  # Failure
 
     to_file = to_square[0]

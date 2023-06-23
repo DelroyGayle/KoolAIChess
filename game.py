@@ -77,6 +77,8 @@ class Game:
     move_count = 0
     move_count_incremented = False
     it_is_checkmate = None
+    directory_of_open_inputfile = None
+
 
     # For Castling
     evaluate_castle_move = ""

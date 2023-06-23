@@ -32,7 +32,7 @@ def handle_internal_error():
 
     print("Computer resigns due to an internal error")
     print("Please investigate")
-    # output_all_chess_moves(constants.PLAYER_WON) todo
+    f.output_all_chess_moves()  # todo
     e.goodbye()
     # Internal Error
     # *** END PROGRAM ***
@@ -562,14 +562,14 @@ def finalise_player_move(chess, it_is_a_castling_move,
             Game.output_chess_move = m.add_checkmate_to_output(chess_move)
             print("Checkmate!! You Win!")
             # Then output the chess move to the output file
-            e.append_to_output_stream(Game.output_chess_move + constants.SPACE)
-# todo            output_all_chess_moves(constants.PLAYER_WON)
-# todo
+            e.append_to_output_stream(Game.output_chess_move + constants.SPACE 
+                                      + constants.PLAYER_WON)
+            f.output_all_chess_moves()
             print()
             e.goodbye()
             # Checkmate!
             # *** END PROGRAM ***
-        # input("CF2")
+        # input("CF2")  TODO
     # Then output the chess move to the output stream
     e.append_to_output_stream(Game.output_chess_move + constants.SPACE)
 

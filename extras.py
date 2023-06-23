@@ -13,6 +13,7 @@ import constants
 from game import Game
 import moves as m
 from time import sleep
+import fileio as f
 
 
 class CustomException(Exception):
@@ -72,8 +73,6 @@ def check_horizontally(chess, file_start, limit, step, rank,
             moves_list.append(newfile + rank)
 
         # Reached an occupied square - proceed no further
-        if Game.move_count>15: # TODO
-            print("H>",newfile, rank, square_sign,piece_sign)
         if square_sign != constants.BLANK:
             return moves_list
 
@@ -100,8 +99,6 @@ def check_vertically(chess, rank_start, limit, step,
             moves_list.append(file + newrank)
 
         # Reached an occupied square - proceed no further
-        if Game.move_count>15: # TODO
-            print("V>",file, newrank, square_sign,piece_sign)
         if square_sign != constants.BLANK:
             return moves_list
 
@@ -494,7 +491,8 @@ def computer_resigns():
     """
 
     print("Kool AI resigns!")
-    output_all_chess_moves(constants.PLAYER_WON)
+    append_to_output_stream(constants.PLAYER_WON)
+    f.output_all_chess_moves()
     goodbye()
     # Computer Resigns
     # *** END PROGRAM ***
@@ -506,6 +504,7 @@ def append_to_output_stream(astring):
     """
     # print("about to add",astring,"TO",Game.output_stream)    # TODO
     Game.output_stream += astring
+    print("G=", Game.output_stream) # todo
     
     # debugging TODO
     # print("OSap>", Game.output_stream)
@@ -604,7 +603,11 @@ def handle_player_move_from_keyboard(chess):
 
     if input_string == "R" or input_string == "r":
         chess.display("Player Resigned")
-        # output_all_chess_moves(chess.COMPUTER_WON) todo
+        if not Game.it_is_checkmate:
+            # Since it was not Checkmate, Deem it a draw!
+            append_to_output_stream(constants.DRAW)
+            f.output_all_chess_moves()
+
         goodbye()
         # Player Resigned
         # *** END PROGRAM ***
@@ -813,6 +816,9 @@ def finalise_computer_move(chess):
     if Game.reading_game_file:
         sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
 
+    # keep this flag unset from now on; so that the move count is incremented
+    Game.move_count_incremented = False
+
     check_flag = in_check(chess, constants.PLAYER)
     if check_flag:
         print("You are in check")
@@ -821,17 +827,21 @@ def finalise_computer_move(chess):
         if check_flag:
             print("Checkmate!! I Win!")
             sleep(constants.SLEEP_VALUE)
-            print("PLEASE CHECK:", Game.output_chess_move) # todo
             # Keep Linter happy - shorten name
             chess_move = Game.output_chess_move
 
             Game.output_chess_move = m.add_checkmate_to_output(chess_move)
-            # Checkmate! However do not end the program
+            # Checkmate! 
+            append_to_output_stream(Game.output_chess_move + constants.SPACE 
+                                    + constants.COMPUTER_WON)
+            f.output_all_chess_moves()
+            # However do not end the program
             # Rather, the Player has to resign!
+            print()
+            return
 
     append_to_output_stream(Game.output_chess_move + constants.SPACE)
     # print("OS comp/app<", Game.output_stream) # TODO
-    # keep this flag unset from now on; so that the move count is incremented
-    Game.move_count_incremented = False
     print()
-    # TODO WHAT ABOUT? # todo            output_all_chess_moves(constants.COMPUTER_WON)
+    # TODO WHAT ABOUT? output_all_chess_moves(constants.COMPUTER_WON)
+    # DONE??
