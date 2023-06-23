@@ -743,7 +743,7 @@ def record_pawn_that_advanced_by2(chess, who_are_you,
         # Since this chess move is not a pawn that has advanced two squares
         # Ensure that previous values for this colour have been reset
         reset_2squares_pawn_positions(who_are_you)
-    input("EP") # todo
+    #  input("EP") # todo
 
 def indicate_en_passant_done(who_are_you):
     """
@@ -825,7 +825,7 @@ def validate_and_perform_en_passant(chess, from_file, from_rank,
     """
 
     print(301, from_file, from_rank, to_file, to_rank)
-    input() # TODO
+    #  input() # TODO
     Game.en_passant_status = constants.NOVALUE
     if chess.piece_value(to_file, to_rank) != constants.BLANK:
         # destination square is occupied so cannot be an en passant move
@@ -837,6 +837,8 @@ def validate_and_perform_en_passant(chess, from_file, from_rank,
     print("WHO/1", Game.opponent_who_are_you, chess.piece_value(to_file, to_rank))
     # todo
 
+    print("WH?", to_file, to_rank, Game.computer_pawn_2squares_advanced_file,  Game.computer_pawn_2squares_advanced_rank,
+        str(int(to_rank) + 1))
     # Player is White
     # Is there a black pawn (which advanced 2 squares) adjacent to the white pawn?
     if (Game.opponent_who_are_you == constants.COMPUTER

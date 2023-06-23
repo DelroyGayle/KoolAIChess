@@ -604,10 +604,11 @@ def handle_player_move_from_keyboard(chess):
         """
         If the Player Resigns at this point,
         a chess move has not yet been entered;
-        the output stream ends with the move number - remove it!
+        the output stream may end with the move number.
+        If so, remove it!
         """
         Game.output_stream = f.remove_the_suffix(Game.output_stream,
-                                                 str(Game.move_count))
+                                                 str(Game.move_count) + ".")
         chess.display("Player Resigned")
         if not Game.it_is_checkmate:
             # Since it was not Checkmate, Deem it a draw!
