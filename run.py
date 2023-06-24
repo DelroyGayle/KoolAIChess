@@ -21,6 +21,7 @@ import os
 import re
 from time import sleep
 from extras import CustomException, in_check, is_it_checkmate, finalise_computer_move
+import copy
 
 def handle_internal_error():
     """
@@ -880,9 +881,12 @@ def main_part2():
         if (Game.xy or Game.move_count >= 7): # todo
             print(chess.board["c6"], Game.promoted_piece, Game.output_stream)
             input("EVAL ENTER " + Game.promoted_piece + Game.output_stream)
+         
+        board_copy = copy.deepcopy(chess)
         Game.evaluation_result = evaluate(chess, 0,
                                           constants.COMPUTER,
                                           constants.EVALUATE_THRESHOLD_SCORE)
+        chess = board_copy
         if (Game.xy or Game.move_count >= 7): # todo
             print(chess.board["c6"], Game.promoted_piece, Game.output_stream)
             input("FINISHED EVAL " + Game.promoted_piece + Game.output_stream)
