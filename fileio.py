@@ -595,6 +595,8 @@ def parse_chess_move():
         Game.general_string_result = matched.group(0)
         handle_move_suffix(matched)
         print("OO>", Game.general_string_result, matched.group(0), len(matched.group(0)))  # todo
+        input("CASTLING")
+        Game.xy = True # TODO
         return True  # Indicate success
 
 # Unknown Chess Move
@@ -1129,6 +1131,7 @@ def handle_computer_move_from_inputfile(chess,
         return (False, from_file, from_rank, to_file, to_rank)
 
     # No file input issue ... Continue
+    # Was the move a Castling Move?
     if Game.move_type == constants.CASTLING_MOVE:
         # A Castling Move has been read from the file - process it
         just_performed_castling = m.perform_castling(chess, constants.COMPUTER)
@@ -1157,6 +1160,43 @@ def handle_computer_move_from_inputfile(chess,
             computer_move_finalised = True
             return (computer_move_finalised,
                     from_file, from_rank, to_file, to_rank)
+
+    # Was the move a En Passant Move?
+    # If so, was it valid?
+    if Game.en_passant_status == constants.INVALID:
+        # The En Passant that was read from the input file was invalid!
+        # 'perform_en_passant() redisplays the Board
+        # and displays the appropriate error messaging
+        print("Computer from this point onwards "
+              "will now generate its own moves")
+        print()
+        sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
+        return (False, from_file, from_rank, to_file, to_rank)
+
+    if Game.en_passant_status == constants.VALID:
+        # The En Passant that was read from the input file was valid!
+        # En Pasant Validation has already been done
+        # to see whether this En Passant move would put the Player in Check
+        # 'indicate_en_passant_done()' displays the appropriate messaging
+        # regarding the En Pasant move
+        # Previous values regarding 'Computer's pawn positions' have already been reset
+
+        # Convert the chess move in order to output it
+        # Add a 'x' to the output chess move if a piece was taken
+        # Add the promoted piece if a promotion took place
+        # Then output the piece to the output file
+        # Use the new en passant coordinates Game.new_...
+        m.setup_output_chess_move_add_promotion(constants.PAWN_LETTER,
+                                                Game.new_from_file,
+                                                Game.new_from_rank,
+                                                Game.new_to_file,
+                                                Game.new_to_rank,
+                                                constants.PAWN_VALUE)
+
+        finalise_computer_move(chess)
+        computer_move_finalised = True
+        return (computer_move_finalised,
+                None, None, None, None)
 
     # Not a Castling move therefore
     # Fetch new values for 'from_file,from_rank,to_file,to_rank'

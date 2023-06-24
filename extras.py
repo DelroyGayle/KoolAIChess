@@ -14,6 +14,7 @@ from game import Game
 import moves as m
 from time import sleep
 import fileio as f
+import piece
 
 
 class CustomException(Exception):
@@ -71,6 +72,9 @@ def check_horizontally(chess, file_start, limit, step, rank,
         if piece_sign != square_sign:
             # Either an opponent piece or a blank square
             moves_list.append(newfile + rank)
+            if Game.xy:
+                print("HORIZ", moves_list)
+                input()
 
         # Reached an occupied square - proceed no further
         if square_sign != constants.BLANK:
@@ -97,6 +101,9 @@ def check_vertically(chess, rank_start, limit, step,
         if piece_sign != square_sign:
             # Either an opponent piece or a blank square
             moves_list.append(file + newrank)
+            if Game.xy:
+                print("VERT", moves_list)
+                input()
 
         # Reached an occupied square - proceed no further
         if square_sign != constants.BLANK:
@@ -208,6 +215,9 @@ def diagonal(chess, file, rank, moves_list, piece_sign):
             break
 
         # Otherwise add the square
+        if Game.xy:
+            print("DIAG", moves_list)
+            input()
         moves_list.append(result)
         # Reached an occupied square - proceed no further
         if chess.piece_sign(result) != constants.BLANK:
@@ -267,21 +277,32 @@ def generate_moves_for_pawn(chess, file, rank,
     # Is there an opponent piece present?
     if newfile and chess.piece_sign(newfile, rank_plus1) == -piece_sign:
         moves_list.append(newfile + rank_plus1)
+        if Game.xy:
+            print("P4", moves_list)
+            input()
 
     # Capture right?
     newfile = advance_horizontal(file, 1)
     # Is there an opponent piece present?
     if newfile and chess.piece_sign(newfile, rank_plus1) == -piece_sign:
         moves_list.append(newfile + rank_plus1)
+        if Game.xy:
+            print("P5", moves_list)
+            input()
 
     # one step forward
     # Is this square blank?
     if chess.piece_sign(file, rank_plus1) == constants.BLANK:
         moves_list.append(file + rank_plus1)
+        if Game.xy:
+            print("P6", file, rank, piece_sign, rank_plus1, file + rank_plus1, moves_list)
+            input()
 
     # two steps forward
     rank_plus2 = (advance_vertical(rank, 2) if piece_sign == constants.PLAYER
                   else advance_vertical(rank, -2))
+    if Game.xy:
+        print("P1",rank_plus2)
 
     if rank == "2" and piece_sign == constants.PLAYER:
         rank_plus2 = advance_vertical(rank, 2)
@@ -289,11 +310,16 @@ def generate_moves_for_pawn(chess, file, rank,
         rank_plus2 = advance_vertical(rank, -2)
     else:
         rank_plus2 = False
+    if Game.xy:
+        print("P2",rank_plus2)
 
     if rank_plus2:
         # Is this square blank?
         if chess.piece_sign(file, rank_plus2) == constants.BLANK:
             moves_list.append(file + rank_plus2)
+            if Game.xy:
+                print("P3",rank_plus2, moves_list)
+
 
     return moves_list
 
@@ -304,7 +330,8 @@ def generate_moves_for_rook(chess, file, rank,
     Generate all the possible moves of the Rook piece
     The legality of the moves are checked later
     """
-
+    if Game.xy:
+        print("ROOK")
     return horizontal_vertical(chess, file, rank, moves_list, piece_sign)
 
 
@@ -370,6 +397,10 @@ def generate_moves_for_knight(chess, file, rank,
                    for diffs in knight_moves
                    if examine_this_square(diffs, chess,
                                           file, rank, piece_sign)]
+    if Game.xy:
+        print("KNIGHT", moves_list)
+        input()
+
     return moves_list
 
 
@@ -379,7 +410,8 @@ def generate_moves_for_bishop(chess, file, rank,
     Generate all the possible moves of the Bishop piece
     The legality of the moves are checked later
     """
-
+    if Game.xy:
+        print("BISHOP")
     return diagonal(chess, file, rank, moves_list, piece_sign)
 
 
@@ -389,7 +421,8 @@ def generate_moves_for_queen(chess, file, rank,
     Generate all the possible moves of the Queen piece
     The legality of the moves are checked later
     """
-
+    if Game.xy:
+        print("QUEEN")
     moves_list = diagonal(chess, file, rank, moves_list, piece_sign)
     moves_list = horizontal_vertical(chess, file, rank, moves_list, piece_sign)
     return moves_list
@@ -417,7 +450,9 @@ def generate_moves_for_king(chess, file, rank,
                    for diffs in king_moves
                    if examine_this_square(diffs, chess,
                                           file, rank, piece_sign)]
-
+    if Game.xy:
+        print("KING", moves_list)
+        input()
     return moves_list
 
 
@@ -450,6 +485,10 @@ def movelist(chess, from_file, from_rank, piece_sign, evaluating=False):
     """
     Get a list of possible moves for a particular piece
     """
+    if Game.xy:
+        chess.display("CHECK BOARD")    # TODO
+        print(Game.move_count, Game.who_are_you,Game.opponent_who_are_you)
+        input()
 
     index = from_file + from_rank
     letter = (chess.board[index]).letter
@@ -465,6 +504,11 @@ def movelist(chess, from_file, from_rank, piece_sign, evaluating=False):
                                           from_file, from_rank,
                                           [],
                                           chess.board[index].sign)
+    if Game.xy:
+        chess.display("CHECK BOARD2")    # TODO
+        print(Game.move_count, Game.who_are_you,Game.opponent_who_are_you)
+        print(all_the_moves)
+        input()
 
 
     #if Game.move_count > 20:
@@ -576,7 +620,9 @@ def handle_castling_input(chess, input_string):
         # No Castling move. Determine what this chess move is
         return do_next
 
+    Game.xy = True # TODO
     Game.general_string_result = input_string
+    input("CASTLING" + Game.promoted + input_string) # TODO
     just_performed_castling = m.perform_castling(chess, constants.PLAYER)
     if not just_performed_castling:
         # This Castling move is invalid!
@@ -587,6 +633,8 @@ def handle_castling_input(chess, input_string):
 
     # The Castling move was valid!
     m.castling_move_was_valid(chess)
+    # Inform Player that Kool AI is thinking!
+    print("I am evaluating my next move...")
     do_next = "return"
     return do_next
 
@@ -622,7 +670,7 @@ def handle_player_move_from_keyboard(chess):
     # *** CASTLING ***
     # Check whether it is a Castling Move
     do_next = handle_castling_input(chess, input_string)
-    if do_next != "pass":
+    if do_next != "pass":            
         return (do_next, None)
 
     # General User Input Validation
@@ -659,17 +707,23 @@ def any_promotion(chess, to_file, to_rank):
 
         # The Player has reached the top of the board
         # Promote the White Pawn to a White Queen
+
         chess.board[to_square].value = constants.QUEEN_VALUE
         chess.board[to_square].letter = constants.QUEEN_LETTER
+        chess.board[to_square] = piece.Queen(constants.QUEEN_VALUE, constants.PLAYER)
         Game.promoted_piece = constants.QUEEN_LETTER
-
+        chess.display(to_square)
+        input("PROMOTION 1") # TODO
     elif (to_rank == to_rank == "1"
           and chess.piece_value(to_square) == -constants.PAWN_VALUE):
         # The Computer has reached the bottom of the board
         # Promote the Black Pawn to a Black Queen
         chess.board[to_square].value = -constants.QUEEN_VALUE
         chess.board[to_square].letter = constants.QUEEN_LETTER
+        chess.board[to_square] = piece.Queen(constants.QUEEN_VALUE, constants.COMPUTER)
         Game.promoted_piece = constants.QUEEN_LETTER
+        chess.display(to_square)
+        input("PROMOTION 2") # TODO
 
     else:
         Game.promoted_piece = ""
@@ -681,7 +735,7 @@ def in_check(chess, user_sign):
     this function [ scans ] all squares to see if any opposition piece
     has the King in Check
     """
-
+    print("IN CHECK IN")
     opponent_sign = -user_sign
     user_king_value = (constants.VALUE_OF_COMPUTER_KING
                                               if user_sign == constants.COMPUTER
@@ -691,6 +745,8 @@ def in_check(chess, user_sign):
     for letter in ["a", "b", "c", "d", "e", "f", "g", "h"]:
         for number in ["1", "2", "3", "4", "5", "6", "7", "8"]:
             index = letter + number
+            # if (Game.move_count >=7 and index == "c6" and user_sign<0):
+            #     Game.xy = False # todo
             if chess.piece_sign(index) == opponent_sign:
                 all_the_moves = movelist(chess, letter, number,
                                            opponent_sign, False)
@@ -702,14 +758,16 @@ def in_check(chess, user_sign):
                        == user_king_value):
                         # User King is in Check!
                         # # TODO
-                        # print(user_sign, opponent_sign, index, all_the_moves[m],
-                        # chess.piece_letter(all_the_moves[m]),
-                        # chess.piece_value(all_the_moves[m]),
-                        # all_the_moves, )
-                        # input("IN CHECK")  # todo
+                        print(user_sign, opponent_sign, index, all_the_moves[m],
+                        chess.piece_letter(all_the_moves[m]),
+                        chess.piece_value(all_the_moves[m]),
+                        all_the_moves, )
+                        print(Game.move_count,user_sign, opponent_sign)
+                        input("IN CHECK")  # todo
                         return True
 
     # Indicate that the Opponent King is not in Check at all
+    print("IN CHECK out") # todo
     return False
 
 
@@ -717,6 +775,10 @@ def make_move_to_square(chess, from_square, to_square, to_file, to_rank):
     """
     Fill the square taken
     """
+    if (chess.move_count >=7 and False):
+        if (to_square.endswith("1") or to_square.endswith("8")):
+                chess.display("ENDS18")
+                input()
 
     chess.board[to_square] = chess.board[from_square]
 
@@ -725,6 +787,10 @@ def make_move_to_square(chess, from_square, to_square, to_file, to_rank):
     # promote pawn if it reaches the board edge
     any_promotion(chess, to_file, to_rank)
 
+    if (chess.move_count >=7 and False):
+        if (to_square.endswith("1") or to_square.endswith("8")):
+                chess.display("ANY18")
+                input()
 
 def test_each_move(chess, who_are_you,
                    from_square,
@@ -738,6 +804,9 @@ def test_each_move(chess, who_are_you,
     # store From and To data so that it may be restored
     save_from_square = chess.board[from_square]
     save_to_square = chess.board[to_square]
+    if Game.xy:
+        chess.display("BEFORE>" + from_square + to_square)
+        input()
     to_file = to_square[0]
     to_rank = to_square[1]
 
@@ -749,6 +818,9 @@ def test_each_move(chess, who_are_you,
     # Restore previous squares
     chess.board[from_square] = save_from_square
     chess.board[to_square] = save_to_square
+    if Game.xy:
+        chess.display("AFTER>" + from_square + to_square + str(check_flag))
+        input()
 
     if not check_flag:
         # A suitable move has been found
@@ -798,6 +870,7 @@ def is_it_checkmate(chess, who_are_you):
 
     # No move found so definitely Checkmate!
     Game.it_is_checkmate = who_are_you
+    input("CM" + Game.promoted) # TODO
     return True
 
 
@@ -810,18 +883,21 @@ def finalise_computer_move(chess):
     That is, is it Checkmate?
     """
 
-    # Display the Computer's move
-    chess.display(Game.computer_print_string)
-    if (Game.show_taken_message):
-        # Show what piece the Computer took
-        print(Game.show_taken_message)
+    # If En Passant move no need to display the move
+    # This has already been done
+    if Game.en_passant_status != constants.VALID:
+        # Display the Computer's move
+        chess.display(Game.computer_print_string)
+        if (Game.show_taken_message):
+            # Show what piece the Computer took
+            print(Game.show_taken_message)
 
         # input("COMPUTER TOOK") # TODO
 
-    # If reading from a file
-    # Pause the computer so that the Player can read it
-    if Game.reading_game_file:
-        sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
+        # If reading from a file
+        # Pause the computer so that the Player can read it
+        if Game.reading_game_file:
+            sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
 
     # keep this flag unset from now on; so that the move count is incremented
     Game.move_count_incremented = False

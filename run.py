@@ -234,6 +234,11 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
     # store From and To data so that it may be restored
     save_from_square = chess.board[from_square]
     save_to_square = chess.board[to_square]
+    if (Game.xy and level == 1):
+        print("B4", from_square, to_square, save_from_square, save_to_square)
+    if (save_from_square == "c6" or save_to_square == "c6"):
+        print(chess.board["c6"])
+        input("c6")
     targetvalue = chess.piece_value(to_square)
     (to_file_number, to_rank_number) = coords_formula(to_file, to_rank)
     # Make the move so that it can be evaluated
@@ -281,6 +286,11 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
         # Restore previous squares
         chess.board[from_square] = save_from_square
         chess.board[to_square] = save_to_square
+        if (Game.xy and level == 1):
+            print("AFT", from_square, to_square, chess.board[from_square], chess.board[to_square])
+            if (save_from_square == "c6" or save_to_square == "c6"):
+                print(chess.board["c6"])
+                input("c6 restore")
 
         """
         Rod Bird's comment:
@@ -303,6 +313,11 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
     # Restore previous squares
     chess.board[from_square] = save_from_square
     chess.board[to_square] = save_to_square
+    if (Game.xy and level == 1):
+        print("AFT2", from_square, to_square, chess.board[from_square], chess.board[to_square])
+        if (save_from_square == "c6" or save_to_square == "c6"):
+            print(chess.board["c6"])
+            input("c6 restore2")
     # Continue the loop i.e. continue evaluating
     exitloop = False
     return (exitloop, bestscore)
@@ -494,7 +509,8 @@ def process_computer_move(chess, from_file, from_rank, to_file, to_rank):
 
     # Handle 2 and 3
     # Validate, Execute then Finalise the Computer Chess Move
-    # (if it was not a Castling Chess Move)
+    # (if it was not a Castling Chess Move 
+    #  or if it is not a 'finalised' computer move)
     if not computer_move_finalised:
         execute_computer_move(chess, from_file, from_rank, to_file, to_rank)
         finalise_computer_move(chess)
@@ -548,10 +564,22 @@ def finalise_player_move(chess, it_is_a_castling_move,
             # input("PLAYER TAKEN/2") TODO
     # input("CHECK - SHOULD BE WHITE1> ") # TODO
 
+    # If an en passant move has been performed, 
+    # the Check test has already been done - no need to repeat it
+    if Game.en_passant_status == constants.VALID:
+        # Then output the chess move to the output stream
+        e.append_to_output_stream(Game.output_chess_move + constants.SPACE)
+        print("REPEAT")
+        input(Game.output_chess_move)
+        return
+
     # Now that the Player has played, see if the Computer is in Check
+    if Game.move_count >= 7 and Game.who_are_you<0:
+            Game.xy = True
     check_flag = in_check(chess, constants.COMPUTER)
     if check_flag:
-        # input("CF") todo
+        input("CF") # TODO
+    # input("CF") todo
         print("I am in Check")
         m.add_check_to_output()
         check_flag = is_it_checkmate(chess, constants.COMPUTER)
@@ -569,6 +597,7 @@ def finalise_player_move(chess, it_is_a_castling_move,
             e.goodbye()
             # Checkmate!
             # *** END PROGRAM ***
+        input("CF2") # todo
         # input("CF2")  TODO
     # Then output the chess move to the output stream
     e.append_to_output_stream(Game.output_chess_move + constants.SPACE)
@@ -651,8 +680,8 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         # Keep linter happy - shorten name
         funcname = m.finalise_en_passant_move_from_inputfile
 
-        do_next = funcname(chess, from_file, from_rank, to_file, to_rank,
-                           print_string, constants.PAWN_LETTER,
+        do_next = funcname(chess,
+                           constants.PAWN_LETTER,
                            constants.PAWN_VALUE)
         if do_next == "return":
             # The en passant move was valid and it has been performed
@@ -724,10 +753,10 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         # will display their own messages using 
         # 'attacking_piece_letter' and 'taken'
         do_next = m.handle_en_passant_from_keyboard(chess, from_file, from_rank,
-                                                    to_file, to_rank,
-                                                    attacking_piece_letter,
-                                                    taken)
+                                                    to_file, to_rank)
         if do_next == "return":
+            # Inform Player that Kool AI is thinking!
+            print("I am evaluating my next move...")
             return
         elif do_next == "continue":
             continue
@@ -802,11 +831,13 @@ def play_2_moves(chess, from_file, from_rank, to_file, to_rank, result):
 
     process_computer_move(chess, from_file, from_rank, to_file, to_rank)
     # if (Game.move_count > 15): # todo
-    #   input("GO")
+    input("GO")
 
     player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank)
     # if (Game.move_count > 15): # todo
-    #     input("GO/2")
+    x = input("GO/2")
+    if x == "Y" or x == "y":
+        Game.xy = True # todo
 #  TODO             just_performed_castling, attacking_piece_letter, taken)
 
 
@@ -820,6 +851,7 @@ def main_part2():
     """
 
     chess = Game()
+    Game.xy = False # TODO
 
     f.open_input_file()
 
@@ -845,10 +877,19 @@ def main_part2():
         # todo - REMOVE
         #  os.system("clear")
         #  chess.showboard()
+        if (Game.xy or Game.move_count >= 7): # todo
+            print(chess.board["c6"], Game.promoted_piece, Game.output_stream)
+            input("EVAL ENTER " + Game.promoted_piece + Game.output_stream)
         Game.evaluation_result = evaluate(chess, 0,
                                           constants.COMPUTER,
                                           constants.EVALUATE_THRESHOLD_SCORE)
-
+        if (Game.xy or Game.move_count >= 7): # todo
+            print(chess.board["c6"], Game.promoted_piece, Game.output_stream)
+            input("FINISHED EVAL " + Game.promoted_piece + Game.output_stream)
+            chess.display("C6 a8 h1")
+            print(chess.board["c6"], chess.board["a8"], chess.board["h1"],
+                        Game.promoted_piece, Game.output_stream)
+            input() # todo
         # remove todo
         # from_file = Game.best_from_file
         # from_rank = Game.best_from_rank
