@@ -146,7 +146,20 @@ Essentially, a PGN file is divided up into eight *mandatory* parts - a *Seven Ta
    
    Any other kind of text would be flagged by this program as erroneous including brackets ("[" and "]").<br>Hence, the input.pgn file must solely contain *Movetext* data.
    
+## The Output of the Game
 
+   One of the features of this program is that at the end of a game,
+   the program will produce **all the moves of the game in <br>Long algebraic notation (LAN)** and write them both out to the screen and the ***output.pgn* file**<p>
+   To quote [Wikipedia](https://en.wikipedia.org/wiki/Algebraic_notation_(chess)), 
+   > **In long algebraic notation (LAN), also known as full/fully expanded algebraic notation,<br> 
+   both the starting and ending squares are specified**,<br>
+   for example: e2e4. Sometimes these are separated by a hyphen, e.g. Nb1-c3, while captures are indicated by an "x", e.g. Rd3xd7.<br>
+   Long algebraic notation takes more space and is no longer commonly used in print; however, it has the advantage of clarity. 
+
+   <p>Therefore, this program produces the output of all moves in LAN <em>without hyphens</em> so that an user such as I,<br> can read the moves clearly without too much difficulty;<br>that is,
+   <em>what moves were made from what square to which square, and what piece was moved.</em><p>
+   Please note: this is LAN as opposed to strict SAN as expected in the PGN Standard.<br>Nevertheless, PGN files can indeed contain LAN and Chess-playing software should understand LAN.
+	   
 -----
    
 ## Testing
@@ -243,15 +256,14 @@ Comments should always be ignored when parsing input.
         Found { however cannot determine where } ends
         There will be no further input from 'input.pgn'
         ```
-        
         *For number 2.* 
         ```
         Found < however cannot determine where > ends
         There will be no further input from 'input.pgn'
         ```
-
         Then the user is prompted:<br>
-        *YOUR MOVE (e.g. e2e4):*    
+        *YOUR MOVE (e.g. e2e4):*
+      
 1. **Test: RAVs using () i.e. parentheses** - All text within the parentheses and including the parentheses should be ignored.<br>**Note: the parentheses (unlike braces/brackets) can be nested**<br>
     * *Method Used*
     
@@ -298,12 +310,10 @@ Comments should always be ignored when parsing input.
         ```
         Finished reading all the moves from the input file
         ```
-        
         *For number 3.* 
         ```
         Cannot determine this NAG: $-123{
-        ```
-        
+        ```  
         *For number 4.* 
         ```
         Cannot determine this NAG: ${OK?}{
@@ -319,6 +329,7 @@ Comments should always be ignored when parsing input.
         2. Followed by a relevant message regarding the failure of parsing a file input
         3. Then the message: *There will be no further input from 'input.pgn'*
         4. Followed by the user prompt, *YOUR MOVE (e.g. e2e4):*<p>
+	
 1. **Test: Ignore e.p.** - Although not allowed according to the *PGN standard*,<br> sometimes the en passant move
 annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ignored.<br>
     * *Method Used*
@@ -519,16 +530,8 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 4. **Can program play its own output?** - That is, can it play using Long algebraic notation?
            
    One of the features of this program is that at the end of a game,
-   the program will produce **all the moves of the game in Long algebraic notation (LAN)** and write them out both to the screen and the ***output.pgn* file**<p>
-   To quote [Wikipedia](https://en.wikipedia.org/wiki/Algebraic_notation_(chess)), 
-   > **In long algebraic notation (LAN), also known as full/fully expanded algebraic notation,<br> 
-   both the starting and ending squares are specified**,<br>
-   for example: e2e4. Sometimes these are separated by a hyphen, e.g. Nb1-c3, while captures are indicated by an "x", e.g. Rd3xd7.<br>
-   Long algebraic notation takes more space and is no longer commonly used in print; however, it has the advantage of clarity. 
-   
-   Therefore, this program produces the output of all moves in LAN *without hyphens* so that an user such as I,<br> can read the moves clearly without too much difficulty;<br>that is,
-   *what moves were made from what square to which square, and what piece was moved.*<p>
-   Please note: this is LAN as opposed to strict SAN as expected in the PGN Standard. Nevertheless, PGN files can indeed contain LAN and Chess-playing software should understand LAN.<p>
+   the program will produce <br>**all the moves of the game in Long algebraic notation (LAN)** and write them both out to the screen and the ***output.pgn* file**<p>
+
    The main purpose of this test is that:
    1. Game moves recorded in SAN are converted to LAN when played by this program.
    2. Regardless of notation, **the game-play ought to be identical!**
@@ -536,8 +539,8 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
       
     * *Method Used*
     <p>The Movetext used can be found in testdata/file04.pgn<br>
-    This is the output of the moves in testdata/file03.pgn after they were used in **Test 3.** So, all the moves have been converted from SAN to LAN.<br>
-    The pgn file, testdata/file04.pgn, has <em>no newlines</em> just to test that lack of newlines is not an issue for the program.
+    This is the output of the moves in testdata/file03.pgn after they were used in <strong>Test 3.</strong> So, all the moves have been converted from SAN to LAN.<br>
+    The pgn file, testdata/file04.pgn, has <em>no newlines</em> in order to test that lack of newlines is not an issue for the program.
     
     testdata/file05.pgn has the same data with newlines as shown here:
     ```
@@ -578,10 +581,9 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
            
     * **Note the moves numbered 12. Number 12's White Move is Castling O-O-O**
     * Run the program:
+    * All moves were played successfully without any issues.
     
     * *The Output*
-
-	![image]        
 
     ```
     Checking Player move for b3-b8 Piece: Queen
@@ -604,7 +606,43 @@ Note:
 *All the captures shown by **x** and all the checks shown by **+** correspond!*
 3. Afterwards, I pasted the outputted moves into input.pgn just to ensure that the moves played and the output were identical.
 Therefore, confirming that  *captures **x** and checks **+*** do not interfere with parsing.
-           
+
+-----
+
+6. **Ignore Annotations** - Test that user can *Castle Queenside*
+
+* Another test to ensure that comments and annotations do not interfere with the parsing of a pgn file
+* I made up the annotations (++ # =Q ) for these moves. They do not actually correspond to any of these moves.
+* That is, there are no checks, checkmates or promotions in this game.
+* I added these simply to check that they are all being ignored during parsing.
+* *Method Used*
+     <p>The Movetext used can be found in testdata/file07.pgn<br>
+    
+* Run the program:
+* All moves were played successfully without any issues.
+* *The Output*
+```
+Computer moves a5-b4 Piece: Pawn
+Computer took your Pawn
+```
+
+
+-----
+
+7. **Illegal Moves** - To test the response when an *illegal move* is read from an input file
+
+* *Method Used*
+     <p>The Movetext used can be found in testdata/file08.pgn<br>
+* **h8h7** in this game is an illegal move since there would be a piece occupying **h7**
+    
+* Run the program:
+* *The Output*
+```
+Legal Chess Move Expected From Input File. Instead h8h7 6.
+There will be no further input from 'input.pgn'
+```
+-----
+
 1. **Test** - 
     * *Method Used*
         * .
