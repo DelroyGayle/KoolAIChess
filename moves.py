@@ -74,19 +74,10 @@ def add_capture_promotion(taken):
         suffix = Game.output_chess_move[-2:]
         Game.output_chess_move = (Game.output_chess_move[0:length - 2] + "x"
                                   + suffix)
-        # if Game.output_chess_move.startswith("d5"):
-        #     Game.xy = True
-        #     print(Game.output_chess_move)
-        #     input(Game.output_chess_move)   # TODO
-        if Game.move_count >= 7 and Game.output_chess_move.startswith("dxc6"):
-            Game.xy = True
-            print(Game.output_chess_move)
-            input(Game.output_chess_move)   # TODO
 
     if Game.promoted_piece:
         # EG Add =Q at the end if a Pawn was promoted to a Queen e.g. fxg1=Q
         Game.output_chess_move += "=" + Game.promoted_piece
-        input(Game.output_chess_move) # TODO
 
 
 def add_check_to_output():
@@ -273,8 +264,8 @@ def produce_error_message(error_type):
 def castling_movement_done_already(who_are_you):
     """
     Castling:
-    Test 2 of 6 - Has Castling already taken place?
-    Test 3 of 6 - Has the king been moved already?
+    Test 1 of 6 - Has Castling already taken place?
+    Test 2 of 6 - Has the king been moved already?
     """
 
     if who_are_you == constants.PLAYER:
@@ -382,12 +373,10 @@ def check_castling_valid_part1(chess, who_are_you,
                                which_castle_side, king_rook_rank):
     """
     Castling:
-    Test 1 of 6 - Is there an actual king in the right position to be moved?
-    Test 2 of 6 - Has Castling already taken place?  CHANGE DG
-    Test 3 of 6 - Has the king been moved already?
+    Test 1 of 6 - Has Castling already taken place?
+    Test 2 of 6 - Has the king been moved already?
+    Test 3 of 6 - Is there an actual king in the right position to be moved?
     """
-
-    result = False
 
 # A king OF THE CORRECT COLOUR must be present in file 'e'
 # of its colour's rank in order to be castled
@@ -409,14 +398,15 @@ def check_castling_valid_part1(chess, who_are_you,
     print("WHO?", king_sign, who_are_you)  # TODO
     # Note: 'is_piece_a_king' does not regard the colour of the piece
 
-    if not (is_piece_a_king(chess,
+    if castling_movement_done_already(who_are_you):
+        produce_error_message(constants.ALREADY_CASTLED)
+        print("RES3.2")  # todo
+        return
+    elif not (is_piece_a_king(chess,
                             constants.CASTLING_KING_FILE, king_rook_rank)
             and king_sign == who_are_you):
         produce_error_message(constants.NO_KING_ROOK)
         print("RES3.1", Game.error_message)  # todo
-        return
-    elif castling_movement_done_already(who_are_you): # dg todo
-        print("RES3.2")  # todo
         return
     else:
         return check_adjacent_squares(chess, who_are_you,
@@ -492,12 +482,8 @@ def check_castling_valid_part2(chess, who_are_you, which_castle_side,
     """
 
 # Check that the king is not currently in check
-    if Game.xy:
-        chess.display("CHECK PRIOR")
-        input() # DG
     if in_check(chess, who_are_you):
         produce_error_message(constants.KING_IN_CHECK)
-        input("IN CHECK??")
         return
 
     the_king_square = constants.CASTLING_KING_FILE + king_rook_rank
@@ -556,7 +542,7 @@ def check_castling_valid_part2(chess, who_are_you, which_castle_side,
     chess.board[the_rook_file + king_rook_rank] = None
 
 # The king must not end up in check
-    if in_check(chess, who_are_you):
+    if in_check(chess, who_are_you) or who_are_you<0:
         produce_error_message(constants.END_UP_IN_CHECK)
         restore_original_positions(chess, the_king, the_rook,
                                    the_king_square, the_rook_square,
@@ -579,9 +565,9 @@ def check_if_castling_move_is_valid(chess, who_are_you, which_castle_side,
                                     evaluating):
     """
     Castling:
-    Test 1 of 6 - Is there an actual king in the right position to be moved?
-    Test 2 of 6 - Has Castling already taken place?
-    Test 3 of 6 - Has the king been moved already?
+    Test 1 of 6 - Has Castling already taken place?
+    Test 2 of 6 - Has the king been moved already?
+    Test 3 of 6 - Is there an actual king in the right position to be moved?
     Test 4 of 6 - Has the chosen rook been moved already?
     Test 5 of 6 - Is there an actual rook in the right position to be moved?
     Test 6 of 6 - Are there any pieces between the king and the rook?
@@ -681,7 +667,7 @@ def perform_castling(chess, who_are_you):
         chess.display(castling_message)
         print("Illegal Castling Move")
         print(Game.error_message)
-        Game.general_string_result = output_castling_move  # Need this
+        Game.general_string_result = output_castling_move  # This is needed
         return False
 
     # This Castling move is valid! - Indicate this

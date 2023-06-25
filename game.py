@@ -268,7 +268,6 @@ class Game:
         print("{}{}".format(space*3, "-"*26))
         # 5 spaces THEN 2 spaces each
         print("{}A  B  C  D  E  F  G  H".format(space*5))
-        print("C6:",self.piece_letter("c", "6")) # todo dg
         print()
 
     def display(self, message):

@@ -596,7 +596,6 @@ def parse_chess_move():
         handle_move_suffix(matched)
         print("OO>", Game.general_string_result, matched.group(0), len(matched.group(0)))  # todo
         input("CASTLING")
-        Game.xy = True # TODO
         return True  # Indicate success
 
 # Unknown Chess Move
@@ -1139,8 +1138,11 @@ def handle_computer_move_from_inputfile(chess,
             # The Castling that was read from the input file was invalid!
             # 'perform_castling() redisplays the Board
             # and displays the appropriate error messaging
+            # No further moves are read from the input file -
+            # rather fetch moves from the user
             print("Computer from this point onwards "
                   "will now generate its own moves")
+            e.is_error_from_input_file()
             print()
             sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
             return (False, from_file, from_rank, to_file, to_rank)
