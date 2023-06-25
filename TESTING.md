@@ -29,7 +29,7 @@ Therefore, essentially ***Chess-Playing Automation!***<br>
 * All moves, including *Castling and En Passant*; should be followed in identical fashion. 
 
 The program will read as many chess moves as present in *input.pgn*.
-When it reaches the end of the file, it will display a suitable message to inform the user that *any further player moves will now come from the user*; likewise, the computer moves would be hereafter evaluated by the computer according to its algorithm.
+When it reaches the end of the file, it will display a suitable message to inform the user that *any further player moves will now come from the user*; likewise, the computer moves would hereafter be evaluated by the computer according to its algorithm.
 
 ## Remove pgn file when deploying
 If there is *no input.pgn file* present the program will simply expect keyboard input from the user.<br>
@@ -66,8 +66,8 @@ In short,
    *  * White's Chess move
    *  * Black's Chess move
    * It will play each move without human intervention until either
-   * a) It reads a item of text that it cannot parse whereby it will display a message then proceed to handle chess moves from the Player
-   * b) The end of the file is reached whereby, in like manner,  it will display a suitable message then proceed to handle chess moves from the Player
+   * a) It reads a item of text that it cannot parse whereby it will display a message. Then it will proceed to handle chess moves from the Player via the keyboard
+   * b) The end of the file is reached whereby, in like manner,  it will display a suitable message. Then it will proceed to handle chess moves from the Player via the keyboard
    * c) A Game Termination Marker is detected: That is, either one of the following strings:
       + **1-0** which means (White wins)
       + **0-1** which means (Black wins)
@@ -151,7 +151,7 @@ Essentially, a PGN file is divided up into eight *mandatory* parts - a *Seven Ta
    
 ## Testing
 ### **Testing the file-handling of input.pgn** 
-1. **Test - Empty File** - An empty file should be ignored. Should simply proceed with the prompt for user's input.
+1. **Test: Empty File** - An empty file should be ignored. Simply proceed with the prompt for user's input.
     * *Method Used*
         
         I modified *open_input_file()* to make it think it had an empty file e.g.<br>
@@ -161,7 +161,7 @@ Essentially, a PGN file is divided up into eight *mandatory* parts - a *Seven Ta
         
         The Chessboard is displayed with the prompt:<br>
         *YOUR MOVE (e.g. e2e4):*    
-1. **Test - Large File** - I set a limit of 10,000 characters for the size of the input file.
+1. **Test: Large File** - I set a limit of 10,000 characters for the size of the input file.
     * *Method Used*
         
         I modified *open_input_file()* to make it think it had a large file e.g.<br>
@@ -181,7 +181,7 @@ Essentially, a PGN file is divided up into eight *mandatory* parts - a *Seven Ta
 ### **Testing PGN Input - Non-Chess Moves** 
 I performed the following testing of ad hoc input of PGN comments and annotations in the following manner.<br>
 Comments should always be ignored when parsing input.
-1. **Test - Comments that begin with ; i.e. semicolon** - <br>With the **;** type comment all input is ignored to the end of the line.<br>
+1. **Test: Comments that begin with ; i.e. semicolon** - <br>With the **;** type comment all input is ignored to the end of the line.<br>
     So, the following entries ought to be all interpreted as empty input.
     * *Method Used*
     
@@ -196,7 +196,7 @@ Comments should always be ignored when parsing input.
         There will be no further input from 'input.pgn'**<p>
         Then the user is prompted:<br>
         *YOUR MOVE (e.g. e2e4):*    
-1. **Test % i.e. percent escape mechanism** -  a percent sign character ("%") appearing in the first column<br>of a line means ignore the rest of the line<br>So, the following entries ought to be all interpreted as empty input.
+1. **Test: % i.e. percent escape mechanism** -  a percent sign character ("%") appearing in the first column<br>of a line means ignore the rest of the line<br>So, the following entries ought to be all interpreted as empty input.
     * *Method Used*
     
         I set *input.pgn* contents with just one of the following lines as its file contents<br>
@@ -210,7 +210,7 @@ Comments should always be ignored when parsing input.
         There will be no further input from 'input.pgn'**<p>
         Then the user is prompted:<br>
         *YOUR MOVE (e.g. e2e4):*    
-1. **Test - Comments using {} and <> i.e. braces and angled brackets** -<br>
+1. **Test: Comments using {} and <> i.e. braces and angled brackets** -<br>
     All text within the braces and including the braces should be ignored.<br>
     All text within the angled brackets and including the angled brackets should be ignored.<br>
     So, the following entries ought to be all interpreted as empty input.
@@ -252,7 +252,7 @@ Comments should always be ignored when parsing input.
 
         Then the user is prompted:<br>
         *YOUR MOVE (e.g. e2e4):*    
-1. **Test - RAVs using () i.e. parentheses** - All text within the parentheses and including the parentheses should be ignored.<br>**Note: the parentheses (unlike braces/brackets) can be nested**<br>
+1. **Test: RAVs using () i.e. parentheses** - All text within the parentheses and including the parentheses should be ignored.<br>**Note: the parentheses (unlike braces/brackets) can be nested**<br>
     * *Method Used*
     
         I set *input.pgn* contents to<br>
@@ -282,7 +282,7 @@ Comments should always be ignored when parsing input.
 
         Then the user is prompted:<br>
         *YOUR MOVE (e.g. e2e4):*    
-1. **Test - NAGs $nnn** - Dollar followed by a nonnegative integer.<br>This annotation ought to be ignored.<br>(I ignore the numeric value, that is, regardless whether it is greater than 255.)<br>
+1. **Test: NAGs $nnn** - Dollar followed by a nonnegative integer.<br>This annotation ought to be ignored.<br>(I ignore the numeric value, that is, regardless whether it is greater than 255.)<br>
     * *Method Used*
         
         I set *input.pgn* contents with just one of the following lines as its file contents<br>
@@ -319,7 +319,7 @@ Comments should always be ignored when parsing input.
         2. Followed by a relevant message regarding the failure of parsing a file input
         3. Then the message: *There will be no further input from 'input.pgn'*
         4. Followed by the user prompt, *YOUR MOVE (e.g. e2e4):*<p>
-1. **Test - Ignore e.p.** - Although not allowed according to the *PGN standard*,<br> sometimes the en passant move
+1. **Test: Ignore e.p.** - Although not allowed according to the *PGN standard*,<br> sometimes the en passant move
 annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ignored.<br>
     * *Method Used*
         
@@ -450,8 +450,10 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 
            
     * All moves were played successfully without any issues.           
-    
-2. **Castling** - Test that user can *Castle*
+
+-----
+         
+2. **Castling** - Test that user can *Castle Kingside*
            
     * *Method Used*
     <p>The Movetext used can be found in testdata/file02.pgn
@@ -483,7 +485,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
            
 	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/1284bad3-255e-4c0c-9667-e52a3dec4055)
 
-
+-----
                      
 3. **Test the detection of Game Termination Markers** - That is, "1-0", "0-1", "1/2-1/2" and "*"
            
@@ -498,7 +500,8 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     28. a3 Nc7 29. Bc4 Nb5 30. Rcd2 a6 31. Rd3 Qd8 32. Nc5 Bxc5 33. dxc5 Rxd3 34. 
     Rxd3 1/2-1/2
     ```
-    * That is, 34 moves ending with White's Rook move then the *Game Termination Marker 1/2-1/2*
+    * That is, 34 moves ending with White's Rook move then the *Game Termination Marker 1/2-1/2*<br>
+    Because of Black's Castling move in **No. 14. Bb3 O-O-O**; this game will also test that *Kool AI can Castle correctly!*
     * Run the program:
     
     * *The Output*
@@ -511,10 +514,12 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 
 	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/d01f5fcf-326b-4573-b7bb-837c68edc683)
 
+-----
+     
 4. **Can program play its own output?** - That is, can it play using Long algebraic notation?
            
    One of the features of this program is that at the end of a game,
-   the program will produce **all the moves of the game in Long algebraic notation (LAN)**<p>
+   the program will produce **all the moves of the game in Long algebraic notation (LAN)** and write them out both to the screen and the ***output.pgn* file**<p>
    To quote [Wikipedia](https://en.wikipedia.org/wiki/Algebraic_notation_(chess)), 
    > **In long algebraic notation (LAN), also known as full/fully expanded algebraic notation,<br> 
    both the starting and ending squares are specified**,<br>
@@ -522,7 +527,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
    Long algebraic notation takes more space and is no longer commonly used in print; however, it has the advantage of clarity. 
    
    Therefore, this program produces the output of all moves in LAN *without hyphens* so that an user such as I,<br> can read the moves clearly without too much difficulty;<br>that is,
-   *what moves were made from what to where, and what piece was moved.*<p>
+   *what moves were made from what square to which square, and what piece was moved.*<p>
    Please note: this is LAN as opposed to strict SAN as expected in the PGN Standard. Nevertheless, PGN files can indeed contain LAN and Chess-playing software should understand LAN.<p>
    The main purpose of this test is that:
    1. Game moves recorded in SAN are converted to LAN when played by this program.
@@ -531,9 +536,9 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
       
     * *Method Used*
     <p>The Movetext used can be found in testdata/file04.pgn<br>
-    This pgn file has <em>no newlines</em> just to test that lack of newlines is not an issue for the program.
+    This is the output of the moves in testdata/file03.pgn after they were used in **Test 3.** So, all the moves have been converted from SAN to LAN.<br>
+    The pgn file, testdata/file04.pgn, has <em>no newlines</em> just to test that lack of newlines is not an issue for the program.
     
-   
     testdata/file05.pgn has the same data with newlines as shown here:
     ```
 	1. e2e4 c7c6 2. d2d4 d7d5 3. e4e5 Bc8f5 4. Ng1f3 e7e6 5. Bf1e2 Ng8h6 6. O-O Bf5g6 7. c2c3 Bf8e7 8. Bc1xh6 g7xh6
@@ -543,7 +548,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     28. a2a3 Nd5c7 29. Bb3c4 Nc7b5 30. Rc2d2 a7a6 31. Rd2d3 Qa5d8 32. Ne4c5 Be7xc5 33. d4xc5 Rd7xd3 
 	34. Rd1xd3
     ```
-    * That is, the same 34 moves as in **Test 5** in LAN.
+    * That is, the same 34 moves as in **Test 3** in LAN.
     * Run the program:
     
     * *The Output*
@@ -552,10 +557,57 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 
            
  * All moves were played successfully without any issues.
- * With the Computer responded  identically with **Nb5d4**
+ * With the Computer responded identically with **Nb5d4**
  * When I compared the contents of testdata\file04.pgn with the outputted moves of this game *without the computer-generated move Nb5d4 and without newlines* using [Diffchecker](https://www.diffchecker.com/text-compare/), the result was<p>
    	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/d229c5a4-a792-49e4-8f4c-37d5c0d3ad0b)
 
+
+-----
+         
+5. **Castling** - Test that user can *Castle Queenside*
+           
+    * *Method Used*
+    <p>The Movetext used can be found in testdata/file06.pgn<br>
+    The Chess moves are taken from<br>
+    * [the Opera Game](https://en.wikipedia.org/wiki/Opera_Game)
+    * [a](https://en.wikipedia.org/wiki/Opera_Game)
+    * [the Opera Game](https://en.wikipedia.org/wiki/Opera_Game)       
+
+    ```
+    1. e2e4 e7e5 2. Ng1f3 d7d6 3. d2d4 Bc8g4 4. d4xe5 Bg4xf3 5. Qd1xf3 d6xe5
+    6. Bf1c4 Ng8f6 7. Qf3b3 Qd8e7 8. Nb1c3 c7c6 9. Bc1g5 b7b5 10. Nc3xb5
+    c6xb5 11. Bc4xb5+ Nb8d7 12. O-O-O Ra8d8 13. Rd1xd7 Rd8xd7 14. Rh1d1
+    Qe7e6 15. Bb5xd7+ Nf6xd7 16. Qb3b8+ 1-0
+    ```
+           
+    * **Note the moves numbered 12. Number 12's White Move is Castling O-O-O**
+    * Run the program:
+    
+    * *The Output*
+
+	![image]        
+
+    ```
+    Checking Player move for b3-b8 Piece: Queen
+    I am in Check
+    Kool AI resigns!
+    The moves of this Chess Game are as follows:
+
+    1. e2e4 e7e5 2. Ng1f3 d7d6 3. d2d4 Bc8g4 4. d4xe5 Bg4xf3 5. Qd1xf3 d6xe5
+    6. Bf1c4 Ng8f6 7. Qf3b3 Qd8e7 8. Nb1c3 c7c6 9. Bc1g5 b7b5 10. Nc3xb5
+    c6xb5 11. Bc4xb5+ Nb8d7 12. O-O-O Ra8d8 13. Rd1xd7 Rd8xd7 14. Rh1d1
+    Qe7e6 15. Bb5xd7+ Nf6xd7 16. Qb3b8+ 1-0
+
+    These moves have also been written to /workspace/KoolAIChess/output.pgn
+
+    ```           
+           
+Note:
+1. The difference is that KoolAI resigned at **Move 16** forseeing that it could not win this game.
+2. When you compare the contents of file06.pgn with the above output you will see that
+*All the captures shown by **x** and all the checks shown by **+** correspond!*
+3. Afterwards, I pasted the outputted moves into input.pgn just to ensure that the moves played and the output were identical.
+Therefore, confirming that  *captures **x** and checks **+** do not interfere with parsing.
            
 1. **Test** - 
     * *Method Used*

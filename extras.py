@@ -14,7 +14,7 @@ from game import Game
 import moves as m
 from time import sleep
 import fileio as f
-import piece
+import piece # TODO
 
 
 class CustomException(Exception):
@@ -661,7 +661,7 @@ def any_promotion(chess, to_file, to_rank):
         Game.promoted_piece = constants.QUEEN_LETTER
         chess.display(to_square)
         input("PROMOTION 1W") # TODO
-    elif (to_rank == to_rank == "1"
+    elif (to_rank == "1"
           and chess.piece_value(to_square) == -constants.PAWN_VALUE):
         # The Computer has reached the bottom of the board
         # Promote the Black Pawn to a Black Queen

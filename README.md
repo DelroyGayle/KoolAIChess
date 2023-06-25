@@ -86,6 +86,8 @@ From this point onwards each, that is, *the Player and the Computer*, will play 
 * 3. The Player realises that the game is a [Draw](https://en.wikipedia.org/wiki/Draw_(chess)).
 * 4. Or the Player chooses to no longer continue the game.
 
+------
+
 ### How to enter a move
 
 The chessboard has the following coordinates:
@@ -114,6 +116,8 @@ Therefore, the description will always show:
 * The From Square
 * The To Square
 * The Piece Played
+
+------
 
 ### Game Screen
 
@@ -153,6 +157,8 @@ Please Note: A description of both the Player's and Computer's moves is always s
 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/8292752c-c146-4281-96ba-7202fa115c7d)
 
+------
+
 ### Illegal Moves
 
 The Player's input will always be validated. Here are some examples:
@@ -186,6 +192,8 @@ For example:
 
 In this case, a rook cannot *pass through pieces*. It is blocked by a pawn.
 
+------
+
 ### Check
 Here is an example of Check:
 
@@ -206,6 +214,8 @@ The only *legal moves when in Check* is to protect your king, whether by
 
 So, in the above scenario, the Knight move does none of the above, **therefore, an illegal move!
 
+------
+
 ### Checkmate
 Here is an example of Checkmate:
 
@@ -219,7 +229,9 @@ However, for reasons explained below, the Game **will continue until the Player 
 By the way, the above chessboard Checkmate configuration, is known in the Chess world, as<br>
 **Fool's Mate - Checkmate in two moves! 1. f2f3 e7e5 2. g2g4 Qd8h4# 0-1**
 
-The Computer algorithm as designed by *Dean Menezes is clever enough* to make these moves and to Checkmate the opponent.
+The Computer Chess algorithm as designed by *Dean Menezes is clever enough* to make these moves and to Checkmate the opponent.
+
+------
 
 ### Resignation
 Here is an example of Resignation:
@@ -234,7 +246,40 @@ Please note however:
 2.  Unfortunately, the program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the human user to end the game by *entering 'r' to resign*.
 3. Also, I am a novice chess player. So in writing this program, there is the distinct possibility that my program may declare **Checkmate** against the human opponent when in fact, it is not!<br>(Personally, throughout my testing I have not come across such a scenario!)<br>
 Therefore, in considering the possibility of such a scenario; even after declaring **Checkmate**; I leave it up to the user to resign.<br>That is, this program does **not** force the end of the game - *the player can play on!*
+
 ------
+
+### Minimax/Negamax
+The Computer Chess algorithm as designed by *Dean Menezes* uses what is known as **negamax** to determine its next move.
+To quote Rod Bird as he describes the *evaluate* function:
+> *This function checks all squares for players to move then recursively test plays.<br>
+  It plays its own move then plays the opponent's best move, recursively over four moves.<br>
+  So getting the potential net worth of each moveable player on the board.<br>
+  The highest scored determines the computer's next move.<br>
+  It is **a classic mini max evaluation shortened to its a negamax form with pruning**<br>
+  i.e. it does not waste time on lower value plays.*
+    
+I will not pretend that I understand the mathematics involved. I can only verify that it indeed works!<br>
+Nonetheless, for more information please see the following Wikipedia articles: [minimax](https://en.wikipedia.org/wiki/Minimax) and [negamax](https://en.wikipedia.org/wiki/Negamax).
+
+------
+
+### Resignation
+When either the Player or the Computer resigns, all the moves played are output to the screen.<br>
+(They are also outputted to *output.pgn* if applicable - see )
+The moves are outputted in **Long algebraic notation (LAN)**<p> 
+To quote [Wikipedia](https://en.wikipedia.org/wiki/Algebraic_notation_(chess)), 
+   > **In long algebraic notation (LAN), also known as full/fully expanded algebraic notation,<br> 
+   both the starting and ending squares are specified**,<br>
+   for example: e2e4. Sometimes these are separated by a hyphen, e.g. Nb1-c3, while captures are indicated by an "x", e.g. Rd3xd7.<br>
+   Long algebraic notation takes more space and is no longer commonly used in print; however, it has the advantage of clarity. 
+   
+   Therefore, this program produces the output of all moves in LAN *without hyphens* so that an user such as I,<br> can read the moves clearly without too much difficulty;<br>that is,
+   *what moves were made from what square to which square, and what piece was moved.*<p>
+   The Player can then copy these moves from the console terminal for further study!
+## Limitations
+* When it comes to Pawn Promotion, *Kool AI* solely promotes its pawns to Queens.<br>Nonetheless, the Player is given the option to promote the White's pawn to another piece besides Queen.
+* The program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the Player to end the game by *entering 'r' to resign*.<br>*Kool AI* will designate such an ending as a Draw i.e. *1/2-1/2*.
 
 ## Future Features
 * The ability to switch sides
@@ -509,6 +554,7 @@ The project is deployed on Heroku. These are the steps in order to deploy on Her
 * os - I use this library for the *clear* function in order to clear the console before displaying an updated chessboard.
 * re - I use *regular expressions* in order to validate user input of chess moves.
 * time - I use the *sleep* function to cause the program to delay for a few seconds.
+* copy TODO
 
 ### Other tools
 

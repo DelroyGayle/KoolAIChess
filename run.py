@@ -220,6 +220,69 @@ def coords_formula(file, rank):
     return (file_number, rank_number)
 
 
+def doCheck(num, chess, chess2, level, from_file, from_rank,
+                  to_file, to_rank, from_square, to_square,
+                  save_from_square, save_to_square):
+    if (to_square.endswith("1") or to_square.endswith("8") 
+        or Game.promoted_piece or to_square == "c2"):
+        chess.display("GAME " + Game.promoted_piece)
+        print("After ",from_square,to_square,save_from_square, save_to_square,"Level", level, type(save_to_square) )
+        if not save_from_square:
+            print("FROMSQUARE NONE",to_square )
+        else:
+            print("FROMSQUARE VALUE/LETTER/SIGN", save_from_square.value,
+                                        save_from_square.letter,
+                                        save_from_square.sign)
+        if not save_to_square:
+            print("TOSQUARE NONE",to_square )
+        else:
+            print("TOSQUARE VALUE/LETTER/SIGN", save_to_square.value,
+                                        save_to_square.letter,
+                                        save_to_square.sign)
+        if not chess.board[to_square]:
+            print("chess NONE",to_square )
+        else:
+            print("chess VALUE/LETTER/SIGN", chess.board[to_square].value,
+                                        chess.board[to_square].letter,
+                                        chess.board[to_square].sign)
+        if not chess.board["c2"]:
+            print("C2 NONE",chess.board["c2"] )
+        else:
+            print("C2 VALUE/LETTER/SIGN", chess.board["c2"].value,
+                                        chess.board["c2"].letter,
+                                        chess.board["c2"].sign)
+        if not chess.board["d4"]:
+            print("d4 NONE",chess.board["d4"] )
+        else:
+            print("d4 VALUE/LETTER/SIGN", chess.board["d4"].value,
+                                        chess.board["d4"].letter,
+                                        chess.board["d4"].sign)
+        
+        differ = False
+        for x in chess2.board:
+            
+            # if chess2.board[x] != chess.board[x]:
+            d = chess2.board[x] and not chess.board[x]
+            d = d or (not chess2.board[x]) and chess.board[x]
+            if not d and chess2.board[x] and chess.board[x]:
+                d = (chess2.board[x].value != chess.board[x].value or
+                chess2.board[x].letter != chess.board[x].letter or
+                chess2.board[x].sign != chess.board[x].sign)
+            if d:
+                print(x,"DIFFERS",level, Game.promoted_piece)
+                differ = True
+                print("CH", chess.board[x].value,  chess.board[x].letter,  chess.board[x].sign )
+                print("CH2", chess2.board[x].value,  chess2.board[x].letter,  chess2.board[x].sign )
+
+        if (differ):
+            input(level)
+
+        
+        if (num == 2):
+            if (level == 100 or Game.promoted_piece):
+                input()
+
+
 def do_evaluation(chess, level, piece_sign, prune_factor,
                   from_file, from_rank,
                   to_file, to_rank,
@@ -229,6 +292,9 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
     minimax/negamax formula
     """
 
+    # TODO
+    #chess2 = chess
+    chess2 = copy.copy(chess)
     from_square = from_file + from_rank
     to_square = to_file + to_rank
 
@@ -279,9 +345,19 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
             Game.best_to_file = to_file
             Game.best_to_rank = to_rank
 
+        doCheck(1, chess, chess2, level, from_file, from_rank,
+                  to_file, to_rank, from_square, to_square,
+                  save_from_square, save_to_square)
+
         # Restore previous squares
         chess.board[from_square] = save_from_square
         chess.board[to_square] = save_to_square
+
+
+        doCheck(2, chess, chess2, level, from_file, from_rank,
+                  to_file, to_rank, from_square, to_square,
+                  save_from_square, save_to_square)
+
 
         """
         Rod Bird's comment:
@@ -304,6 +380,10 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
     # Restore previous squares
     chess.board[from_square] = save_from_square
     chess.board[to_square] = save_to_square
+    doCheck(2, chess, chess2, level, from_file, from_rank,
+                  to_file, to_rank, from_square, to_square,
+                  save_from_square, save_to_square)
+
     # Continue the loop i.e. continue evaluating
     exitloop = False
     return (exitloop, bestscore)
@@ -812,10 +892,10 @@ def play_2_moves(chess, from_file, from_rank, to_file, to_rank, result):
     """
 
     process_computer_move(chess, from_file, from_rank, to_file, to_rank)
-    # input("GO") # TODO
+    input("GO") # TODO
 
     player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank)
-    # input("GO/2") # TODO
+    input("GO/2") # TODO
 
 
 def main_part2():
@@ -860,10 +940,24 @@ def main_part2():
         """        
         # board_copy = copy.deepcopy(chess)
         print("EVAL IN")
+        input()
         Game.evaluation_result = evaluate(chess, 0,
                                           constants.COMPUTER,
                                           constants.EVALUATE_THRESHOLD_SCORE)
         print("EVAL OUT") # TODO
+        if not chess.board["d4"]:
+            print("d4 NONE",chess.board["d4"] )
+        else:
+            print("d4 VALUE/LETTER/SIGN", chess.board["d4"].value,
+                                        chess.board["d4"].letter,
+                                        chess.board["d4"].sign)
+        if not chess.board["d4"]:
+            print("d4x NONE",chess.board["d4"] )
+        else:
+            print("d4x VALUE/LETTER/SIGN", chess.piece_value("d4"),
+                                        chess.piece_letter("d4"),
+                                        chess.piece_sign("d4"))
+        input()
         # Restore Chessboard
         # chess = board_copy
         # Reset this variable just in case it was affected
