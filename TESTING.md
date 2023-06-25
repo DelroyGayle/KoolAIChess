@@ -563,16 +563,12 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 
 
 -----
-         
-5. **Castling** - Test that user can *Castle Queenside*
-           
-    * *Method Used*
-    <p>The Movetext used can be found in testdata/file06.pgn<br>
-    The Chess moves are taken from<br>
-    * [the Opera Game](https://en.wikipedia.org/wiki/Opera_Game)
-    * [a](https://en.wikipedia.org/wiki/Opera_Game)
-    * [the Opera Game](https://en.wikipedia.org/wiki/Opera_Game)       
 
+5. **Castling** - Test that user can *Castle Queenside*
+   * *Method Used*
+     <p>The Movetext used can be found in testdata/file06.pgn<br>
+	The Chess moves are taken from the [Opera Game](https://en.wikipedia.org/wiki/Opera_Game)
+  
     ```
     1. e2e4 e7e5 2. Ng1f3 d7d6 3. d2d4 Bc8g4 4. d4xe5 Bg4xf3 5. Qd1xf3 d6xe5
     6. Bf1c4 Ng8f6 7. Qf3b3 Qd8e7 8. Nb1c3 c7c6 9. Bc1g5 b7b5 10. Nc3xb5
@@ -604,10 +600,10 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
            
 Note:
 1. The difference is that KoolAI resigned at **Move 16** forseeing that it could not win this game.
-2. When you compare the contents of file06.pgn with the above output you will see that
+2. When you compare the contents of file06.pgn with the above output you will see that<br>
 *All the captures shown by **x** and all the checks shown by **+** correspond!*
 3. Afterwards, I pasted the outputted moves into input.pgn just to ensure that the moves played and the output were identical.
-Therefore, confirming that  *captures **x** and checks **+** do not interfere with parsing.
+Therefore, confirming that  *captures **x** and checks **+*** do not interfere with parsing.
            
 1. **Test** - 
     * *Method Used*
