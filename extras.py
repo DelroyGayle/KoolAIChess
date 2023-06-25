@@ -549,7 +549,7 @@ def is_error_from_input_file():
                         "from your input via the keyboard")
 
 
-def handle_castling_input(chess, input_string):
+def test_if_input_is_castling(chess, input_string):
     """
     *** CASTLING ***
     Has user entered a Castling move from the keyboard?
@@ -562,13 +562,12 @@ def handle_castling_input(chess, input_string):
     # Default: 'pass' as in Python i.e. NOP
     do_next = "pass"
     input_string = input_string.upper()
+    #      r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))\Z"
     if not constants.castling_keyboard_pattern.match(input_string):
-        # r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))\Z"
         # No Castling move. Determine what this chess move is
         return do_next
 
     Game.general_string_result = input_string
-    input("CASTLING" + Game.promoted + input_string) # TODO
     just_performed_castling = m.perform_castling(chess, constants.PLAYER)
     if not just_performed_castling:
         # This Castling move is invalid!
@@ -615,7 +614,7 @@ def handle_player_move_from_keyboard(chess):
 
     # *** CASTLING ***
     # Check whether it is a Castling Move
-    do_next = handle_castling_input(chess, input_string)
+    do_next = test_if_input_is_castling(chess, input_string)
     if do_next != "pass":            
         return (do_next, None)
 
@@ -833,8 +832,6 @@ def finalise_computer_move(chess):
         if (Game.show_taken_message):
             # Show what piece the Computer took
             print(Game.show_taken_message)
-
-            input("COMPUTER TOOK") # TODO
 
         # If reading from a file
         # Pause the computer so that the Player can read it

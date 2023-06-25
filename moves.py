@@ -542,7 +542,7 @@ def check_castling_valid_part2(chess, who_are_you, which_castle_side,
     chess.board[the_rook_file + king_rook_rank] = None
 
 # The king must not end up in check
-    if in_check(chess, who_are_you) or who_are_you<0:
+    if in_check(chess, who_are_you):
         produce_error_message(constants.END_UP_IN_CHECK)
         restore_original_positions(chess, the_king, the_rook,
                                    the_king_square, the_rook_square,

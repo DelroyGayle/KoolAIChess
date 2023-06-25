@@ -584,7 +584,8 @@ def finalise_player_move(chess, it_is_a_castling_move,
     e.append_to_output_stream(Game.output_chess_move + constants.SPACE)
 
 
-def handle_castling_input(chess, input_string):
+# TODO
+def REMOVE_handle_castling_input(chess, input_string):
     """
     *** CASTLING ***
     This is denoted by using capital 'O'
@@ -811,10 +812,10 @@ def play_2_moves(chess, from_file, from_rank, to_file, to_rank, result):
     """
 
     process_computer_move(chess, from_file, from_rank, to_file, to_rank)
-    input("GO") # TODO
+    # input("GO") # TODO
 
     player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank)
-    input("GO/2") # TODO
+    # input("GO/2") # TODO
 
 
 def main_part2():
@@ -858,12 +859,14 @@ def main_part2():
         to its original values/configuration
         """        
         # board_copy = copy.deepcopy(chess)
+        print("EVAL IN")
         Game.evaluation_result = evaluate(chess, 0,
                                           constants.COMPUTER,
                                           constants.EVALUATE_THRESHOLD_SCORE)
+        print("EVAL OUT") # TODO
         # Restore Chessboard
         # chess = board_copy
-        # Reset just in case it was affected
+        # Reset this variable just in case it was affected
         Game.promoted_piece = ""
         # remove todo
         # from_file = Game.best_from_file

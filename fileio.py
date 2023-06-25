@@ -595,7 +595,6 @@ def parse_chess_move():
         Game.general_string_result = matched.group(0)
         handle_move_suffix(matched)
         print("OO>", Game.general_string_result, matched.group(0), len(matched.group(0)))  # todo
-        input("CASTLING")
         return True  # Indicate success
 
 # Unknown Chess Move
