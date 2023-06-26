@@ -1,5 +1,5 @@
 {
-    ' TEST EN PASSANT - TEST 3 - FOR BLACK TO ENTER A MOVE
+    ' TEST EN PASSANT - FOR THE COMPUTER TO ENTER A MOVE
     ' THAT IS: 15. ... exf3+ is a Discovery Check     
 }
 1.e4 e5 2.Nf3 d5 3.exd5 Bd6 4.Nc3 Nf6 5.Bb5+ c6 6.Ba4 e4

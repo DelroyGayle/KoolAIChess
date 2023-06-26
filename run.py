@@ -219,7 +219,7 @@ def coords_formula(file, rank):
     rank_number = constants.ASCII_EIGHT - ord(rank)
     return (file_number, rank_number)
 
-#TODO
+#TODO REMOVE
 def custom_copy(object):
     dict_copy = copy.copy(object)
     print(type(dict_copy), id(dict_copy), id(object))
@@ -229,6 +229,7 @@ def custom_copy(object):
     return dict_copy
 
 
+# need to remove TODO
 def doCheck(num, chess, chess2, level, from_file, from_rank,
                   to_file, to_rank, from_square, to_square,
                   save_from_square, save_to_square):
@@ -291,7 +292,7 @@ def doCheck(num, chess, chess2, level, from_file, from_rank,
             if (level == 100 or Game.promoted_piece):
                 input()
 
-
+# NEED TO REMOVE TODO
 def save_last_rows(chess):
     """
     In case a Pawn gets Promoted
@@ -357,8 +358,8 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
                                temp_calc)
         if Game.promoted_piece:
             print("PROMOTION HAPPENED", Game.promoted_piece)
-            #chess = chess2
-            #input()
+            #chess = chess2 TODO
+            #input() TODO
 
     """
     Rod Bird's comment:
@@ -686,8 +687,8 @@ def finalise_player_move(chess, it_is_a_castling_move,
     if Game.en_passant_status == constants.VALID:
         # Then output the chess move to the output stream
         e.append_to_output_stream(Game.output_chess_move + constants.SPACE)
-        print("REPEAT")
-        input(Game.output_chess_move)
+        print("EP VALID")
+        input(Game.output_chess_move) # TODO
         return
 
     # Now that the Player has played, see if the Computer is in Check
@@ -943,10 +944,10 @@ def play_2_moves(chess, from_file, from_rank, to_file, to_rank, result):
     """
 
     process_computer_move(chess, from_file, from_rank, to_file, to_rank)
-    input("GO") # TODO
+    # input("GO") # TODO
 
     player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank)
-    input("GO/2") # TODO
+    # input("GO/2") # TODO
 
 
 def main_part2():
@@ -989,27 +990,27 @@ def main_part2():
         Use 'deepcopy' to ensure that the Chessboard is restored
         to its original values/configuration
         """        
-        # board_copy = copy.deepcopy(chess)
+        # board_copy = copy.deepcopy(chess) TODO
         print("EVAL IN")
-        # input()
-        chess2 = copy.copy(chess)
+        # input() TODO
+        chess2 = copy.copy(chess) # TODO REMOVE
         chess2board = custom_copy(chess.board)
 
         Game.evaluation_result = evaluate(chess, 0,
                                           constants.COMPUTER,
                                           constants.EVALUATE_THRESHOLD_SCORE)
-        if Game.promoted_piece:
-            print("PROMOTION HAPPENEDXXX", Game.promoted_piece,level)
-            # chess = chess2
-            Game.promoted_piece = ""
-            input()
+        # if Game.promoted_piece:
+        #     print("PROMOTION HAPPENEDXXX", Game.promoted_piece,level)
+        #     # chess = chess2
+        #     Game.promoted_piece = ""
+        #     input() TODO
 
         print("EVAL OUT") # TODO
         print("IDS", id(chess.board), id(chess2board))
         # chess2.display("DISPLAY CHESS2")
         print("D4 CHESS2 ORIG",chess2board["d4"])
         print("D4 CHESS1 ORIG",chess.board["d4"])
-        if chess2board["d4"]:
+        if chess2board["d4"] and False: # todo
             print("D4 CHESS2 LETTER", chess2board["d4"].letter)
             print("ORIG",chess2board["d4"], chess2board["d4"].letter,
                                         chess2board["d4"].value,
@@ -1022,7 +1023,7 @@ def main_part2():
         print("NOW",chess.board["d4"])
         print("NOW",chess.board["d1"])
 
-        input("NONEx")
+        # input("NONEx") TODO
         # for x in chess2board: TODO
             # print(type(chess2board[x]), chess2board[x])
         # for x in chess2board:
@@ -1040,7 +1041,7 @@ def main_part2():
         #         chess.board[x].value = chess2board[x].value
         #         chess.board[x].sign = chess2board[x].sign
         #         print("CHANGED",x,chess2board[x].letter)
-        # input("LOOP")
+        # input("LOOP") TODO
         chess.display("DISPLAY CHESS")
         # chess = chess2
         # if not chess2.board["d4"]:
@@ -1062,7 +1063,7 @@ def main_part2():
                                         chess.piece_letter("d1"),
                                         chess.piece_sign("d1"))
 
-        input()
+        # input() TODO
         # Restore Chessboard
         # chess = board_copy
         # Reset this variable just in case it was affected

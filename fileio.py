@@ -1084,9 +1084,10 @@ def handle_player_move_from_inputfile(chess,
             # The Castling that was read from the input file was invalid!
             # 'perform_castling() redisplays the Board
             # and displays the appropriate error messaging
-            # No further moves are read from the input file -
+            # No further moves are read from the input file;
             # rather fetch moves from the user
             e.is_error_from_input_file()
+            print()
             do_next = "continue"
             return do_next
 
@@ -1141,7 +1142,7 @@ def handle_computer_move_from_inputfile(chess,
             # The Castling that was read from the input file was invalid!
             # 'perform_castling() redisplays the Board
             # and displays the appropriate error messaging
-            # No further moves are read from the input file -
+            # No further moves are read from the input file;
             # rather fetch moves from the user
             print("Computer from this point onwards "
                   "will now generate its own moves")

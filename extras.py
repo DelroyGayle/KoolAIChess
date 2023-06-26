@@ -455,7 +455,7 @@ def movelist(chess, from_file, from_rank, piece_sign, evaluating=False):
     generate_moves_method = determine_generate_move_method(letter)
     #if Game.move_count > 20:
     #    print("LETTER,446,E>", letter,index,chess.board[index].sign) # todo
-    #    input()
+    #    input() TODO
     all_the_moves = generate_moves_method(chess,
                                           from_file, from_rank,
                                           [],
@@ -535,7 +535,7 @@ def input_status_message(message):
 
     # There is the need for a further delay here
     sleep(3)
-    input()
+    # input() TODO
 
 
 def is_error_from_input_file():
@@ -816,7 +816,7 @@ def is_it_checkmate(chess, who_are_you):
 
     # No move found so definitely Checkmate!
     Game.it_is_checkmate = who_are_you
-    input("CM" + Game.promoted) # TODO
+    # input("CM" + Game.promoted_piece) # TODO
     return True
 
 

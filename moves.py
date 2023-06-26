@@ -801,7 +801,7 @@ def perform_en_passant(chess, from_file, from_rank, to_file, to_rank):
     chess.board[from_square] = None
     chess.display("TEST") # TODO REMOVE
     print(from_file, from_rank, to_file, to_rank)  # TODO REMOVE
-    input(from_square + to_square)  # TODO REMOVE
+    # input(from_square + to_square)  # TODO REMOVE
 
     # The king must not end up in check
     if in_check(chess, Game.who_are_you):
@@ -827,7 +827,7 @@ def validate_and_perform_en_passant(chess, from_file, from_rank,
     If an en passant move is possible, perform it
     """
 
-    print(301, from_file, from_rank, to_file, to_rank)
+    print(301, from_file, from_rank, to_file, to_rank) # TODO
     #  input() # TODO
     Game.en_passant_status = constants.NOVALUE
     if chess.piece_value(to_file, to_rank) != constants.BLANK:
@@ -841,7 +841,7 @@ def validate_and_perform_en_passant(chess, from_file, from_rank,
     # todo
 
     print("WH?", to_file, to_rank, Game.computer_pawn_2squares_advanced_file,  Game.computer_pawn_2squares_advanced_rank,
-        str(int(to_rank) - 1))
+        "WH", str(int(to_rank) - 1), "BL",str(int(to_rank) + 1))
     # Player is White
     # Is there a black pawn (which advanced 2 squares) adjacent to the white pawn?
     if (Game.opponent_who_are_you == constants.COMPUTER
@@ -865,13 +865,13 @@ def validate_and_perform_en_passant(chess, from_file, from_rank,
     elif (Game.opponent_who_are_you == constants.PLAYER
           and Game.player_pawn_2squares_advanced_file == to_file
           and Game.player_pawn_2squares_advanced_rank
-          == str(int(to_rank) - 1)):
+          == str(int(to_rank) + 1)):
             print("YES/OPP = PLAYER EP")
             print("X", from_file)
             print("Y", from_rank)
             print("PAWN/p", chess.piece_value(Game.player_pawn_2squares_advanced_file, Game.player_pawn_2squares_advanced_rank), constants.PAWN_VALUE * Game.who_are_you, Game.who_are_you, Game.opponent_who_are_you)
             the_file = Game.player_pawn_2squares_advanced_file
-            the_rank = str(int(to_rank) - 1)
+            the_rank = to_rank # str(int(to_rank) - 1) TODO DG
             print("DEST FILE", the_file)
             print("DEST RANK", to_rank)
             save_file = Game.player_pawn_2squares_advanced_file
@@ -903,8 +903,8 @@ def validate_and_perform_en_passant(chess, from_file, from_rank,
     # At this point, 
     # it has been determined that this move is an en passant move
     # So, Redisplay the Board
-    print(110,from_file, from_rank, to_file, to_rank)
-    input() # TODO
+    print(110,from_file, from_rank, to_file, to_rank) # TODO
+    # input() # TODO
     chess.display(output_attacking_move(chess, Game.who_are_you,
                                         from_file, from_rank,
                                         to_file, to_rank))
