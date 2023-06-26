@@ -160,6 +160,10 @@ Essentially, a PGN file is divided up into eight *mandatory* parts - a *Seven Ta
    <em>what moves were made from what square to which square, and what piece was moved.</em><p>
    Please note: this is LAN as opposed to strict SAN as expected in the PGN Standard.<br>Nevertheless, PGN files can indeed contain LAN and Chess-playing software should understand LAN.
 	   
+## Limitations
+* When it comes to File Input of moves and Pawn Promotion, *Kool AI* solely promotes Pawns to Queens.
+* Therefore, when parsing *input.pgn* the program will ignore the annotation *=N* in a move such as **a8=N**.
+* Instead it would automatically promote the pawn in a8 to a Queen.
 -----
    
 ## Testing

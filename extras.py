@@ -535,6 +535,7 @@ def input_status_message(message):
 
     # There is the need for a further delay here
     sleep(3)
+    input()
 
 
 def is_error_from_input_file():
@@ -654,25 +655,29 @@ def any_promotion(chess, to_file, to_rank):
         # Promote the White Pawn to a White Queen
 
         chess.display("DO PROMOTE FOR WHITE")
-        input(to_square)
-        chess.board[to_square].value = constants.QUEEN_VALUE
-        chess.board[to_square].letter = constants.QUEEN_LETTER
-        chess.board[to_square] = piece.Queen(constants.QUEEN_VALUE, constants.PLAYER)
+        #input(to_square)
+        #chess.board[to_square].value = constants.QUEEN_VALUE
+        #chess.board[to_square].letter = constants.QUEEN_LETTER
+        #chess.board[to_square].sign = constants.PLAYER
+        # chess.board[to_square] = piece.Queen(constants.QUEEN_VALUE, constants.PLAYER)
+        # TODO
         Game.promoted_piece = constants.QUEEN_LETTER
         chess.display(to_square)
-        input("PROMOTION 1W") # TODO
+        #input("PROMOTION 1W") # TODO
     elif (to_rank == "1"
           and chess.piece_value(to_square) == -constants.PAWN_VALUE):
         # The Computer has reached the bottom of the board
         # Promote the Black Pawn to a Black Queen
-        chess.display("DO PROMOTE FOR BLACK")
-        input(to_square)
-        chess.board[to_square].value = -constants.QUEEN_VALUE
-        chess.board[to_square].letter = constants.QUEEN_LETTER
-        chess.board[to_square] = piece.Queen(constants.QUEEN_VALUE, constants.COMPUTER)
+        #chess.display("DO PROMOTE FOR BLACK")
+        #input(to_square)
+        #chess.board[to_square].value = -constants.QUEEN_VALUE
+        #chess.board[to_square].letter = constants.QUEEN_LETTER
+        #chess.board[to_square].sign = constants.COMPUTER
+        # chess.board[to_square] = piece.Queen(constants.QUEEN_VALUE, constants.COMPUTER)
+        # TODO
         Game.promoted_piece = constants.QUEEN_LETTER
         chess.display(to_square)
-        input("PROMOTION 2B") # TODO
+        #input("PROMOTION 2B") # TODO
 
     else:
         Game.promoted_piece = ""

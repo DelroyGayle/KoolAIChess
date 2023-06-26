@@ -278,7 +278,7 @@ To quote [Wikipedia](https://en.wikipedia.org/wiki/Algebraic_notation_(chess)),
    *what moves were made from what square to which square, and what piece was moved.*<p>
    The Player can then copy these moves from the console terminal for further study!
 ## Limitations
-* When it comes to Pawn Promotion, *Kool AI* solely promotes its pawns to Queens.<br>Nonetheless, the Player is given the option to promote the White's pawn to another piece besides Queen.
+* When it comes to Pawn Promotion, *Kool AI* solely promotes its Pawns to Queens.<br>Nonetheless, the Player is given the option to promote the White's Pawn to another piece besides Queen.
 * The program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the Player to end the game by *entering 'r' to resign*.<br>*Kool AI* will designate such an ending as a Draw i.e. *1/2-1/2*.
 
 ## Future Features

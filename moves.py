@@ -841,20 +841,20 @@ def validate_and_perform_en_passant(chess, from_file, from_rank,
     # todo
 
     print("WH?", to_file, to_rank, Game.computer_pawn_2squares_advanced_file,  Game.computer_pawn_2squares_advanced_rank,
-        str(int(to_rank) + 1))
+        str(int(to_rank) - 1))
     # Player is White
     # Is there a black pawn (which advanced 2 squares) adjacent to the white pawn?
     if (Game.opponent_who_are_you == constants.COMPUTER
         and Game.computer_pawn_2squares_advanced_file == to_file
         and Game.computer_pawn_2squares_advanced_rank
-        == str(int(to_rank) + 1)): 
+        == str(int(to_rank) - 1)): 
             print("YES/ OPP = COMPUTER EP")
             print("X", from_file)
             print("Y", from_rank) # todo
             print("PAWN/c", chess.piece_value(Game.computer_pawn_2squares_advanced_file, 
             Game.computer_pawn_2squares_advanced_rank), constants.PAWN_VALUE * Game.who_are_you, Game.who_are_you, Game.opponent_who_are_you)
             the_file = Game.computer_pawn_2squares_advanced_file
-            the_rank = str(int(to_rank) + 1)
+            the_rank = to_rank # the_rank = str(int(to_rank) - 1) TODO DG
             print("DEST FILE", the_file)
             print("DEST RANK", the_rank) # todo
             save_file = Game.computer_pawn_2squares_advanced_file

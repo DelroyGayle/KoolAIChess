@@ -433,6 +433,7 @@ def parse_chess_move():
 
     Game.input_stream_previous_contents = Game.input_stream[0:20]
     print(336,"MATCHED",Game.input_stream_previous_contents) # TODO
+
     # EIGHT REGEXPS
 
     """
@@ -598,6 +599,7 @@ def parse_chess_move():
         return True  # Indicate success
 
 # Unknown Chess Move
+    print(199)
     e.input_status_message(constants.BAD_CHESS_MOVE_FROMFILE
                            + Game.input_stream[0:20])
     return False  # Indicate failure
@@ -752,6 +754,7 @@ def find_the_match(chess, all_matched_list,
         It means: An illegal move or invalid move
         has been read in from the input file
         """
+        print(299)        
         e.input_status_message(constants.BAD_CHESS_MOVE_FROMFILE
                                + Game.input_stream_previous_contents)
         return  # Failure
@@ -871,6 +874,7 @@ def determine_the_capture_by_both_squares(chess,
         It means: An illegal move or invalid move
         has been read in from the input file
         """
+        print(399)        
         e.input_status_message(constants.BAD_CHESS_MOVE_FROMFILE
                                + Game.input_stream_previous_contents)
         return  # Failure

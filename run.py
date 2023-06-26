@@ -219,6 +219,15 @@ def coords_formula(file, rank):
     rank_number = constants.ASCII_EIGHT - ord(rank)
     return (file_number, rank_number)
 
+#TODO
+def custom_copy(object):
+    dict_copy = copy.copy(object)
+    print(type(dict_copy), id(dict_copy), id(object))
+    for k, v in object.items():
+        if isinstance(object[k], dict):
+            dict_copy[k] = object[k].custom_copy()
+    return dict_copy
+
 
 def doCheck(num, chess, chess2, level, from_file, from_rank,
                   to_file, to_rank, from_square, to_square,
@@ -283,6 +292,33 @@ def doCheck(num, chess, chess2, level, from_file, from_rank,
                 input()
 
 
+def save_last_rows(chess):
+    """
+    In case a Pawn gets Promoted
+    Keep a copy of the original Pawns that are in
+    both the top [a8 to h8] and last rows [a1 to h1]
+    """
+
+    found = False
+    save_dict = {}
+    base = ord("a")
+    for i in range(8):
+        file = chr(base)
+        base += 1
+        index = file + "1"  # a1 to h1
+        if chess.piece_letter(index) == constants.PAWN_LETTER:
+            save_dict[index] = chess.board[index]
+        index = file + "8"  # a8 to h8
+        if chess.piece_letter(index) == constants.PAWN_LETTER:
+            save_dict[index] = chess.board[index]
+   	
+    if found:
+        print(save_dict)
+        input("FOUND")
+        return save_dict
+    # Otherwise return None
+
+
 def do_evaluation(chess, level, piece_sign, prune_factor,
                   from_file, from_rank,
                   to_file, to_rank,
@@ -294,7 +330,7 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
 
     # TODO
     #chess2 = chess
-    chess2 = copy.copy(chess)
+    #chess2 = copy.deepcopy(chess)
     from_square = from_file + from_rank
     to_square = to_file + to_rank
 
@@ -302,6 +338,9 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
     save_from_square = chess.board[from_square]
     save_to_square = chess.board[to_square]
     targetvalue = chess.piece_value(to_square)
+    # saved_last_rows = save_last_rows(chess) TODO
+    saved_last_rows = None  # TODO
+    chess2 = copy.copy(chess)
     (to_file_number, to_rank_number) = coords_formula(to_file, to_rank)
     # Make the move so that it can be evaluated
     e.make_move_to_square(chess,
@@ -316,6 +355,10 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
                                level,
                                -piece_sign,
                                temp_calc)
+        if Game.promoted_piece:
+            print("PROMOTION HAPPENED", Game.promoted_piece)
+            #chess = chess2
+            #input()
 
     """
     Rod Bird's comment:
@@ -345,18 +388,21 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
             Game.best_to_file = to_file
             Game.best_to_rank = to_rank
 
-        doCheck(1, chess, chess2, level, from_file, from_rank,
-                  to_file, to_rank, from_square, to_square,
-                  save_from_square, save_to_square)
+        # doCheck(1, chess, chess2, level, from_file, from_rank,
+        #           to_file, to_rank, from_square, to_square,
+        #           save_from_square, save_to_square)
 
         # Restore previous squares
         chess.board[from_square] = save_from_square
         chess.board[to_square] = save_to_square
+        if saved_last_rows:
+            # Restore the first and last rank (row) if affected by Pawn Promotions
+            for index in saved_last_rows:
+                chess.board[index] = saved_last_rows[index]
 
-
-        doCheck(2, chess, chess2, level, from_file, from_rank,
-                  to_file, to_rank, from_square, to_square,
-                  save_from_square, save_to_square)
+        # doCheck(2, chess, chess2, level, from_file, from_rank,
+        #           to_file, to_rank, from_square, to_square,
+        #           save_from_square, save_to_square)
 
 
         """
@@ -380,9 +426,14 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
     # Restore previous squares
     chess.board[from_square] = save_from_square
     chess.board[to_square] = save_to_square
-    doCheck(2, chess, chess2, level, from_file, from_rank,
-                  to_file, to_rank, from_square, to_square,
-                  save_from_square, save_to_square)
+    if saved_last_rows:
+        # Restore the first and last rank (row) if affected by Pawn Promotions
+        for index in saved_last_rows:
+            chess.board[index] = saved_last_rows[index]
+
+    # doCheck(2, chess, chess2, level, from_file, from_rank,
+    #               to_file, to_rank, from_square, to_square,
+    #               save_from_square, save_to_square)
 
     # Continue the loop i.e. continue evaluating
     exitloop = False
@@ -940,23 +991,77 @@ def main_part2():
         """        
         # board_copy = copy.deepcopy(chess)
         print("EVAL IN")
-        input()
+        # input()
+        chess2 = copy.copy(chess)
+        chess2board = custom_copy(chess.board)
+
         Game.evaluation_result = evaluate(chess, 0,
                                           constants.COMPUTER,
                                           constants.EVALUATE_THRESHOLD_SCORE)
+        if Game.promoted_piece:
+            print("PROMOTION HAPPENEDXXX", Game.promoted_piece,level)
+            # chess = chess2
+            Game.promoted_piece = ""
+            input()
+
         print("EVAL OUT") # TODO
-        if not chess.board["d4"]:
-            print("d4 NONE",chess.board["d4"] )
-        else:
-            print("d4 VALUE/LETTER/SIGN", chess.board["d4"].value,
-                                        chess.board["d4"].letter,
-                                        chess.board["d4"].sign)
+        print("IDS", id(chess.board), id(chess2board))
+        # chess2.display("DISPLAY CHESS2")
+        print("D4 CHESS2 ORIG",chess2board["d4"])
+        print("D4 CHESS1 ORIG",chess.board["d4"])
+        if chess2board["d4"]:
+            print("D4 CHESS2 LETTER", chess2board["d4"].letter)
+            print("ORIG",chess2board["d4"], chess2board["d4"].letter,
+                                        chess2board["d4"].value,
+                                        chess2board["d4"].sign)
+        if chess.board["d4"]:
+            print("D4 CHESS1 LETTER",  chess.piece_letter("d4"))
+        if chess.board["d1"]:
+            print("D1 CHESS1 LETTER",  chess.piece_letter("d1"))
+
+        print("NOW",chess.board["d4"])
+        print("NOW",chess.board["d1"])
+
+        input("NONEx")
+        # for x in chess2board: TODO
+            # print(type(chess2board[x]), chess2board[x])
+        # for x in chess2board:
+        #     if not chess.board[x] and not chess2board[x]:
+        #         continue
+
+        #     if ((not chess.board[x] and chess2board[x]) or
+        #         chess.board[x] and not chess2board[x]):
+        #             chess.board[x] = chess2board[x]
+        #             print("CHANGE BECAUSE OF NULL", x)
+        #             continue
+        #     print("CH",x,chess.board[x].letter,chess2board[x].letter)
+        #     if chess.board[x].letter != chess2board[x].letter:
+        #         chess.board[x].letter = chess2board[x].letter
+        #         chess.board[x].value = chess2board[x].value
+        #         chess.board[x].sign = chess2board[x].sign
+        #         print("CHANGED",x,chess2board[x].letter)
+        # input("LOOP")
+        chess.display("DISPLAY CHESS")
+        # chess = chess2
+        # if not chess2.board["d4"]:
+        #     print("d4/c2 NONE",chess2.board["d4"] )
+        # else:
+        #     print("d4/c2 VALUE/LETTER/SIGN", chess2.board["d4"].value,
+        #                                 chess2.board["d4"].letter,
+        #                                 chess2.board["d4"].sign)
         if not chess.board["d4"]:
             print("d4x NONE",chess.board["d4"] )
         else:
             print("d4x VALUE/LETTER/SIGN", chess.piece_value("d4"),
                                         chess.piece_letter("d4"),
                                         chess.piece_sign("d4"))
+        if not chess.board["d1"]:
+            print("d1x NONE",chess.board["d1"] )
+        else:
+            print("d1x VALUE/LETTER/SIGN", chess.piece_value("d1"),
+                                        chess.piece_letter("d1"),
+                                        chess.piece_sign("d1"))
+
         input()
         # Restore Chessboard
         # chess = board_copy
