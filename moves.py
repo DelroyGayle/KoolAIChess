@@ -594,10 +594,10 @@ def check_if_castling_move_is_valid(chess, who_are_you, which_castle_side,
     return True
 
 
-# At this point, castling has been executed.
+# At this point, Castling has been executed.
 # A post-examination of the move has been done to ensure
 # that the king in question is not in check
-# Therefore it is a legal castling move - no need for any further checks
+# Therefore it is a legal Castling move - no need for any further checks
 # Record that Castling has been executed once
 # for either the player or the computer
 # Redisplay the Board
@@ -747,13 +747,13 @@ def record_pawn_that_advanced_by2(chess, who_are_you,
 def indicate_en_passant_done(chess, who_are_you, from_file, from_rank, 
                                     to_file, to_rank):
     """
-    At this point, en passant has been executed.
+    At this point, En Passant has been executed.
     A post-examination of the move has been done
     to ensure that the king in question is not in Check
-    Therefore it is a legal en passant move - no need for any further checks
+    Therefore it is a legal En Passant move - no need for any further checks
     Reset variables holding opponent's advanced-by-2 pawn positions
     Display message
-    Update new values regarding en passant
+    Update new values regarding En Passant
     """
 
     if who_are_you == constants.PLAYER:

@@ -689,7 +689,7 @@ def in_check(chess, user_sign):
     this function [ scans ] all squares to see if any opposition piece
     has the King in Check
     """
-    print("IN CHECK IN") # TODO
+    # print("IN CHECK IN") # TODO
     opponent_sign = -user_sign
     user_king_value = (constants.VALUE_OF_COMPUTER_KING
                                               if user_sign == constants.COMPUTER
@@ -710,16 +710,16 @@ def in_check(chess, user_sign):
                        == user_king_value):
                         # User King is in Check!
                         # # TODO
-                        print(user_sign, opponent_sign, index, all_the_moves[m],
-                        chess.piece_letter(all_the_moves[m]),
-                        chess.piece_value(all_the_moves[m]),
-                        all_the_moves, )
-                        print(Game.move_count,user_sign, opponent_sign)
-                        print("YES IN CHECK")  # todo
+                        # print(user_sign, opponent_sign, index, all_the_moves[m],
+                        # chess.piece_letter(all_the_moves[m]),
+                        # chess.piece_value(all_the_moves[m]),
+                        # all_the_moves, )
+                        # print(Game.move_count,user_sign, opponent_sign)
+                        # print("YES IN CHECK")  # todo
                         return True
 
     # Indicate that the Opponent King is not in Check at all
-    print("IN CHECK out") # todo
+    # print("IN CHECK out") # todo
     return False
 
 

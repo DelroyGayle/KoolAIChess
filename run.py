@@ -688,7 +688,7 @@ def finalise_player_move(chess, it_is_a_castling_move,
         # Then output the chess move to the output stream
         e.append_to_output_stream(Game.output_chess_move + constants.SPACE)
         print("EP VALID")
-        input(Game.output_chess_move) # TODO
+        # input(Game.output_chess_move) # TODO
         return
 
     # Now that the Player has played, see if the Computer is in Check
