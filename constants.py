@@ -7,7 +7,7 @@ import re
 
 # maximum recursive calls for the function evaluate()
 # 5 normal play; 3 dumber and quicker
-MAXLEVEL = 5
+MAXLEVEL = 3
 
 # Negative number used to represent Black
 COMPUTER = -1

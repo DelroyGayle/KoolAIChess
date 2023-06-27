@@ -771,7 +771,8 @@ def indicate_en_passant_done(chess, who_are_you, from_file, from_rank,
     Game.en_passant_status = constants.VALID
 
 
-def perform_en_passant(chess, from_file, from_rank, to_file, to_rank):
+def perform_en_passant(chess, from_file, from_rank, to_file, to_rank,
+                              display_chess_move):
     """
     Chess move has been determined which matches an en passant move
     Therefore, perform it
@@ -799,9 +800,12 @@ def perform_en_passant(chess, from_file, from_rank, to_file, to_rank):
 
     # Erase square of 'from' pawn now vacated
     chess.board[from_square] = None
-    chess.display("TEST") # TODO REMOVE
-    print(from_file, from_rank, to_file, to_rank)  # TODO REMOVE
+    # chess.display("TEST") # TODO REMOVE
+    # print(from_file, from_rank, to_file, to_rank)  # TODO REMOVE
     # input(from_square + to_square)  # TODO REMOVE
+
+    # Redisplay the Board After the En Passant Move
+    chess.display(display_chess_move)
 
     # The king must not end up in check
     if in_check(chess, Game.who_are_you):
@@ -811,7 +815,7 @@ def perform_en_passant(chess, from_file, from_rank, to_file, to_rank):
         chess.board[save_square] = save_captured_pawn
         chess.board[to_square] = None
         # Redisplay the board
-        chess.display("Invalid en passant - The king must not end up in check")
+        print("Illegal En Passant - The king must not end up in check")
         Game.en_passant_status = constants.INVALID
         sleep(constants.SLEEP_VALUE)
         return False
@@ -902,18 +906,18 @@ def validate_and_perform_en_passant(chess, from_file, from_rank,
 
     # At this point, 
     # it has been determined that this move is an en passant move
-    # So, Redisplay the Board
-    print(110,from_file, from_rank, to_file, to_rank) # TODO
-    # input() # TODO
-    chess.display(output_attacking_move(chess, Game.who_are_you,
-                                        from_file, from_rank,
-                                        to_file, to_rank))
+    # Set up the Chess Move to be displayed
+    display_chess_move = output_attacking_move(chess, Game.who_are_you,
+                                               from_file, from_rank,
+                                               to_file, to_rank)
 
     # Defensive Programming
     # Add a failsafe just to:
     # 1) Double-check that the attacking piece is a pawn of the right colour
     if (chess.piece_value(from_file, from_rank) !=
        constants.PAWN_VALUE * Game.who_are_you):
+        # Redisplay the Board
+        chess.display(display_chess_move)
         # Display error message
         outstring = "Instead, Value: {}".format(chess.piece_value(from_file,
                                                                   from_rank))
@@ -938,6 +942,8 @@ def validate_and_perform_en_passant(chess, from_file, from_rank,
     # an actual opponent pawn of the right colour?
     if (chess.piece_value(save_file, save_rank) !=
        constants.PAWN_VALUE * Game.opponent_who_are_you):
+        # Redisplay the Board
+        chess.display(display_chess_move)
         # Display error message
         format_string = "Instead, Value: {}"
         output_error_message = ("INTERNAL ERROR: Expected the Captured Piece "
@@ -957,7 +963,9 @@ def validate_and_perform_en_passant(chess, from_file, from_rank,
         return False
 
 # Otherwise perform the en passant
-    return perform_en_passant(chess, from_file, from_rank, to_file, to_rank)
+    return perform_en_passant(chess, from_file, from_rank, 
+                                     to_file, to_rank,
+                                     display_chess_move)
 
 
 def validate_player_en_passant_move(chess, from_file, from_rank,

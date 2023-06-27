@@ -1,0 +1,8 @@
+{Shortest possible composed game which ends with mate by an en passant capture
+No. 3
+The task of constructing the shortest game with discovered mate by means of an en passant capture
+had already been resolved by Pal Benko.
+SOURCE: https://www.chesshistory.com/winter/extra/enpassant.html 
+Used to test en passant
+}
+1 e4 e5 2 Qh5 Nc6 3 g4 d6 4 Bh3 Kd7 5 g5+ f5 6 gxf6 (mate)

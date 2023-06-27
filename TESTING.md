@@ -102,7 +102,8 @@ f3 Bc8 34. Kf2 Bf5 35. Ra7 g6 36. Ra6+ Kc5 37. Ke1 Nf4 38. g3 Nxh3 39. Kd2 Kb5
 
 ## PGN Game format
    
-   > A PGN game is composed of two sections. The first is the tag pair section and the second is the Movetext section. The tag pair section provides information that identifies the game by defining the values associated with a set of standard parameters. The Movetext section gives the usually enumerated and possibly annotated moves of the game along with the concluding game termination marker. The chess moves themselves are represented using **SAN (Standard Algebraic Notation)**, also described later.
+   > A PGN game is composed of two sections. The first is the tag pair section and the second is the Movetext section. The tag pair section provides information that identifies the game by defining the values associated with a set of standard parameters. The Movetext section gives the usually enumerated and possibly annotated moves of the game along with the concluding game termination marker. The chess moves themselves are represented using **SAN (Standard Algebraic Notation)**.<br>
+   See [this article](https://www.chessprogramming.org/Algebraic_Chess_Notation#Standard_Algebraic_Notation_.28SAN.29) for an explanation of **SAN**.<p>
    
 Essentially, a PGN file is divided up into eight *mandatory* parts - a *Seven Tag Roster* followed by the *Movetext*
    
@@ -121,7 +122,7 @@ Essentially, a PGN file is divided up into eight *mandatory* parts - a *Seven Ta
    It will parse the following:
    * Movetext move number indications - A move number indication is composed of one or more adjacent digits (an integer token) followed by *zero or more periods*. 
    * * **Note: This program expects that the Movetext begins with a move number of 1. Moreover, that the first move is White's move.**
-   * A chess move in **SAN (Standard Algebraic Notation)** - please refer to the above specification links for an explanation.
+   * A chess move in **SAN (Standard Algebraic Notation)** - please refer to [this link](https://www.chessprogramming.org/Algebraic_Chess_Notation#Standard_Algebraic_Notation_.28SAN.29) for an explanation.
    * * Essentially, this notation uses English language single character abbreviations for chess pieces,<br>that is: pawn = "P", knight = "N", bishop = "B", rook = "R", queen = "Q", and king = "K".
    * The letter code for a pawn is not used for SAN moves in PGN export format movetext.
    * * **In other words, a move would consist of the letter code (blank for Pawns) followed by the Square Identification.**
@@ -661,4 +662,5 @@ There will be no further input from 'input.pgn'
 * [Standard: Portable Game Notation Specification and Implementation Guide - Revised: 1994.03.12](https://ia802908.us.archive.org/26/items/pgn-standard-1994-03-12/PGN_standard_1994-03-12.txt)
 * [HTML version](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm)
 * [Wikipedia - Algebraic notation (chess)](https://en.wikipedia.org/wiki/Algebraic_notation_(chess))
+* [Algebraic Chess Notation](https://www.chessprogramming.org/Algebraic_Chess_Notation)
 * [Diffchecker](https://www.diffchecker.com/text-compare/)

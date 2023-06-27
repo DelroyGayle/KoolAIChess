@@ -599,7 +599,7 @@ def parse_chess_move():
         return True  # Indicate success
 
 # Unknown Chess Move
-    print(199)
+    print("Cannot match chess move")
     e.input_status_message(constants.BAD_CHESS_MOVE_FROMFILE
                            + Game.input_stream[0:20])
     return False  # Indicate failure
@@ -639,11 +639,17 @@ def expected_move_number_not_found():
 
 def parse_move_text():
     """
-    Parse the text into a tuple of the following form:
+    1) 
+    If it is the Player's turn, then a Move Number is expected
+    to be parsed first. The Move Number parsed must match 
+    the current Move Number Count.
+    2)
+    Then a Chess Move is expected, which will be parsed
+    into a tuple of the following form:
     (the piece optional, the destination square)
-    The parsed chess move string is in Game.general_string_result
-    TODO
-    todo - test ...
+    The parsed chess move string is placed in Game.general_string_result
+    3)
+    During Parsing, all PGN comments and annotations are ignored
     """
 
     if Game.whose_move == constants.COMPUTER:
@@ -754,7 +760,7 @@ def find_the_match(chess, all_matched_list,
         It means: An illegal move or invalid move
         has been read in from the input file
         """
-        print(299)        
+        print("Invalid Move")      
         e.input_status_message(constants.BAD_CHESS_MOVE_FROMFILE
                                + Game.input_stream_previous_contents)
         return  # Failure
@@ -874,7 +880,7 @@ def determine_the_capture_by_both_squares(chess,
         It means: An illegal move or invalid move
         has been read in from the input file
         """
-        print(399)        
+        print("Invalid Long Notation Move")        
         e.input_status_message(constants.BAD_CHESS_MOVE_FROMFILE
                                + Game.input_stream_previous_contents)
         return  # Failure
@@ -891,8 +897,19 @@ def determine_the_capture_by_both_squares(chess,
 
 def determine_move_both_file_rank(chess):
     """
-    Since SAN is shortened i.e. short algebraic notation
+    Standard Algebraic Notation (SAN) suppresses redundant information concerning the from-square,
+    while keeping the descriptive letter or symbol of pieces other than a pawn.
+    In other words, it is a shortened algebraic notation of chess moves.
+    
+    https://www.chessprogramming.org/Algebraic_Chess_Notation#Standard_Algebraic_Notation_.28SAN.29
+
     https://en.wikipedia.org/wiki/Algebraic_notation_(chess)
+
+    Therefore, a conversion is needed to convert SAN chess moves into 
+    Long Algebraic Notation (LAN) so that the origin and target coordinates
+    can be used by this program to interpret the chess move.
+    
+    Therefore:
     Determine the full chess move, both file and rank
     For example, change 'e4' to 'e2e4'; change 'Nf3' to 'g1f3'
     This is needed in order for this program to play the move
@@ -962,12 +979,6 @@ def determine_move_both_file_rank(chess):
           or Game.move_type == constants.LONG_NOTATION):
         # PIECE_BOTH_SQUARES EG Nd2xe4
         # LONG_NOTATION EG Ng1f3
-        determine_the_capture_by_both_squares(chess,
-                                              piece, source, target)
-        return
-
-    elif Game.move_type == constants.LONG_NOTATION:
-        # EG Ng1f3
         determine_the_capture_by_both_squares(chess,
                                               piece, source, target)
         return

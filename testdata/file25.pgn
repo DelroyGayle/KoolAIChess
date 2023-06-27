@@ -1,0 +1,7 @@
+{Shortest possible composed game which ends with mate by an en passant capture
+No. 2
+SOURCE: https://www.chesshistory.com/winter/extra/enpassant.html 
+Used to test en passant
+C.N. 254 (late 1982) Philipp Mottet (Zuchwil, Switzerland) submitted:
+}
+1 e4 e5 2 Qh5 d6 3 g4 Nc6 4 Bh3 Kd7 5 g5+ f5 6 gxf6 (mate)

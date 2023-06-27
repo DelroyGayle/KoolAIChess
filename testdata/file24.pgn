@@ -1,0 +1,7 @@
+{Shortest possible composed game which ends with mate by an en passant capture
+No. 1
+SOURCE: https://www.chesshistory.com/winter/extra/enpassant.html 
+Used to test en passant
+C.N. 179, Michael McDowell gave the following:
+}
+1 b3 h6 2 Bb2 f5 3 e4 Kf7 4 exf5 Qe8 5 Qg4 g5 6 fxg6 (mate)

@@ -682,14 +682,14 @@ def finalise_player_move(chess, it_is_a_castling_move,
             # input("PLAYER TAKEN/2") TODO
     # input("CHECK - SHOULD BE WHITE1> ") # TODO
 
-    # If an en passant move has been performed, 
-    # the Check test has already been done - no need to repeat it
-    if Game.en_passant_status == constants.VALID:
-        # Then output the chess move to the output stream
-        e.append_to_output_stream(Game.output_chess_move + constants.SPACE)
-        print("EP VALID")
-        # input(Game.output_chess_move) # TODO
-        return
+    # # If an en passant move has been performed, 
+    # # the Check test has already been done - no need to repeat it
+    # if Game.en_passant_status == constants.VALID:
+    #     # Then output the chess move to the output stream
+    #     e.append_to_output_stream(Game.output_chess_move + constants.SPACE)
+    #     print("EP VALID")
+    #     input(Game.output_chess_move) # TODO
+    #     return
 
     # Now that the Player has played, see if the Computer is in Check
     check_flag = in_check(chess, constants.COMPUTER)
@@ -1063,7 +1063,7 @@ def main_part2():
                                         chess.piece_letter("d1"),
                                         chess.piece_sign("d1"))
 
-        # input() TODO
+        # input()  # TODO
         # Restore Chessboard
         # chess = board_copy
         # Reset this variable just in case it was affected
