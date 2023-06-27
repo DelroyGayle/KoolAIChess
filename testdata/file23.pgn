@@ -1,9 +1,9 @@
-1. e2e4 e7e6 2. d2d4 d7d5 3. Nb1c3 Ng8f6 4. Bc1g5 Bf8e7 5. e4e5 Nf6d7 6.
-Bg5xe7 Qd8xe7 7. f2f4 a7a6 8. Ng1f3 c7c5 9. Qd1d2 Nb8c6 10. d4xc5 Nd7xc5
-11. g2g3 Bc8d7 12. Bf1g2 b7b5 13. Nf3d4 O-O 14. Nc3e2 Nc6xd4 15. Ne2xd4
-Rf8c8 16. O-O Bd7e8 17. Ra1b1 Qe7a7 18. Qd2f2 Qa7e7 19. f4f5 Be8d7 20.
-f5f6 Qe7f8 21. f6xg7 Qf8xg7 22. Qf2e3 Rc8c7 23. Rf1f6 Ra8a7 24. Rb1f1
-Bd7c8 25. Rf6h6 Nc5d7 26. Rf1f6 Nd7f8 27. c2c3 Nf8g6 28. Nd4f3 Ra7b7 29.
-Rh6h3 b5b4 30. Nf3g5 Ng6f8 31. Rf6h6 b4xc3 32. b2xc3 Rb7b1+ 33. Bg2f1
-Rb1b2 34. Ng5xh7 Nf8xh7 35. Rh6xh7 Qg7xh7 36. Qe3g5+ Qh7g7 37. Qg5d8+
-Qg7f8 38. Rh3h8+ Kg8xh8 39. Qd8xf8+ Kh8h7 40. Bf1d3+ f7f5 41. e5xf6 1-0
+{En passant captures which administer Checkmate
+SOURCE: https://www.chesshistory.com/winter/extra/enpassant.html  
+Used to test en passant
+}
+1 e4 e6 2 d4 d5 3 Nc3 Nf6 4 Bg5 Be7 5 e5 Nfd7 6 Bxe7 Qxe7 7 f4 a6 8 Nf3 c5 9 Qd2 Nc6 
+10 dxc5 Nxc5 11 g3 Bd7 12 Bg2 b5 13 Nd4 O-O 14 Nce2 Nxd4 15 Nxd4 Rfc8 16 O-O Be8 17 Rab1 Qa7 18 Qf2 Qe7 19 f5 Bd7 
+20 f6 Qf8 21 fxg7 Qxg7 22 Qe3 Rc7 23 Rf6 Raa7 24 Rbf1 Bc8 25 Rh6 Nd7
+26 Rff6 Nf8 27 c3 Ng6 28 Nf3 Rab7 29 Rh3 b4 30 Ng5 Nf8 31 Rfh6 bxc3 32 bxc3 Rb1+ 33 Bf1 Rb2 34 Nxh7 Nxh7 35 Rxh7 Qxh7
+36 Qg5+ Qg7 37 Qd8+ Qf8 38 Rh8+ Kxh8 39 Qxf8+ Kh7 40 Bd3+ f5 41 exf6 (Checkmate by en passant)

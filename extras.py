@@ -601,7 +601,7 @@ def handle_player_move_from_keyboard(chess):
         the output stream may end with the move number.
         If so, remove it!
         """
-        Game.output_stream = f.remove_the_suffix(Game.output_stream,
+        Game.output_stream = f.remove_the_suffix(Game.output_stream.rstrip(),
                                                  str(Game.move_count) + ".")
         chess.display("Player Resigned")
         if not Game.it_is_checkmate:

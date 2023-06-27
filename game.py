@@ -79,7 +79,6 @@ class Game:
     it_is_checkmate = None
     directory_of_open_inputfile = None
 
-
     # For Castling
     evaluate_castle_move = ""
 

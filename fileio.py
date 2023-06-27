@@ -905,7 +905,7 @@ def determine_move_both_file_rank(chess):
 
     https://en.wikipedia.org/wiki/Algebraic_notation_(chess)
 
-    Therefore, a conversion is needed to convert SAN chess moves into 
+    Therefore, conversion is needed to convert SAN chess moves into 
     Long Algebraic Notation (LAN) so that the origin and target coordinates
     can be used by this program to interpret the chess move.
     
@@ -915,15 +915,21 @@ def determine_move_both_file_rank(chess):
     This is needed in order for this program to play the move
 
     Game.chess_move_tuple consists of (piece, source, target)
+
+    Note: If the resultant move that has been read 
+          from the input file is an en passant move
+          Then this move is performed 'at this stage'
+          within the functionality of 'determine_move_both_file_rank'
     """
 
     (piece, source, target) = Game.chess_move_tuple
 
     # Depending on the 'move_type' check whether
     # an en passant move is possible
-    # And if so, perform the move in this function
+    # And if so, perform the move at this point
     if (Game.move_type == constants.PAWN_CAPTURE_FILE
-       or Game.move_type == constants.LONG_NOTATION):
+       or Game.move_type == constants.LONG_NOTATION
+       or Game.move_type == constants.PIECE_BOTH_SQUARES):
         print(201,source,202,target) # TODO
         # Game.en_passant_status is
         # set to either constants.VALID for a valid en passant move
@@ -941,7 +947,7 @@ def determine_move_both_file_rank(chess):
         which turned out to be illegal
 
         3) Otherwise the move was not an en passant move at all
-        Proceed with determining the full move
+        Proceed with determining the full chess move
         # TODO
         """
 
@@ -977,7 +983,7 @@ def determine_move_both_file_rank(chess):
 
     elif (Game.move_type == constants.PIECE_BOTH_SQUARES
           or Game.move_type == constants.LONG_NOTATION):
-        # PIECE_BOTH_SQUARES EG Nd2xe4
+        # PIECE_BOTH_SQUARES EG Nd2xe4 e5xf6
         # LONG_NOTATION EG Ng1f3
         determine_the_capture_by_both_squares(chess,
                                               piece, source, target)
