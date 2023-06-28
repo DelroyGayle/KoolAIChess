@@ -134,3 +134,11 @@ class Pawn(Piece):
         String to be outputted for Pawns
         """
         return "Pawn"
+
+    def promote(self,letter,value,sign):
+        """
+        Object-Oriented Approach to Pawn Promotion
+        """
+        self.promoted_letter = letter
+        self.promoted_value = value * sign
+        return "Pawn"

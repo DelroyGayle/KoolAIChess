@@ -82,6 +82,10 @@ class Game:
     # For Castling
     evaluate_castle_move = ""
 
+    # For the undo-ing of Pawn Promotions
+    # Grows and Shrinks with the calling of the 'evaluate' function
+    undo_stack = None
+
     def __init__(self):
         self.board = None
         self.fillboard()
@@ -205,8 +209,12 @@ class Game:
         if rank:
             index += rank
 
-        # space = " " todo
-        return getattr(self.board[index], "value", constants.BLANK)
+        # Check first whether it is a promoted pawn
+        # If so, return its promoted piece's 'value'
+        thevalue =  getattr(self.board[index], "promoted_value", None)
+        if thevalue is None:
+            thevalue = getattr(self.board[index], "value", constants.BLANK)
+        return thevalue
 
     def piece_letter(self, index, rank=""):
         """
@@ -217,8 +225,12 @@ class Game:
         if rank:
             index += rank
 
-        # space = " " todo
-        return getattr(self.board[index], "letter", None)
+        # Check first whether it is a promoted pawn
+        # If so, return its promoted piece's 'letter'
+        theletter =  getattr(self.board[index], "promoted_letter", None)
+        if theletter is None:
+            theletter = getattr(self.board[index], "letter", constants.BLANK)
+        return theletter
 
     def showboard(self):
         """

@@ -447,7 +447,7 @@ def movelist(chess, from_file, from_rank, piece_sign, evaluating=False):
     """
 
     index = from_file + from_rank
-    letter = (chess.board[index]).letter
+    letter = chess.piece_letter(index)
     if not letter:
         return []  # blank square
 
@@ -645,6 +645,9 @@ def any_promotion(chess, to_file, to_rank):
     """
     Pawn Promotion
     Promote Pawn Piece if it reaches the board edge
+    This is done by adding the attributes
+    'promote_letter' and 'promoted_value'
+    using the 'promote' method
     """
 
     to_square = to_file + to_rank
@@ -654,30 +657,26 @@ def any_promotion(chess, to_file, to_rank):
         # The Player has reached the top of the board
         # Promote the White Pawn to a White Queen
 
-        chess.display("DO PROMOTE FOR WHITE")
-        #input(to_square)
-        #chess.board[to_square].value = constants.QUEEN_VALUE
-        #chess.board[to_square].letter = constants.QUEEN_LETTER
-        #chess.board[to_square].sign = constants.PLAYER
-        # chess.board[to_square] = piece.Queen(constants.QUEEN_VALUE, constants.PLAYER)
+        chess.display("DO PROMOTE FOR WHITE") # TODO
+        chess.board[to_square].promote(constants.QUEEN_LETTER,constants.QUEEN_VALUE, constants.PLAYER)
+        # Record the Promotion in order to 'undo' if function 'evaluate' has been called
+        Game.undo_stack[-1].add(to_square)
         # TODO
         Game.promoted_piece = constants.QUEEN_LETTER
         chess.display(to_square)
-        #input("PROMOTION 1W") # TODO
+        input("PROMOTION 1W") # TODO
     elif (to_rank == "1"
           and chess.piece_value(to_square) == -constants.PAWN_VALUE):
         # The Computer has reached the bottom of the board
         # Promote the Black Pawn to a Black Queen
-        #chess.display("DO PROMOTE FOR BLACK")
-        #input(to_square)
-        #chess.board[to_square].value = -constants.QUEEN_VALUE
-        #chess.board[to_square].letter = constants.QUEEN_LETTER
-        #chess.board[to_square].sign = constants.COMPUTER
-        # chess.board[to_square] = piece.Queen(constants.QUEEN_VALUE, constants.COMPUTER)
+        chess.display("DO PROMOTE FOR BLACK")
+        chess.board[to_square].promote(constants.QUEEN_LETTER,constants.QUEEN_VALUE, constants.COMPUTER)
+        # Record the Promotion in order to 'undo' if function 'evaluate' has been called
+        Game.undo_stack[-1].add(to_square)
         # TODO
         Game.promoted_piece = constants.QUEEN_LETTER
         chess.display(to_square)
-        #input("PROMOTION 2B") # TODO
+        input("PROMOTION 2B") # TODO
 
     else:
         Game.promoted_piece = ""
@@ -738,11 +737,6 @@ def make_move_to_square(chess, from_square, to_square, to_file, to_rank):
     chess.board[from_square] = None
     # promote pawn if it reaches the board edge
     any_promotion(chess, to_file, to_rank)
-
-    if (chess.move_count >=7 and False):
-        if (to_square.endswith("1") or to_square.endswith("8")):
-                chess.display("ANY18") # TODO
-                input()
 
 def test_each_move(chess, who_are_you,
                    from_square,

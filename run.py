@@ -320,6 +320,45 @@ def save_last_rows(chess):
     # Otherwise return None
 
 
+def undo_pawn_promotions(chess):
+    """
+    # Remove any Pawn Promotions that may have occurred
+    # during evaluation
+    Game.undo_stack is a list of sets that grows/shrinks
+    with the call of 'evaluate'
+    evaluate() may be called up to 5 levels deep
+    So if for example, when level 3 goes deeper to level 4
+    Any pawn promotions that occur will be added to level 4's Set
+    When 'evaluate' returns to level 3
+    Compare the sets of level 3 and level 4
+    Any new pawn promotions that have been added since level 3
+    which are shown in level 4's Set stack need to be removed
+    That way, when another call is made to level 4,
+    the chessboard is identical including any pawn promotions
+    """
+
+    if len(Game.undo_stack) == 1:
+        # Initial Call at Level 1
+        # Nothing to compare at this stage
+        # Simply empty it
+        Game.undo_stack[0].clear()
+        return
+    
+    latest = Game.undo_stack[-1]
+    previous = Game.undo_stack[-2]
+    print("L", latest)
+    print("P",previous)
+    setDifference = latest - previous
+    input("SETDIFF")
+    for index in setDifference:
+        # Remove the Pawn Promotion attributes
+        # i.e. Undo them!
+        del chess.board[index].promoted_value
+        del chess.board[index].promoted_letter
+    # empty the set
+    Game.undo_stack[-1].clear()
+
+
 def do_evaluation(chess, level, piece_sign, prune_factor,
                   from_file, from_rank,
                   to_file, to_rank,
@@ -360,6 +399,9 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
             print("PROMOTION HAPPENED", Game.promoted_piece)
             #chess = chess2 TODO
             #input() TODO
+        # Remove any Pawn Promotions that may have occurred
+        # during evaluation
+        undo_pawn_promotions(chess)
 
     """
     Rod Bird's comment:
@@ -453,6 +495,10 @@ def evaluate(chess, level, piece_sign, prune_factor):
     It is a classic mini max evaluation shortened
     to its a negamax form with pruning
     i.e. it does not waste time on lower value plays.
+
+    To cater for any 'pawn promotions' that occur during evaluation
+    Game.undo_stack is used to keep a record of any new promotions 
+    that will be 'undone' when 'evaluate' returns
     """
 
     # Update recursion level
@@ -460,6 +506,15 @@ def evaluate(chess, level, piece_sign, prune_factor):
     if level > constants.MAXLEVEL:
         raise CustomException("Internal Error: Level Number Overflow: "
               + str(level))
+
+    if not Game.undo_stack:
+        # if an empty list i.e. [] then initialise with an empty set
+        Game.undo_stack = [set()]
+    else:
+        # Otherwise append the shallow copy of its most recent set
+        Game.undo_stack.append(Game.undo_stack[-1].copy)
+        print(len(Game.undo_stack),Game.undo_stack) # TODO
+        input(level)
 
     bestscore = constants.EVALUATE_THRESHOLD_SCORE * piece_sign
     # Go through each square on the board
@@ -509,11 +564,13 @@ def evaluate(chess, level, piece_sign, prune_factor):
             # Restore 'score'
             Game.score = oldscore
             if exit_loop:
+                Game.undo_stack.pop()
                 return bestscore  # Done!
 
             # Otherwise continue evaluating
             continue
 
+    Game.undo_stack.pop()
     return bestscore  # Done!
 
 
@@ -966,6 +1023,19 @@ def main_part2():
     chess.fillboard()
     os.system("clear")
     chess.showboard()
+    print(type(chess.board["a1"]), chess.piece_letter("a1"), chess.piece_value("a1"))
+    print(type(chess.board["a2"]), chess.piece_letter("a2"), chess.piece_value("a2"))
+    print(isinstance(chess.board["a1"],piece.Pawn),isinstance(chess.board["a1"],piece.Rook),
+          isinstance(chess.board["a1"],Game),isinstance(chess,Game))
+    print(isinstance(chess.board["a2"],piece.Pawn))
+    chess.board["a2"].promote(constants.QUEEN_LETTER,constants.QUEEN_VALUE,constants.PLAYER)
+    print(type(chess.board["a2"]), chess.piece_letter("a2"), chess.piece_value("a2"))
+    chess.board["a2"].promote(constants.QUEEN_LETTER,constants.QUEEN_VALUE,constants.COMPUTER)
+    print(type(chess.board["a2"]), chess.piece_letter("a2"), chess.piece_value("a2"))
+    del chess.board["a2"].promoted_value
+    del chess.board["a2"].promoted_letter
+    print(type(chess.board["a2"]), chess.piece_letter("a2"), chess.piece_value("a2"))
+    #    TODO    
 
     # remove todo
     from_file = None
@@ -996,9 +1066,18 @@ def main_part2():
         chess2 = copy.copy(chess) # TODO REMOVE
         chess2board = custom_copy(chess.board)
 
+        # For the undo-ing of Pawn Promotions
+        # Grows and Shrinks with the calling of the 'evaluate' function
+        Game.undo_stack = []
+
         Game.evaluation_result = evaluate(chess, 0,
                                           constants.COMPUTER,
                                           constants.EVALUATE_THRESHOLD_SCORE)
+        Game.undo_stack = None
+        if Game.promoted_piece:
+            print( Game.promoted_piece, undo_promotions_listsep="\n")
+            quit()
+
         # if Game.promoted_piece:
         #     print("PROMOTION HAPPENEDXXX", Game.promoted_piece,level)
         #     # chess = chess2
