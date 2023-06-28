@@ -341,15 +341,34 @@ def undo_pawn_promotions(chess):
         # Initial Call at Level 1
         # Nothing to compare at this stage
         # Simply empty it
-        Game.undo_stack[0].clear()
+        setDifference = Game.undo_stack[0]
+        if not setDifference:
+            return
+        print("CHECK ONE DIFF")
+        print(setDifference)
+
+        for index in setDifference:
+            # Remove the Pawn Promotion attributes
+            # i.e. Undo them!
+            del chess.board[index].promoted_value
+            del chess.board[index].promoted_letter
+        # empty the set
+        Game.undo_stack[-1].clear()
+        input("1dff")
         return
     
     latest = Game.undo_stack[-1]
+    if not latest:
+        # Empty set - no pawn promotions
+        return
+
     previous = Game.undo_stack[-2]
-    print("L", latest)
-    print("P",previous)
     setDifference = latest - previous
-    input("SETDIFF")
+    # chess.display("SETDIFF")
+    # print("L", latest)
+    # print("P",previous)
+    # print("DIFF", setDifference)
+    # input("SETDIFF")
     for index in setDifference:
         # Remove the Pawn Promotion attributes
         # i.e. Undo them!
@@ -378,8 +397,8 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
     save_from_square = chess.board[from_square]
     save_to_square = chess.board[to_square]
     targetvalue = chess.piece_value(to_square)
-    # saved_last_rows = save_last_rows(chess) TODO
-    saved_last_rows = None  # TODO
+    # saved_last_rows = save_last_rows(chess) TODO  # TODO REMOVE
+    saved_last_rows = None  # TODO  # TODO REMOVE
     chess2 = copy.copy(chess)
     (to_file_number, to_rank_number) = coords_formula(to_file, to_rank)
     # Make the move so that it can be evaluated
@@ -401,6 +420,7 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
             #input() TODO
         # Remove any Pawn Promotions that may have occurred
         # during evaluation
+        # print("LEVEL",level,Game.undo_stack) TODO
         undo_pawn_promotions(chess)
 
     """
@@ -438,7 +458,7 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
         # Restore previous squares
         chess.board[from_square] = save_from_square
         chess.board[to_square] = save_to_square
-        if saved_last_rows:
+        if saved_last_rows: # TODO REMOVE
             # Restore the first and last rank (row) if affected by Pawn Promotions
             for index in saved_last_rows:
                 chess.board[index] = saved_last_rows[index]
@@ -469,7 +489,7 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
     # Restore previous squares
     chess.board[from_square] = save_from_square
     chess.board[to_square] = save_to_square
-    if saved_last_rows:
+    if saved_last_rows:  # TODO REMOVE
         # Restore the first and last rank (row) if affected by Pawn Promotions
         for index in saved_last_rows:
             chess.board[index] = saved_last_rows[index]
@@ -512,9 +532,9 @@ def evaluate(chess, level, piece_sign, prune_factor):
         Game.undo_stack = [set()]
     else:
         # Otherwise append the shallow copy of its most recent set
-        Game.undo_stack.append(Game.undo_stack[-1].copy)
-        print(len(Game.undo_stack),Game.undo_stack) # TODO
-        input(level)
+        Game.undo_stack.append(Game.undo_stack[-1].copy())
+        # print(len(Game.undo_stack),Game.undo_stack) # TODO
+        # input(level)
 
     bestscore = constants.EVALUATE_THRESHOLD_SCORE * piece_sign
     # Go through each square on the board
@@ -1076,7 +1096,7 @@ def main_part2():
         Game.undo_stack = None
         if Game.promoted_piece:
             print( Game.promoted_piece, undo_promotions_listsep="\n")
-            quit()
+            quit() # TODO
 
         # if Game.promoted_piece:
         #     print("PROMOTION HAPPENEDXXX", Game.promoted_piece,level)

@@ -1,8 +1,5 @@
-{Shortest possible composed game which ends with mate by an en passant capture
-No. 3
-The task of constructing the shortest game with discovered mate by means of an en passant capture
-had already been resolved by Pal Benko.
-SOURCE: https://www.chesshistory.com/winter/extra/enpassant.html 
-Used to test en passant
-}
-1 e4 e5 2 Qh5 Nc6 3 g4 d6 4 Bh3 Kd7 5 g5+ f5 6 gxf6 (mate)
+
+{DOWNLOADED FROM
+https://www.chess.com/forum/view/game-analysis/shortest-checkmated-game-with-pawn-promotion }
+{CHESS2A PRODUCED 1. e2e4 d7d5 2. e4xd5 Ng8f6 3. Bf1b5+ c7c6 4. d5xc6 Qd8b6 5. c6xb7+
+Qb6xb5 6. b7xc8=Q# 1-0}

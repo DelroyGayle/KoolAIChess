@@ -599,13 +599,15 @@ def handle_player_move_from_keyboard(chess):
         If the Player Resigns at this point,
         a chess move has not yet been entered;
         the output stream may end with the move number.
-        If so, remove it!
+        If so, remove the move number!
         """
         Game.output_stream = f.remove_the_suffix(Game.output_stream.rstrip(),
-                                                 str(Game.move_count) + ".")
+                                                 str(Game.move_count) + ".")           
         chess.display("Player Resigned")
         if not Game.it_is_checkmate:
             # Since it was not Checkmate, Deem it a draw!
+            if not Game.output_stream.endswith(constants.SPACE):
+                Game.output_stream += constants.SPACE
             append_to_output_stream(constants.DRAW)
             f.output_all_chess_moves()
 
@@ -663,8 +665,10 @@ def any_promotion(chess, to_file, to_rank):
         Game.undo_stack[-1].add(to_square)
         # TODO
         Game.promoted_piece = constants.QUEEN_LETTER
-        chess.display(to_square)
-        input("PROMOTION 1W") # TODO
+        # chess.display(to_square)
+        # print(Game.undo_stack[-1])
+        # print(chess.piece_value(to_square),chess.piece_letter(to_square))
+        # input("PROMOTION 1W") # TODO
     elif (to_rank == "1"
           and chess.piece_value(to_square) == -constants.PAWN_VALUE):
         # The Computer has reached the bottom of the board
@@ -675,8 +679,8 @@ def any_promotion(chess, to_file, to_rank):
         Game.undo_stack[-1].add(to_square)
         # TODO
         Game.promoted_piece = constants.QUEEN_LETTER
-        chess.display(to_square)
-        input("PROMOTION 2B") # TODO
+        # chess.display(to_square)
+        # input("PROMOTION 2B") # TODO
 
     else:
         Game.promoted_piece = ""
