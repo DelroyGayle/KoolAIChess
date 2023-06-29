@@ -73,7 +73,6 @@ PLAYER_PAWNS_RANK = "2"  # a2...h2
 # The rank (row) of black pieces
 COMPUTER_PAWNS_RANK = "7"  # a7...h7
 
-
 NOVALUE = -1
 INVALID = 1
 VALID = 2

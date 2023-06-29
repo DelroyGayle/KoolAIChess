@@ -654,15 +654,29 @@ def any_promotion(chess, to_file, to_rank):
 
     to_square = to_file + to_rank
     if (to_rank == "8"
-       and chess.piece_value(to_square) == constants.PAWN_VALUE):
+       and chess.piece_value(to_square) == constants.PAWN_VALUE
+       and not hasattr(chess.board[to_square],"promoted_value")):
 
         # The Player has reached the top of the board
         # Promote the White Pawn to a White Queen
 
-        chess.display("DO PROMOTE FOR WHITE") # TODO
-        chess.board[to_square].promote(constants.QUEEN_LETTER,constants.QUEEN_VALUE, constants.PLAYER)
+        # chess.display("DO PROMOTE FOR WHITE") # TODO
+        # print("White A:", to_square, constants.QUEEN_VALUE, constants.PLAYER)
+        chess.board[to_square].promote(constants.QUEEN_LETTER,constants.QUEEN_VALUE, constants.PLAYER, to_square)
         # Record the Promotion in order to 'undo' if function 'evaluate' has been called
-        Game.undo_stack[-1].add(to_square)
+        if Game.evaluating:
+            # print("STACKBEF",Game.undo_stack2)
+            # Game.undo_stack[-1].add(to_square)
+            Game.undo_stack2[-1].add(to_square)
+            # print("White B:",Game.undo_stack2[-1])
+            # print("White C:", Game.undo_stack2)
+            #input()
+            #chess.display("PROMOTion done FOR WHITE")
+            #input() TODO
+        else:
+            # Set up a message regarding the promotion
+            Game.promotion_message = "Pawn promoted to Queen"
+
         # TODO
         Game.promoted_piece = constants.QUEEN_LETTER
         # chess.display(to_square)
@@ -670,13 +684,28 @@ def any_promotion(chess, to_file, to_rank):
         # print(chess.piece_value(to_square),chess.piece_letter(to_square))
         # input("PROMOTION 1W") # TODO
     elif (to_rank == "1"
-          and chess.piece_value(to_square) == -constants.PAWN_VALUE):
+          and chess.piece_value(to_square) == -constants.PAWN_VALUE
+          and not hasattr(chess.board[to_square],"promoted_value")):
         # The Computer has reached the bottom of the board
         # Promote the Black Pawn to a Black Queen
-        chess.display("DO PROMOTE FOR BLACK")
-        chess.board[to_square].promote(constants.QUEEN_LETTER,constants.QUEEN_VALUE, constants.COMPUTER)
+        # chess.display("DO PROMOTE FOR BLACK")
+        # print("Black A:", to_square, constants.QUEEN_VALUE, constants.PLAYER)
+        chess.board[to_square].promote(constants.QUEEN_LETTER,constants.QUEEN_VALUE, constants.COMPUTER, to_square)
         # Record the Promotion in order to 'undo' if function 'evaluate' has been called
-        Game.undo_stack[-1].add(to_square)
+        if Game.evaluating:
+            # print("STACKBEF",Game.undo_stack2)
+            # temp = len(Game.undo_stack2) >=3 and Game.undo_stack2[2]
+            Game.undo_stack2[-1].add(to_square)
+            # print("Black B:",Game.undo_stack2[-1])
+            # print("Black C:", Game.undo_stack2)
+            # if temp:
+            #     input()
+            #     chess.display("PROMOTion done FOR BLACK")
+            #     input()
+        else:
+            # Set up a message regarding the promotion
+            Game.promotion_message = "Pawn promoted to Queen"
+
         # TODO
         Game.promoted_piece = constants.QUEEN_LETTER
         # chess.display(to_square)
@@ -730,7 +759,7 @@ def make_move_to_square(chess, from_square, to_square, to_file, to_rank):
     """
     Fill the square taken
     """
-    if (chess.move_count >=7 and False):
+    if (chess.move_count >=7 and False): # REMOVE
         if (to_square.endswith("1") or to_square.endswith("8")):
                 chess.display("ENDS18") # TODO
                 input()
@@ -827,14 +856,21 @@ def finalise_computer_move(chess):
     That is, is it Checkmate?
     """
 
-    # If En Passant move no need to display the move
+    # If this is an En Passant move,
+    # there is no need to display the move
     # This has already been done
     if Game.en_passant_status != constants.VALID:
         # Display the Computer's move
         chess.display(Game.computer_print_string)
-        if (Game.show_taken_message):
+
+        if Game.show_taken_message:
             # Show what piece the Computer took
             print(Game.show_taken_message)
+
+        # Was there a Pawn Promotion? If so, Display a Message
+        if Game.promotion_message:
+            print(Game.promotion_message)        
+            Game.promotion_message = "" # reset
 
         # If reading from a file
         # Pause the computer so that the Player can read it

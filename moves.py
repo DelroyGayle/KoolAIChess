@@ -762,6 +762,10 @@ def indicate_en_passant_done(chess, who_are_you, from_file, from_rank,
     else:
         print("Computer Took Your Pawn En Passant")
         reset_2squares_pawn_positions(constants.PLAYER)
+    # Was there a Pawn Promotion? If so, Display a Message
+    if Game.promotion_message:
+        print(Game.promotion_message)        
+        Game.promotion_message = "" # reset
 
     print()
     Game.new_from_file = from_file

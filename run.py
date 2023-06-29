@@ -63,7 +63,7 @@ def is_piece_taken(chess, to_file, to_rank, piece_sign):
     # Check whether a King is about to be actually taken!
     # Note the Kings' values: Computer's King (-7500) and Player's King (5000)
     if (piece_taken == constants.VALUE_OF_COMPUTER_KING or
-            piece_taken == constants.VALUE_OF_PLAYER_KING):
+        piece_taken == constants.VALUE_OF_PLAYER_KING):
 
         """
         This means the PLAYER/COMPUTER was allowed to make an illegal move
@@ -320,7 +320,7 @@ def save_last_rows(chess):
     # Otherwise return None
 
 
-def undo_pawn_promotions(chess):
+def undo_pawn_promotions(chess, level):
     """
     # Remove any Pawn Promotions that may have occurred
     # during evaluation
@@ -336,18 +336,76 @@ def undo_pawn_promotions(chess):
     That way, when another call is made to level 4,
     the chessboard is identical including any pawn promotions
     """
-
+    print("UNDO/1", Game.undo_stack )
     if len(Game.undo_stack) == 1:
         # Initial Call at Level 1
         # Nothing to compare at this stage
         # Simply empty it
-        setDifference = Game.undo_stack[0]
-        if not setDifference:
+        set_difference = Game.undo_stack[0]
+        if not set_difference:
+            return
+    
+    else:    
+        latest = Game.undo_stack[-1]
+        if not latest:
+            # Empty set - no pawn promotions
+            return
+
+        previous = Game.undo_stack[-2]
+        set_difference = latest - previous
+
+        if not set_difference:
+            # No pawn promotions at this 'evaluate level'
+            return
+
+    chess.display("SETDIFF " + str(level))
+    for index in chess.board:
+        temp = chess.board[index]
+        if hasattr(temp,"square") and temp.square in set_difference:
+            # Found a matching promoted pawn - undo the promotion
+            # Remove the Pawn Promotion attributes
+            # i.e. Undo them!
+            thesquare = temp.square
+            del chess.board[index].promoted_value
+            del chess.board[index].promoted_letter
+            del chess.board[index].square
+            # Remove the square from the set
+            set_difference.remove(thesquare)
+            if not set_difference:
+                # The set is now empty - no need to search for anymore pawns
+                break
+    chess.display("DONE/CHECK")
+    input("UNDONE") # TODO
+
+
+def undo_pawn_promotions2(chess):
+    """
+    # Remove any Pawn Promotions that may have occurred
+    # during evaluation
+    Game.undo_stack is a list of sets that grows/shrinks
+    with the call of 'evaluate'
+    evaluate() may be called up to 5 levels deep
+    So if for example, when level 3 goes deeper to level 4
+    Any pawn promotions that occur will be added to level 4's Set
+    When 'evaluate' returns to level 3
+    Compare the sets of level 3 and level 4
+    Any new pawn promotions that have been added since level 3
+    which are shown in level 4's Set stack need to be removed
+    That way, when another call is made to level 4,
+    the chessboard is identical including any pawn promotions
+    """
+    print("UNDO/1", Game.undo_stack )
+    if len(Game.undo_stack) == 1:
+        # Initial Call at Level 1
+        # Nothing to compare at this stage
+        # Simply empty it
+        set_difference = Game.undo_stack[0]
+        if not set_difference:
             return
         print("CHECK ONE DIFF")
-        print(setDifference)
+        print(set_difference)
 
-        for index in setDifference:
+        for index in set_difference:
             # Remove the Pawn Promotion attributes
             # i.e. Undo them!
             del chess.board[index].promoted_value
@@ -363,19 +421,79 @@ def undo_pawn_promotions(chess):
         return
 
     previous = Game.undo_stack[-2]
-    setDifference = latest - previous
-    # chess.display("SETDIFF")
-    # print("L", latest)
-    # print("P",previous)
-    # print("DIFF", setDifference)
-    # input("SETDIFF")
-    for index in setDifference:
+    set_difference = latest - previous
+    chess.display("SETDIFF " + str(level))
+    print("L", latest)
+    print("P",previous)
+    print("DIFF", set_difference)
+    input("SETDIFF") # TODO
+    for index in set_difference:
         # Remove the Pawn Promotion attributes
         # i.e. Undo them!
         del chess.board[index].promoted_value
         del chess.board[index].promoted_letter
     # empty the set
     Game.undo_stack[-1].clear()
+    chess.display("SETDIFF")
+    input("UNDONE") # TODO
+
+
+def undo_pawn_promotions3(chess,level):
+    """
+    # Remove any Pawn Promotions that may have occurred
+    # during evaluation
+    Game.undo_stack is a list of sets that grows/shrinks
+    with the call of 'evaluate'
+    evaluate() may be called up to 5 levels deep
+    So if for example, when level 3 goes deeper to level 4
+    Any pawn promotions that occur will be added to level 4's Set
+    When 'evaluate' returns to level 3
+    Compare the sets of level 3 and level 4
+    Any new pawn promotions that have been added since level 3
+    which are shown in level 4's Set stack need to be removed
+    That way, when another call is made to level 4,
+    the chessboard is identical including any pawn promotions
+    """
+    Game.promoted_piece = "" # reset
+    if not Game.undo_stack2[-1]:
+        return
+    # chess.display("UNDO/3")
+    # print("UNDO/3", level, Game.undo_stack2 )
+    # input()
+    set_difference = Game.undo_stack2[-1]
+    for index in set_difference:
+        # Remove the Pawn Promotion attributes
+        # i.e. Undo them!
+        del chess.board[index].promoted_value
+        del chess.board[index].promoted_letter
+        # empty the set
+    Game.undo_stack2[-1].clear()
+    # chess.display("UNDOne/3")
+    # print("UNDOne/3", level, Game.undo_stack2 )
+    # input("1dff")
+    return
+    
+    latest = Game.undo_stack[-1]
+    if not latest:
+        # Empty set - no pawn promotions
+        return
+
+    previous = Game.undo_stack[-2]
+    set_difference = latest - previous
+    chess.display("SETDIFF " + str(level))
+    print("L", latest)
+    print("P",previous)
+    print("DIFF", set_difference)
+    input("SETDIFF") # TODO
+    for index in set_difference:
+        # Remove the Pawn Promotion attributes
+        # i.e. Undo them!
+        del chess.board[index].promoted_value
+        del chess.board[index].promoted_letter
+    # empty the set
+    Game.undo_stack[-1].clear()
+    chess.display("SETDIFF")
+    input("UNDONE") # TODO
 
 
 def do_evaluation(chess, level, piece_sign, prune_factor,
@@ -404,6 +522,12 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
     # Make the move so that it can be evaluated
     e.make_move_to_square(chess,
                           from_square, to_square, to_file, to_rank)
+    # if Game.undo_stack2[-1]:
+    #     print("MADE MOVE")
+    #     print(Game.undo_stack2[-1],Game.undo_stack2[0])
+    #     print(not Game.undo_stack2[0])
+    #     input(Game.promoted_piece+str(level)) # todo
+    # TODO
 
     # negamax formula
     if level < constants.MAXLEVEL:
@@ -414,14 +538,23 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
                                level,
                                -piece_sign,
                                temp_calc)
+        # print(Game.undo_stack2)
+        # if Game.undo_stack2[-1]:
+        #     chess.display("CHECK CONTENTS")                       
+        #     print(Game.undo_stack2)
+        #     print("CHECK CONTENTS")
+        #     print(Game.undo_stack2[-1])
+        #     input(Game.promoted_piece)
+
         if Game.promoted_piece:
             print("PROMOTION HAPPENED", Game.promoted_piece)
+            print(level,undo_stack,undo_stack2)
             #chess = chess2 TODO
-            #input() TODO
+            input(level)   # TODO
         # Remove any Pawn Promotions that may have occurred
         # during evaluation
         # print("LEVEL",level,Game.undo_stack) TODO
-        undo_pawn_promotions(chess)
+        # undo_pawn_promotions(chess,level)
 
     """
     Rod Bird's comment:
@@ -455,6 +588,8 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
         #           to_file, to_rank, from_square, to_square,
         #           save_from_square, save_to_square)
 
+        # Undo any pawn promotions
+        undo_pawn_promotions3(chess,level)
         # Restore previous squares
         chess.board[from_square] = save_from_square
         chess.board[to_square] = save_to_square
@@ -486,6 +621,8 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
 
         return (exitloop, bestscore)
 
+    # Undo any pawn promotions
+    undo_pawn_promotions3(chess,level)
     # Restore previous squares
     chess.board[from_square] = save_from_square
     chess.board[to_square] = save_to_square
@@ -527,6 +664,7 @@ def evaluate(chess, level, piece_sign, prune_factor):
         raise CustomException("Internal Error: Level Number Overflow: "
               + str(level))
 
+    Game.undo_stack2.append(set()) # TODO DG
     if not Game.undo_stack:
         # if an empty list i.e. [] then initialise with an empty set
         Game.undo_stack = [set()]
@@ -583,14 +721,40 @@ def evaluate(chess, level, piece_sign, prune_factor):
 
             # Restore 'score'
             Game.score = oldscore
+            if len(Game.undo_stack) == 5 and Game.undo_stack[4] and False: #TODO
+                print(100,level, exit_loop, Game.undo_stack, Game.undo_stack[4],bool(Game.undo_stack[4]))
+                input()
+                chess.display(101)
+                input(102)
+                for index in chess.board:
+                    temp = chess.board[index]
+                    if hasattr(temp,"square"):
+                        print(index, temp, temp.square)
+                input("LOOP")
             if exit_loop:
+                #undo_pawn_promotions(chess, level)  REMOVE
                 Game.undo_stack.pop()
+                # REMOVE
+                # if (Game.undo_stack2[-1]):
+                #    chess.display("NONNULL " + str(level))
+                #    print(Game.undo_stack2)
+                #    input(level)
+                Game.undo_stack2.pop() # TODO DG
                 return bestscore  # Done!
 
             # Otherwise continue evaluating
             continue
 
+    if len(Game.undo_stack) == 5 and Game.undo_stack[4] and False:
+        print(200,level, exit_loop, Game.undo_stack)
+        input()
+    #undo_pawn_promotions(chess, level)  REMOVE
     Game.undo_stack.pop()
+    # if (Game.undo_stack2[-1]):  REMOVE
+        # chess.display("NONNULL2 " + str(level))
+        # print(Game.undo_stack2)
+        # input(level)
+    Game.undo_stack2.pop() # TODO DG
     return bestscore  # Done!
 
 
@@ -752,9 +916,14 @@ def finalise_player_move(chess, it_is_a_castling_move,
     if print_string:
         # Display the move
         chess.display(print_string)
-        if (Game.show_taken_message):
+        if Game.show_taken_message:
             # Show what piece the Player took
             print(Game.show_taken_message)
+
+        # Was there a Pawn Promotion? If so, Display a Message
+        if Game.promotion_message:
+            print(Game.promotion_message)
+            Game.promotion_message = "" # reset
 
             # input("PLAYER TAKEN/2") TODO
     # input("CHECK - SHOULD BE WHITE1> ") # TODO
@@ -998,6 +1167,7 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         # Valid move has been played - show the updated board
         # Display the Player's Move
         
+        # REMOVE
         #chess.display(print_string)
         #if (Game.show_taken_message):
             # Show what piece the Player took
@@ -1021,10 +1191,10 @@ def play_2_moves(chess, from_file, from_rank, to_file, to_rank, result):
     """
 
     process_computer_move(chess, from_file, from_rank, to_file, to_rank)
-    # input("GO") # TODO
+    input("GO") # TODO
 
     player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank)
-    # input("GO/2") # TODO
+    input("GO/2") # TODO
 
 
 def main_part2():
@@ -1048,12 +1218,13 @@ def main_part2():
     print(isinstance(chess.board["a1"],piece.Pawn),isinstance(chess.board["a1"],piece.Rook),
           isinstance(chess.board["a1"],Game),isinstance(chess,Game))
     print(isinstance(chess.board["a2"],piece.Pawn))
-    chess.board["a2"].promote(constants.QUEEN_LETTER,constants.QUEEN_VALUE,constants.PLAYER)
+    chess.board["a2"].promote(constants.QUEEN_LETTER,constants.QUEEN_VALUE,constants.PLAYER, "a2")
     print(type(chess.board["a2"]), chess.piece_letter("a2"), chess.piece_value("a2"))
-    chess.board["a2"].promote(constants.QUEEN_LETTER,constants.QUEEN_VALUE,constants.COMPUTER)
+    chess.board["a2"].promote(constants.QUEEN_LETTER,constants.QUEEN_VALUE,constants.COMPUTER,"a2")
     print(type(chess.board["a2"]), chess.piece_letter("a2"), chess.piece_value("a2"))
     del chess.board["a2"].promoted_value
     del chess.board["a2"].promoted_letter
+    del chess.board["a2"].square
     print(type(chess.board["a2"]), chess.piece_letter("a2"), chess.piece_value("a2"))
     #    TODO    
 
@@ -1089,11 +1260,16 @@ def main_part2():
         # For the undo-ing of Pawn Promotions
         # Grows and Shrinks with the calling of the 'evaluate' function
         Game.undo_stack = []
+        Game.undo_stack2 = []
+        Game.evaluating = True
 
         Game.evaluation_result = evaluate(chess, 0,
                                           constants.COMPUTER,
                                           constants.EVALUATE_THRESHOLD_SCORE)
+
+        Game.evaluating = False
         Game.undo_stack = None
+        Game.undo_stack2 = None
         if Game.promoted_piece:
             print( Game.promoted_piece, undo_promotions_listsep="\n")
             quit() # TODO
@@ -1104,6 +1280,12 @@ def main_part2():
         #     Game.promoted_piece = ""
         #     input() TODO
 
+        if Game.undo_stack:
+            print("UNDO POPULATED")
+            for i in undo_stack:
+                print(i)
+            quit()
+        Game.promoted_piece = ""  # Reset
         print("EVAL OUT") # TODO
         print("IDS", id(chess.board), id(chess2board))
         # chess2.display("DISPLAY CHESS2")

@@ -50,8 +50,8 @@ class Game:
     message_printed = False
     computer_print_string = ""
     show_taken_message = ""
-
     promoted_piece = ""
+    promotion_message = ""
     player_castled = False
     computer_castled = False
     player_king_moved = False
@@ -85,6 +85,10 @@ class Game:
     # For the undo-ing of Pawn Promotions
     # Grows and Shrinks with the calling of the 'evaluate' function
     undo_stack = None
+    undo_stack2 = None
+
+    # Flag to indicate that the Kool AI is evaluating its next move
+    evaluating = None
 
     def __init__(self):
         self.board = None

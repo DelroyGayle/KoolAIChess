@@ -747,7 +747,7 @@ def find_the_match(chess, all_matched_list,
                 found_target = all_the_moves[m]
                 # todo
                 # print("MATCH/ANSWER", from_file, from_rank, to_file, to_rank)
-                # if (Game.move_count > 15): # todo
+                # if (Game.move_count > 15): # todo REMOVE
                 #     input()
                 break
 
@@ -780,7 +780,7 @@ def find_the_match(chess, all_matched_list,
 
     Game.output_chess_move += found_target
     # print("OCM", Game.output_chess_move)  # todo
-    # if (Game.move_count > 21): # todo
+    # if (Game.move_count > 21): # todo REMOVE
     #    input()
     return  # Success
 
@@ -963,7 +963,7 @@ def determine_move_both_file_rank(chess):
         piece = "P"
 
     if (Game.move_type == constants.DESTINATION_SQUARE_ONLY
-       or Game.move_type == constants.PIECE_DESTINATION_SQUARE):
+        or Game.move_type == constants.PIECE_DESTINATION_SQUARE):
         # DESTINATION_SQUARE_ONLY  EG h3 OR Ne2
         # PIECE_DESTINATION_SQUARE EG Qxe1
         determine_the_move(chess, piece, target)
@@ -1032,7 +1032,7 @@ def handle_move_text(chess):
     
     determine_move_both_file_rank(chess)
     
-    # if (Game.move_count > 21): # todo
+    # if (Game.move_count > 21): # todo REMOVE
     #    input(str(Game.move_count))
     # todo RESULT NOT NEEDED TODO SUB NOT FUNCTION
 
@@ -1091,7 +1091,7 @@ def handle_player_move_from_inputfile(chess,
 
     if not Game.reading_game_file:
         sleep(constants.SLEEP_VALUE)
-        return do_next  # "pass"
+        return do_next  # 'pass'
 
     # Was a castling move read from the file? If so, process it
     if Game.reading_game_file and Game.move_type == constants.CASTLING_MOVE:
@@ -1113,7 +1113,7 @@ def handle_player_move_from_inputfile(chess,
         do_next = "return"
         return do_next
 
-    #if (Game.move_count > 21): # todo
+    #if (Game.move_count > 21): # todo REMOVE
     #    input(do_next)   
 
     # Otherwise 'pass'
