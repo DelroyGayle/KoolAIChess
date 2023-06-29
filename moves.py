@@ -742,7 +742,7 @@ def record_pawn_that_advanced_by2(chess, who_are_you,
         # Since this chess move is not a pawn that has advanced two squares
         # Ensure that previous values for this colour have been reset
         reset_2squares_pawn_positions(who_are_you)
-    #  input("EP") # todo
+
 
 def indicate_en_passant_done(chess, who_are_you, from_file, from_rank, 
                                     to_file, to_rank):
@@ -804,9 +804,6 @@ def perform_en_passant(chess, from_file, from_rank, to_file, to_rank,
 
     # Erase square of 'from' pawn now vacated
     chess.board[from_square] = None
-    # chess.display("TEST") # TODO REMOVE
-    # print(from_file, from_rank, to_file, to_rank)  # TODO REMOVE
-    # input(from_square + to_square)  # TODO REMOVE
 
     # Redisplay the Board After the En Passant Move
     chess.display(display_chess_move)

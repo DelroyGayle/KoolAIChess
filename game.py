@@ -48,7 +48,7 @@ class Game:
     output_chess_move = ""
     error_message = ""
     message_printed = False
-    computer_print_string = ""
+    current_print_string = ""
     show_taken_message = ""
     promoted_piece = ""
     promotion_message = ""

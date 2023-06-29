@@ -745,10 +745,6 @@ def find_the_match(chess, all_matched_list,
             target_rank = all_the_moves[m][1]
             if target_file == to_file and target_rank == to_rank:
                 found_target = all_the_moves[m]
-                # todo
-                # print("MATCH/ANSWER", from_file, from_rank, to_file, to_rank)
-                # if (Game.move_count > 15): # todo REMOVE
-                #     input()
                 break
 
         if found_target:
@@ -779,9 +775,6 @@ def find_the_match(chess, all_matched_list,
         Game.output_chess_move = piece
 
     Game.output_chess_move += found_target
-    # print("OCM", Game.output_chess_move)  # todo
-    # if (Game.move_count > 21): # todo REMOVE
-    #    input()
     return  # Success
 
 
@@ -1023,7 +1016,7 @@ def handle_move_text(chess):
     # Determine the full chess move, both file and rank
     # Note: If the resultant move is an en passant move
     #       Then this move is performed at this stage 
-    # within the functionality of 'determine_move_both_file_rank'
+    #       within the functionality of 'determine_move_both_file_rank'
 
     #       Game.en_passant_status is:
     #           set to 'constants.VALID' for a valid en passant move
@@ -1031,10 +1024,6 @@ def handle_move_text(chess):
     #           set to 'constants.NOVALUE' for a non-en-passant move
     
     determine_move_both_file_rank(chess)
-    
-    # if (Game.move_count > 21): # todo REMOVE
-    #    input(str(Game.move_count))
-    # todo RESULT NOT NEEDED TODO SUB NOT FUNCTION
 
 
 def fetch_chess_move_from_file(chess):
@@ -1112,9 +1101,6 @@ def handle_player_move_from_inputfile(chess,
         m.castling_move_was_valid(chess)
         do_next = "return"
         return do_next
-
-    #if (Game.move_count > 21): # todo REMOVE
-    #    input(do_next)   
 
     # Otherwise 'pass'
     return do_next

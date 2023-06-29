@@ -34,7 +34,7 @@ class Piece():
         self.letter = ""
         self.sign = sign
 
-    def print_string(self):
+    def piece_string(self):
         """
         No 'print_string' for the Base Class
         """
@@ -50,7 +50,7 @@ class Rook(Piece):
         self.letter = constants.ROOK_LETTER
         self.value = constants.ROOK_VALUE * sign
 
-    def print_string(self):
+    def piece_string(self):
         """
         String to be outputted for Rooks
         """
@@ -66,7 +66,7 @@ class Knight(Piece):
         self.letter = constants.KNIGHT_LETTER
         self.value = constants.KNIGHT_VALUE * sign
 
-    def print_string(self):
+    def piece_string(self):
         """
         String to be outputted for Knights
         """
@@ -82,7 +82,7 @@ class Bishop(Piece):
         self.letter = constants.BISHOP_LETTER
         self.value = constants.BISHOP_VALUE * sign
 
-    def print_string(self):
+    def piece_string(self):
         """
         String to be outputted for Bishops
         """
@@ -98,7 +98,7 @@ class Queen(Piece):
         self.letter = constants.QUEEN_LETTER
         self.value = constants.QUEEN_VALUE * sign
 
-    def print_string(self):
+    def piece_string(self):
         """
         String to be outputted for Queens
         """
@@ -117,7 +117,7 @@ class King(Piece):
                       if sign == constants.COMPUTER
                       else constants.VALUE_OF_PLAYER_KING)
         # King piece cannot be 'taken'
-        # So no 'print_string'
+        # So no 'piece_string'
 
 
 class Pawn(Piece):
@@ -129,11 +129,11 @@ class Pawn(Piece):
         self.letter = constants.PAWN_LETTER
         self.value = constants.PAWN_VALUE * sign
 
-    def print_string(self):
+    def piece_string(self):
         """
         String to be outputted for Pawns
         """
-        return "Pawn"
+        return "Pawn" if not hasattr(self, "promoted_piece_string") else self.promoted_piece_string
 
     def promote(self, letter, value, sign, square):
         """
@@ -141,5 +141,9 @@ class Pawn(Piece):
         """
         self.promoted_letter = letter
         self.promoted_value = value * sign
+        self.promoted_piece_string = ("Queen" if letter == constants.QUEEN_LETTER else
+                                     "Rook" if letter == constants.ROOK_LETTER else
+                                     "Bishop" if letter == constants.BISHOP_LETTER else
+                                     "Knight")
         self.square = square
         return "Pawn"

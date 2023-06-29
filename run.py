@@ -96,7 +96,7 @@ def is_piece_taken(chess, to_file, to_rank, piece_sign):
         message = "Player took my "
 
     index = to_file + to_rank
-    Game.show_taken_message = message + chess.board[index].print_string()
+    Game.show_taken_message = message + chess.board[index].piece_string()
     return piece_taken
 
 
@@ -136,10 +136,6 @@ def is_player_move_illegal(chess, from_file, from_rank, to_file, to_rank):
     all_possible_moves = e.movelist(chess, from_file, from_rank,
                                     piece_sign, False)
 
-    # print("G>>>",Game.reading_game_file)
-    # print(all_possible_moves) # todo
-    # if Game.move_count > 21:
-    #     input() # todo
     from_square = from_file + from_rank
     to_square = to_file + to_rank
 
@@ -165,8 +161,6 @@ def is_player_move_illegal(chess, from_file, from_rank, to_file, to_rank):
             # store From and To data so that it may be restored
             save_from_square = chess.board[from_square]
             save_to_square = chess.board[to_square]
-            # if Game.move_count > 21:
-            #     input("BEFORE MOVE " + to_square) # todo
 
             # Make the Player's move
             e.make_move_to_square(chess,
@@ -457,9 +451,7 @@ def undo_pawn_promotions3(chess,level):
     Game.promoted_piece = "" # reset
     if not Game.undo_stack2[-1]:
         return
-    # chess.display("UNDO/3")
-    # print("UNDO/3", level, Game.undo_stack2 )
-    # input()
+
     set_difference = Game.undo_stack2[-1]
     for index in set_difference:
         # Remove the Pawn Promotion attributes
@@ -468,11 +460,8 @@ def undo_pawn_promotions3(chess,level):
         del chess.board[index].promoted_letter
         # empty the set
     Game.undo_stack2[-1].clear()
-    # chess.display("UNDOne/3")
-    # print("UNDOne/3", level, Game.undo_stack2 )
-    # input("1dff")
     return
-    
+    # REMOVE TODO ****
     latest = Game.undo_stack[-1]
     if not latest:
         # Empty set - no pawn promotions
@@ -522,12 +511,6 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
     # Make the move so that it can be evaluated
     e.make_move_to_square(chess,
                           from_square, to_square, to_file, to_rank)
-    # if Game.undo_stack2[-1]:
-    #     print("MADE MOVE")
-    #     print(Game.undo_stack2[-1],Game.undo_stack2[0])
-    #     print(not Game.undo_stack2[0])
-    #     input(Game.promoted_piece+str(level)) # todo
-    # TODO
 
     # negamax formula
     if level < constants.MAXLEVEL:
@@ -538,23 +521,6 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
                                level,
                                -piece_sign,
                                temp_calc)
-        # print(Game.undo_stack2)
-        # if Game.undo_stack2[-1]:
-        #     chess.display("CHECK CONTENTS")                       
-        #     print(Game.undo_stack2)
-        #     print("CHECK CONTENTS")
-        #     print(Game.undo_stack2[-1])
-        #     input(Game.promoted_piece)
-
-        if Game.promoted_piece:
-            print("PROMOTION HAPPENED", Game.promoted_piece)
-            print(level,undo_stack,undo_stack2)
-            #chess = chess2 TODO
-            input(level)   # TODO
-        # Remove any Pawn Promotions that may have occurred
-        # during evaluation
-        # print("LEVEL",level,Game.undo_stack) TODO
-        # undo_pawn_promotions(chess,level)
 
     """
     Rod Bird's comment:
@@ -665,6 +631,7 @@ def evaluate(chess, level, piece_sign, prune_factor):
               + str(level))
 
     Game.undo_stack2.append(set()) # TODO DG
+    # REMOVE
     if not Game.undo_stack:
         # if an empty list i.e. [] then initialise with an empty set
         Game.undo_stack = [set()]
@@ -721,7 +688,7 @@ def evaluate(chess, level, piece_sign, prune_factor):
 
             # Restore 'score'
             Game.score = oldscore
-            if len(Game.undo_stack) == 5 and Game.undo_stack[4] and False: #TODO
+            if len(Game.undo_stack) == 5 and Game.undo_stack[4] and False: #TODO REMOVE
                 print(100,level, exit_loop, Game.undo_stack, Game.undo_stack[4],bool(Game.undo_stack[4]))
                 input()
                 chess.display(101)
@@ -734,26 +701,17 @@ def evaluate(chess, level, piece_sign, prune_factor):
             if exit_loop:
                 #undo_pawn_promotions(chess, level)  REMOVE
                 Game.undo_stack.pop()
-                # REMOVE
-                # if (Game.undo_stack2[-1]):
-                #    chess.display("NONNULL " + str(level))
-                #    print(Game.undo_stack2)
-                #    input(level)
                 Game.undo_stack2.pop() # TODO DG
                 return bestscore  # Done!
 
             # Otherwise continue evaluating
             continue
 
-    if len(Game.undo_stack) == 5 and Game.undo_stack[4] and False:
+    if len(Game.undo_stack) == 5 and Game.undo_stack[4] and False: # REMOVE TODO
         print(200,level, exit_loop, Game.undo_stack)
         input()
     #undo_pawn_promotions(chess, level)  REMOVE
     Game.undo_stack.pop()
-    # if (Game.undo_stack2[-1]):  REMOVE
-        # chess.display("NONNULL2 " + str(level))
-        # print(Game.undo_stack2)
-        # input(level)
     Game.undo_stack2.pop() # TODO DG
     return bestscore  # Done!
 
@@ -769,10 +727,10 @@ def execute_computer_move(chess, from_file, from_rank, to_file, to_rank):
     # display the move
     attacking_piece_letter = chess.piece_letter(from_file, from_rank)
 
-    Game.computer_print_string = m.output_attacking_move(chess,
-                                                         constants.COMPUTER,
-                                                         from_file, from_rank,
-                                                         to_file, to_rank)
+    Game.current_print_string = m.output_attacking_move(chess,
+                                                        constants.COMPUTER,
+                                                        from_file, from_rank,
+                                                        to_file, to_rank)
 
     """
     Check whether a Player's piece is about to be taken
@@ -1005,6 +963,7 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
     just_performed_castling = False
     attacking_piece_letter = ""
     print_string = ""
+    Game.current_print_string = ""
     taken = None
 
     while True:
@@ -1087,8 +1046,7 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
         print_string = m.output_attacking_move(chess, constants.PLAYER,
                                                from_file, from_rank,
                                                to_file, to_rank)
-        # print() todo
-        # print(print_string)
+        Game.current_print_string = print_string
 
         piece_value = chess.piece_value(from_file, from_rank)
 
@@ -1191,10 +1149,10 @@ def play_2_moves(chess, from_file, from_rank, to_file, to_rank, result):
     """
 
     process_computer_move(chess, from_file, from_rank, to_file, to_rank)
-    input("GO") # TODO
+    # input("GO") # TODO
 
     player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank)
-    input("GO/2") # TODO
+    # input("GO/2") # TODO
 
 
 def main_part2():
@@ -1252,7 +1210,7 @@ def main_part2():
         to its original values/configuration
         """        
         # board_copy = copy.deepcopy(chess) TODO
-        print("EVAL IN")
+        # print("EVAL IN")
         # input() TODO
         chess2 = copy.copy(chess) # TODO REMOVE
         chess2board = custom_copy(chess.board)

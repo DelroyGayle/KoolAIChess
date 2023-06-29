@@ -15,6 +15,7 @@ import moves as m
 from time import sleep
 import fileio as f
 import piece # TODO
+import datetime
 
 
 class CustomException(Exception):
@@ -453,9 +454,6 @@ def movelist(chess, from_file, from_rank, piece_sign, evaluating=False):
 
     # Determine which function to call
     generate_moves_method = determine_generate_move_method(letter)
-    #if Game.move_count > 20:
-    #    print("LETTER,446,E>", letter,index,chess.board[index].sign) # todo
-    #    input() TODO
     all_the_moves = generate_moves_method(chess,
                                           from_file, from_rank,
                                           [],
@@ -483,6 +481,9 @@ def goodbye():
     print()
     print("Thank You For Playing")
     print("Goodbye")
+    # get the current date and time
+    now = datetime.datetime.now()
+    print(now)    
     quit()
 
 
@@ -535,7 +536,6 @@ def input_status_message(message):
 
     # There is the need for a further delay here
     sleep(3)
-    # input() TODO
 
 
 def is_error_from_input_file():
@@ -652,67 +652,93 @@ def any_promotion(chess, to_file, to_rank):
     using the 'promote' method
     """
 
+    Game.promoted_piece = ""
+    if to_rank not in ["1", "8"]:
+        # Not the board edge
+        return
+
+    CHOICE_DICTIONARY = {
+        constants.KNIGHT_LETTER: constants.KNIGHT_VALUE,
+        constants.BISHOP_LETTER: constants.BISHOP_VALUE,
+        constants.ROOK_LETTER: constants.ROOK_VALUE,
+        constants.QUEEN_LETTER: constants.QUEEN_VALUE
+    }
+
+    CHOICE_LIST = [constants.ROOK_LETTER, constants.BISHOP_LETTER,
+                   constants.KNIGHT_LETTER, constants.QUEEN_LETTER]
+
+    Game.promoted_piece = constants.QUEEN_LETTER  # default
     to_square = to_file + to_rank
+    if (to_rank == "1"
+        and chess.piece_value(to_square) == -constants.PAWN_VALUE):
+
+        # The Computer has reached the bottom of the board
+        # Is the Piece an Unpromoted Pawn?
+
+        if hasattr(chess.board[to_square],"promoted_value"):
+            # No!
+            return
+
+        # Yes!
+        # Promote the Black Pawn to a Black Queen
+        chess.board[to_square].promote(constants.QUEEN_LETTER, constants.QUEEN_VALUE, constants.COMPUTER, to_square)
+        # Record the Promotion in order to 'undo' if function 'evaluate' has been called
+        if Game.evaluating:
+            Game.undo_stack2[-1].add(to_square)
+        else:
+            # Set up a message regarding the promotion
+            Game.promotion_message = "Pawn promoted to Queen"
+
+        Game.promoted_piece = constants.QUEEN_LETTER
+        return
+
     if (to_rank == "8"
-       and chess.piece_value(to_square) == constants.PAWN_VALUE
-       and not hasattr(chess.board[to_square],"promoted_value")):
+        and chess.piece_value(to_square) == constants.PAWN_VALUE):
 
         # The Player has reached the top of the board
-        # Promote the White Pawn to a White Queen
+        # Is the Piece an Unpromoted Pawn?
 
-        # chess.display("DO PROMOTE FOR WHITE") # TODO
-        # print("White A:", to_square, constants.QUEEN_VALUE, constants.PLAYER)
-        chess.board[to_square].promote(constants.QUEEN_LETTER,constants.QUEEN_VALUE, constants.PLAYER, to_square)
-        # Record the Promotion in order to 'undo' if function 'evaluate' has been called
+        if hasattr(chess.board[to_square],"promoted_value"):
+            # No!
+            return
+
+        # Yes!
+
+        # Is Kool AI Evaluating White's Move?
         if Game.evaluating:
-            # print("STACKBEF",Game.undo_stack2)
-            # Game.undo_stack[-1].add(to_square)
+            # Promote the White Pawn to a White Queen
+            chess.board[to_square].promote(constants.QUEEN_LETTER, constants.QUEEN_VALUE, constants.COMPUTER, to_square)
+            # Record the Promotion in order to 'undo' if function 'evaluate' has been called
             Game.undo_stack2[-1].add(to_square)
-            # print("White B:",Game.undo_stack2[-1])
-            # print("White C:", Game.undo_stack2)
-            #input()
-            #chess.display("PROMOTion done FOR WHITE")
-            #input() TODO
-        else:
-            # Set up a message regarding the promotion
-            Game.promotion_message = "Pawn promoted to Queen"
+            return
 
-        # TODO
-        Game.promoted_piece = constants.QUEEN_LETTER
-        # chess.display(to_square)
-        # print(Game.undo_stack[-1])
-        # print(chess.piece_value(to_square),chess.piece_letter(to_square))
-        # input("PROMOTION 1W") # TODO
-    elif (to_rank == "1"
-          and chess.piece_value(to_square) == -constants.PAWN_VALUE
-          and not hasattr(chess.board[to_square],"promoted_value")):
-        # The Computer has reached the bottom of the board
-        # Promote the Black Pawn to a Black Queen
-        # chess.display("DO PROMOTE FOR BLACK")
-        # print("Black A:", to_square, constants.QUEEN_VALUE, constants.PLAYER)
-        chess.board[to_square].promote(constants.QUEEN_LETTER,constants.QUEEN_VALUE, constants.COMPUTER, to_square)
+        # Promote the White Pawn to the user's choice
+        # First, redisplay board showing the pawn at the top row/rank
+        chess.display(Game.current_print_string)
+        if Game.show_taken_message:
+            # Show what piece the Player took
+            print(Game.show_taken_message)
+
+        print("What piece would you like to promote your Pawn to?")
+        while True:
+            print("Please enter either r for Rook, b for Bishop, n for Knight")
+            choice = input("q or Enter for Queen. Pick an answer [r/b/n/q/Enter] : ")
+            choice = choice.strip().upper()
+            if choice == "":
+                choice = constants.QUEEN_LETTER
+                break
+            elif choice not in CHOICE_LIST:
+                print("Not an appropriate choice.")
+            else:
+                print(Game.promotion_message)
+                break
+
+        # Promote the Pawn
+        chess.board[to_square].promote(choice, CHOICE_DICTIONARY[choice], constants.PLAYER, to_square)
         # Record the Promotion in order to 'undo' if function 'evaluate' has been called
-        if Game.evaluating:
-            # print("STACKBEF",Game.undo_stack2)
-            # temp = len(Game.undo_stack2) >=3 and Game.undo_stack2[2]
-            Game.undo_stack2[-1].add(to_square)
-            # print("Black B:",Game.undo_stack2[-1])
-            # print("Black C:", Game.undo_stack2)
-            # if temp:
-            #     input()
-            #     chess.display("PROMOTion done FOR BLACK")
-            #     input()
-        else:
-            # Set up a message regarding the promotion
-            Game.promotion_message = "Pawn promoted to Queen"
-
-        # TODO
-        Game.promoted_piece = constants.QUEEN_LETTER
-        # chess.display(to_square)
-        # input("PROMOTION 2B") # TODO
-
-    else:
-        Game.promoted_piece = ""
+        # Set up a message regarding the promotion
+        Game.promotion_message = "Pawn promoted to " + chess.board[to_square].piece_string()
+        Game.promoted_piece = choice
 
 
 def in_check(chess, user_sign):
@@ -759,11 +785,6 @@ def make_move_to_square(chess, from_square, to_square, to_file, to_rank):
     """
     Fill the square taken
     """
-    if (chess.move_count >=7 and False): # REMOVE
-        if (to_square.endswith("1") or to_square.endswith("8")):
-                chess.display("ENDS18") # TODO
-                input()
-
     chess.board[to_square] = chess.board[from_square]
 
     # erase square vacated
@@ -843,7 +864,6 @@ def is_it_checkmate(chess, who_are_you):
 
     # No move found so definitely Checkmate!
     Game.it_is_checkmate = who_are_you
-    # input("CM" + Game.promoted_piece) # TODO
     return True
 
 
@@ -861,7 +881,7 @@ def finalise_computer_move(chess):
     # This has already been done
     if Game.en_passant_status != constants.VALID:
         # Display the Computer's move
-        chess.display(Game.computer_print_string)
+        chess.display(Game.current_print_string)
 
         if Game.show_taken_message:
             # Show what piece the Computer took
