@@ -76,7 +76,8 @@ def add_capture_promotion(taken):
                                   + suffix)
 
     if Game.promoted_piece:
-        # EG Add =Q at the end if a Pawn was promoted to a Queen e.g. fxg1=Q
+        # Append promoted piece to the Chess move
+        # EG Add =Q at the end if a Pawn was promoted to a Queen ==> fxg1=Q
         Game.output_chess_move += "=" + Game.promoted_piece
 
 

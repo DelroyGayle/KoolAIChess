@@ -135,7 +135,7 @@ class Pawn(Piece):
         """
         return "Pawn" if not hasattr(self, "promoted_piece_string") else self.promoted_piece_string
 
-    def promote(self, letter, value, sign, square):
+    def promote(self, letter, value, sign):
         """
         Object-Oriented Approach to Pawn Promotion
         """
@@ -145,5 +145,3 @@ class Pawn(Piece):
                                      "Rook" if letter == constants.ROOK_LETTER else
                                      "Bishop" if letter == constants.BISHOP_LETTER else
                                      "Knight")
-        self.square = square
-        return "Pawn"

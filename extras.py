@@ -14,8 +14,6 @@ from game import Game
 import moves as m
 from time import sleep
 import fileio as f
-import piece # TODO
-import datetime
 
 
 class CustomException(Exception):
@@ -481,9 +479,6 @@ def goodbye():
     print()
     print("Thank You For Playing")
     print("Goodbye")
-    # get the current date and time
-    now = datetime.datetime.now()
-    print(now)    
     quit()
 
 
@@ -667,7 +662,6 @@ def any_promotion(chess, to_file, to_rank):
     CHOICE_LIST = [constants.ROOK_LETTER, constants.BISHOP_LETTER,
                    constants.KNIGHT_LETTER, constants.QUEEN_LETTER]
 
-    Game.promoted_piece = constants.QUEEN_LETTER  # default
     to_square = to_file + to_rank
     if (to_rank == "1"
         and chess.piece_value(to_square) == -constants.PAWN_VALUE):
@@ -681,7 +675,7 @@ def any_promotion(chess, to_file, to_rank):
 
         # Yes!
         # Promote the Black Pawn to a Black Queen
-        chess.board[to_square].promote(constants.QUEEN_LETTER, constants.QUEEN_VALUE, constants.COMPUTER, to_square)
+        chess.board[to_square].promote(constants.QUEEN_LETTER, constants.QUEEN_VALUE, constants.COMPUTER)
         # Record the Promotion in order to 'undo' if function 'evaluate' has been called
         if Game.evaluating:
             Game.undo_stack2[-1].add(to_square)
@@ -707,13 +701,14 @@ def any_promotion(chess, to_file, to_rank):
         # Is Kool AI Evaluating White's Move?
         if Game.evaluating:
             # Promote the White Pawn to a White Queen
-            chess.board[to_square].promote(constants.QUEEN_LETTER, constants.QUEEN_VALUE, constants.COMPUTER, to_square)
+            chess.board[to_square].promote(constants.QUEEN_LETTER, constants.QUEEN_VALUE, constants.COMPUTER)
             # Record the Promotion in order to 'undo' if function 'evaluate' has been called
             Game.undo_stack2[-1].add(to_square)
+            Game.promoted_piece = constants.QUEEN_LETTER
             return
 
-        # Promote the White Pawn to the user's choice
-        # First, redisplay board showing the pawn at the top row/rank
+        # Otherwise Promote the White Pawn to the Player's choice
+        # First, redisplay board showing the Pawn at the top row/rank
         chess.display(Game.current_print_string)
         if Game.show_taken_message:
             # Show what piece the Player took
@@ -734,7 +729,7 @@ def any_promotion(chess, to_file, to_rank):
                 break
 
         # Promote the Pawn
-        chess.board[to_square].promote(choice, CHOICE_DICTIONARY[choice], constants.PLAYER, to_square)
+        chess.board[to_square].promote(choice, CHOICE_DICTIONARY[choice], constants.PLAYER)
         # Record the Promotion in order to 'undo' if function 'evaluate' has been called
         # Set up a message regarding the promotion
         Game.promotion_message = "Pawn promoted to " + chess.board[to_square].piece_string()
@@ -899,11 +894,17 @@ def finalise_computer_move(chess):
 
     # keep this flag unset from now on; so that the move count is incremented
     Game.move_count_incremented = False
-
     check_flag = in_check(chess, constants.PLAYER)
     if check_flag:
         print("You are in check")
         m.add_check_to_output()
+        # If reading from an input file do NOT test for Checkmate
+        if Game.reading_game_file:
+            # Instead output the chess move to the output stream
+            append_to_output_stream(Game.output_chess_move + constants.SPACE)
+            print()
+            return
+
         check_flag = is_it_checkmate(chess, constants.PLAYER)
         if check_flag:
             print("Checkmate!! I Win!")
@@ -922,7 +923,4 @@ def finalise_computer_move(chess):
             return
 
     append_to_output_stream(Game.output_chess_move + constants.SPACE)
-    # print("OS comp/app<", Game.output_stream) # TODO
     print()
-    # TODO WHAT ABOUT? output_all_chess_moves(constants.COMPUTER_WON)
-    # DONE??

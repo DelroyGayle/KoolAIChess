@@ -21,7 +21,6 @@ import os
 import re
 from time import sleep
 from extras import CustomException, in_check, is_it_checkmate, finalise_computer_move
-import copy
 
 def handle_internal_error():
     """
@@ -213,226 +212,8 @@ def coords_formula(file, rank):
     rank_number = constants.ASCII_EIGHT - ord(rank)
     return (file_number, rank_number)
 
-#TODO REMOVE
-def custom_copy(object):
-    dict_copy = copy.copy(object)
-    print(type(dict_copy), id(dict_copy), id(object))
-    for k, v in object.items():
-        if isinstance(object[k], dict):
-            dict_copy[k] = object[k].custom_copy()
-    return dict_copy
 
-
-# need to remove TODO
-def doCheck(num, chess, chess2, level, from_file, from_rank,
-                  to_file, to_rank, from_square, to_square,
-                  save_from_square, save_to_square):
-    if (to_square.endswith("1") or to_square.endswith("8") 
-        or Game.promoted_piece or to_square == "c2"):
-        chess.display("GAME " + Game.promoted_piece)
-        print("After ",from_square,to_square,save_from_square, save_to_square,"Level", level, type(save_to_square) )
-        if not save_from_square:
-            print("FROMSQUARE NONE",to_square )
-        else:
-            print("FROMSQUARE VALUE/LETTER/SIGN", save_from_square.value,
-                                        save_from_square.letter,
-                                        save_from_square.sign)
-        if not save_to_square:
-            print("TOSQUARE NONE",to_square )
-        else:
-            print("TOSQUARE VALUE/LETTER/SIGN", save_to_square.value,
-                                        save_to_square.letter,
-                                        save_to_square.sign)
-        if not chess.board[to_square]:
-            print("chess NONE",to_square )
-        else:
-            print("chess VALUE/LETTER/SIGN", chess.board[to_square].value,
-                                        chess.board[to_square].letter,
-                                        chess.board[to_square].sign)
-        if not chess.board["c2"]:
-            print("C2 NONE",chess.board["c2"] )
-        else:
-            print("C2 VALUE/LETTER/SIGN", chess.board["c2"].value,
-                                        chess.board["c2"].letter,
-                                        chess.board["c2"].sign)
-        if not chess.board["d4"]:
-            print("d4 NONE",chess.board["d4"] )
-        else:
-            print("d4 VALUE/LETTER/SIGN", chess.board["d4"].value,
-                                        chess.board["d4"].letter,
-                                        chess.board["d4"].sign)
-        
-        differ = False
-        for x in chess2.board:
-            
-            # if chess2.board[x] != chess.board[x]:
-            d = chess2.board[x] and not chess.board[x]
-            d = d or (not chess2.board[x]) and chess.board[x]
-            if not d and chess2.board[x] and chess.board[x]:
-                d = (chess2.board[x].value != chess.board[x].value or
-                chess2.board[x].letter != chess.board[x].letter or
-                chess2.board[x].sign != chess.board[x].sign)
-            if d:
-                print(x,"DIFFERS",level, Game.promoted_piece)
-                differ = True
-                print("CH", chess.board[x].value,  chess.board[x].letter,  chess.board[x].sign )
-                print("CH2", chess2.board[x].value,  chess2.board[x].letter,  chess2.board[x].sign )
-
-        if (differ):
-            input(level)
-
-        
-        if (num == 2):
-            if (level == 100 or Game.promoted_piece):
-                input()
-
-# NEED TO REMOVE TODO
-def save_last_rows(chess):
-    """
-    In case a Pawn gets Promoted
-    Keep a copy of the original Pawns that are in
-    both the top [a8 to h8] and last rows [a1 to h1]
-    """
-
-    found = False
-    save_dict = {}
-    base = ord("a")
-    for i in range(8):
-        file = chr(base)
-        base += 1
-        index = file + "1"  # a1 to h1
-        if chess.piece_letter(index) == constants.PAWN_LETTER:
-            save_dict[index] = chess.board[index]
-        index = file + "8"  # a8 to h8
-        if chess.piece_letter(index) == constants.PAWN_LETTER:
-            save_dict[index] = chess.board[index]
-   	
-    if found:
-        print(save_dict)
-        input("FOUND")
-        return save_dict
-    # Otherwise return None
-
-
-def undo_pawn_promotions(chess, level):
-    """
-    # Remove any Pawn Promotions that may have occurred
-    # during evaluation
-    Game.undo_stack is a list of sets that grows/shrinks
-    with the call of 'evaluate'
-    evaluate() may be called up to 5 levels deep
-    So if for example, when level 3 goes deeper to level 4
-    Any pawn promotions that occur will be added to level 4's Set
-    When 'evaluate' returns to level 3
-    Compare the sets of level 3 and level 4
-    Any new pawn promotions that have been added since level 3
-    which are shown in level 4's Set stack need to be removed
-    That way, when another call is made to level 4,
-    the chessboard is identical including any pawn promotions
-    """
-    print("UNDO/1", Game.undo_stack )
-    if len(Game.undo_stack) == 1:
-        # Initial Call at Level 1
-        # Nothing to compare at this stage
-        # Simply empty it
-        set_difference = Game.undo_stack[0]
-        if not set_difference:
-            return
-    
-    else:    
-        latest = Game.undo_stack[-1]
-        if not latest:
-            # Empty set - no pawn promotions
-            return
-
-        previous = Game.undo_stack[-2]
-        set_difference = latest - previous
-
-        if not set_difference:
-            # No pawn promotions at this 'evaluate level'
-            return
-
-    chess.display("SETDIFF " + str(level))
-    for index in chess.board:
-        temp = chess.board[index]
-        if hasattr(temp,"square") and temp.square in set_difference:
-            # Found a matching promoted pawn - undo the promotion
-            # Remove the Pawn Promotion attributes
-            # i.e. Undo them!
-            thesquare = temp.square
-            del chess.board[index].promoted_value
-            del chess.board[index].promoted_letter
-            del chess.board[index].square
-            # Remove the square from the set
-            set_difference.remove(thesquare)
-            if not set_difference:
-                # The set is now empty - no need to search for anymore pawns
-                break
-    chess.display("DONE/CHECK")
-    input("UNDONE") # TODO
-
-
-def undo_pawn_promotions2(chess):
-    """
-    # Remove any Pawn Promotions that may have occurred
-    # during evaluation
-    Game.undo_stack is a list of sets that grows/shrinks
-    with the call of 'evaluate'
-    evaluate() may be called up to 5 levels deep
-    So if for example, when level 3 goes deeper to level 4
-    Any pawn promotions that occur will be added to level 4's Set
-    When 'evaluate' returns to level 3
-    Compare the sets of level 3 and level 4
-    Any new pawn promotions that have been added since level 3
-    which are shown in level 4's Set stack need to be removed
-    That way, when another call is made to level 4,
-    the chessboard is identical including any pawn promotions
-    """
-    print("UNDO/1", Game.undo_stack )
-    if len(Game.undo_stack) == 1:
-        # Initial Call at Level 1
-        # Nothing to compare at this stage
-        # Simply empty it
-        set_difference = Game.undo_stack[0]
-        if not set_difference:
-            return
-        print("CHECK ONE DIFF")
-        print(set_difference)
-
-        for index in set_difference:
-            # Remove the Pawn Promotion attributes
-            # i.e. Undo them!
-            del chess.board[index].promoted_value
-            del chess.board[index].promoted_letter
-        # empty the set
-        Game.undo_stack[-1].clear()
-        input("1dff")
-        return
-    
-    latest = Game.undo_stack[-1]
-    if not latest:
-        # Empty set - no pawn promotions
-        return
-
-    previous = Game.undo_stack[-2]
-    set_difference = latest - previous
-    chess.display("SETDIFF " + str(level))
-    print("L", latest)
-    print("P",previous)
-    print("DIFF", set_difference)
-    input("SETDIFF") # TODO
-    for index in set_difference:
-        # Remove the Pawn Promotion attributes
-        # i.e. Undo them!
-        del chess.board[index].promoted_value
-        del chess.board[index].promoted_letter
-    # empty the set
-    Game.undo_stack[-1].clear()
-    chess.display("SETDIFF")
-    input("UNDONE") # TODO
-
-
-def undo_pawn_promotions3(chess,level):
+def undo_pawn_promotions3(chess):
     """
     # Remove any Pawn Promotions that may have occurred
     # during evaluation
@@ -460,29 +241,6 @@ def undo_pawn_promotions3(chess,level):
         del chess.board[index].promoted_letter
         # empty the set
     Game.undo_stack2[-1].clear()
-    return
-    # REMOVE TODO ****
-    latest = Game.undo_stack[-1]
-    if not latest:
-        # Empty set - no pawn promotions
-        return
-
-    previous = Game.undo_stack[-2]
-    set_difference = latest - previous
-    chess.display("SETDIFF " + str(level))
-    print("L", latest)
-    print("P",previous)
-    print("DIFF", set_difference)
-    input("SETDIFF") # TODO
-    for index in set_difference:
-        # Remove the Pawn Promotion attributes
-        # i.e. Undo them!
-        del chess.board[index].promoted_value
-        del chess.board[index].promoted_letter
-    # empty the set
-    Game.undo_stack[-1].clear()
-    chess.display("SETDIFF")
-    input("UNDONE") # TODO
 
 
 def do_evaluation(chess, level, piece_sign, prune_factor,
@@ -494,9 +252,6 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
     minimax/negamax formula
     """
 
-    # TODO
-    #chess2 = chess
-    #chess2 = copy.deepcopy(chess)
     from_square = from_file + from_rank
     to_square = to_file + to_rank
 
@@ -504,9 +259,6 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
     save_from_square = chess.board[from_square]
     save_to_square = chess.board[to_square]
     targetvalue = chess.piece_value(to_square)
-    # saved_last_rows = save_last_rows(chess) TODO  # TODO REMOVE
-    saved_last_rows = None  # TODO  # TODO REMOVE
-    chess2 = copy.copy(chess)
     (to_file_number, to_rank_number) = coords_formula(to_file, to_rank)
     # Make the move so that it can be evaluated
     e.make_move_to_square(chess,
@@ -550,24 +302,11 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
             Game.best_to_file = to_file
             Game.best_to_rank = to_rank
 
-        # doCheck(1, chess, chess2, level, from_file, from_rank,
-        #           to_file, to_rank, from_square, to_square,
-        #           save_from_square, save_to_square)
-
         # Undo any pawn promotions
-        undo_pawn_promotions3(chess,level)
+        undo_pawn_promotions3(chess)
         # Restore previous squares
         chess.board[from_square] = save_from_square
         chess.board[to_square] = save_to_square
-        if saved_last_rows: # TODO REMOVE
-            # Restore the first and last rank (row) if affected by Pawn Promotions
-            for index in saved_last_rows:
-                chess.board[index] = saved_last_rows[index]
-
-        # doCheck(2, chess, chess2, level, from_file, from_rank,
-        #           to_file, to_rank, from_square, to_square,
-        #           save_from_square, save_to_square)
-
 
         """
         Rod Bird's comment:
@@ -588,18 +327,10 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
         return (exitloop, bestscore)
 
     # Undo any pawn promotions
-    undo_pawn_promotions3(chess,level)
+    undo_pawn_promotions3(chess)
     # Restore previous squares
     chess.board[from_square] = save_from_square
     chess.board[to_square] = save_to_square
-    if saved_last_rows:  # TODO REMOVE
-        # Restore the first and last rank (row) if affected by Pawn Promotions
-        for index in saved_last_rows:
-            chess.board[index] = saved_last_rows[index]
-
-    # doCheck(2, chess, chess2, level, from_file, from_rank,
-    #               to_file, to_rank, from_square, to_square,
-    #               save_from_square, save_to_square)
 
     # Continue the loop i.e. continue evaluating
     exitloop = False
@@ -630,16 +361,8 @@ def evaluate(chess, level, piece_sign, prune_factor):
         raise CustomException("Internal Error: Level Number Overflow: "
               + str(level))
 
-    Game.undo_stack2.append(set()) # TODO DG
-    # REMOVE
-    if not Game.undo_stack:
-        # if an empty list i.e. [] then initialise with an empty set
-        Game.undo_stack = [set()]
-    else:
-        # Otherwise append the shallow copy of its most recent set
-        Game.undo_stack.append(Game.undo_stack[-1].copy())
-        # print(len(Game.undo_stack),Game.undo_stack) # TODO
-        # input(level)
+    # Add an empty set to the stack
+    Game.undo_stack2.append(set())
 
     bestscore = constants.EVALUATE_THRESHOLD_SCORE * piece_sign
     # Go through each square on the board
@@ -688,30 +411,15 @@ def evaluate(chess, level, piece_sign, prune_factor):
 
             # Restore 'score'
             Game.score = oldscore
-            if len(Game.undo_stack) == 5 and Game.undo_stack[4] and False: #TODO REMOVE
-                print(100,level, exit_loop, Game.undo_stack, Game.undo_stack[4],bool(Game.undo_stack[4]))
-                input()
-                chess.display(101)
-                input(102)
-                for index in chess.board:
-                    temp = chess.board[index]
-                    if hasattr(temp,"square"):
-                        print(index, temp, temp.square)
-                input("LOOP")
             if exit_loop:
-                #undo_pawn_promotions(chess, level)  REMOVE
-                Game.undo_stack.pop()
-                Game.undo_stack2.pop() # TODO DG
+                # Pop the stack
+                Game.undo_stack2.pop()
                 return bestscore  # Done!
 
             # Otherwise continue evaluating
             continue
 
-    if len(Game.undo_stack) == 5 and Game.undo_stack[4] and False: # REMOVE TODO
-        print(200,level, exit_loop, Game.undo_stack)
-        input()
-    #undo_pawn_promotions(chess, level)  REMOVE
-    Game.undo_stack.pop()
+    # Pop the stack
     Game.undo_stack2.pop() # TODO DG
     return bestscore  # Done!
 
@@ -900,6 +608,12 @@ def finalise_player_move(chess, it_is_a_castling_move,
     if check_flag:
         print("I am in Check")
         m.add_check_to_output()
+        # If reading from an input file do NOT test for Checkmate
+        if Game.reading_game_file:
+            # Instead output the chess move to the output stream
+            e.append_to_output_stream(Game.output_chess_move + constants.SPACE)
+            return
+
         check_flag = is_it_checkmate(chess, constants.COMPUTER)
         if check_flag:
             # Keep Linter happy - shorten name
@@ -1171,26 +885,6 @@ def main_part2():
     chess.fillboard()
     os.system("clear")
     chess.showboard()
-    print(type(chess.board["a1"]), chess.piece_letter("a1"), chess.piece_value("a1"))
-    print(type(chess.board["a2"]), chess.piece_letter("a2"), chess.piece_value("a2"))
-    print(isinstance(chess.board["a1"],piece.Pawn),isinstance(chess.board["a1"],piece.Rook),
-          isinstance(chess.board["a1"],Game),isinstance(chess,Game))
-    print(isinstance(chess.board["a2"],piece.Pawn))
-    chess.board["a2"].promote(constants.QUEEN_LETTER,constants.QUEEN_VALUE,constants.PLAYER, "a2")
-    print(type(chess.board["a2"]), chess.piece_letter("a2"), chess.piece_value("a2"))
-    chess.board["a2"].promote(constants.QUEEN_LETTER,constants.QUEEN_VALUE,constants.COMPUTER,"a2")
-    print(type(chess.board["a2"]), chess.piece_letter("a2"), chess.piece_value("a2"))
-    del chess.board["a2"].promoted_value
-    del chess.board["a2"].promoted_letter
-    del chess.board["a2"].square
-    print(type(chess.board["a2"]), chess.piece_letter("a2"), chess.piece_value("a2"))
-    #    TODO    
-
-    # remove todo
-    from_file = None
-    from_rank = None
-    to_file = None
-    to_rank = None
 
     # Game Loop
     while True:
@@ -1201,23 +895,8 @@ def main_part2():
                      Game.best_to_rank,
                      Game.evaluation_result)
 
-        # todo - REMOVE
-        #  os.system("clear")
-        #  chess.showboard()
-
-        """
-        Use 'deepcopy' to ensure that the Chessboard is restored
-        to its original values/configuration
-        """        
-        # board_copy = copy.deepcopy(chess) TODO
-        # print("EVAL IN")
-        # input() TODO
-        chess2 = copy.copy(chess) # TODO REMOVE
-        chess2board = custom_copy(chess.board)
-
-        # For the undo-ing of Pawn Promotions
-        # Grows and Shrinks with the calling of the 'evaluate' function
-        Game.undo_stack = []
+        # This stack is for the undo-ing of Pawn Promotions
+        # It Grows and Shrinks with the calling of the 'evaluate' function
         Game.undo_stack2 = []
         Game.evaluating = True
 
@@ -1225,91 +904,10 @@ def main_part2():
                                           constants.COMPUTER,
                                           constants.EVALUATE_THRESHOLD_SCORE)
 
+        # Reset variables
         Game.evaluating = False
-        Game.undo_stack = None
         Game.undo_stack2 = None
-        if Game.promoted_piece:
-            print( Game.promoted_piece, undo_promotions_listsep="\n")
-            quit() # TODO
-
-        # if Game.promoted_piece:
-        #     print("PROMOTION HAPPENEDXXX", Game.promoted_piece,level)
-        #     # chess = chess2
-        #     Game.promoted_piece = ""
-        #     input() TODO
-
-        if Game.undo_stack:
-            print("UNDO POPULATED")
-            for i in undo_stack:
-                print(i)
-            quit()
-        Game.promoted_piece = ""  # Reset
-        print("EVAL OUT") # TODO
-        print("IDS", id(chess.board), id(chess2board))
-        # chess2.display("DISPLAY CHESS2")
-        print("D4 CHESS2 ORIG",chess2board["d4"])
-        print("D4 CHESS1 ORIG",chess.board["d4"])
-        if chess2board["d4"] and False: # todo
-            print("D4 CHESS2 LETTER", chess2board["d4"].letter)
-            print("ORIG",chess2board["d4"], chess2board["d4"].letter,
-                                        chess2board["d4"].value,
-                                        chess2board["d4"].sign)
-        if chess.board["d4"]:
-            print("D4 CHESS1 LETTER",  chess.piece_letter("d4"))
-        if chess.board["d1"]:
-            print("D1 CHESS1 LETTER",  chess.piece_letter("d1"))
-
-        print("NOW",chess.board["d4"])
-        print("NOW",chess.board["d1"])
-
-        # input("NONEx") TODO
-        # for x in chess2board: TODO
-            # print(type(chess2board[x]), chess2board[x])
-        # for x in chess2board:
-        #     if not chess.board[x] and not chess2board[x]:
-        #         continue
-
-        #     if ((not chess.board[x] and chess2board[x]) or
-        #         chess.board[x] and not chess2board[x]):
-        #             chess.board[x] = chess2board[x]
-        #             print("CHANGE BECAUSE OF NULL", x)
-        #             continue
-        #     print("CH",x,chess.board[x].letter,chess2board[x].letter)
-        #     if chess.board[x].letter != chess2board[x].letter:
-        #         chess.board[x].letter = chess2board[x].letter
-        #         chess.board[x].value = chess2board[x].value
-        #         chess.board[x].sign = chess2board[x].sign
-        #         print("CHANGED",x,chess2board[x].letter)
-        # input("LOOP") TODO
-        chess.display("DISPLAY CHESS")
-        # chess = chess2
-        # if not chess2.board["d4"]:
-        #     print("d4/c2 NONE",chess2.board["d4"] )
-        # else:
-        #     print("d4/c2 VALUE/LETTER/SIGN", chess2.board["d4"].value,
-        #                                 chess2.board["d4"].letter,
-        #                                 chess2.board["d4"].sign)
-        if not chess.board["d4"]:
-            print("d4x NONE",chess.board["d4"] )
-        else:
-            print("d4x VALUE/LETTER/SIGN", chess.piece_value("d4"),
-                                        chess.piece_letter("d4"),
-                                        chess.piece_sign("d4"))
-        if not chess.board["d1"]:
-            print("d1x NONE",chess.board["d1"] )
-        else:
-            print("d1x VALUE/LETTER/SIGN", chess.piece_value("d1"),
-                                        chess.piece_letter("d1"),
-                                        chess.piece_sign("d1"))
-
-        # input()  # TODO
-        # Restore Chessboard
-        # chess = board_copy
-        # Reset this variable just in case it was affected
         Game.promoted_piece = ""
-        # remove todo
-        # from_file = Game.best_from_file
-        # from_rank = Game.best_from_rank
 
 
 def main():
