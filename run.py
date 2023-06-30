@@ -608,12 +608,6 @@ def finalise_player_move(chess, it_is_a_castling_move,
     if check_flag:
         print("I am in Check")
         m.add_check_to_output()
-        # If reading from an input file do NOT test for Checkmate
-        if Game.reading_game_file:
-            # Instead output the chess move to the output stream
-            e.append_to_output_stream(Game.output_chess_move + constants.SPACE)
-            return
-
         check_flag = is_it_checkmate(chess, constants.COMPUTER)
         if check_flag:
             # Keep Linter happy - shorten name
@@ -630,7 +624,7 @@ def finalise_player_move(chess, it_is_a_castling_move,
             # Checkmate!
             # *** END PROGRAM ***
 
-    # Then output the chess move to the output stream
+    # Otherwise output the chess move to the output stream
     e.append_to_output_stream(Game.output_chess_move + constants.SPACE)
 
 

@@ -898,13 +898,6 @@ def finalise_computer_move(chess):
     if check_flag:
         print("You are in check")
         m.add_check_to_output()
-        # If reading from an input file do NOT test for Checkmate
-        if Game.reading_game_file:
-            # Instead output the chess move to the output stream
-            append_to_output_stream(Game.output_chess_move + constants.SPACE)
-            print()
-            return
-
         check_flag = is_it_checkmate(chess, constants.PLAYER)
         if check_flag:
             print("Checkmate!! I Win!")
@@ -922,5 +915,6 @@ def finalise_computer_move(chess):
             print()
             return
 
+    # Otherwise output the chess move to the output stream
     append_to_output_stream(Game.output_chess_move + constants.SPACE)
     print()

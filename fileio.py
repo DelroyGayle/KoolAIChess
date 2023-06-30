@@ -155,6 +155,21 @@ def open_input_file():
         # Game.input_stream already set to ""
 
 
+def output_to_screen(outtable, output_filename, output_ok):
+    """
+    Print outtable's contents to the screen
+    """
+    print("The moves of this Chess Game are as follows:")
+    print()
+    for i in range(len(outtable)):
+        print(outtable[i])
+    print()
+    if output_ok:
+        print(f"These moves have also been written to {output_filename}")
+        print()
+
+
+
 def output_all_chess_moves():
 
     """
@@ -194,6 +209,11 @@ def output_all_chess_moves():
     outtable.append(line.rstrip())
 
     output_ok = False
+    if not Game.directory_of_open_inputfile:
+        # Output to the screen only
+        output_to_screen(outtable, output_ok)
+        return
+
     try:
         output_filename = (Game.directory_of_open_inputfile 
                            + constants.OUTPUT_PGN_NAME)
@@ -206,15 +226,8 @@ def output_all_chess_moves():
         # Ignore any output errors - rather, write to the screen instead
         pass
 
-    print("The moves of this Chess Game are as follows:")
-    print()
-    for i in range(len(outtable)):
-        print(outtable[i])
-    print()
-    if output_ok:
-        print(f"These moves have also been written to {output_filename}")
-        # print(os.path.realpath(pgn_output_file.name))  todo
-        print()
+    output_to_screen(outtable, output_filename, output_ok)
+
 
 def regexp_loop():
     """
