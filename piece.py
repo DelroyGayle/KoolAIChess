@@ -133,7 +133,9 @@ class Pawn(Piece):
         """
         String to be outputted for Pawns
         """
-        return "Pawn" if not hasattr(self, "promoted_piece_string") else self.promoted_piece_string
+        return ("Pawn"
+                if not hasattr(self, "promoted_piece_string")
+                else self.promoted_piece_string)
 
     def promote(self, letter, value, sign):
         """
@@ -141,7 +143,9 @@ class Pawn(Piece):
         """
         self.promoted_letter = letter
         self.promoted_value = value * sign
-        self.promoted_piece_string = ("Queen" if letter == constants.QUEEN_LETTER else
-                                     "Rook" if letter == constants.ROOK_LETTER else
-                                     "Bishop" if letter == constants.BISHOP_LETTER else
-                                     "Knight")
+        # shorter name to keep linter happy
+        the_string = ("Queen" if letter == constants.QUEEN_LETTER else
+                      "Rook" if letter == constants.ROOK_LETTER else
+                      "Bishop" if letter == constants.BISHOP_LETTER else
+                      "Knight")
+        self.promoted_piece_string = the_string

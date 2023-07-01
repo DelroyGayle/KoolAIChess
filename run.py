@@ -20,7 +20,9 @@ import extras as e
 import os
 import re
 from time import sleep
-from extras import CustomException, in_check, is_it_checkmate, finalise_computer_move
+from extras import CustomException, in_check, is_it_checkmate
+from extras import finalise_computer_move
+
 
 def handle_internal_error():
     """
@@ -62,7 +64,7 @@ def is_piece_taken(chess, to_file, to_rank, piece_sign):
     # Check whether a King is about to be actually taken!
     # Note the Kings' values: Computer's King (-7500) and Player's King (5000)
     if (piece_taken == constants.VALUE_OF_COMPUTER_KING or
-        piece_taken == constants.VALUE_OF_PLAYER_KING):
+       piece_taken == constants.VALUE_OF_PLAYER_KING):
 
         """
         This means the PLAYER/COMPUTER was allowed to make an illegal move
@@ -207,7 +209,7 @@ def undo_pawn_promotions(chess):
     That way, when another call is made to level 4,
     the chessboard is identical including any pawn promotions
     """
-    Game.promoted_piece = "" # reset
+    Game.promoted_piece = ""  # reset
     if not Game.undo_stack[-1]:
         return
 
@@ -329,7 +331,7 @@ def evaluate(chess, level, piece_sign, prune_factor):
     i.e. it does not waste time on lower value plays.
 
     To cater for any 'pawn promotions' that occur during evaluation
-    Game.undo_stack is used to keep a record of any new promotions 
+    Game.undo_stack is used to keep a record of any new promotions
     that will be 'undone' when 'evaluate' returns
     """
 
@@ -398,7 +400,7 @@ def evaluate(chess, level, piece_sign, prune_factor):
             continue
 
     # Pop the stack
-    Game.undo_stack.pop() # TODO DG
+    Game.undo_stack.pop()
     return bestscore  # Done!
 
 
@@ -512,7 +514,7 @@ def process_computer_move(chess, from_file, from_rank, to_file, to_rank):
 
     # Handle 2 and 3
     # Validate, Execute then Finalise the Computer Chess Move
-    # (if it was not a Castling Chess Move 
+    # (if it was not a Castling Chess Move
     #  or if it is not a 'finalised' computer move)
     if not computer_move_finalised:
         execute_computer_move(chess, from_file, from_rank, to_file, to_rank)
@@ -541,17 +543,18 @@ def finalise_player_move(chess, it_is_a_castling_move,
         if not Game.move_count_incremented:
             Game.move_count += 1
 
-        # keep this flag unset from now on; so that the move count is incremented
+        # keep this flag unset from now on;
+        # so that the move count is incremented
         Game.move_count_incremented = False
 
         # Output the Move Number
         e.append_to_output_stream(str(Game.move_count) + "." + constants.SPACE)
 
     if not it_is_a_castling_move:
-    # Convert the chess move in order to output it
-    # Add a 'x' to the output chess move if a piece was taken
-    # Add the promoted piece if a promotion took place
-    # (The above does not apply to the Castling move) 
+        # Convert the chess move in order to output it
+        # Add a 'x' to the output chess move if a piece was taken
+        # Add the promoted piece if a promotion took place
+        # (The above does not apply to the Castling move)
         m.setup_output_chess_move_add_promotion(attacking_piece_letter,
                                                 from_file, from_rank,
                                                 to_file, to_rank, taken)
@@ -567,12 +570,12 @@ def finalise_player_move(chess, it_is_a_castling_move,
         # Was there a Pawn Promotion? If so, Display a Message
         if Game.promotion_message:
             print(Game.promotion_message)
-            Game.promotion_message = "" # reset
+            Game.promotion_message = ""  # reset
 
             # input("PLAYER TAKEN/2") TODO
     # input("CHECK - SHOULD BE WHITE1> ") # TODO
 
-    # # If an en passant move has been performed, 
+    # # If an en passant move has been performed,
     # # the Check test has already been done - no need to repeat it
     # if Game.en_passant_status == constants.VALID:
     #     # Then output the chess move to the output stream
@@ -594,7 +597,7 @@ def finalise_player_move(chess, it_is_a_castling_move,
             Game.output_chess_move = m.add_checkmate_to_output(chess_move)
             print("Checkmate!! You Win!")
             # Then output the chess move to the output file
-            e.append_to_output_stream(Game.output_chess_move + constants.SPACE 
+            e.append_to_output_stream(Game.output_chess_move + constants.SPACE
                                       + constants.PLAYER_WON)
             f.output_all_chess_moves()
             print()
@@ -754,9 +757,10 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
 
         # Check whether the Player entered an en passant move
         # 'print_string' N/A since the en passant routines
-        # will display their own messages using 
+        # will display their own messages using
         # 'attacking_piece_letter' and 'taken'
-        do_next = m.handle_en_passant_from_keyboard(chess, from_file, from_rank,
+        do_next = m.handle_en_passant_from_keyboard(chess,
+                                                    from_file, from_rank,
                                                     to_file, to_rank)
         if do_next == "return":
             # Inform Player that Kool AI is thinking!
@@ -810,14 +814,14 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
 
         # Valid move has been played - show the updated board
         # Display the Player's Move
-        
-        # REMOVE
+
+        # REMOVE TODO
         #chess.display(print_string)
         #if (Game.show_taken_message):
             # Show what piece the Player took
         #    print(Game.show_taken_message)
         # CF3 TODO
-        
+
         # Pause so that the Player
         # can see the description of the move that the Player chose
         # Inform Player that Kool AI is thinking!

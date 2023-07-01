@@ -214,7 +214,7 @@ class Game:
 
         # Check first whether it is a promoted pawn
         # If so, return its promoted piece's 'value'
-        thevalue =  getattr(self.board[index], "promoted_value", None)
+        thevalue = getattr(self.board[index], "promoted_value", None)
         if thevalue is None:
             thevalue = getattr(self.board[index], "value", constants.BLANK)
         return thevalue
@@ -230,7 +230,7 @@ class Game:
 
         # Check first whether it is a promoted pawn
         # If so, return its promoted piece's 'letter'
-        theletter =  getattr(self.board[index], "promoted_letter", None)
+        theletter = getattr(self.board[index], "promoted_letter", None)
         if theletter is None:
             theletter = getattr(self.board[index], "letter", constants.BLANK)
         return theletter

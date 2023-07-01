@@ -28,7 +28,7 @@ def cleanup_input_stream(in_string):
     work_string = re.sub(regexp, "\n", in_string)
 
 # Remove nonprintables
-# Remove any possibility of SAN move suffix annotations 
+# Remove any possibility of SAN move suffix annotations
 # i.e. remove ! and ? characters
     regexp = r"[!?\x00-\x08\x0B-\x1F\x7F-\xFF]"
     work_string = re.sub(regexp, "", work_string)
@@ -36,7 +36,8 @@ def cleanup_input_stream(in_string):
 # Replace any horizontal tabs with spaces
     work_string = work_string.replace(constants.TAB, constants.SPACE)
 
-# Trim the string of whitespace and ensure there is an extra \n at the end, if not null
+# Trim the string of whitespace
+# ensure there is an extra \n at the end, if not null
     work_string = work_string.strip()
     if work_string:
         return work_string + "\n"
@@ -155,7 +156,7 @@ def open_input_file():
         # Game.input_stream already set to ""
 
 
-def output_to_screen(outtable, output_ok, output_filename= ""):
+def output_to_screen(outtable, output_ok, output_filename=""):
     """
     Print outtable's contents to the screen
     """
@@ -176,13 +177,13 @@ def output_all_chess_moves():
     EG 1. e2e4 c7c6 2. d2d4 d7d5
     INTO 'thelist'
     ["1.", "e2e4", "c7c6", "2.", "d2d4", "d7d5"]
-    Add items from 'thelist' to the output string 'line' up to 
+    Add items from 'thelist' to the output string 'line' up to
     the length of constants.LINESIZE (currently 73)
     Once this length as been exceeded, print 'line'
     and then set 'line' to the current item
     and repeat the process until the entire list has been processed
 
-    Then 
+    Then
     1) Print outtable's contents to the output file 'output.pgn'
     in input.pgn's directory or the current working directory
     2) Print outtable's contents to the screen
@@ -197,7 +198,7 @@ def output_all_chess_moves():
     surplus = ""
     while thelist:
         # Remove the first item of the list
-        surplus = thelist.pop(0) + " " 
+        surplus = thelist.pop(0) + " "
         if len(line) + len(surplus) <= constants.LINESIZE:
             line += surplus
         else:
@@ -214,7 +215,7 @@ def output_all_chess_moves():
         return
 
     try:
-        output_filename = (Game.directory_of_open_inputfile 
+        output_filename = (Game.directory_of_open_inputfile
                            + constants.OUTPUT_PGN_NAME)
 
         with open(output_filename, "w") as pgn_output_file:
@@ -388,13 +389,12 @@ def triple_tuple(matched):
     Game.general_string_result = matched.group(0)
 
     #                                PIECE
-    Game.chess_move_tuple =      (matched.group(1),
-                                  #  FROM
-                                  matched.group(2),
-                                  #  TO
-                                  matched.group(3))
+    Game.chess_move_tuple = (matched.group(1),
+                             #  FROM
+                             matched.group(2),
+                             #  TO
+                             matched.group(3))
     handle_move_suffix(matched)
-    print("TT", Game.chess_move_tuple) # TODO
 
 
 def double_tuple_with_piece(matched):
@@ -429,7 +429,6 @@ def double_tuple_with_source(matched):
     #                            SOURCE            DESTINATION
     Game.chess_move_tuple = ("", matched.group(1), matched.group(2))
     handle_move_suffix(matched)
-    print("DT/source", Game.chess_move_tuple) # TODO
 
 
 def parse_chess_move():
@@ -441,7 +440,7 @@ def parse_chess_move():
     """
 
     Game.input_stream_previous_contents = Game.input_stream[0:20]
- 
+
     # EIGHT REGEXPS
 
     """
@@ -464,7 +463,6 @@ def parse_chess_move():
         # That is, the piece, the source square, the destination square
         Game.move_type = constants.LONG_NOTATION
         triple_tuple(matched)
-        print(700) #TODO
         return True  # Indicate success
 
     """
@@ -484,7 +482,6 @@ def parse_chess_move():
         # That is, the piece, the source square, the destination square
         Game.move_type = constants.PIECE_BOTH_SQUARES
         triple_tuple(matched)
-        print(600) #TODO
         return True  # Indicate success
 
     """
@@ -503,7 +500,6 @@ def parse_chess_move():
         # That is, just piece and the destination square only
         Game.move_type = constants.DESTINATION_SQUARE_ONLY
         double_tuple_with_piece(matched)
-        print(100) #TODO
         return True  # Indicate success
 
     """
@@ -561,7 +557,6 @@ def parse_chess_move():
         # That is, the piece, the file and the destination square
         Game.move_type = constants.PIECE_FILE_MOVE
         triple_tuple(matched)
-        print(400) #TODO
         return True  # Indicate success
 
     """
@@ -583,7 +578,6 @@ def parse_chess_move():
         # That is, the piece, the rank and the destination square
         Game.move_type = constants.PIECE_RANK_MOVE
         triple_tuple(matched)
-        print(500) #TODO
         return True  # Indicate success
 
     """
@@ -601,7 +595,6 @@ def parse_chess_move():
         Game.move_type = constants.CASTLING_MOVE
         Game.general_string_result = matched.group(0)
         handle_move_suffix(matched)
-        print("OO>", Game.general_string_result, matched.group(0), len(matched.group(0)))  # todo
         return True  # Indicate success
 
 # Unknown Chess Move
@@ -645,9 +638,9 @@ def expected_move_number_not_found():
 
 def parse_move_text():
     """
-    1) 
+    1)
     If it is the Player's turn, then a Move Number is expected
-    to be parsed first. The Move Number parsed must match 
+    to be parsed first. The Move Number parsed must match
     the current Move Number Count.
     2)
     Then a Chess Move is expected, which will be parsed
@@ -762,7 +755,7 @@ def find_the_match(chess, all_matched_list,
         It means: An illegal move or invalid move
         has been read in from the input file
         """
-        print("Invalid Move")      
+        print("Invalid Move")
         e.input_status_message(constants.BAD_CHESS_MOVE_FROMFILE
                                + Game.input_stream_previous_contents)
         return  # Failure
@@ -797,19 +790,9 @@ def determine_the_move(chess, piece, to_square):
                         if chess.piece_sign(index) == Game.global_piece_sign
                         and chess.piece_letter(index) == piece]
 
-    print("712 DONE", piece, all_matched_list)
-    # input("712 CHECK - SHOULD BE WHITE/4> ") # TODO
     # Go through each filtered square,
     # generated all the moves for the piece on a filtered square
     # and find the move with the matching 'target' destination
-
-    # f= find_the_match(chess, all_matched_list,
-    #                      to_file, to_rank, piece)    
-    # TODO
-    # if Game.move_count > 20:
-    #    print(Game.new_from_file,Game.new_from_rank,Game.new_to_file,Game.new_to_rank)
-    #    input("find_the_match")
-    # return f
 
     find_the_match(chess, all_matched_list,
                    to_file, to_rank, piece)
@@ -879,7 +862,7 @@ def determine_the_capture_by_both_squares(chess,
         It means: An illegal move or invalid move
         has been read in from the input file
         """
-        print("Invalid Long Notation Move")        
+        print("Invalid Long Notation Move")
         e.input_status_message(constants.BAD_CHESS_MOVE_FROMFILE
                                + Game.input_stream_previous_contents)
         return  # Failure
@@ -896,18 +879,20 @@ def determine_the_capture_by_both_squares(chess,
 
 def determine_move_both_file_rank(chess):
     """
-    Standard Algebraic Notation (SAN) suppresses redundant information concerning the from-square,
+    Standard Algebraic Notation (SAN) suppresses redundant information
+    concerning the from-square,
     while keeping the descriptive letter or symbol of pieces other than a pawn.
     In other words, it is a shortened algebraic notation of chess moves.
-    
-    https://www.chessprogramming.org/Algebraic_Chess_Notation#Standard_Algebraic_Notation_.28SAN.29
+
+    https://www.chessprogramming.org/
+    Algebraic_Chess_Notation#Standard_Algebraic_Notation_.28SAN.29
 
     https://en.wikipedia.org/wiki/Algebraic_notation_(chess)
 
-    Therefore, conversion is needed to convert SAN chess moves into 
+    Therefore, conversion is needed to convert SAN chess moves into
     Long Algebraic Notation (LAN) so that the origin and target coordinates
     can be used by this program to interpret the chess move.
-    
+
     Therefore:
     Determine the full chess move, both file and rank
     For example, change 'e4' to 'e2e4'; change 'Nf3' to 'g1f3'
@@ -915,7 +900,7 @@ def determine_move_both_file_rank(chess):
 
     Game.chess_move_tuple consists of (piece, source, target)
 
-    Note: If the resultant move that has been read 
+    Note: If the resultant move that has been read
           from the input file is an en passant move
           Then this move is performed 'at this stage'
           within the functionality of 'determine_move_both_file_rank'
@@ -961,7 +946,7 @@ def determine_move_both_file_rank(chess):
         piece = "P"
 
     if (Game.move_type == constants.DESTINATION_SQUARE_ONLY
-        or Game.move_type == constants.PIECE_DESTINATION_SQUARE):
+       or Game.move_type == constants.PIECE_DESTINATION_SQUARE):
         # DESTINATION_SQUARE_ONLY  EG h3 OR Ne2
         # PIECE_DESTINATION_SQUARE EG Qxe1
         determine_the_move(chess, piece, target)
@@ -1019,14 +1004,14 @@ def handle_move_text(chess):
     # TODO
     # Determine the full chess move, both file and rank
     # Note: If the resultant move is an en passant move
-    #       Then this move is performed at this stage 
+    #       Then this move is performed at this stage
     #       within the functionality of 'determine_move_both_file_rank'
 
     #       Game.en_passant_status is:
     #           set to 'constants.VALID' for a valid en passant move
     #           set to 'constants.INVALID' for an illegal en passant move
     #           set to 'constants.NOVALUE' for a non-en-passant move
-    
+
     determine_move_both_file_rank(chess)
 
 
@@ -1190,7 +1175,8 @@ def handle_computer_move_from_inputfile(chess,
         # to see whether this En Passant move would put the Player in Check
         # 'indicate_en_passant_done()' displays the appropriate messaging
         # regarding the En Pasant move
-        # Previous values regarding 'Computer's pawn positions' have already been reset
+        # Previous values regarding 'Computer's pawn positions'
+        # have already been reset
 
         # Convert the chess move in order to output it
         # Add a 'x' to the output chess move if a piece was taken
