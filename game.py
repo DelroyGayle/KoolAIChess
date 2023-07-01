@@ -84,7 +84,7 @@ class Game:
 
     # For the undo-ing of Pawn Promotions
     # Grows and Shrinks with the calling of the 'evaluate' function
-    undo_stack2 = None
+    undo_stack = None
 
     # Flag to indicate that the Kool AI is evaluating its next move
     evaluating = None

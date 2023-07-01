@@ -155,7 +155,7 @@ def open_input_file():
         # Game.input_stream already set to ""
 
 
-def output_to_screen(outtable, output_filename, output_ok):
+def output_to_screen(outtable, output_ok, output_filename= ""):
     """
     Print outtable's contents to the screen
     """
@@ -167,7 +167,6 @@ def output_to_screen(outtable, output_filename, output_ok):
     if output_ok:
         print(f"These moves have also been written to {output_filename}")
         print()
-
 
 
 def output_all_chess_moves():
@@ -226,7 +225,7 @@ def output_all_chess_moves():
         # Ignore any output errors - rather, write to the screen instead
         pass
 
-    output_to_screen(outtable, output_filename, output_ok)
+    output_to_screen(outtable, output_ok, output_filename)
 
 
 def regexp_loop():
@@ -413,7 +412,6 @@ def double_tuple_with_piece(matched):
     #                        PIECE                 DESTINATION
     Game.chess_move_tuple = (matched.group(1), "", matched.group(2))
     handle_move_suffix(matched)
-    print("DT/piece", Game.chess_move_tuple) # TODO
 
 
 def double_tuple_with_source(matched):
@@ -442,11 +440,8 @@ def parse_chess_move():
     Note: the order of these regular expression patterns is significant
     """
 
-    print(">" + Game.input_stream[0:20])  # todo
-
     Game.input_stream_previous_contents = Game.input_stream[0:20]
-    print(336,"MATCHED",Game.input_stream_previous_contents) # TODO
-
+ 
     # EIGHT REGEXPS
 
     """
@@ -527,7 +522,6 @@ def parse_chess_move():
         # That is, just the file and the destination square only
         Game.move_type = constants.PAWN_CAPTURE_FILE
         double_tuple_with_source(matched)
-        print(200, matched, matched.group(0))  # TODO
         return True  # Indicate success
 
     """
@@ -546,7 +540,6 @@ def parse_chess_move():
         # EG Qxe1 Kxf7 Rxe1+
         Game.move_type = constants.PIECE_DESTINATION_SQUARE
         double_tuple_with_piece(matched)
-        print(300)  # TODO
         return True  # Indicate success
 
     """
@@ -936,7 +929,6 @@ def determine_move_both_file_rank(chess):
     if (Game.move_type == constants.PAWN_CAPTURE_FILE
        or Game.move_type == constants.LONG_NOTATION
        or Game.move_type == constants.PIECE_BOTH_SQUARES):
-        print(201,source,202,target) # TODO
         # Game.en_passant_status is
         # set to either constants.VALID for a valid en passant move
         #  or to 'constants.INVALID' for an illegal en passant move
@@ -1021,7 +1013,6 @@ def handle_move_text(chess):
         return
 
     # Yes!
-    print("BEFORE1", Game.reading_game_file) # TODO
     if Game.move_type == constants.CASTLING_MOVE:
         return
 
@@ -1136,8 +1127,6 @@ def handle_computer_move_from_inputfile(chess,
     Game.opponent_who_are_you = constants.PLAYER
 
     fetch_chess_move_from_file(chess)
-    print("FILE OK", Game.reading_game_file, Game.move_type,
-          Game.evaluate_castle_move)  # TODO
 
     # Was there a file input issue?
     # Appropriate error messaging has been displayed

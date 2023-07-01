@@ -99,28 +99,6 @@ def is_piece_taken(chess, to_file, to_rank, piece_sign):
     return piece_taken
 
 
-""" TODO
-    if bpiece(x, y)
-        elif == asc("P")
-            pawn(x, y, piece_sign)
-        elif == asc("N")
-            knight(x, y, piece_sign)
-        elif == asc("B")
-            bishop(x, y, piece_sign)
-        elif == asc("R")
-            rook(x, y, piece_sign)
-        elif == asc("Q")
-            queen(x, y, piece_sign)
-        elif == asc("K")
-            king(x, y, piece_sign)
-# Determine whether a Castling move is feasible
-            if evaluating:
-                  print("Castle", evaluating, level)  # todo
-                  evaluate_castle(x, y, piece_sign)
-todo
-"""
-
-
 def is_player_move_illegal(chess, from_file, from_rank, to_file, to_rank):
 
     """
@@ -213,7 +191,7 @@ def coords_formula(file, rank):
     return (file_number, rank_number)
 
 
-def undo_pawn_promotions3(chess):
+def undo_pawn_promotions(chess):
     """
     # Remove any Pawn Promotions that may have occurred
     # during evaluation
@@ -230,17 +208,17 @@ def undo_pawn_promotions3(chess):
     the chessboard is identical including any pawn promotions
     """
     Game.promoted_piece = "" # reset
-    if not Game.undo_stack2[-1]:
+    if not Game.undo_stack[-1]:
         return
 
-    set_difference = Game.undo_stack2[-1]
+    set_difference = Game.undo_stack[-1]
     for index in set_difference:
         # Remove the Pawn Promotion attributes
         # i.e. Undo them!
         del chess.board[index].promoted_value
         del chess.board[index].promoted_letter
         # empty the set
-    Game.undo_stack2[-1].clear()
+    Game.undo_stack[-1].clear()
 
 
 def do_evaluation(chess, level, piece_sign, prune_factor,
@@ -303,7 +281,7 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
             Game.best_to_rank = to_rank
 
         # Undo any pawn promotions
-        undo_pawn_promotions3(chess)
+        undo_pawn_promotions(chess)
         # Restore previous squares
         chess.board[from_square] = save_from_square
         chess.board[to_square] = save_to_square
@@ -327,7 +305,7 @@ def do_evaluation(chess, level, piece_sign, prune_factor,
         return (exitloop, bestscore)
 
     # Undo any pawn promotions
-    undo_pawn_promotions3(chess)
+    undo_pawn_promotions(chess)
     # Restore previous squares
     chess.board[from_square] = save_from_square
     chess.board[to_square] = save_to_square
@@ -362,7 +340,7 @@ def evaluate(chess, level, piece_sign, prune_factor):
               + str(level))
 
     # Add an empty set to the stack
-    Game.undo_stack2.append(set())
+    Game.undo_stack.append(set())
 
     bestscore = constants.EVALUATE_THRESHOLD_SCORE * piece_sign
     # Go through each square on the board
@@ -413,14 +391,14 @@ def evaluate(chess, level, piece_sign, prune_factor):
             Game.score = oldscore
             if exit_loop:
                 # Pop the stack
-                Game.undo_stack2.pop()
+                Game.undo_stack.pop()
                 return bestscore  # Done!
 
             # Otherwise continue evaluating
             continue
 
     # Pop the stack
-    Game.undo_stack2.pop() # TODO DG
+    Game.undo_stack.pop() # TODO DG
     return bestscore  # Done!
 
 
@@ -891,7 +869,7 @@ def main_part2():
 
         # This stack is for the undo-ing of Pawn Promotions
         # It Grows and Shrinks with the calling of the 'evaluate' function
-        Game.undo_stack2 = []
+        Game.undo_stack = []
         Game.evaluating = True
 
         Game.evaluation_result = evaluate(chess, 0,
@@ -900,7 +878,7 @@ def main_part2():
 
         # Reset variables
         Game.evaluating = False
-        Game.undo_stack2 = None
+        Game.undo_stack = None
         Game.promoted_piece = ""
 
 

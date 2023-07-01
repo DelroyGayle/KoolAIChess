@@ -25,7 +25,9 @@ class CustomException(Exception):
     """
     pass
 
-#### ROUTINES THAT GENERATE EACH OF THE PIECE'S MOVES ####
+
+""" ROUTINES THAT GENERATE EACH OF THE PIECE'S MOVES """
+
 
 def advance_vertical(rank, steps):
     """
@@ -438,7 +440,9 @@ def determine_generate_move_method(piece_letter):
 
     return themethod
 
-#### THE END OF PIECES' ROUTINES ####
+
+""" THE END OF PIECES' ROUTINES """
+
 
 def movelist(chess, from_file, from_rank, piece_sign, evaluating=False):
     """
@@ -464,11 +468,7 @@ def append_to_output_stream(astring):
     """
     append string to Game.output_stream
     """
-    # print("about to add",astring,"TO",Game.output_stream)    # TODO
     Game.output_stream += astring
-    
-    # debugging TODO
-    # print("OSap>", Game.output_stream)
 
 
 def goodbye():
@@ -597,7 +597,7 @@ def handle_player_move_from_keyboard(chess):
         If so, remove the move number!
         """
         Game.output_stream = f.remove_the_suffix(Game.output_stream.rstrip(),
-                                                 str(Game.move_count) + ".")           
+                                                 str(Game.move_count) + ".")
         chess.display("Player Resigned")
         if not Game.it_is_checkmate:
             # Since it was not Checkmate, Deem it a draw!
@@ -613,7 +613,7 @@ def handle_player_move_from_keyboard(chess):
     # *** CASTLING ***
     # Check whether it is a Castling Move
     do_next = test_if_input_is_castling(chess, input_string)
-    if do_next != "pass":            
+    if do_next != "pass":
         return (do_next, None)
 
     # General User Input Validation
@@ -631,7 +631,8 @@ def handle_player_move_from_keyboard(chess):
         print("Format of Chess moves ought to be 4 characters e.g. e2e4")
         print("Files should be a letter from a to h")
         print("Ranks should be a number from 1 to 8")
-        print("\nEnter O-O for Queenside Castling; enter O-O-O for Kingside Castling")
+        print("\nEnter O-O for Queenside Castling; "
+              "enter O-O-O for Kingside Castling")
         print("Enter r to Resign")
         do_next = "continue"
 
@@ -664,21 +665,24 @@ def any_promotion(chess, to_file, to_rank):
 
     to_square = to_file + to_rank
     if (to_rank == "1"
-        and chess.piece_value(to_square) == -constants.PAWN_VALUE):
+       and chess.piece_value(to_square) == -constants.PAWN_VALUE):
 
         # The Computer has reached the bottom of the board
         # Is the Piece an Unpromoted Pawn?
 
-        if hasattr(chess.board[to_square],"promoted_value"):
+        if hasattr(chess.board[to_square], "promoted_value"):
             # No!
             return
 
         # Yes!
         # Promote the Black Pawn to a Black Queen
-        chess.board[to_square].promote(constants.QUEEN_LETTER, constants.QUEEN_VALUE, constants.COMPUTER)
-        # Record the Promotion in order to 'undo' if function 'evaluate' has been called
+        chess.board[to_square].promote(constants.QUEEN_LETTER,
+                                       constants.QUEEN_VALUE,
+                                       constants.COMPUTER)
+        # Record the Promotion in order to 'undo'
+        # if function 'evaluate' has been called
         if Game.evaluating:
-            Game.undo_stack2[-1].add(to_square)
+            Game.undo_stack[-1].add(to_square)
         else:
             # Set up a message regarding the promotion
             Game.promotion_message = "Pawn promoted to Queen"
@@ -687,12 +691,12 @@ def any_promotion(chess, to_file, to_rank):
         return
 
     if (to_rank == "8"
-        and chess.piece_value(to_square) == constants.PAWN_VALUE):
+       and chess.piece_value(to_square) == constants.PAWN_VALUE):
 
         # The Player has reached the top of the board
         # Is the Piece an Unpromoted Pawn?
 
-        if hasattr(chess.board[to_square],"promoted_value"):
+        if hasattr(chess.board[to_square], "promoted_value"):
             # No!
             return
 
@@ -701,9 +705,12 @@ def any_promotion(chess, to_file, to_rank):
         # Is Kool AI Evaluating White's Move?
         if Game.evaluating:
             # Promote the White Pawn to a White Queen
-            chess.board[to_square].promote(constants.QUEEN_LETTER, constants.QUEEN_VALUE, constants.COMPUTER)
-            # Record the Promotion in order to 'undo' if function 'evaluate' has been called
-            Game.undo_stack2[-1].add(to_square)
+            chess.board[to_square].promote(constants.QUEEN_LETTER,
+                                           constants.QUEEN_VALUE,
+                                           constants.COMPUTER)
+            # Record the Promotion in order to 'undo'
+            # if function 'evaluate' has been called
+            Game.undo_stack[-1].add(to_square)
             Game.promoted_piece = constants.QUEEN_LETTER
             return
 
@@ -717,7 +724,8 @@ def any_promotion(chess, to_file, to_rank):
         print("What piece would you like to promote your Pawn to?")
         while True:
             print("Please enter either r for Rook, b for Bishop, n for Knight")
-            choice = input("q or Enter for Queen. Pick an answer [r/b/n/q/Enter] : ")
+            choice = input("q or Enter for Queen. "
+                           "Pick an answer [r/b/n/q/Enter] : ")
             choice = choice.strip().upper()
             if choice == "":
                 choice = constants.QUEEN_LETTER
@@ -729,10 +737,13 @@ def any_promotion(chess, to_file, to_rank):
                 break
 
         # Promote the Pawn
-        chess.board[to_square].promote(choice, CHOICE_DICTIONARY[choice], constants.PLAYER)
-        # Record the Promotion in order to 'undo' if function 'evaluate' has been called
+        chess.board[to_square].promote(choice, CHOICE_DICTIONARY[choice],
+                                       constants.PLAYER)
+        # Record the Promotion in order to 'undo'
+        # if function 'evaluate' has been called
         # Set up a message regarding the promotion
-        Game.promotion_message = "Pawn promoted to " + chess.board[to_square].piece_string()
+        Game.promotion_message = ("Pawn promoted to "
+                                  + chess.board[to_square].piece_string())
         Game.promoted_piece = choice
 
 
@@ -745,8 +756,8 @@ def in_check(chess, user_sign):
     # print("IN CHECK IN") # TODO
     opponent_sign = -user_sign
     user_king_value = (constants.VALUE_OF_COMPUTER_KING
-                                              if user_sign == constants.COMPUTER
-                                              else constants.VALUE_OF_PLAYER_KING)
+                       if user_sign == constants.COMPUTER
+                       else constants.VALUE_OF_PLAYER_KING)
 
     # Go through each square on the board
     for letter in ["a", "b", "c", "d", "e", "f", "g", "h"]:
@@ -754,21 +765,14 @@ def in_check(chess, user_sign):
             index = letter + number
             if chess.piece_sign(index) == opponent_sign:
                 all_the_moves = movelist(chess, letter, number,
-                                           opponent_sign, False)
+                                         opponent_sign, False)
                 # Start scanning each move
                 for m in range(len(all_the_moves)):
                     if (chess.piece_letter(all_the_moves[m])
-                       == constants.KING_LETTER 
+                       == constants.KING_LETTER
                        and chess.piece_value(all_the_moves[m])
                        == user_king_value):
                         # User King is in Check!
-                        # # TODO
-                        # print(user_sign, opponent_sign, index, all_the_moves[m],
-                        # chess.piece_letter(all_the_moves[m]),
-                        # chess.piece_value(all_the_moves[m]),
-                        # all_the_moves, )
-                        # print(Game.move_count,user_sign, opponent_sign)
-                        # print("YES IN CHECK")  # todo
                         return True
 
     # Indicate that the Opponent King is not in Check at all
@@ -786,6 +790,7 @@ def make_move_to_square(chess, from_square, to_square, to_file, to_rank):
     chess.board[from_square] = None
     # promote pawn if it reaches the board edge
     any_promotion(chess, to_file, to_rank)
+
 
 def test_each_move(chess, who_are_you,
                    from_square,
@@ -843,7 +848,7 @@ def is_it_checkmate(chess, who_are_you):
         from_file = index[0]
         from_rank = index[1]
         all_the_moves = movelist(chess, from_file, from_rank,
-                                   who_are_you, False)
+                                 who_are_you, False)
 
         # Loop through each possible move
         for m in range(len(all_the_moves)):
@@ -884,8 +889,8 @@ def finalise_computer_move(chess):
 
         # Was there a Pawn Promotion? If so, Display a Message
         if Game.promotion_message:
-            print(Game.promotion_message)        
-            Game.promotion_message = "" # reset
+            print(Game.promotion_message)
+            Game.promotion_message = ""  # reset
 
         # If reading from a file
         # Pause the computer so that the Player can read it
@@ -906,8 +911,8 @@ def finalise_computer_move(chess):
             chess_move = Game.output_chess_move
 
             Game.output_chess_move = m.add_checkmate_to_output(chess_move)
-            # Checkmate! 
-            append_to_output_stream(Game.output_chess_move + constants.SPACE 
+            # Checkmate!
+            append_to_output_stream(Game.output_chess_move + constants.SPACE
                                     + constants.COMPUTER_WON)
             f.output_all_chess_moves()
             # However do not end the program

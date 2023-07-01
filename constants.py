@@ -7,7 +7,7 @@ import re
 
 # maximum recursive calls for the function evaluate()
 # 5 normal play; 3 dumber and quicker
-MAXLEVEL = 5
+MAXLEVEL = 2
 
 # Negative number used to represent Black
 COMPUTER = -1
@@ -134,43 +134,40 @@ SLEEP_VALUE = 2  # Pause 2 seconds
 COMPUTER_FILEIO_SLEEP_VALUE = 4
 
 # Regular Expressions
+parens_pattern = re.compile(r"[()]")
 percent_pattern = re.compile(r"(\A%)|(\n%)")
 en_passant_pattern = re.compile(r"\A(e\.p\.[ \n]*)+")
 nag_pattern = re.compile(r"\A\$[0-9]+")
-parens_pattern = re.compile(r"[()]")
+chess_move_suffix_pattern = re.compile(r"\A[A-Za-z0-9+#=:\-]*")
+castling_inputfile_pattern = re.compile(r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))")
+game_termination_pattern = re.compile(r"\A((1-0)|(0-1)|(1/2-1/2)|[*])")
 periods_pattern = re.compile(r"\A[.]+")
 move_number_pattern = re.compile(r"\A([0-9]+)[. ]*")
 move_number_suffix_pattern = re.compile(r"\A[.][ \n]*")
-game_termination_pattern = re.compile(r"\A((1-0)|(0-1)|(1/2-1/2)|[*])")
+castling_keyboard_pattern = re.compile(r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))\Z")
+chess_move_pattern = re.compile(r"([a-h][1-8]){2}")
 
-# 7
+# 1
 long_notation_pattern = re.compile(r"\A([KQRBN]?)([a-h][1-8])([a-h][1-8])",
                                    flags=re.ASCII)
 
-# 6
+# 2
 capture_2squares_pattern = re.compile(r"\A([KQRBN]?)([a-h][1-8])x([a-h][1-8])",
                                       flags=re.ASCII)
-# 1
+# 3
 one_square_pattern = re.compile(r"\A([KQRBN]?)([a-h][1-8])",
                                 flags=re.ASCII)
-# 2
+# 4
 pawn_capture_pattern = re.compile(r"\A([a-h])x([a-h][1-8])",
                                   flags=re.ASCII)
-# 3
+# 5
 nonpawn_capture_pattern = re.compile(r"\A([KQRBN])x([a-h][1-8])",
                                      flags=re.ASCII)
 
-# 4
+# 6
 file_pattern = re.compile(r"\A([KQRBN])([a-h])x?([a-h][1-8])",
                           flags=re.ASCII)
 
-# 5
+# 7
 rank_pattern = re.compile(r"\A([KQRBN])([1-8])x?([a-h][1-8])",
                           flags=re.ASCII)
-
-castling_inputfile_pattern = re.compile(r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))")
-
-chess_move_suffix_pattern = re.compile(r"\A[A-Za-z0-9+#=:\-]*")
-
-castling_keyboard_pattern = re.compile(r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))\Z")
-chess_move_pattern = re.compile(r"([a-h][1-8]){2}")

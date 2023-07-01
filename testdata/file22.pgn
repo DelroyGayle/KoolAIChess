@@ -1,19 +1,11 @@
-{147-move computer game HIARCS 11.1 UCI - Rybka 2.3.1 32-bit, 2008
-SOURCE:
-https://jeromegambit.blogspot.com/2009/10/king-in-peril-comment-reply.html
-} 
-1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.Bxf7+ Kxf7 5.Nxe5+ Nxe5 6.d4 Qh4 7.0-0 Nf6 8.dxc5 Qxe4 9.Nc3 Qb4 10.Be3 d6 
-11.cxd6 Qxd6 12.Qxd6 cxd6 13.Nb5 Nc4 14.Bf4 Bd7 15.Nxd6+ Nxd6 16.Bxd6 Rhe8 17.Rfe1 Bb5 18.Rac1 Rad8 19.Bb4 Be2 
-20.Bc5 a6 21.Be3 Bg4 22.c4 Be6 23.h3 Rd3 24.Kh2 Ne4 25.Bf4 Nc5 26.Be3 Nd7 27.b3 Ne5 28.Re2 Bf5 29.Rce1 Nc6 
-30.Bc5 Rxe2 31.Rxe2 Kf6 32.Ba3 Nd4 33.Bb2 h5 34.g4 hxg4 35.hxg4 Bh7 36.Re3 Rd1 37.Kg3 Bb1 38.f4 Kf7 39.Bxd4 Rxd4 
-40.Re2 Be4 41.Kf2 Bc6 42.Kg3 Rd3+ 43.Kh4 Bf3 44.Rh2 Kf6 45.Rh3 b6 46.Rh2 g6 47.Rc2 Rd1 48.c5 bxc5 49.Rxc5 Rg1 
-50.g5+ Ke6 51.Ra5 Rh1+ 52.Kg3 Bb7 53.b4 Rb1 54.a3 Re1 55.Kg4 Kd6 56.Rc5 Rg1+ 57.Kh3 Bd5 58.Ra5 Bc4 59.Re5 Be6+ 
-60.Kh2 Rg4 61.Re4 Bd5 62.Rd4 Rg2+ 63.Kh3 Rg1 64.Rd3 Rc1 65.Kg4 Rc2 66.Kg3 Rg2+ 67.Kh4 Ke6 68.Kh3 Rg1 69.Re3+ Kd7 
-70.Rd3 Kd6 71.Re3 Rg2 72.Re5 Rc2 73.Re3 Kc6 74.Kg4 Kb5 75.Re5 Kc4 76.Kh4 Rc3 77.f5 Kd4 78.Re8 gxf5 79.a4 Bc6 
-80.Rf8 Ke5 81.g6 Rc4+ 82.Kh5 Bf3+ 83.Kh6 Rh4+ 84.Kg7 Rxb4 85.Re8+ Kf4 86.Kf8 Rxa4 87.Rd8 Ra5 88.g7 Bd5 89.Rxd5 Rxd5 
-90.Ke7 Re5+ 91.Kf7 a5 92.g8Q Rd5 93.Ke6 Rb5 94.Qg1 Ke4 95.Qe1+ Kd4 96.Qa1+ Kc5 97.Ke5 Kc4+ 98.Kf4 Rd5 99.Qa4+ Kd3 
-100.Qb3+ Kd4 101.Qb6+ Kc4 102.Qc6+ Kd4 103.Kf3 Rc5 104.Qa6 Kc3 105.Qd6 Kc4 106.Qd7 Kb4 107.Qd4+ Kb5 108.Qb2+ Kc4 109.Qa3 Rd5 
-110.Qa2+ Kd4 111.Qd2+ Kc4 112.Qc2+ Kb4 113.Qb1+ Kc5 114.Qa1 Kc4 115.Qa4+ Kc3 116.Qc6+ Kd4 117.Ke2 Rc5 118.Qa4+ Kd5 119.Kd3 Kd6 
-120.Qa3 Kc6 121.Qb3 Rd5+ 122.Kc3 Re5 123.Qa4+ Kd6 124.Qd4+ Ke6 125.Qb6+ Ke7 126.Qc7+ Ke6 127.Qc6+ Kf7 128.Qd7+ Kf6 129.Qd8+ Ke6 
-130.Qb6+ Ke7 131.Kd4 Re4+ 132.Kd5 a4 133.Qg6 a3 134.Qg7+ Ke8 135.Kd6 Rd4+ 136.Qxd4 Kf7 137.Ke5 Kg7 138.Qa7+ Kg6 139.Qxa3 f4 
-140.Qd6+ Kg5 141.Qf6+ Kg4 142.Qxf4+ Kh3 143.Ke4 Kg2 144.Qh4 Kf1 145.Kf3 Kg1 146.Qf2+ Kh1 147.Qg2#
+{
+According to Mr. Blackburne's Games at Chess (1899) the British master 
+demolished the Jerome Gambit (he referred to it as "the Kentucky opening") 
+in this well-known miniature:
+Amateur - Blackburne
+London, "about 1880"
+SOURCE: https://jeromegambit.blogspot.com/2008/06/nobody-expects-jerome-gambit.html
+}
+
+1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.Bxf7+ Kxf7 5.Nxe5+ Nxe5 6.Qh5+ g6 7.Qxe5 d6 8.Qxh8 Qh4 9.0-0 Nf6 10.c3 Ng4 
+11.h3 Bxf2+ 12.Kh1 Bf5 13.Qxa8 Qxh3+ 14.gxh3 Bxe4 {mate}
