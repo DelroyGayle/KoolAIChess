@@ -882,7 +882,7 @@ The games I chose are as follows:
 * [PGN Mentor](https://www.pgnmentor.com/files.html)
 * [Chess.com](https://www.chess.com)
 * [The Jerome Gambit](https://jeromegambit.blogspot.com)
-* **PLEASE NOTE: Do NOT use chessgames.com/perl/...** - These links flags up with **Malware and Adware**
+* **PLEASE NOTE: Do NOT use chessgames.com/perl/...** - These links contain **Malware and Adware**
 
 ## References
 * [Wikipedia - Portable Game Notation](https://en.wikipedia.org/wiki/Portable_Game_Notation)
