@@ -429,7 +429,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 
  * *The Output*
            
-   ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/c38b95e9-9753-4fbd-9ce1-7c7e045be873)
+   	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/c38b95e9-9753-4fbd-9ce1-7c7e045be873)
 
     ```    
     Finished reading all the moves from the input file
@@ -491,11 +491,12 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 
     * Solution: Edit such PGN files before testing. For example, change the line in question to<br>**6. Qb3 { clock paused for 7 days } Qc8** in order for it to work.
     * See testdata/file03.pgn
-    * This PGN file also tests Kingside Castling by both Player & Kool AI* - see Moves No. 9 & 10
+    * This PGN file also tests Kingside Castling by both Player & Kool AI - see Moves No. 9 & 10
     * Run the program:
     * All moves were played successfully without any issues.
     * *The Output*          
-	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/157bd004-1f33-4a93-bf36-d4f2da91d1a2)
+	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/98ea4add-4785-40c4-a687-433fa7a9a83a)
+
 
 
 -----
@@ -575,7 +576,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 
    * *Method Used*
     <p>The Movetext used can be found in testdata/file06.pgn<br>
-    This is the output of the moves in *testdata/file05.pgn* after they were used in <strong>Test 15.</strong> So, all the moves have been converted from SAN to LAN.<br>
+    This is the output of the moves in *testdata/file05.pgn* after they were used in <strong>Test 15.</strong><br>So, all the moves have been converted from SAN to LAN.<br>
     The pgn file, testdata/file06.pgn, has <em>no newlines</em> in order to test that lack of newlines is not an issue for the program.
     
     testdata/file07.pgn has the same data with newlines as shown here:  
@@ -727,7 +728,7 @@ There will be no further input from 'input.pgn'
 
 ----
 
-23. **En Passant** - Checkmate by En Passant
+23. **En Passant** - Checkmate by En Passant - Game 1
    * *Method Used*
      <p>The Movetext used can be found in testdata/file14.pgn<br>
 	
@@ -738,7 +739,7 @@ There will be no further input from 'input.pgn'
 
 ----
 
-24. **En Passant** - Checkmate by En Passant
+24. **En Passant** - Checkmate by En Passant - Game 2
    * *Method Used*
      <p>The Movetext used can be found in testdata/file15.pgn<br>
 	
@@ -748,7 +749,7 @@ There will be no further input from 'input.pgn'
    * *The Output*
 ----
 
-25. **En Passant** - Checkmate by En Passant
+25. **En Passant** - Checkmate by En Passant - Game 3
    * *Method Used*
      <p>The Movetext used can be found in testdata/file16.pgn<br>
 	
