@@ -135,8 +135,6 @@ def is_player_move_illegal(chess, from_file, from_rank, to_file, to_rank):
             taken = is_piece_taken(chess, to_file, to_rank, piece_sign)
             # No error raised - so the above test passed
 
-            # print("from/to taken",from_square,to_square,taken) todo
-
             # store From and To data so that it may be restored
             save_from_square = chess.board[from_square]
             save_to_square = chess.board[to_square]
@@ -671,7 +669,6 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
             from_rank = lower_string[1]
             to_file = lower_string[2]
             to_rank = lower_string[3]
-            print(lower_string)  # todo
 
         else:
             # In the case of No. 1)

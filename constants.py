@@ -128,7 +128,12 @@ PRESET_CHESSBOARD = [chr(j+97) + chr(k+49)
 
 INPUT_PGN_NAME = "input.pgn"
 OUTPUT_PGN_NAME = "output.pgn"
-SLEEP_VALUE = 2  # Pause 2 seconds
+
+# Pauses
+# Pause 2 seconds
+SLEEP_VALUE = 2
+# Pause longer after a Castling Move or En Passant Move
+CASTLING_EP_SLEEP_VALUE = 3
 # When reading & playing moves from an input file
 # Pause for 4 seconds
 COMPUTER_FILEIO_SLEEP_VALUE = 4
@@ -141,7 +146,7 @@ nag_pattern = re.compile(r"\A\$[0-9]+")
 chess_move_suffix_pattern = re.compile(r"\A[A-Za-z0-9+#=:\-]*")
 castling_inputfile_pattern = re.compile(r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))")
 game_termination_pattern = re.compile(r"\A((1-0)|(0-1)|(1/2-1/2)|[*])")
-periods_pattern = re.compile(r"\A[.]+")
+number_periods_pattern = re.compile(r"\A([0-9]+|[.]+)")
 move_number_pattern = re.compile(r"\A([0-9]+)[. ]*")
 move_number_suffix_pattern = re.compile(r"\A[.][ \n]*")
 castling_keyboard_pattern = re.compile(r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))\Z")

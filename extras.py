@@ -776,7 +776,6 @@ def in_check(chess, user_sign):
                         return True
 
     # Indicate that the Opponent King is not in Check at all
-    # print("IN CHECK out") # todo
     return False
 
 

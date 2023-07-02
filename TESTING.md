@@ -12,29 +12,30 @@ I am a novice chess player. I simply do not know enough chess to ensure that my 
 * then I know that there is a bug in the program that needs to be resolved.
 * This is the rationale behind my method of testing.
 
-Therefore, if there is a **input.pgn** present in the KOOLAICHESS directory:<p> 
+Therefore, if there is an **input.pgn** present in the KOOLAICHESS directory:<p> 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/72976999-049a-4e01-9c85-f6fad53403ea)
    
-1. the program will first open this file, read its contents and close the file
-2. parse the contents, 
-3. then **play the Chess moves that was found in this file<br>*as if* both a human player and the computer were playing both *White's and Black's* moves.**
+1. The program will first open this file, read its contents and close the file
+2. Parse the contents
+3. Then **play the Chess moves that was found in this file<br>*as if* both a human player and the computer were playing both *White's and Black's* moves.**
 
 Therefore, essentially ***Chess-Playing Automation!***<br> 
 
+*Method Used:*
 * I would copy and paste the chess moves from a PGN file into *input.pgn*;
-* run the program, and watch it play each move, displaying the chessboard accordingly.
+* Run the program, and watch it play each move, displaying the chessboard accordingly.
 * If the chosen game, ends in Check, I expect the outcome of the program to be the same.
 * If the chosen game, ends in Checkmate, I expect the outcome of the program to be the same.
 * Any pieces taken, the program ought to take the same pieces.
 * All moves, including *Castling and En Passant*; should be followed in identical fashion. 
 
 The program will read as many chess moves as present in *input.pgn*.
-When it reaches the end of the file, it will display a suitable message to inform the user that *any further player moves will now come from the user*; likewise, the computer moves would hereafter be evaluated by the computer according to its algorithm.
+When it reaches the end of the file, it will display a suitable message to inform the user that<br>*any further player moves will now come from the user*; likewise, the computer moves would hereafter be evaluated by the computer according to its algorithm.
 
 ## Remove pgn file when deploying
 If there is *no input.pgn file* present the program will simply expect keyboard input from the user.<br>
-Therefore, there ought to be *no file I/O* in the deployed version of this project.<br>
-That is, before deployment, remove *input.pgn* from the project. This ensures that the program's logic expects all input to be from the user.
+Therefore, **there ought to be *no file I/O* in the deployed version of this project.<br>
+That is, before deployment, remove *input.pgn* from the project.** This ensures that the program's logic expects all input to be from the user.
 
 -----
    
@@ -51,9 +52,9 @@ The major part that this program is interested in, is *the Movetext*.
 
 Originally, I envisioned that the user could browse and select a pgn file from their computer and play the game. However, I quickly realised that, that is far beyond the scope of this project and my expertise. :)
 <br>Instead, 
-   * copy solely the Movetext from a pgn file 
-   * place it into the input.pgn file
-   * then the program will parse this file and run the parsed chess moves.
+   * Copy solely the Movetext from a pgn file 
+   * Place it into the input.pgn file
+   * Then the program will parse this file and run the parsed chess moves
 
 In short,
    * The program reads the entire contents of input.pgn
@@ -73,7 +74,7 @@ In short,
       + **0-1** which means (Black wins)
       + **1/2-1/2** which means (drawn game)
       + **\*** which means (game in progress, result unknown, or game abandoned)
-   * d) If the program detects any of the above four strings it will perform the EOF action as described in **b)**.  
+   * d) If the program detects any of the above four strings it will perform the end-of-file action as described in **b)**.  
    
    
 Now I will describe the relevant parts of the PGN file format citing the above Standard.
@@ -118,7 +119,7 @@ Essentially, a PGN file is divided up into eight *mandatory* parts - a *Seven Ta
 
 ## Movetext
 
-   The program expects the *input.pgn* to contain solely the *Movetext portion* of a PGN Game file.<br>
+   The program expects *input.pgn* to contain solely the *Movetext portion* of a PGN Game file.<br>
    It will parse the following:
    * Movetext move number indications - A move number indication is composed of one or more adjacent digits (an integer token) followed by *zero or more periods*. 
    * * **Note: This program expects that the Movetext begins with a move number of 1. Moreover, that the first move is White's move.**
@@ -163,8 +164,11 @@ Essentially, a PGN file is divided up into eight *mandatory* parts - a *Seven Ta
 	   
 ## Limitations
 * When it comes to File Input of moves and Pawn Promotion, *Kool AI* solely promotes Pawns to Queens.
-* Therefore, when parsing *input.pgn* the program will ignore the annotation *=N* in a move such as **a8=N**.
+* Therefore, when parsing *input.pgn* the program will, for example, ignore the annotation *=N* in a move such as **a8=N**.
 * Instead it would automatically promote the pawn in a8 to a Queen.
+* Some PGN files prefix Black's move with a number and/or periods e.g.<br>**6. Qb3 { clock paused for 7 days } 6... Qc8**
+* This program will not parse this. Instead, an error message will be displayed.
+* Therefore, edit such PGN files before testing. For example, change the line in question to<br>**6. Qb3 { clock paused for 7 days } Qc8** in order for it to work. See Test No. xx
 -----
    
 ## Testing
@@ -656,6 +660,12 @@ There will be no further input from 'input.pgn'
     * *Issues Found*
     *  *Solution Found:*
         *  .
+
+## Various sources of PGN files and chess moves in PGN notation
+* [fsmosca/chess-artist](https://github.com/fsmosca/chess-artist/blob/master/PGN)
+* [ValdemarOrn/Chess](https://github.com/ValdemarOrn/Chess/tree/master/Annotated%20Games)
+* [PGN Mentor](https://www.pgnmentor.com/files.html)
+* [Chess.com](https://www.chess.com)
 
 ## References
 * [Wikipedia - Portable Game Notation](https://en.wikipedia.org/wiki/Portable_Game_Notation)

@@ -420,7 +420,7 @@ Therefore, I split it up into different modules:
 * **constants.py** - Holds all the major constants used in this program
 * **extras.py** - I moved the routines that manage how piece moves are generated - Pawn/Rook/Knight/Bishop/Queen/King - into this module<br>
 Also any routines that caused *import circular issues* with the Python interpreter are placed in extras.py
-* **fileio.py** - This program can *essentially perform Chess-Playing Automation* by playing chess moves read from a *input.pgn* file<br>
+* **fileio.py** - This program can *essentially perform Chess-Playing Automation* by playing chess moves read from an *input.pgn* file<br>
 All routines related to this process are placed in fileio.py<br>(see [TESTING.md](https://github.com/DelroyGayle/KoolAIChess/blob/main/TESTING.md) for more details)
 * **game.py** - The *Game Class* and its related routines
 * **moves.py** - The functionality for chess moves: *Castling and En Passant*

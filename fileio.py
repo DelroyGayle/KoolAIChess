@@ -627,7 +627,7 @@ def expected_move_number_not_found():
                            + ". Instead: " + Game.input_stream[0:10])
 
 
-def parse_move_text():
+def parse_move_text(chess):
     """
     1)
     If it is the Player's turn, then a Move Number is expected
@@ -645,13 +645,13 @@ def parse_move_text():
     if Game.whose_move == constants.COMPUTER:
         Game.global_piece_sign = constants.COMPUTER
         # For parsing a Computer's move, check that
-        # it is not a string of periods e.g. ...
-        #                   r"\A[.]+"
-        matched = constants.periods_pattern.match(Game.input_stream)
+        # it is not a number nor a string of periods e.g. ...
+        #                   r"\A([0-9]+|[.]+)"
+        matched = constants.number_periods_pattern.match(Game.input_stream)
         if matched:
-            e.input_status_message(
-                               "Expected the Player's Chess Move not Periods: "
-                               + Game.input_stream[0:10])
+            chess.display("Expected the Computer's Chess Move")
+            e.input_status_message("Not Numbers or Periods: "
+                                   + Game.input_stream[0:10])
             return False
 
         # Otherwise
@@ -978,7 +978,7 @@ def handle_move_text(chess):
     the value of the matched 'chess move string'
     """
 
-    result = parse_move_text()
+    result = parse_move_text(chess)
     # Alternate the players for the next time; that is, negate the sign
     Game.whose_move = -Game.whose_move
 
@@ -1080,7 +1080,7 @@ def handle_player_move_from_inputfile(chess,
         # The Castling Move that was read from the input file was valid!
         m.castling_move_was_valid(chess)
         # Pause the computer so that the Player can read the move
-        sleep(constants.SLEEP_VALUE)
+        sleep(constants.CASTLING_EP_SLEEP_VALUE)
         do_next = "return"
         return do_next
 
@@ -1099,7 +1099,7 @@ def pause_for_display():
     if Game.reading_game_file:
         sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
     else:
-        sleep(constants.SLEEP_VALUE)
+        sleep(constants.CASTLING_EP_SLEEP_VALUE)
 
 
 def handle_computer_move_from_inputfile(chess,
