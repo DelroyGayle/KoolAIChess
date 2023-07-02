@@ -1,0 +1,6 @@
+{Test RANK-FIRST Disambiguation
+That is, test that moves can be distinguished by their originating ranks
+
+Test also the removal of SAN move suffix annotations "!", "?", "!!", "!?",
+"?!", and "??"}
+1. e4 c6 2. d4? d5 3. e5? B8f5! 4. N1f3 !? e6 5. !? B1e2 N8h6!!
