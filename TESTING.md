@@ -869,14 +869,14 @@ The games I chose with their testdata and endgames are as follows:<p>
 29. Joseph Henry Blackburne's Gambit - testdata/file19.pgn
 30. **The Game of the Century** - Donald Byrne vs Robert Fischer - Result "0-1" - testdata/file20.pgn
 31. Robert Fischer vs Boris Spassky - Result "1/2-1/2" - testdata/file21.pgn
-32. HIARCS 11.1 UCI - Rybka 2.3.1 32-bit 2008 - testdata/file22.pgn
+32. **The Immortal Game** - Anderssen vs Kieseritzky, London 1851 - Result "1-0" - testdata/file22.pgn
 33. Charlick - Mann correspondence Australia, 1881 - testdata/file23.pgn
 34. **The 147-move computer game** HIARCS 11.1 UCI - Rybka 2.3.1 32-bit, 2008 - testdata/file24.pgn
-35. **The longest recorded game of chess in history** - Ivan Nikolic vs Goran Arsovic - Result "1/2-1/2" - testdata/file25.pgn
+35. **The longest recorded game of chess in history - 269 moves!** - Ivan Nikolic vs Goran Arsovic - Result "1/2-1/2" - testdata/file25.pgn
 
 ----
 
-   * Fool's mate - **Checkmate in 2 moves!**
+Test 28 - Fool's mate - **Checkmate in 2 moves!**
    * *The Output*  
 	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/94704229-8084-4045-ba14-9183711a1c1a)
 ```
@@ -888,31 +888,75 @@ The moves of this Chess Game are as follows:
 1. f2f3 e7e5 2. g2g4 Qd8h4# 0-1
 ```
 ----
-   * Joseph Henry Blackburne's Gambit
-   * * *The Output*  
-     ![image]
-```
-1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.Bxf7+ Kxf7 5.Nxe5+ Nxe5 6.Qh5+ g6 7.Qxe5 d6 8.Qxh8 Qh4 9.0-0 Nf6 10.c3 Ng4 
-11.h3 Bxf2+ 12.Kh1 Bf5 13.Qxa8 Qxh3+ 14.gxh3 Bxe4 {mate}
-```
-   * **The Game of the Century** - Donald Byrne vs Robert Fischer
+Test 29 - Joseph Henry Blackburne's Gambit
    * *The Output*  
-     ![image]
-     * HIARCS 11.1 UCI - Rybka 2.3.1 32-bit 2008
-     * *The Output*  
-     ![image]
+     ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/6df2b8b9-c4fc-444c-abb7-c62c58cc3ab3)
 
-   * Charlick - Mann correspondence Australia, 1881
+```
+Computer moves f5-e4 Piece: Bishop
+Computer took your Pawn
+You are in check
+Checkmate!! I Win!
+The moves of this Chess Game are as follows:
+
+1. e2e4 e7e5 2. Ng1f3 Nb8c6 3. Bf1c4 Bf8c5 4. Bc4xf7+ Ke8xf7 5. Nf3xe5+
+Nc6xe5 6. Qd1h5+ g7g6 7. Qh5xe5 d7d6 8. Qe5xh8 Qd8h4 9. O-O Ng8f6 10.
+c2c3 Nf6g4 11. h2h3 Bc5xf2+ 12. Kg1h1 Bc8f5 13. Qh8xa8 Qh4xh3+ 14. g2xh3
+Bf5xe4# 0-1
+```
+----
+Test 30 - **The Game of the Century** - Donald Byrne vs Robert Fischer
    * *The Output*  
-     ![image]
-     * **The 147-move computer game** HIARCS 11.1 UCI - Rybka 2.3.1 32-bit, 2008
-     * *The Output*  
-     ![image]
-   * **The longest recorded game of chess in history** - Ivan Nikolic vs Goran Arsovic
-   * * *The Output*  
-     ![image]
-   
+     ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/19238abd-a94d-4fd0-8282-c24e5220ebb0)
+```
+Computer moves a2-c2 Piece: Rook
+You are in check
+Checkmate!! I Win!
+```
 
+----
+Test 31 - Robert Fischer vs Boris Spassky
+   * *The Output*  
+     ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/3b0064f3-a06e-41f7-862a-6dc4a7480222)
+
+* Showing *Kool AI's* response in regard to the 43rd move i.e. *it moves its King c5-d4*
+----
+Test 32 - **The Immortal Game** - Anderssen vs Kieseritzky, London 1851
+   * *The Output*  
+     ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/62544850-5d17-4103-bcee-7386f96bcba1)
+
+```
+Checking Player move for d6-e7 Piece: Bishop
+I am in Check
+Checkmate!! You Win!
+The moves of this Chess Game are as follows:
+
+1. e2e4 e7e5 2. f2f4 e5xf4 3. Bf1c4 Qd8h4+ 4. Ke1f1 b7b5 5. Bc4xb5 Ng8f6
+6. Ng1f3 Qh4h6 7. d2d3 Nf6h5 8. Nf3h4 Qh6g5 9. Nh4f5 c7c6 10. g2g4 Nh5f6
+11. Rh1g1 c6xb5 12. h2h4 Qg5g6 13. h4h5 Qg6g5 14. Qd1f3 Nf6g8 15. Bc1xf4
+Qg5f6 16. Nb1c3 Bf8c5 17. Nc3d5 Qf6xb2 18. Bf4d6 Bc5xg1 19. e4e5 Qb2xa1+
+20. Kf1e2 Nb8a6 21. Nf5xg7+ Ke8d8 22. Qf3f6+ Ng8xf6 23. Bd6e7# 1-0
+```
+----
+Test 33 - Charlick - Mann correspondence Australia, 1881
+   * *The Output*  
+     ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/b8b68cfe-5938-4f55-b12e-966e839e7411)
+* Showing *Kool AI's* response in regard to the 72nd move i.e. *it moves its King h6-g7*
+----     
+Test 34 - **The 147-move computer game** HIARCS 11.1 UCI - Rybka 2.3.1 32-bit, 2008  
+* *The Output*  
+     ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/cb25635e-08c0-4c18-bd45-a6311dbbfa0d)
+```
+Checking Player move for f2-g2 Piece: Queen
+I am in Check
+Checkmate!! You Win!
+```
+----     
+Test 35 - **The longest recorded game of chess in history - 269 moves!** - Ivan Nikolic vs Goran Arsovic
+* *The Output*  
+     ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/98fedbe1-3655-4512-a2a1-eaea0f9a4119)
+
+----
 ## Various sources of PGN files and chess moves in PGN notation
 * [fsmosca/chess-artist](https://github.com/fsmosca/chess-artist/blob/master/PGN)
 * [ValdemarOrn/Chess](https://github.com/ValdemarOrn/Chess/tree/master/Annotated%20Games)
