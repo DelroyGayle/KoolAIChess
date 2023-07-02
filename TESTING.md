@@ -465,7 +465,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     ```
            
     * Various annotations and comments have been added which ought to be ignored by the program
-    * Run the program:
+    * Run the program
     
     * *The Output*
            
@@ -483,7 +483,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     <p>The Movetext used can be found in testdata/file02.pgn
            
     * Various annotations and comments have been added which ought to be ignored by the program
-    * Run the program:
+    * Run the program
     
     * *The Output*
            
@@ -492,7 +492,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     * Solution: Edit such PGN files before testing. For example, change the line in question to<br>**6. Qb3 { clock paused for 7 days } Qc8** in order for it to work.
     * See testdata/file03.pgn
     * This PGN file also tests Kingside Castling by both Player & Kool AI - see Moves No. 9 & 10
-    * Run the program:
+    * Run the program
     * All moves were played successfully without any issues.
     * *The Output*          
 	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/98ea4add-4785-40c4-a687-433fa7a9a83a)
@@ -514,7 +514,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     * **Note the moves numbered 6. Number 6's White Move is Castling O-O**
     * So, I solely populate input.pgn with 1. e4 c6 2. d4 d5 3. e5 Bf5 4. Nf3 e6 5. Be2 Nh6
     * That is, *without Number 6 moves.* 
-    * Run the program:
+    * Run the program
     
     * *The Output*
            
@@ -550,7 +550,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     ```
     * That is, 34 moves ending with White's Rook move then the *Game Termination Marker 1/2-1/2*<br>
     Because of Black's Castling move in **No. 14. Bb3 O-O-O**; this game will also test that *Kool AI can Castle Queenside correctly!*
-    * Run the program:
+    * Run the program
     
     * *The Output*
            
@@ -581,16 +581,16 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     
     testdata/file07.pgn has the same data with newlines as shown here:  
 
-    ```
-	1. e2e4 c7c6 2. d2d4 d7d5 3. e4e5 Bc8f5 4. Ng1f3 e7e6 5. Bf1e2 Ng8h6 6. O-O Bf5g6 7. c2c3 Bf8e7 8. Bc1xh6 g7xh6
-    9. Qd1c1 h6h5 10. c3c4 d5xc4 11. Be2xc4 Nb8d7 12. Nb1c3 Qd8c7 13. Qc1f4 Nd7b6 14. Bc4b3 O-O-O 15. Ra1c1 Kc8b8
-    16. Rf1d1 Qc7d7 17. Nf3h4 Rh8f8 18. Nh4xg6 h7xg6 19. Nc3e4 Qd7c7 20. Qf4f3 Nb6d5 21. Ne4c3 Qc7b6
-    22. h2h3 Qb6b4 23. Nc3e4 Nd5c7 24. Rc1c4 Qb4b6 25. Rd1d3 Nc7d5 26. Rd3d1 Rd8d7 27. Rc4c2 Qb6a5
-    28. a2a3 Nd5c7 29. Bb3c4 Nc7b5 30. Rc2d2 a7a6 31. Rd2d3 Qa5d8 32. Ne4c5 Be7xc5 33. d4xc5 Rd7xd3 
-	34. Rd1xd3
-    ```
+```
+1. e2e4 c7c6 2. d2d4 d7d5 3. e4e5 Bc8f5 4. Ng1f3 e7e6 5. Bf1e2 Ng8h6 6. O-O Bf5g6 7. c2c3 Bf8e7 8. Bc1xh6 g7xh6
+9. Qd1c1 h6h5 10. c3c4 d5xc4 11. Be2xc4 Nb8d7 12. Nb1c3 Qd8c7 13. Qc1f4 Nd7b6 14. Bc4b3 O-O-O 15. Ra1c1 Kc8b8
+16. Rf1d1 Qc7d7 17. Nf3h4 Rh8f8 18. Nh4xg6 h7xg6 19. Nc3e4 Qd7c7 20. Qf4f3 Nb6d5 21. Ne4c3 Qc7b6
+22. h2h3 Qb6b4 23. Nc3e4 Nd5c7 24. Rc1c4 Qb4b6 25. Rd1d3 Nc7d5 26. Rd3d1 Rd8d7 27. Rc4c2 Qb6a5
+28. a2a3 Nd5c7 29. Bb3c4 Nc7b5 30. Rc2d2 a7a6 31. Rd2d3 Qa5d8 32. Ne4c5 Be7xc5 33. d4xc5 Rd7xd3 
+34. Rd1xd3
+```
 * That is, the same 34 moves as in **Test 15** in LAN.
-* Run the program:
+* Run the program
 * *The Output*<p>
   ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/d70d82d1-26b9-42dc-973b-0aa14a97f99e)
 
@@ -608,32 +608,29 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
      <p>The Movetext used can be found in testdata/file08.pgn<br>
 	The Chess moves are taken from the [Opera Game](https://en.wikipedia.org/wiki/Opera_Game)
   
-    ```
-    1. e2e4 e7e5 2. Ng1f3 d7d6 3. d2d4 Bc8g4 4. d4xe5 Bg4xf3 5. Qd1xf3 d6xe5
-    6. Bf1c4 Ng8f6 7. Qf3b3 Qd8e7 8. Nb1c3 c7c6 9. Bc1g5 b7b5 10. Nc3xb5
-    c6xb5 11. Bc4xb5+ Nb8d7 12. O-O-O Ra8d8 13. Rd1xd7 Rd8xd7 14. Rh1d1
-    Qe7e6 15. Bb5xd7+ Nf6xd7 16. Qb3b8+ 1-0
-    ```
+```
+1. e2e4 e7e5 2. Ng1f3 d7d6 3. d2d4 Bc8g4 4. d4xe5 Bg4xf3 5. Qd1xf3 d6xe5
+6. Bf1c4 Ng8f6 7. Qf3b3 Qd8e7 8. Nb1c3 c7c6 9. Bc1g5 b7b5 10. Nc3xb5
+c6xb5 11. Bc4xb5+ Nb8d7 12. O-O-O Ra8d8 13. Rd1xd7 Rd8xd7 14. Rh1d1
+Qe7e6 15. Bb5xd7+ Nf6xd7 16. Qb3b8+ 1-0
+```
 
 * **Note the moves numbered 12. Number 12's White Move is Castling O-O-O**
-* Run the program:
+* Run the program
 * All moves were played successfully without any issues.
 * *The Output*
 
-    ```
-    Checking Player move for b3-b8 Piece: Queen
-    I am in Check
-    Kool AI resigns!
-    The moves of this Chess Game are as follows:
+```
+Checking Player move for b3-b8 Piece: Queen
+I am in Check
+Kool AI resigns!
+The moves of this Chess Game are as follows:
 
-    1. e2e4 e7e5 2. Ng1f3 d7d6 3. d2d4 Bc8g4 4. d4xe5 Bg4xf3 5. Qd1xf3 d6xe5
-    6. Bf1c4 Ng8f6 7. Qf3b3 Qd8e7 8. Nb1c3 c7c6 9. Bc1g5 b7b5 10. Nc3xb5
-    c6xb5 11. Bc4xb5+ Nb8d7 12. O-O-O Ra8d8 13. Rd1xd7 Rd8xd7 14. Rh1d1
-    Qe7e6 15. Bb5xd7+ Nf6xd7 16. Qb3b8+ 1-0
-
-    These moves have also been written to /workspace/KoolAIChess/output.pgn
-
-    ```           
+1. e2e4 e7e5 2. Ng1f3 d7d6 3. d2d4 Bc8g4 4. d4xe5 Bg4xf3 5. Qd1xf3 d6xe5
+6. Bf1c4 Ng8f6 7. Qf3b3 Qd8e7 8. Nb1c3 c7c6 9. Bc1g5 b7b5 10. Nc3xb5
+c6xb5 11. Bc4xb5+ Nb8d7 12. O-O-O Ra8d8 13. Rd1xd7 Rd8xd7 14. Rh1d1
+Qe7e6 15. Bb5xd7+ Nf6xd7 16. Qb3b8+ 1-0
+```           
            
 Note:
 1. The difference is that KoolAI resigned at **Move 16** forseeing that it could not win this game.
@@ -653,7 +650,7 @@ Therefore, confirming that  *captures **x** and checks **+*** do not interfere w
 * *Method Used*
      <p>The Movetext used can be found in testdata/file09.pgn<br>
     
-* Run the program:
+* Run the program
 * All moves were played successfully without any issues.
 * *The Output*
 ```
@@ -670,7 +667,7 @@ Computer took your Pawn
      <p>The Movetext used can be found in testdata/file10.pgn<br>
 * **h8h7** in this game is an illegal move since there would be a piece occupying **h7**
     
-* Run the program:
+* Run the program
 * *The Output*
 ```
 Legal Chess Move Expected From Input File. Instead h8h7 6.
@@ -683,16 +680,20 @@ There will be no further input from 'input.pgn'
    * *Method Used*
      <p>The Movetext used can be found in testdata/file11.pgn<br>
   
-    ```
-	1.e4 e5 2. Nf3 Nf6 3. d4 exd4 4. e5 Ne4 5. Qxd4 d5
-    ```
+```
+1.e4 e5 2. Nf3 Nf6 3. d4 exd4 4. e5 Ne4 5. Qxd4 d5
+```
            
-   * Run the program:
-   * After the moves of this file are played, enter **e5d6**
-   * All moves were played successfully without any issues.
-   * *The Output*
+   * Run the program:  
+     		![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/4f88974f-cfc2-4577-954a-7ad418dbe2f0)
+
+   * Then I entered the *En Passant* Move, **e5d6**
+   * *The Output*  
+	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/46cfe509-b03d-4fc0-9a7f-4a449f10b316)
+     
    * The Computer responded with
-   * Computer moves d7-d5 Piece: Pawn
+   * Computer moves e4-d6 Piece: Knight
+   * Computer took your Pawn
 
 -----
 
@@ -701,16 +702,19 @@ There will be no further input from 'input.pgn'
    * *Method Used*
      <p>The Movetext used can be found in testdata/file12.pgn<br>
   
-    ```
-	1.e4 e5 2. Nf3 Nf6 3. d4 exd4 4. e5 Ne4 5. Qxd4 d5 6. exd6 e.p. Nxd6
-	7.Bg5 Nc6 8. Qe3+ Be7 9. Nbd2 0-0 10. 0-0-0 Re8 11. Kb1 (=)
-    ```
+```
+1.e4 e5 2. Nf3 Nf6 3. d4 exd4 4. e5 Ne4 5. Qxd4 d5 6. exd6 e.p. Nxd6
+7.Bg5 Nc6 8. Qe3+ Be7 9. Nbd2 0-0 10. 0-0-0 Re8 11. Kb1 (=)
+```
            
    * This PGN file also tests that the annotation *e.p.* is ignored
-   * Run the program:
+   * Run the program
    * All moves were played successfully without any issues.
-   * *The Output*
-   * The Computer responded with 
+   * *The Output*  
+     	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/b79553ff-0e0b-4346-ab41-735afe4a692a)
+
+   * The Computer responded with
+   * Computer moves c8-g4 Piece: Bishop
      
 
 ----
@@ -720,11 +724,25 @@ There will be no further input from 'input.pgn'
      <p>The Movetext used can be found in testdata/file13.pgn<br>
 	
    * Move No. 15 for Black: **... exf3+ is a Discovery Check which is the result of the En Passant move!**
-   * So, the program should emulate the same Check!
-   * Run the program:
+   * So, the program should emulate the same Check! As well as ending the game with Checkmate!
+   * Run the program
    * All moves were played successfully without any issues.
-   * *The Output*
-   * * Move No. 15 is displayed as  
+   * *The Output*  
+     	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/d86da3f7-9a8e-459b-8886-a1f4440b1c8e)
+
+   * * Move No. 15 is displayed as outputted as f2f4 **e4xf3+**
+```
+Checkmate!! I Win!
+The moves of this Chess Game are as follows:
+
+1. e2e4 e7e5 2. Ng1f3 d7d5 3. e4xd5 Bf8d6 4. Nb1c3 Ng8f6 5. Bf1b5+ c7c6
+6. Bb5a4 e5e4 7. d5xc6 O-O 8. Nf3d4 b7xc6 9. Nd4xc6 Qd8b6 10. Nc6xb8
+Ra8xb8 11. Ba4b5 Rf8d8 12. O-O Bd6xh2+ 13. Kg1xh2 Nf6g4+ 14. Kh2g3
+Qb6c7+ 15. f2f4 e4xf3+ 16. Kg3xf3 Rd8d4 17. d2d3 Bc8b7+ 18. Nc3e4
+Bb7xe4+ 19. Kf3xg4 Qc7h2 20. d3xe4 Qh2xg2+ 21. Kg4h4 Rb8xb5 22. Qd1xd4
+Rb5h5+ 23. Kh4xh5 Qg2h3+ 24. Kh5g5 h7h6+ 25. Kg5f4 g7g5+ 26. Kf4e5
+Qh3e6# 0-1
+```
 
 ----
 
@@ -733,31 +751,60 @@ There will be no further input from 'input.pgn'
      <p>The Movetext used can be found in testdata/file14.pgn<br>
 	
    * The program should emulate the same Checkmate!
-   * Run the program:
-   * Successful Checkmate
-   * *The Output*
+   * Run the program - Successful Checkmate:
+   * *The Output*  
+	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/40e4784f-d7c7-480d-8106-d2f6d5b2a005)
 
 ----
 
 24. **En Passant** - Checkmate by En Passant - Game 2
    * *Method Used*
      <p>The Movetext used can be found in testdata/file15.pgn<br>
+```
+1 b3 h6 2 Bb2 f5 3 e4 Kf7 4 exf5 Qe8 5 Qg4 g5 6 fxg6 (mate)
+```     
 	
    * The program should emulate the same Checkmate!
-   * Run the program:
-   * Successful Checkmate
-   * *The Output*
+   * Run the program - Successful Checkmate:  
+   * *The Output*  
+     	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/60b50390-11e4-45b4-bcd1-004003682989)
+
+```
+I am in Check
+Checkmate!! You Win!
+The moves of this Chess Game are as follows:
+
+1. b2b3 h7h6 2. Bc1b2 f7f5 3. e2e4 Ke8f7 4. e4xf5 Qd8e8 5. Qd1g4 g7g5 6.
+f5xg6# 1-0
+
+These moves have also been written to /workspace/KoolAIChess/output.pgn
+```
 ----
 
 25. **En Passant** - Checkmate by En Passant - Game 3
    * *Method Used*
      <p>The Movetext used can be found in testdata/file16.pgn<br>
+```
+1 e4 e5 2 Qh5 Nc6 3 g4 d6 4 Bh3 Kd7 5 g5+ f5 6 gxf6 (mate)
+```     
 	
    * The program should emulate the same Checkmate!
-   * Run the program:
-   * Successful Checkmate
-   * *The Output*
+   * Run the program - Successful Checkmate:  
+   * *The Output*  
+     	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/f3eb30c0-3229-4892-8e8f-cd7ac59d2c41)
 
+
+```
+Checking Player move for g5-f6 Piece: Pawn
+Player Took My Pawn En Passant
+
+I am in Check
+Checkmate!! You Win!
+The moves of this Chess Game are as follows:
+
+1. e2e4 e7e5 2. Qd1h5 Nb8c6 3. g2g4 d7d6 4. Bf1h3 Ke8d7 5. g4g5+ f7f5 6.
+g5xf6# 1-0
+```
 -----
 
 
@@ -767,34 +814,65 @@ There will be no further input from 'input.pgn'
   
    * In order to Test that Pawn Promotion handling works correctly, this game ends with Checkmate after a Pawn Promotion
    * The program should emulate the same Checkmate!  
-    ```
-	1. e4 d5 2. exd5 Nf6 3. Bb5+ c6 4. dxc6 Qb6 5. cxb7+ Qxb5 6.bxc8=# { pawn promotion & CHECKMATE! }
-	1-0
-    ```
+```
+1. e4 d5 2. exd5 Nf6 3. Bb5+ c6 4. dxc6 Qb6 5. cxb7+ Qxb5 6.bxc8=# { pawn promotion & CHECKMATE! }
+1-0
+```
            
-   * Run the program:
-   * After the moves of this file are played, enter **e5d6**
-   * Successful Checkmate
-    
-    * *The Output*
+   * Run the program
+   * After the moves of this file are played, when **No. 6** is reached, the following is displayed  
+	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/4fe25afd-049a-4877-98d8-ccf653ec06ac)
 
+   * I entered Q for Queen - Note: *one can also just press Enter for the default Promotion to Queen*
+   * This resulted with a Successful Checkmate:
+   * *The Output*  
+     ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/c8f06bec-db47-4e81-a88a-67d9e4e170e5)
+
+```
+Checking Player move for b7-c8 Piece: Pawn
+Player took my Bishop
+Pawn promoted to Queen
+I am in Check
+Checkmate!! You Win!
+The moves of this Chess Game are as follows:
+
+1. e2e4 d7d5 2. e4xd5 Ng8f6 3. Bf1b5+ c7c6 4. d5xc6 Qd8b6 5. c6xb7+
+Qb6xb5 6. b7xc8=Q# 1-0
+```
+
+
+-----
+
+
+27. **Rank-First Disambiguation** - That is, test that moves can be distinguished by their originating ranks
+   * *Method Used*
+     <p>The Movetext used can be found in testdata/file26.pgn<br>
+  
+   * Based on the same moves in **Test 1**. The difference being the rank numbers are given instead of the file letters  
+```
+1. e4 c6 2. d4? d5 3. e5? B8f5! 4. N1f3 !? e6 5. !? B1e2 N8h6!!
+```
+   * So, the output should be identical to **Test 1!**           
+   * Run the program
+   * When I compared the output of **Test 1** with the outputted moves of this game using [Diffchecker](https://www.diffchecker.com/text-compare/), the result was<p>
+   	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/df178d70-c58f-4da3-83f1-f0070de3e2cc)
 
 -----
    
 ### **Play Entire Games**
 At this stage, I decided to finish off testing by playing a series of full games. 
 In each case, the program played all the moves and emulate the result successfully.
-This includes all **147 moves and 269 moves** of Tests 33 and 34.
+This includes all **147 moves and 269 moves** of Tests 34 and 35.
 The games I chose are as follows:
 
-27. Fool's mate - **Checkmate in 2 moves!** - testdata/file18.pgn
-28. Joseph Henry Blackburne's Gambit - testdata/file19.pgn
-29. **The Game of the Century** - Donald Byrne vs Robert Fischer - Result "0-1" - testdata/file20.pgn
-30. Robert Fischer vs Boris Spassky - Result "1/2-1/2" - testdata/file21.pgn
-31. HIARCS 11.1 UCI - Rybka 2.3.1 32-bit 2008 - testdata/file22.pgn
-32. Charlick - Mann correspondence Australia, 1881 - testdata/file23.pgn
-33. **The 147-move computer game** HIARCS 11.1 UCI - Rybka 2.3.1 32-bit, 2008 - testdata/file24.pgn
-34. **The longest recorded game of chess in history** - Ivan Nikolic vs Goran Arsovic - Result "1/2-1/2" - testdata/file25.pgn
+28. Fool's mate - **Checkmate in 2 moves!** - testdata/file18.pgn
+29. Joseph Henry Blackburne's Gambit - testdata/file19.pgn
+30. **The Game of the Century** - Donald Byrne vs Robert Fischer - Result "0-1" - testdata/file20.pgn
+31. Robert Fischer vs Boris Spassky - Result "1/2-1/2" - testdata/file21.pgn
+32. HIARCS 11.1 UCI - Rybka 2.3.1 32-bit 2008 - testdata/file22.pgn
+33. Charlick - Mann correspondence Australia, 1881 - testdata/file23.pgn
+34. **The 147-move computer game** HIARCS 11.1 UCI - Rybka 2.3.1 32-bit, 2008 - testdata/file24.pgn
+35. **The longest recorded game of chess in history** - Ivan Nikolic vs Goran Arsovic - Result "1/2-1/2" - testdata/file25.pgn
 
 ----
 
