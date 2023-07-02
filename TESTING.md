@@ -474,13 +474,11 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 
            
 1. **Test the prefix of Black's moves**
+    Some PGN files prefix Black's move with a number and/or periods e.g.<br>**6. Qb3 { clock paused for 7 days } 6... Qc8**
+    This program will not parse this. Instead, an error message will be displayed.
            
     * *Method Used*
-    <p>The Movetext used can be found in testdata/file01.pgn
-       
-    ```
-    1. e4 c6 2. d4? d5 3. e5? Bf5! 4. Nf3 !? e6 5. !? Be2 Nh6!!
-    ```
+    <p>The Movetext used can be found in testdata/file02.pgn
            
     * Various annotations and comments have been added which ought to be ignored by the program
     * Run the program:
@@ -489,7 +487,10 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
            
       ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/3abb6084-11e0-4601-8de6-c2190eb00230)
 
-           
+    * Solution: Edit such PGN files before testing. For example, change the line in question to<br>**6. Qb3 { clock paused for 7 days } Qc8** in order for it to work.
+    * See testdata/file03.pgn
+    * This PGN file also tests Kingside Castling by both Player & Kool AI* - see Moves No. 9 & 10
+    * Run the program:
     * All moves were played successfully without any issues.           
 
 
@@ -498,7 +499,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 14. **Castling** - Test that user can *Castle Kingside*
            
     * *Method Used*
-    <p>The Movetext used can be found in testdata/file02.pgn
+    <p>The Movetext used can be found in testdata/file04.pgn
     <p>This is the original Movetext that I based this test on
        
     ```
@@ -532,7 +533,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 15. **Test the detection of Game Termination Markers** - That is, "1-0", "0-1", "1/2-1/2" and "*"
            
     * *Method Used*
-    <p>The Movetext used can be found in testdata/file03.pgn
+    <p>The Movetext used can be found in testdata/file05.pgn
        
     ```
     1. e4 c6 2. d4 d5 3. e5 Bf5 4. Nf3 e6 5. Be2 Nh6 6. O-O Bg6 7. c3 Be7 8. Bxh6
@@ -543,7 +544,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     Rxd3 1/2-1/2
     ```
     * That is, 34 moves ending with White's Rook move then the *Game Termination Marker 1/2-1/2*<br>
-    Because of Black's Castling move in **No. 14. Bb3 O-O-O**; this game will also test that *Kool AI can Castle correctly!*
+    Because of Black's Castling move in **No. 14. Bb3 O-O-O**; this game will also test that *Kool AI can Castle Queenside correctly!*
     * Run the program:
     
     * *The Output*
@@ -566,14 +567,15 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
    The main purpose of this test is that:
    1. Game moves recorded in SAN are converted to LAN when played by this program.
    2. Regardless of notation, **the game-play ought to be identical!**
-   3. Therefore, if the program reads and plays **the same game** using LAN notation, the outcome ought to be identical!<p>
-      
-    * *Method Used*
-    <p>The Movetext used can be found in testdata/file04.pgn<br>
-    This is the output of the moves in testdata/file03.pgn after they were used in <strong>Test 3.</strong> So, all the moves have been converted from SAN to LAN.<br>
-    The pgn file, testdata/file04.pgn, has <em>no newlines</em> in order to test that lack of newlines is not an issue for the program.
+   3. Therefore, if the program reads and plays **the same game** using LAN notation, the outcome ought to be identical!  
+
+   * *Method Used*
+    <p>The Movetext used can be found in testdata/file06.pgn<br>
+    This is the output of the moves in *testdata/file05.pgn* after they were used in <strong>Test 15.</strong> So, all the moves have been converted from SAN to LAN.<br>
+    The pgn file, testdata/file06.pgn, has <em>no newlines</em> in order to test that lack of newlines is not an issue for the program.
     
-    testdata/file05.pgn has the same data with newlines as shown here:
+    testdata/file07.pgn has the same data with newlines as shown here:  
+
     ```
 	1. e2e4 c7c6 2. d2d4 d7d5 3. e4e5 Bc8f5 4. Ng1f3 e7e6 5. Bf1e2 Ng8h6 6. O-O Bf5g6 7. c2c3 Bf8e7 8. Bc1xh6 g7xh6
     9. Qd1c1 h6h5 10. c3c4 d5xc4 11. Be2xc4 Nb8d7 12. Nb1c3 Qd8c7 13. Qc1f4 Nd7b6 14. Bc4b3 O-O-O 15. Ra1c1 Kc8b8
@@ -582,17 +584,15 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     28. a2a3 Nd5c7 29. Bb3c4 Nc7b5 30. Rc2d2 a7a6 31. Rd2d3 Qa5d8 32. Ne4c5 Be7xc5 33. d4xc5 Rd7xd3 
 	34. Rd1xd3
     ```
-    * That is, the same 34 moves as in **Test 3** in LAN.
-    * Run the program:
-    
-    * *The Output*
-           
-      	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/d70d82d1-26b9-42dc-973b-0aa14a97f99e)
+* That is, the same 34 moves as in **Test 15** in LAN.
+* Run the program:
+* *The Output*<p>
+  ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/d70d82d1-26b9-42dc-973b-0aa14a97f99e)
 
            
  * All moves were played successfully without any issues.
  * With the Computer responded identically with **Nb5d4**
- * When I compared the contents of testdata\file04.pgn with the outputted moves of this game *without the computer-generated move Nb5d4 and without newlines* using [Diffchecker](https://www.diffchecker.com/text-compare/), the result was<p>
+ * When I compared the contents of testdata\file06.pgn with the outputted moves of this game *without the computer-generated move Nb5d4 and without newlines* using [Diffchecker](https://www.diffchecker.com/text-compare/), the result was<p>
    	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/d229c5a4-a792-49e4-8f4c-37d5c0d3ad0b)
 
 
@@ -600,7 +600,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 
 17. **Castling** - Test that user can *Castle Queenside*
    * *Method Used*
-     <p>The Movetext used can be found in testdata/file06.pgn<br>
+     <p>The Movetext used can be found in testdata/file08.pgn<br>
 	The Chess moves are taken from the [Opera Game](https://en.wikipedia.org/wiki/Opera_Game)
   
     ```
@@ -609,12 +609,11 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     c6xb5 11. Bc4xb5+ Nb8d7 12. O-O-O Ra8d8 13. Rd1xd7 Rd8xd7 14. Rh1d1
     Qe7e6 15. Bb5xd7+ Nf6xd7 16. Qb3b8+ 1-0
     ```
-           
-    * **Note the moves numbered 12. Number 12's White Move is Castling O-O-O**
-    * Run the program:
-    * All moves were played successfully without any issues.
-    
-    * *The Output*
+
+* **Note the moves numbered 12. Number 12's White Move is Castling O-O-O**
+* Run the program:
+* All moves were played successfully without any issues.
+* *The Output*
 
     ```
     Checking Player move for b3-b8 Piece: Queen
@@ -633,7 +632,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
            
 Note:
 1. The difference is that KoolAI resigned at **Move 16** forseeing that it could not win this game.
-2. When you compare the contents of file06.pgn with the above output you will see that<br>
+2. When you compare the contents of file08.pgn with the above output you will see that<br>
 *All the captures shown by **x** and all the checks shown by **+** correspond!*
 3. Afterwards, I pasted the outputted moves into input.pgn just to ensure that the moves played and the output were identical.
 Therefore, confirming that  *captures **x** and checks **+*** do not interfere with parsing.
@@ -643,11 +642,11 @@ Therefore, confirming that  *captures **x** and checks **+*** do not interfere w
 18. **Ignore Annotations** - Test that user can *Castle Queenside*
 
 * Another test to ensure that comments and annotations do not interfere with the parsing of a pgn file
-* I made up the annotations (++ # =Q ) for these moves. They do not actually correspond to any of these moves.
+* **Note: I made up the annotations (++ # =Q ) for these moves. They do not actually correspond to any of these moves.**
 * That is, there are no checks, checkmates or promotions in this game.
 * I added these simply to check that they are all being ignored during parsing.
 * *Method Used*
-     <p>The Movetext used can be found in testdata/file07.pgn<br>
+     <p>The Movetext used can be found in testdata/file09.pgn<br>
     
 * Run the program:
 * All moves were played successfully without any issues.
@@ -663,7 +662,7 @@ Computer took your Pawn
 19. **Illegal Moves** - To test the response when an *illegal move* is read from an input file
 
 * *Method Used*
-     <p>The Movetext used can be found in testdata/file08.pgn<br>
+     <p>The Movetext used can be found in testdata/file10.pgn<br>
 * **h8h7** in this game is an illegal move since there would be a piece occupying **h7**
     
 * Run the program:
@@ -674,14 +673,125 @@ There will be no further input from 'input.pgn'
 ```
 -----
 
-1. **Test** - 
-    * *Method Used*
-        * .
-    * *The Output* 
-        * .
-    * *Issues Found*
-    *  *Solution Found:*
-        *  .
+
+20. **En Passant** - Test that user can play an *En Passant* move
+   * *Method Used*
+     <p>The Movetext used can be found in testdata/file11.pgn<br>
+  
+    ```
+	1.e4 e5 2. Nf3 Nf6 3. d4 exd4 4. e5 Ne4 5. Qxd4 d5
+    ```
+           
+   * Run the program:
+   * After the moves of this file are played, enter **e5d6**
+   * All moves were played successfully without any issues.
+   * *The Output*
+   * The Computer responded with
+   * Computer moves d7-d5 Piece: Pawn
+
+-----
+
+
+21. **En Passant** - Play a full game which includes an *En Passant* move
+   * *Method Used*
+     <p>The Movetext used can be found in testdata/file12.pgn<br>
+  
+    ```
+	1.e4 e5 2. Nf3 Nf6 3. d4 exd4 4. e5 Ne4 5. Qxd4 d5 6. exd6 e.p. Nxd6
+	7.Bg5 Nc6 8. Qe3+ Be7 9. Nbd2 0-0 10. 0-0-0 Re8 11. Kb1 (=)
+    ```
+           
+   * This PGN file also tests that the annotation *e.p.* is ignored
+   * Run the program:
+   * All moves were played successfully without any issues.
+   * *The Output*
+   * The Computer responded with 
+     
+
+----
+
+22. **En Passant** - Ensure that Kool AI can play an *En Passant* move
+   * *Method Used*
+     <p>The Movetext used can be found in testdata/file13.pgn<br>
+	
+   * Move No. 15 for Black: **... exf3+ is a Discovery Check which is the result of the En Passant move!**
+   * So, the program should emulate the same Check!
+   * Run the program:
+   * All moves were played successfully without any issues.
+   * *The Output*
+   * * Move No. 15 is displayed as  
+
+----
+
+23. **En Passant** - Checkmate by En Passant
+   * *Method Used*
+     <p>The Movetext used can be found in testdata/file14.pgn<br>
+	
+   * The program should emulate the same Checkmate!
+   * Run the program:
+   * Successful Checkmate
+   * *The Output*
+
+----
+
+24. **En Passant** - Checkmate by En Passant
+   * *Method Used*
+     <p>The Movetext used can be found in testdata/file15.pgn<br>
+	
+   * The program should emulate the same Checkmate!
+   * Run the program:
+   * Successful Checkmate
+   * *The Output*
+----
+
+25. **En Passant** - Checkmate by En Passant
+   * *Method Used*
+     <p>The Movetext used can be found in testdata/file16.pgn<br>
+	
+   * The program should emulate the same Checkmate!
+   * Run the program:
+   * Successful Checkmate
+   * *The Output*
+
+-----
+
+
+26. **Pawn Promotion** - Checkmate by Pawn Promotion
+   * *Method Used*
+     <p>The Movetext used can be found in testdata/file17.pgn<br>
+  
+   * In order to Test that Pawn Promotion handling works correctly, this game ends with Checkmate after a Pawn Promotion
+   * The program should emulate the same Checkmate!  
+    ```
+	1. e4 d5 2. exd5 Nf6 3. Bb5+ c6 4. dxc6 Qb6 5. cxb7+ Qxb5 6.bxc8=# { pawn promotion & CHECKMATE! }
+	1-0
+    ```
+           
+   * Run the program:
+   * After the moves of this file are played, enter **e5d6**
+   * Successful Checkmate
+    
+    * *The Output*
+
+
+-----
+   
+### **Play Entire Games**
+At this stage, I decided to finish off testing by playing a series of full games. 
+In each case, the program played all the moves and emulate the result successfully.
+This includes all **147 moves and 269 moves** of Tests 33 and 34.
+The games I chose are as follows:
+
+27. Fool's mate - **Checkmate in 2 moves!** - testdata/file18.pgn
+28. Joseph Henry Blackburne's Gambit - testdata/file19.pgn
+29. **The Game of the Century** - Donald Byrne vs Robert Fischer - Result "0-1" - testdata/file20.pgn
+30. Robert Fischer vs Boris Spassky - Result "1/2-1/2" - testdata/file21.pgn
+31. HIARCS 11.1 UCI - Rybka 2.3.1 32-bit 2008 - testdata/file22.pgn
+32. Charlick - Mann correspondence Australia, 1881 - testdata/file23.pgn
+33. **The 147-move computer game** HIARCS 11.1 UCI - Rybka 2.3.1 32-bit, 2008 - testdata/file24.pgn
+34. **The longest recorded game of chess in history** - Ivan Nikolic vs Goran Arsovic - Result "1/2-1/2" - testdata/file25.pgn
+
+----
 
 ## Various sources of PGN files and chess moves in PGN notation
 * [fsmosca/chess-artist](https://github.com/fsmosca/chess-artist/blob/master/PGN)
@@ -689,6 +799,7 @@ There will be no further input from 'input.pgn'
 * [PGN Mentor](https://www.pgnmentor.com/files.html)
 * [Chess.com](https://www.chess.com)
 * [The Jerome Gambit](https://jeromegambit.blogspot.com)
+* **PLEASE NOTE: Do NOT use chessgames.com/perl/...** - These links flags up with **Malware and Adware**
 
 ## References
 * [Wikipedia - Portable Game Notation](https://en.wikipedia.org/wiki/Portable_Game_Notation)
