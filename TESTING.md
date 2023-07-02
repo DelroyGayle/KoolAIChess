@@ -345,7 +345,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     * *Method Used*
         
         I set *input.pgn* contents to have various annotations:<br>
-        * "e.p. e.p.1{Testing Various Annotations} ((ABC)) e.p."<p>
+        * e.p. e.p.1{Testing Various Annotations} ((ABC)) e.p.<p>
 
     * *The Output*
         
@@ -356,6 +356,8 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
         etc.
 
         So, all that is parsed is the move number **1** followed by a comment i.e. null input, which in turn, is ignored. 
+        The initial Chessboard is displayed with the prompt:<br>
+        *YOUR MOVE (e.g. e2e4):*    
 
 -----
        
@@ -364,7 +366,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     * *Method Used*
         
         I set *input.pgn* contents to have various annotations:<br>
-        * "e.p. e.p.**2.**{Testing Various Annotations} ((ABC)) e.p."<p>
+        * e.p. e.p.**2.**{Testing Various Annotations} ((ABC)) e.p.<p>
     
     * *The Output* - the following error message
         
@@ -381,7 +383,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     * *Method Used*
         
         I set *input.pgn* contents to have all three elements as follows:<br>
-        * "1. {One Chess move} e4"<p>
+        * 1. {One Chess move} e4<p>
     
     * *The Output*<p>
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/f53e0879-03b4-47d1-812f-15f0c2f4e270)
@@ -417,7 +419,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     * *Method Used*
         
         I set *input.pgn* contents to have two Chess moves with comments as follows:<br>
-        * "1. {First move} e4 (2nd move) h5"<p>
+        * 1. {First move} e4 (2nd move) h5<p>
     
     * *The Output*
            
@@ -485,13 +487,15 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     
     * *The Output*
            
-      ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/3abb6084-11e0-4601-8de6-c2190eb00230)
+      ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/6db51066-e2b9-406f-8042-eb99cd3a776b)
 
     * Solution: Edit such PGN files before testing. For example, change the line in question to<br>**6. Qb3 { clock paused for 7 days } Qc8** in order for it to work.
     * See testdata/file03.pgn
     * This PGN file also tests Kingside Castling by both Player & Kool AI* - see Moves No. 9 & 10
     * Run the program:
-    * All moves were played successfully without any issues.           
+    * All moves were played successfully without any issues.
+    * *The Output*          
+	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/157bd004-1f33-4a93-bf36-d4f2da91d1a2)
 
 
 -----
