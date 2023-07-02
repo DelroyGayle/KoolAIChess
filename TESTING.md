@@ -4,11 +4,11 @@
 
 I am a novice chess player. I simply do not know enough chess to ensure that my program works correctly in its playing of Chess.<p>
 **My Solution:**<br>There are thousands of recorded chess games on the internet, all recorded in *PGN/SAN notation*.<br>Therefore,
-* if I could get the program to *actually play the chess moves as read from a pgn file*;
+* If I could get the program to *actually play the chess moves as read from a pgn file*;
 * then exactly the same chessboard configuration should appear after *playing the read moves*;
-* without any differences in the outcomes;
-* neither should there be any error messages or conflicts coming from the program.
-* If any error messages or discrepancies in the outcomes occur
+* without any differences in the outcomes.
+* Neither should there be any error messages or conflicts coming from the program.
+* If any error messages or discrepancies in the outcomes occur,
 * then I know that there is a bug in the program that needs to be resolved.
 * This is the rationale behind my method of testing.
 
