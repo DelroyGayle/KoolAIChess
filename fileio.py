@@ -262,7 +262,7 @@ def regexp_loop():
             # The length is either 1 or 2 -
             # the correct starting position for the 'find'
             position = Game.input_stream.find("\n", len(matched.group(0)))
-            if position < 0:  # No \n found - therefore remove entire contents
+            if position < 0:  # No \n found - therefore, remove entire contents
                 Game.input_stream = ""
                 continue
 
@@ -273,7 +273,7 @@ def regexp_loop():
         # Remove any leading whitespace i.e. including \n
         Game.input_stream = Game.input_stream.lstrip(" \n\t")
 
-        # Just in case any found - remove an 'en passant' annotation,
+        # Just in case any found - remove an 'En Passant' annotation,
         # that is 'e.p.'
         #                             r"\A(e\.p\.[ \n]*)+"
         Game.input_stream = constants.en_passant_pattern.sub("",
@@ -296,7 +296,7 @@ def regexp_loop():
         if firstchar == ";":
             # Ignore up to the end of the line
             position = Game.input_stream.find("\n")
-            if position < 0:  # No \n found - therefore remove entire contents
+            if position < 0:  # No \n found - therefore, remove entire contents
                 Game.input_stream = ""
                 continue
 
@@ -367,7 +367,7 @@ def handle_move_suffix(matched):
     digit characters ("0-9"),
     the plus sign ("+"), the octothorpe sign ("#"),
     the equal sign ("="), the colon (":"),  and the hyphen ("-").
-    Therefore ignore suffix text such as =Q+
+    Therefore, ignore suffix text such as =Q+
     """
 
     Game.input_stream = Game.input_stream[matched.end(0):]
@@ -433,8 +433,8 @@ def double_tuple_with_source(matched):
 def parse_chess_move():
     """
     Parse the chess move into a tuple
-    Place the tuple into Game.chess_move_tuple
-    Place the matched string result into Game.general_string_result
+    Place the tuple into 'Game.chess_move_tuple'
+    Place the matched string result into 'Game.general_string_result'
     Note: the order of these regular expression patterns is significant
     """
 
@@ -597,8 +597,8 @@ def parse_chess_move():
 
 def check_game_termination_marker_found():
     """
-    Determine if the parsed string is
-    # is it "1-0" (White wins), "0-1" (Black wins),
+    Determine if the parsed string is either
+    #       "1-0" (White wins), "0-1" (Black wins),
     #       "1/2-1/2" (drawn game), OR "*"
     """
 
@@ -637,7 +637,7 @@ def parse_move_text():
     Then a Chess Move is expected, which will be parsed
     into a tuple of the following form:
     (the piece optional, the destination square)
-    The parsed chess move string is placed in Game.general_string_result
+    The parsed chess move string is placed in 'Game.general_string_result'
     3)
     During Parsing, all PGN comments and annotations are ignored
     """
@@ -657,7 +657,7 @@ def parse_move_text():
         # Otherwise
         return parse_chess_move()
 
-    # Therefore Game.whose_move is == constants.PLAYER
+    # Therefore, Game.whose_move is == constants.PLAYER
     # Increment the Move Counter
     Game.global_piece_sign = constants.PLAYER
     Game.move_count += 1
@@ -889,10 +889,10 @@ def determine_move_both_file_rank(chess):
     For example, change 'e4' to 'e2e4'; change 'Nf3' to 'g1f3'; etc
     This is needed in order for this program to play the move.
 
-    Game.chess_move_tuple consists of (piece, source, target)
+    'Game.chess_move_tuple' consists of (piece, source, target)
 
     Note: If the resultant move that has been read
-          from the input file is an en passant move.
+          from the input file is an En Passant move.
           Then this move is performed 'at this stage'
           within the functionality of 'determine_move_both_file_rank'
     """
@@ -900,37 +900,37 @@ def determine_move_both_file_rank(chess):
     (piece, source, target) = Game.chess_move_tuple
 
     # Depending on the 'move_type' check whether
-    # an en passant move is possible
+    # an En Passant move is possible
     # And if so, perform the move at this point
     if (Game.move_type == constants.PAWN_CAPTURE_FILE
        or Game.move_type == constants.LONG_NOTATION
        or Game.move_type == constants.PIECE_BOTH_SQUARES):
         # Game.en_passant_status is
-        # set to either constants.VALID for a valid en passant move
-        #  or to 'constants.INVALID' for an illegal en passant move
+        # set to either constants.VALID for a valid En Passant move
+        #  or to 'constants.INVALID' for an illegal En Passant move
         result = m.check_if_inputfile_move_is_en_passant(chess, source, target)
 
         """
         There are three possible outcomes
 
-        1) If 'result' is True then an en passant move has been performed
+        1) If 'result' is True then an En Passant move has been performed
 
         2) Otherwise check Game.en_passant_status
         If it is equal to constants.INVALID
-        then an attempted en passant took place
+        then an attempted En Passant took place
         which turned out to be illegal
 
-        3) Otherwise the move was not an en passant move at all
+        3) Otherwise the move was not an En Passant move at all
         Proceed with determining the full chess move, both file and rank
         """
 
         if result:
-            return  # Successful en passant move
+            return  # Successful En Passant move
 
         if Game.en_passant_status == constants.INVALID:
-            return  # Unsuccessful en passant move
+            return  # Unsuccessful En Passant move
 
-        # Otherwise not an en passant move - Continue
+        # Otherwise not an En Passant move - Continue
 
     if piece == "":  # PAWN
         piece = "P"
@@ -974,7 +974,7 @@ def handle_move_text(chess):
     a Move Number or a Chess Move EG 1. OR e2e4
     Parse accordingly
     If it is a Chess Move and the Parsing operation was successful,
-    Game.general_string_result would be set to
+    'Game.general_string_result' would be set to
     the value of the matched 'chess move string'
     """
 
@@ -992,13 +992,13 @@ def handle_move_text(chess):
         return
 
     # Determine the full chess move, both file and rank
-    # Note: If the resultant move is an en passant move
+    # Note: If the resultant move is an En Passant move
     #       Then this move is performed at this stage
     #       within the functionality of 'determine_move_both_file_rank'
 
     #       Game.en_passant_status would be:
-    #           set to 'constants.VALID' for a valid en passant move
-    #           set to 'constants.INVALID' for an illegal en passant move
+    #           set to 'constants.VALID' for a valid En Passant move
+    #           set to 'constants.INVALID' for an illegal En Passant move
     #           set to 'constants.NOVALUE' for a non-en-passant move
 
     determine_move_both_file_rank(chess)
@@ -1007,9 +1007,9 @@ def handle_move_text(chess):
 def fetch_chess_move_from_file(chess):
     """
     Read a chess move from the input file stream and parse it
+    Note: the order of this 'or' expression is significant
+    Call regexp_loop first!
     """
-    # Note: the order of this 'or' expression is significant
-    # Call regexp_loop first!
     if not regexp_loop() or Game.input_stream == "":
         # Empty or Erroneous input
         return
@@ -1060,7 +1060,7 @@ def handle_player_move_from_inputfile(chess,
         sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
         return do_next  # 'pass'
 
-    # Was a castling move read from the file? If so, process it
+    # Was a Castling move read from the file? If so, process it
     if Game.reading_game_file and Game.move_type == constants.CASTLING_MOVE:
         just_performed_castling = m.perform_castling(chess, constants.PLAYER)
 
@@ -1090,12 +1090,12 @@ def handle_player_move_from_inputfile(chess,
 
 def pause_for_display():
     """
-    Pause the computer so that the Player can read the output
+    Pause the computer so that the Player can read what has been displayed
     """
     if Game.it_is_checkmate:
         # Messaging already displayed and Paused
         return
-        
+
     if Game.reading_game_file:
         sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
     else:
@@ -1153,7 +1153,7 @@ def handle_computer_move_from_inputfile(chess,
             # The Castling that was read from the input file was valid!
             # Castling Validation has already been done
             # to see whether Castling would put the Player in Check
-            # 'indicate_castling_done()' displays the appropriate messaging
+            # 'indicate_castling_done()' displayed the appropriate messaging
             # regarding the Castling move
 
             # Since this chess move is not a pawn that has advanced two squares
@@ -1193,7 +1193,7 @@ def handle_computer_move_from_inputfile(chess,
         # Add a 'x' to the output chess move if a piece was taken
         # Add the promoted piece if a promotion took place
         # Then output the piece to the output file
-        # Use the new en passant coordinates Game.new_...
+        # Use the new En Passant coordinates Game.new_...
         m.setup_output_chess_move_add_promotion(constants.PAWN_LETTER,
                                                 Game.new_from_file,
                                                 Game.new_from_rank,
@@ -1207,7 +1207,7 @@ def handle_computer_move_from_inputfile(chess,
         return (computer_move_finalised,
                 None, None, None, None)
 
-    # Not a Castling move therefore
+    # Not a Castling move therefore,
     # Fetch new values for 'from_file,from_rank,to_file,to_rank'
     # from what was read in the input game file
     Game.en_passant_status = constants.NOVALUE

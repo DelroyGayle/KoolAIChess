@@ -308,7 +308,7 @@ def generate_moves_for_rook(chess, file, rank,
 
 def examine_this_square(diffs_tuple, chess, file, rank, piece_sign):
     """
-    Check if it is possible for this piece to land on this square
+    Check if it is possible for the piece to land on this square
     Calculate the square's coordinates using the numbers in 'diffs_tuple'
     """
 
@@ -446,7 +446,7 @@ def determine_generate_move_method(piece_letter):
 
 def movelist(chess, from_file, from_rank, piece_sign, evaluating=False):
     """
-    Get a list of possible moves for a particular piece
+    Generate a list of possible moves for a particular piece
     """
 
     index = from_file + from_rank
@@ -536,7 +536,7 @@ def input_status_message(message):
 def is_error_from_input_file():
     """
     Display a general message if an erroneous chess move
-    came from the input file
+    had been read from the input file
     """
     if Game.reading_game_file:
         input_status_message(
@@ -583,6 +583,7 @@ def test_if_input_is_castling(chess, input_string):
 def handle_player_move_from_keyboard(chess):
     """
     Validate the chess move entered by the Player
+    via the keyboard
     """
     # Default: 'pass' as in Python i.e. NOP
     do_next = "pass"
@@ -641,7 +642,7 @@ def handle_player_move_from_keyboard(chess):
 
 def any_promotion(chess, to_file, to_rank):
     """
-    Pawn Promotion
+    Pawn Promotion:
     Promote Pawn Piece if it reaches the board edge
     This is done by adding the attributes
     'promote_letter' and 'promoted_value'
@@ -753,7 +754,6 @@ def in_check(chess, user_sign):
     this function [ scans ] all squares to see if any opposition piece
     has the King in Check
     """
-    # print("IN CHECK IN") # TODO
     opponent_sign = -user_sign
     user_king_value = (constants.VALUE_OF_COMPUTER_KING
                        if user_sign == constants.COMPUTER
@@ -782,7 +782,7 @@ def in_check(chess, user_sign):
 
 def make_move_to_square(chess, from_square, to_square, to_file, to_rank):
     """
-    Fill the square taken
+    Fill the square with the chess piece
     """
     chess.board[to_square] = chess.board[from_square]
 
@@ -797,7 +797,7 @@ def test_each_move(chess, who_are_you,
                    to_square):
     """
     Go through each possible move
-    To see if there is one whereby the king
+    To see if there is a chess move whereby the king
     is no longer 'in check'
     """
 
@@ -818,7 +818,7 @@ def test_each_move(chess, who_are_you,
 
     if not check_flag:
         # A suitable move has been found
-        # Therefore it is not Checkmate
+        # Therefore, it is not Checkmate
         return True
 
     # Otherwise continue the loop i.e. continue testing

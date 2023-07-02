@@ -133,13 +133,13 @@ class Game:
         a2, b2, c2, d2, e2, f2, g2, h2
         a1, b1, c1, d1, e1, f1, g1, h1
 
-        Therefore rather than a 8X8 array with numerical indices;
+        Therefore, rather than a 8X8 array with numerical indices;
         instead I chose to use a Python dictionary to reflect the above scheme.
         The keys being a string e.g. "h8" for the square h8
         Then each value would be a Piece Class instance
         of the form Piece(VALUE, LETTER, SIGN)
 
-        Therefore the Dictionary would look like this
+        Therefore, the Dictionary would look like this
         {a8:value, b8:value, ..., d1:None, ..., e1:None, a1:value, ...,
          h1:value}
 
