@@ -597,7 +597,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
            
  * All moves were played successfully without any issues.
  * With the Computer responded identically with **Nb5d4**
- * When I compared the contents of testdata\file06.pgn with the outputted moves of this game *without the computer-generated move Nb5d4 and without newlines* using [Diffchecker](https://www.diffchecker.com/text-compare/), the result was<p>
+ * When I compared the contents of testdata/file06.pgn with the outputted moves of this game *without the computer-generated move Nb5d4 and without newlines* using [Diffchecker](https://www.diffchecker.com/text-compare/), the result was<p>
    	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/d229c5a4-a792-49e4-8f4c-37d5c0d3ad0b)
 
 
@@ -863,7 +863,7 @@ Qb6xb5 6. b7xc8=Q# 1-0
 At this stage, I decided to finish off testing by playing a series of full games. 
 In each case, the program played all the moves and emulate the result successfully.
 This includes all **147 moves and 269 moves** of Tests 34 and 35.
-The games I chose are as follows:
+The games I chose with their testdata and endgames are as follows:<p>
 
 28. Fool's mate - **Checkmate in 2 moves!** - testdata/file18.pgn
 29. Joseph Henry Blackburne's Gambit - testdata/file19.pgn
@@ -875,6 +875,31 @@ The games I chose are as follows:
 35. **The longest recorded game of chess in history** - Ivan Nikolic vs Goran Arsovic - Result "1/2-1/2" - testdata/file25.pgn
 
 ----
+
+   * Fool's mate - **Checkmate in 2 moves!**
+   * *The Output*  
+     ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/6e9a5b88-3da4-4bd2-b4bc-65af00c4e99f)
+
+   * Joseph Henry Blackburne's Gambit
+   * * *The Output*  
+     ![image]
+   * **The Game of the Century** - Donald Byrne vs Robert Fischer
+   * *The Output*  
+     ![image]
+     * HIARCS 11.1 UCI - Rybka 2.3.1 32-bit 2008
+     * *The Output*  
+     ![image]
+
+   * Charlick - Mann correspondence Australia, 1881
+   * *The Output*  
+     ![image]
+     * **The 147-move computer game** HIARCS 11.1 UCI - Rybka 2.3.1 32-bit, 2008
+     * *The Output*  
+     ![image]
+   * **The longest recorded game of chess in history** - Ivan Nikolic vs Goran Arsovic
+   * * *The Output*  
+     ![image]
+   
 
 ## Various sources of PGN files and chess moves in PGN notation
 * [fsmosca/chess-artist](https://github.com/fsmosca/chess-artist/blob/master/PGN)
