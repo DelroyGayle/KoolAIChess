@@ -1,9 +1,11 @@
-{HIARCS 11.1 UCI - Rybka 2.3.1 32-bit 2008
-SOURCE: https://jeromegambit.blogspot.com/2009/10/king-in-peril-comment-reply.html}
-1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.Bxf7+ Kxf7 5.Nxe5+ Nxe5 6.d4 Qh4 7.0-0 Nf6 8.dxe5 Ng4 9.Qf3+ Ke8 
-10.Bf4 Rf8 11.Bg3 Rxf3 12.Bxh4 Rf7 13.Bg3 Bd4 14.Nc3 Kf8 15.Nb5 Bxe5 16.Bxe5 Nxe5 17.Nxc7 Rb8 18.Nb5 b6 19.a4 Bb7 
-20.Nd6 Rf4 21.f3 Ke7 22.Rfd1 Kf6 23.b4 Kg5 24.a5 b5 25.Nxb7 Rxb7 26.Rd5 Kf6 27.a6 Rb6 28.Ra5 Rc6 29.Raxb5 d6 
-30.Rb7 Rxa6 31.b5 Ra1+ 32.Kf2 Ke6 33.Rxg7 Ra2 34.Ke3 Rh4 35.Rc7 Rxh2 36.f4 Ra3+ 37.c3 Nf7 38.Rf5 Nh6 39.Rf8 d5 
-40.e5 Ng4+ 41.Kf3 Nxe5+ 42.fxe5 Kxe5 43.Re8+ Kf5 44.Rd8 Ke5 45.Rc5 Ra2 46.Rdxd5+ Ke6 47.Re5+ Kf6 48.Rf5+ Ke6 49.Rce5+ Kd6 
-50.c4 Kc7 51.c5 Rhxg2 52.Rf7+ Kd8 53.Rxh7 Rgb2 54.Rg5 Rf2+ 55.Ke4 Rfe2+ 56.Kd5 Ra1 57.Kc6 Rae1 58.Rd5+ Ke8 59.Rdd7 Rf2 
-60.Kc7 Rf7 61.Rhxf7 a5 62.Rh7 Re7 63.Rhxe7+ Kf8 64.Kd6 a4 65.Rd8#
+{Anderssen vs Kieseritzky, London 1851
+This game, played between Adolf Anderssen and Lionel Kieseritzky, is known as 'The Immortal Game', 
+and is one of the most famous chess games ever played.
+SOURCE: https://www.chessstrategyonline.com/content/tutorials/basic-chess-concepts-chess-notation 
+}
+
+1. e4 e5 2. f4 exf4 3. Bc4 Qh4+ 4. Kf1 b5 5. Bxb5 Nf6 6. Nf3 Qh6 7. d3 Nh5 8. Nh4 Qg5 9. Nf5 c6 10. g4 Nf6 
+11. Rg1 cxb5 12. h4 Qg6 13. h5 Qg5 14. Qf3 Ng8 15. Bxf4 Qf6 16. Nc3 Bc5 17. Nd5 Qxb2 18. Bd6 Bxg1 
+19. e5 Qxa1+ 20. Ke2
+(Kieseritzky resigned after this move, but the game would have finished as follows:)
+Na6 21. Nxg7+ Kd8 22. Qf6+ Nxf6 23. Be7#
