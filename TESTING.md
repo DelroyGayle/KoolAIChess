@@ -30,7 +30,7 @@ Therefore, essentially ***Chess-Playing Automation!***<br>
 * All moves, including *Castling and En Passant*; should be followed in identical fashion. 
 
 The program will read as many chess moves as present in *input.pgn*.
-When it reaches the end of the file, it will display a suitable message to inform the user that<br>*any further player moves will now come from the user*; likewise, the computer moves would hereafter be evaluated by the computer according to its algorithm.
+When it reaches the end of the file, it will display a suitable message to inform the user that *any further player moves will now come from the user*; likewise, the computer moves would hereafter be evaluated by the computer according to its algorithm.
 
 ## Remove pgn file when deploying
 If there is *no input.pgn file* present the program will simply expect keyboard input from the user.<br>
@@ -168,7 +168,7 @@ Essentially, a PGN file is divided up into eight *mandatory* parts - a *Seven Ta
 * Instead it would automatically promote the pawn in a8 to a Queen.
 * Some PGN files prefix Black's move with a number and/or periods e.g.<br>**6. Qb3 { clock paused for 7 days } 6... Qc8**
 * This program will not parse this. Instead, an error message will be displayed.
-* Therefore, edit such PGN files before testing. For example, change the line in question to<br>**6. Qb3 { clock paused for 7 days } Qc8** in order for it to work. See Test No. xx
+* Therefore, edit such PGN files before testing. For example, change the line in question to<br>**6. Qb3 { clock paused for 7 days } Qc8** in order for it to work. *See Test No. 13*
 -----
    
 ## Testing
@@ -202,8 +202,9 @@ Essentially, a PGN file is divided up into eight *mandatory* parts - a *Seven Ta
    
 ### **Testing PGN Input - Non-Chess Moves** 
 I performed the following testing of ad hoc input of PGN comments and annotations in the following manner.<br>
-Comments should always be ignored when parsing input.
-1. **Test: Comments that begin with ; i.e. semicolon** - <br>With the **;** type comment all input is ignored to the end of the line.<br>
+Comments should always be ignored when parsing input.<p>
+
+3. **Test: Comments that begin with ; i.e. semicolon** - <br>With the **;** type comment all input is ignored to the end of the line.<br>
     So, the following entries ought to be all interpreted as empty input.
     * *Method Used*
     
@@ -359,7 +360,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 -----
        
 ### **Testing SAN Input - Chess Moves** 
-1. **Test Move Numbers** - The PGN file should have consecutive numbered pairs of chess moves **starting with Number 1**.<p>
+9. **Test Move Numbers** - The PGN file should have consecutive numbered pairs of chess moves **starting with Number 1**.<p>
     * *Method Used*
         
         I set *input.pgn* contents to have various annotations:<br>
@@ -452,7 +453,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 
 ### **Testing any number of moves**
            
-1. **Test the removal of SAN move suffix annotations** - That is, "!", "?", "!!", "!?", "?!" and "??"
+12. **Test the removal of SAN move suffix annotations** - That is, "!", "?", "!!", "!?", "?!" and "??"
            
     * *Method Used*
     <p>The Movetext used can be found in testdata/file01.pgn
@@ -471,9 +472,30 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
            
     * All moves were played successfully without any issues.           
 
+           
+1. **Test the prefix of Black's moves**
+           
+    * *Method Used*
+    <p>The Movetext used can be found in testdata/file01.pgn
+       
+    ```
+    1. e4 c6 2. d4? d5 3. e5? Bf5! 4. Nf3 !? e6 5. !? Be2 Nh6!!
+    ```
+           
+    * Various annotations and comments have been added which ought to be ignored by the program
+    * Run the program:
+    
+    * *The Output*
+           
+      ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/3abb6084-11e0-4601-8de6-c2190eb00230)
+
+           
+    * All moves were played successfully without any issues.           
+
+
 -----
          
-2. **Castling** - Test that user can *Castle Kingside*
+14. **Castling** - Test that user can *Castle Kingside*
            
     * *Method Used*
     <p>The Movetext used can be found in testdata/file02.pgn
@@ -507,7 +529,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 
 -----
                      
-3. **Test the detection of Game Termination Markers** - That is, "1-0", "0-1", "1/2-1/2" and "*"
+15. **Test the detection of Game Termination Markers** - That is, "1-0", "0-1", "1/2-1/2" and "*"
            
     * *Method Used*
     <p>The Movetext used can be found in testdata/file03.pgn
@@ -536,7 +558,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 
 -----
      
-4. **Can program play its own output?** - That is, can it play using Long algebraic notation?
+16. **Can program play its own output?** - That is, can it play using Long algebraic notation?
            
    One of the features of this program is that at the end of a game,
    the program will produce <br>**all the moves of the game in Long algebraic notation (LAN)** and write them both out to the screen and the ***output.pgn* file**<p>
@@ -576,7 +598,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 
 -----
 
-5. **Castling** - Test that user can *Castle Queenside*
+17. **Castling** - Test that user can *Castle Queenside*
    * *Method Used*
      <p>The Movetext used can be found in testdata/file06.pgn<br>
 	The Chess moves are taken from the [Opera Game](https://en.wikipedia.org/wiki/Opera_Game)
@@ -618,7 +640,7 @@ Therefore, confirming that  *captures **x** and checks **+*** do not interfere w
 
 -----
 
-6. **Ignore Annotations** - Test that user can *Castle Queenside*
+18. **Ignore Annotations** - Test that user can *Castle Queenside*
 
 * Another test to ensure that comments and annotations do not interfere with the parsing of a pgn file
 * I made up the annotations (++ # =Q ) for these moves. They do not actually correspond to any of these moves.
@@ -638,7 +660,7 @@ Computer took your Pawn
 
 -----
 
-7. **Illegal Moves** - To test the response when an *illegal move* is read from an input file
+19. **Illegal Moves** - To test the response when an *illegal move* is read from an input file
 
 * *Method Used*
      <p>The Movetext used can be found in testdata/file08.pgn<br>
@@ -666,6 +688,7 @@ There will be no further input from 'input.pgn'
 * [ValdemarOrn/Chess](https://github.com/ValdemarOrn/Chess/tree/master/Annotated%20Games)
 * [PGN Mentor](https://www.pgnmentor.com/files.html)
 * [Chess.com](https://www.chess.com)
+* [The Jerome Gambit](https://jeromegambit.blogspot.com)
 
 ## References
 * [Wikipedia - Portable Game Notation](https://en.wikipedia.org/wiki/Portable_Game_Notation)
