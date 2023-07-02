@@ -878,11 +878,23 @@ The games I chose with their testdata and endgames are as follows:<p>
 
    * Fool's mate - **Checkmate in 2 moves!**
    * *The Output*  
-     ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/6e9a5b88-3da4-4bd2-b4bc-65af00c4e99f)
+	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/94704229-8084-4045-ba14-9183711a1c1a)
+```
+Computer moves d8-h4 Piece: Queen
+You are in check
+Checkmate!! I Win!
+The moves of this Chess Game are as follows:
 
+1. f2f3 e7e5 2. g2g4 Qd8h4# 0-1
+```
+----
    * Joseph Henry Blackburne's Gambit
    * * *The Output*  
      ![image]
+```
+1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.Bxf7+ Kxf7 5.Nxe5+ Nxe5 6.Qh5+ g6 7.Qxe5 d6 8.Qxh8 Qh4 9.0-0 Nf6 10.c3 Ng4 
+11.h3 Bxf2+ 12.Kh1 Bf5 13.Qxa8 Qxh3+ 14.gxh3 Bxe4 {mate}
+```
    * **The Game of the Century** - Donald Byrne vs Robert Fischer
    * *The Output*  
      ![image]
