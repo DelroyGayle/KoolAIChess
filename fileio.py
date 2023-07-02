@@ -1,7 +1,6 @@
 """
 fileio.py
-For testing purposes I decided to read Chess moves
-from an input file
+For testing purposes Chess moves are read from an input file
 So this file contains all the routines related to reading chess moves
 from a file and their validation.
 """
@@ -444,9 +443,7 @@ def parse_chess_move():
     # EIGHT REGEXPS
 
     """
-    7)
-    A)
-    print("NO7>> " + Game.input_stream)  # todo
+    1)
 
     *** NON-AMBIGUOUS LONG NOTATION SHOWING PIECE
     & COORDINATES OF BOTH PIECES ***
@@ -466,8 +463,7 @@ def parse_chess_move():
         return True  # Indicate success
 
     """
-    6)
-    B)
+    2)
 
     *** HANDLE MOVES/CAPTURES REGARDING PIECES DETERMINED
     BY BOTH two character square coordinates ***
@@ -485,8 +481,7 @@ def parse_chess_move():
         return True  # Indicate success
 
     """
-    1)
-    C)
+    3)
 
     *** HANDLE e4 Ng2 ***
     Note: This program does NOT support En Passant captures of the form EG d6
@@ -503,8 +498,7 @@ def parse_chess_move():
         return True  # Indicate success
 
     """
-    2)
-    D)
+    4)
 
     *** HANDLE PAWN CAPTURES USING 'file' EG exd4 ***
     EG exd4
@@ -521,8 +515,7 @@ def parse_chess_move():
         return True  # Indicate success
 
     """
-    3)
-    E)
+    5)
 
     *** HANDLE CAPTURES REGARDING OTHER PIECES EG Qxd4 ***
     No possibility of an En Passant move in this format
@@ -539,8 +532,7 @@ def parse_chess_move():
         return True  # Indicate success
 
     """
-    4)
-    F)
+    6)
 
     *** HANDLE MOVES/CAPTURES REGARDING PIECES DETERMINED BY THEIR 'file' ***
     EG Nge2  - THE FILE BEING 'g'
@@ -560,8 +552,7 @@ def parse_chess_move():
         return True  # Indicate success
 
     """
-    5)
-    G)
+    7)
 
     *** HANDLE MOVES/CAPTURES REGARDING PIECES DETERMINED BY THEIR 'rank' ***
     EG N2d4  - THE RANK BEING '2'
@@ -889,19 +880,19 @@ def determine_move_both_file_rank(chess):
 
     https://en.wikipedia.org/wiki/Algebraic_notation_(chess)
 
-    Therefore, conversion is needed to convert SAN chess moves into
+    Therefore, conversion takes place. In order to convert SAN chess moves into
     Long Algebraic Notation (LAN) so that the origin and target coordinates
     can be used by this program to interpret the chess move.
 
     Therefore:
     Determine the full chess move, both file and rank
-    For example, change 'e4' to 'e2e4'; change 'Nf3' to 'g1f3'
-    This is needed in order for this program to play the move
+    For example, change 'e4' to 'e2e4'; change 'Nf3' to 'g1f3'; etc
+    This is needed in order for this program to play the move.
 
     Game.chess_move_tuple consists of (piece, source, target)
 
     Note: If the resultant move that has been read
-          from the input file is an en passant move
+          from the input file is an en passant move.
           Then this move is performed 'at this stage'
           within the functionality of 'determine_move_both_file_rank'
     """
@@ -930,8 +921,7 @@ def determine_move_both_file_rank(chess):
         which turned out to be illegal
 
         3) Otherwise the move was not an en passant move at all
-        Proceed with determining the full chess move
-        # TODO
+        Proceed with determining the full chess move, both file and rank
         """
 
         if result:
@@ -1001,13 +991,12 @@ def handle_move_text(chess):
     if Game.move_type == constants.CASTLING_MOVE:
         return
 
-    # TODO
     # Determine the full chess move, both file and rank
     # Note: If the resultant move is an en passant move
     #       Then this move is performed at this stage
     #       within the functionality of 'determine_move_both_file_rank'
 
-    #       Game.en_passant_status is:
+    #       Game.en_passant_status would be:
     #           set to 'constants.VALID' for a valid en passant move
     #           set to 'constants.INVALID' for an illegal en passant move
     #           set to 'constants.NOVALUE' for a non-en-passant move
@@ -1027,8 +1016,8 @@ def fetch_chess_move_from_file(chess):
 
     # Must be the movetext section.
     # The movetext section is composed of chess moves, move number indications,
-    #                                     comments,
-    # optional annotations, and a single concluding game termination marker.
+    # comments, optional annotations
+    # and a single concluding game termination marker.
 
     # is it "1-0" (White wins), "0-1" (Black wins),
     # "1/2-1/2" (drawn game), OR "*"
@@ -1042,7 +1031,7 @@ def fetch_chess_move_from_file(chess):
 def handle_player_move_from_inputfile(chess,
                                       from_file, from_rank, to_file, to_rank):
     """
-    For testing purposes I read Chess moves from an input file
+    For testing purposes Chess moves are read from an input file
     Therefore, if this option is ON
     Fetch the Player's next move from the input file's stream
     """
@@ -1051,7 +1040,7 @@ def handle_player_move_from_inputfile(chess,
     do_next = "pass"
     if not Game.reading_game_file:
         # No File Handling. Fetch the chess move from the user
-        # from the keyboard
+        # from the keyboard i.e. 'pass'
         return do_next
 
     # File Input ... Continue
@@ -1068,7 +1057,7 @@ def handle_player_move_from_inputfile(chess,
     # From this point, fetch user's input from keyboard
 
     if not Game.reading_game_file:
-        sleep(constants.SLEEP_VALUE)
+        sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
         return do_next  # 'pass'
 
     # Was a castling move read from the file? If so, process it
@@ -1079,15 +1068,19 @@ def handle_player_move_from_inputfile(chess,
             # The Castling that was read from the input file was invalid!
             # 'perform_castling() redisplays the Board
             # and displays the appropriate error messaging
+            # Pause the computer so that the Player can read it
             # No further moves are read from the input file;
             # rather fetch moves from the user
             e.is_error_from_input_file()
             print()
+            sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
             do_next = "continue"
             return do_next
 
-        # The Castling that was read from the input file was valid!
+        # The Castling Move that was read from the input file was valid!
         m.castling_move_was_valid(chess)
+        # Pause the computer so that the Player can read the move
+        sleep(constants.SLEEP_VALUE)
         do_next = "return"
         return do_next
 
@@ -1095,11 +1088,25 @@ def handle_player_move_from_inputfile(chess,
     return do_next
 
 
+def pause_for_display():
+    """
+    Pause the computer so that the Player can read the output
+    """
+    if Game.it_is_checkmate:
+        # Messaging already displayed and Paused
+        return
+        
+    if Game.reading_game_file:
+        sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
+    else:
+        sleep(constants.SLEEP_VALUE)
+
+
 def handle_computer_move_from_inputfile(chess,
                                         from_file, from_rank,
                                         to_file, to_rank):
     """
-    For testing purposes I read Chess moves from an input file
+    For testing purposes Chess moves are read from an input file
     Therefore, if this option is ON
     Fetch the Computer's next move from the input file's stream
     The Chess Move being read from the input file always has priority
@@ -1114,13 +1121,13 @@ def handle_computer_move_from_inputfile(chess,
     fetch_chess_move_from_file(chess)
 
     # Was there a file input issue?
-    # Appropriate error messaging has been displayed
+    # If so, appropriate error messaging has been displayed
     # Pause the computer so that the Player can read it
     # Use the values that were previously generated by 'evaluate'
     # i.e. from_file, from_rank, to_file, to_rank
 
     if not Game.reading_game_file:
-        sleep(constants.SLEEP_VALUE)
+        sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
         return (False, from_file, from_rank, to_file, to_rank)
 
     # No file input issue ... Continue
@@ -1132,6 +1139,7 @@ def handle_computer_move_from_inputfile(chess,
             # The Castling that was read from the input file was invalid!
             # 'perform_castling() redisplays the Board
             # and displays the appropriate error messaging
+            # Pause the computer so that the Player can read it
             # No further moves are read from the input file;
             # rather fetch moves from the user
             print("Computer from this point onwards "
@@ -1152,8 +1160,10 @@ def handle_computer_move_from_inputfile(chess,
             # Ensure that previous values for 'Computer' have been reset
 
             m.reset_2squares_pawn_positions(constants.COMPUTER)
-            finalise_computer_move(chess)
+            finalise_computer_move(chess, True)
+            pause_for_display()
             computer_move_finalised = True
+
             return (computer_move_finalised,
                     from_file, from_rank, to_file, to_rank)
 
@@ -1163,6 +1173,7 @@ def handle_computer_move_from_inputfile(chess,
         # The En Passant that was read from the input file was invalid!
         # 'perform_en_passant() redisplays the Board
         # and displays the appropriate error messaging
+        # Pause the computer so that the Player can read it
         print("Computer from this point onwards "
               "will now generate its own moves")
         print()
@@ -1190,7 +1201,8 @@ def handle_computer_move_from_inputfile(chess,
                                                 Game.new_to_rank,
                                                 constants.PAWN_VALUE)
 
-        finalise_computer_move(chess)
+        finalise_computer_move(chess, False)
+        pause_for_display()
         computer_move_finalised = True
         return (computer_move_finalised,
                 None, None, None, None)

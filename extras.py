@@ -560,7 +560,7 @@ def test_if_input_is_castling(chess, input_string):
     input_string = input_string.upper()
     #      r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))\Z"
     if not constants.castling_keyboard_pattern.match(input_string):
-        # No Castling move. Determine what this chess move is
+        # Not a Castling move. Determine what this chess move is
         return do_next
 
     Game.general_string_result = input_string
@@ -867,19 +867,25 @@ def is_it_checkmate(chess, who_are_you):
     return True
 
 
-def finalise_computer_move(chess):
+def finalise_computer_move(chess, it_is_a_castling_move):
     """
     Now that the Computer's move has been performed
     Output the chess move to the output stream
     Determine whether the Computer's move has placed the Player in Check
     If so, determine to see if the Computer has won
     That is, is it Checkmate?
+
+    If this is an En Passant move
+    or if this is a Castling move
+    there is no need to display the move
+    This has already been done
+
+    Game.en_passant_status != constants.VALID
+    indicates a non-en-passant Chess Move
     """
 
-    # If this is an En Passant move,
-    # there is no need to display the move
-    # This has already been done
-    if Game.en_passant_status != constants.VALID:
+    if (Game.en_passant_status != constants.VALID
+       and not it_is_a_castling_move):
         # Display the Computer's move
         chess.display(Game.current_print_string)
 
@@ -893,7 +899,7 @@ def finalise_computer_move(chess):
             Game.promotion_message = ""  # reset
 
         # If reading from a file
-        # Pause the computer so that the Player can read it
+        # Pause the computer so that the Player can read the output
         if Game.reading_game_file:
             sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
 
@@ -922,4 +928,3 @@ def finalise_computer_move(chess):
 
     # Otherwise output the chess move to the output stream
     append_to_output_stream(Game.output_chess_move + constants.SPACE)
-    print()

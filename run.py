@@ -480,7 +480,7 @@ def process_computer_move(chess, from_file, from_rank, to_file, to_rank):
         # there is no processing of Computer Moves
         Game.player_first_move = False
         return
-
+    
     # From this point onwards, process the Computer's move
 
     # king on king end game?
@@ -518,7 +518,7 @@ def process_computer_move(chess, from_file, from_rank, to_file, to_rank):
     #  or if it is not a 'finalised' computer move)
     if not computer_move_finalised:
         execute_computer_move(chess, from_file, from_rank, to_file, to_rank)
-        finalise_computer_move(chess)
+        finalise_computer_move(chess, False)
 
     return
 
@@ -533,7 +533,7 @@ def finalise_player_move(chess, it_is_a_castling_move,
     Increment the move count (if not reading from a file)
     Display the chess move to the Player
     Output the chess move to the output stream
-    Determine whether the Computer is in Check
+    Determine whether the Player's move has placed the Computer in Check
     If so, determine to see if the Player has won
     That is, is it Checkmate?
     """
@@ -572,18 +572,6 @@ def finalise_player_move(chess, it_is_a_castling_move,
             print(Game.promotion_message)
             Game.promotion_message = ""  # reset
 
-            # input("PLAYER TAKEN/2") TODO
-    # input("CHECK - SHOULD BE WHITE1> ") # TODO
-
-    # # If an en passant move has been performed,
-    # # the Check test has already been done - no need to repeat it
-    # if Game.en_passant_status == constants.VALID:
-    #     # Then output the chess move to the output stream
-    #     e.append_to_output_stream(Game.output_chess_move + constants.SPACE)
-    #     print("EP VALID")
-    #     input(Game.output_chess_move) # TODO
-    #     return
-
     # Now that the Player has played, see if the Computer is in Check
     check_flag = in_check(chess, constants.COMPUTER)
     if check_flag:
@@ -609,39 +597,6 @@ def finalise_player_move(chess, it_is_a_castling_move,
     e.append_to_output_stream(Game.output_chess_move + constants.SPACE)
 
 
-# TODO
-def REMOVE_handle_castling_input(chess, input_string):
-    """
-    *** CASTLING ***
-    This is denoted by using capital 'O'
-    that is O-O and O-O-O
-    It is not PGN notation to use ZEROS
-    However will cater for 0-0 and 0-0-0
-    """
-
-    # Default: 'pass' as in Python i.e. NOP
-    do_next = "pass"
-    input_string = input_string.upper()
-    if not constants.castling_keyboard_pattern.match(input_string):
-        # r"\A((O-O-O)|(O-O)|(0-0-0)|(0-0))\Z"
-        # No Castling move. Determine what this chess move is
-        return do_next
-
-    Game.general_string_result = input_string
-    just_performed_castling = m.perform_castling(chess, constants.PLAYER)
-    if not just_performed_castling:
-        # This Castling move is invalid!
-        # 'perform_castling() redisplays the Board
-        # and displays the appropriate error messaging
-        do_next = "continue"
-        return do_next
-
-    # The Castling move was valid!
-    m.castling_move_was_valid(chess)
-    do_next = "return"
-    return do_next
-
-
 def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
     """
     Input Validation of the Player's Move
@@ -656,8 +611,6 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
     taken = None
 
     while True:
-
-        # print() TODO
 
         # Are the moves being read from the input game file?
         # If so, fetch the next move from there
@@ -675,12 +628,18 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
                                                       from_file, from_rank,
                                                       to_file, to_rank)
         if do_next == "return":
+            # Valid Castling Move read from file
             return
         elif do_next == "continue":
+            # Invalid Chess Move read from file
             continue
         # else do_next is "pass"
+        # which means either
+        # 1) A Valid Chess Move was read from file or
+        # 2) Not reading from input file at all i.e. fetch move from keyboard
 
         # *** EN PASSANT ***
+        # In the case of No. 1)
         # At this point, a chess move has successfully been read and parsed
         # from the input game file
         # Was this chess move, an en passant move?
@@ -692,16 +651,18 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
                            constants.PAWN_LETTER,
                            constants.PAWN_VALUE)
         if do_next == "return":
-            # The en passant move was valid and it has been performed
+            # The en passant move read from file
+            # was valid and it has been performed
             return
         elif do_next == "continue":
-            # The en passant move was invalid!
+            # The en passant move read from file was invalid!
             continue
         # else do_next is "pass"
-        # It was not an en passant move
+        # It was not an en passant move at all
         # Continue
 
         if not Game.reading_game_file:
+            # In the case of No. 2)
             # fetch the next move from the player from the keyboard
             (do_next, lower_string) = e.handle_player_move_from_keyboard(chess)
             if do_next == "return":
@@ -719,12 +680,13 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
             print(lower_string)  # todo
 
         else:
+            # In the case of No. 1)
             # If the move was read from the input file
             # populate the relevant values
             # Note: although it is fair to assume that ALL the Chess Moves
             # in the input file are legal
-            # Nevertheless the input file's moves will be validated
-            # as if the user has entered them
+            # Nevertheless the read input file's moves will be validated
+            # as if the user has entered them from the keyboard
             from_file = Game.new_from_file
             from_rank = Game.new_from_rank
             to_file = Game.new_to_file
@@ -763,13 +725,16 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
                                                     from_file, from_rank,
                                                     to_file, to_rank)
         if do_next == "return":
+            # Valid En Passant Move
             # Inform Player that Kool AI is thinking!
             print("I am evaluating my next move...")
             return
         elif do_next == "continue":
+            # Invalid En Passant Move
             continue
+
         # else do_next is "pass"
-        # It was not an en passant move
+        # That is, the Player's move was not an En Passant Move at all
 
         # Check legality of Player's move
         # If legal, the move is played
@@ -785,11 +750,16 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
             else:
                 chess.display(print_string)
                 print("Illegal move because it is Checkmate!")
+
+            # Pause the computer so that the Player can read the message
+            sleep(constants.SLEEP_VALUE)
             continue
 
         elif illegal:
             chess.display(print_string)
             print("Illegal move")
+            # Pause the computer so that the Player can read the message
+            sleep(constants.SLEEP_VALUE)
             continue
 
         # Has the king been moved?
@@ -814,21 +784,15 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
 
         # Valid move has been played - show the updated board
         # Display the Player's Move
-
-        # REMOVE TODO
-        #chess.display(print_string)
-        #if (Game.show_taken_message):
-            # Show what piece the Player took
-        #    print(Game.show_taken_message)
-        # CF3 TODO
-
         # Pause so that the Player
         # can see the description of the move that the Player chose
         # Inform Player that Kool AI is thinking!
         if not Game.reading_game_file:
             print("I am evaluating my next move...")
+            sleep(constants.SLEEP_VALUE)
+        else:
+            sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
 
-        sleep(constants.SLEEP_VALUE)
         return
 
 
@@ -840,7 +804,6 @@ def play_2_moves(chess, from_file, from_rank, to_file, to_rank, result):
 
     process_computer_move(chess, from_file, from_rank, to_file, to_rank)
     # input("GO") # TODO
-
     player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank)
     # input("GO/2") # TODO
 

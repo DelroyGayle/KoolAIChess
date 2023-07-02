@@ -39,8 +39,12 @@ def output_attacking_move(chess, who_are_you,
         return "Computer moves " + print_string
 
 
-# Reset previous values for the relevant colour
 def reset_2squares_pawn_positions(who_are_you):
+    """
+    These fields are used to record the position of 
+    a pawn that has made its initial advance of two squares
+    Reset these fields here for the relevant colour
+    """
     if who_are_you == constants.PLAYER:
         Game.player_pawn_2squares_advanced_file = constants.NOVALUE
         Game.player_pawn_2squares_advanced_rank = constants.NOVALUE
@@ -394,7 +398,6 @@ def calculate_new_file(file, number):
     Used for the Castling movement
     New file = Current file value + number
     EG h8 + -1 = g8; a8 + 2 = c8
-    Add the value of square[file + number, rank] is equal to 'test_value'
     """
 
     new_file = chr(ord(file) + number)
@@ -428,8 +431,8 @@ def restore_original_positions(chess, the_king, the_rook,
                                the_king_square, the_rook_square,
                                king_rook_rank, direction):
     """
-    After attempting a Castle move
-    Restore the king and rook to their original positions
+    After attempting a Castle move it turn out to be illegal
+    Therefore, restore the king and rook to their original positions
     """
 
     chess.board[the_king_square] = the_king
@@ -524,14 +527,12 @@ def check_castling_valid_part2(chess, who_are_you, which_castle_side,
                                    king_rook_rank, -rook_direction)
         return
 
-
 # This Castling move is valid
 # If evaluating, restore regardless
     if evaluating:
         restore_original_positions(chess, the_king, the_rook,
                                    the_king_square, the_rook_square,
                                    king_rook_rank, -rook_direction)
-        showboard()  # todo
 
     return True  # Successful Castling move
 
@@ -558,27 +559,26 @@ def check_if_castling_move_is_valid(chess, who_are_you, which_castle_side,
 
     if not check_castling_valid_part1(chess, who_are_you, which_castle_side,
                                       king_rook_rank):
-        print("FS1 FALSE")  # TODO
         return False
 
     if not check_castling_valid_part2(chess, who_are_you, which_castle_side,
                                       king_rook_rank, evaluating):
-        print("FS2 FALSE")  # TODO
         return False
 
+    # Valid Castling Move
     return True
 
 
-# At this point, Castling has been executed.
-# A post-examination of the move has been done to ensure
-# that the king in question is not in check
-# Therefore it is a legal Castling move - no need for any further checks
-# Record that Castling has been executed once
-# for either the player or the computer
-# Redisplay the Board
-# Display a message
-
 def indicate_castling_done(chess, who_are_you, which_side_castled):
+    """
+    At this point, Castling has been executed
+    A post-examination of the move has been done to ensure
+    that the king in question is not in check
+    Therefore it is a legal Castling move - no need for any further checks
+    Record that Castling has been executed once
+    for either the player or the computer
+    Redisplay the Board and Display a message
+    """
     if who_are_you == constants.PLAYER:
         Game.player_castled = True
         Game.player_king_moved = True
@@ -589,10 +589,8 @@ def indicate_castling_done(chess, who_are_you, which_side_castled):
             Game.player_queen_rook_moved = True
             chess.display("Player Castled Queenside O-O-O")
 
-# PRINT ' Player-wise - the blank line is printed here ' todo
         return
 
-# PRINT ' Computer-wise - the blank line is printed here ' todo
     Game.computer_castled = True
     Game.computer_king_moved = True
     if which_side_castled == constants.KINGSIDE:
@@ -666,7 +664,7 @@ def castling_move_was_valid(chess):
     # Increment the move count
     # Convert player's chess move for output
     # Output the chess move
-    # The Chessboard and move has already been displayed
+    # The Chessboard and chess move has already been displayed
     # There is no 'attacking_piece_letter' nor 'taken' for Castling moves
     finalise_player_move(chess, True)
 
@@ -714,7 +712,7 @@ def record_pawn_that_advanced_by2(chess, who_are_you,
 def indicate_en_passant_done(chess, who_are_you, from_file, from_rank,
                              to_file, to_rank):
     """
-    At this point, En Passant has been executed.
+    At this point, an En Passant move has been executed.
     A post-examination of the move has been done
     to ensure that the king in question is not in Check
     Therefore it is a legal En Passant move - no need for any further checks
@@ -735,6 +733,9 @@ def indicate_en_passant_done(chess, who_are_you, from_file, from_rank,
         Game.promotion_message = ""  # reset
 
     print()
+    # Pause the computer so that the Player can read the output
+    sleep(constants.SLEEP_VALUE)
+    # Update new coordinates
     Game.new_from_file = from_file
     Game.new_from_rank = from_rank
     Game.new_to_file = to_file
@@ -745,7 +746,7 @@ def indicate_en_passant_done(chess, who_are_you, from_file, from_rank,
 def perform_en_passant(chess, from_file, from_rank, to_file, to_rank,
                        display_chess_move):
     """
-    Chess move has been determined which matches an en passant move
+    Chess move has been match to be an en passant move
     Therefore, perform it
     """
     # Erase square of opponent pawn now vacated
@@ -927,8 +928,6 @@ def validate_player_en_passant_move(chess, from_file, from_rank,
                                                                to_rank)
     if is_it_an_en_passant_move:
         # Valid en passant move
-        # Pause the computer so that the Player can read the move
-        sleep(constants.SLEEP_VALUE)
         return True
 
     # Illegal En Passant Move
@@ -1023,7 +1022,7 @@ def handle_evaluated_castling_move(chess, computer_move_finalised):
     # Ensure that previous values for 'Computer' have been reset
 
     reset_2squares_pawn_positions(constants.COMPUTER)
-    finalise_computer_move(chess)
+    finalise_computer_move(chess, True)
     computer_move_finalised = True
     return computer_move_finalised
 
@@ -1032,7 +1031,7 @@ def finalise_en_passant_move_from_inputfile(chess,
                                             attacking_piece_letter,
                                             taken):
     """
-    For testing purposes I read Chess moves from an input file
+    For testing purposes Chess moves are read from an input file
     Therefore, if this option is ON
     Check whether the 'read move' was an en passant move
     that has been performed or attempted
@@ -1050,21 +1049,15 @@ def finalise_en_passant_move_from_inputfile(chess,
     if Game.en_passant_status == constants.VALID:
         """
         The En Passant move that was read from the input file was valid!
-        At this stage we know that no king nor rook has been moved;
-        neither has any pawns been advanced two squares
-        Nor can there be any promotions from this en passant move
+        Increment the move count
+        Determine whether the Computer is in Check
         Convert the en passant move in order to output it
         Add a 'x' to the output chess move if a piece was taken
         Then output the piece to the output file
+        Finalise using the new en passant coordinates Game.new_...
+        print_string N/A hence ""
         """
 
-        # setup_output_chess_move_add_promotion(constants.PAWN_LETTER,
-        #                               from_file, from_rank, to_file, to_rank,
-        #                                   constants.PAWN_VALUE)
-        # TODO - REMOVE ABOVE, THE TEST IS BELOW I.E. finalise_player_move
-
-        # Finalise using the new en passant coordinates Game.new_...
-        # print_string N/A hence ""
         finalise_player_move(chess, False,
                              Game.new_from_file,
                              Game.new_from_rank,
