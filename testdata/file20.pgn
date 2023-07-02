@@ -1,9 +1,16 @@
-{HIARCS 11.1 UCI - Rybka 2.3.1 32-bit 2008
-SOURCE: https://jeromegambit.blogspot.com/2009/10/king-in-peril-comment-reply.html}
-1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.Bxf7+ Kxf7 5.Nxe5+ Nxe5 6.d4 Qh4 7.0-0 Nf6 8.dxe5 Ng4 9.Qf3+ Ke8 
-10.Bf4 Rf8 11.Bg3 Rxf3 12.Bxh4 Rf7 13.Bg3 Bd4 14.Nc3 Kf8 15.Nb5 Bxe5 16.Bxe5 Nxe5 17.Nxc7 Rb8 18.Nb5 b6 19.a4 Bb7 
-20.Nd6 Rf4 21.f3 Ke7 22.Rfd1 Kf6 23.b4 Kg5 24.a5 b5 25.Nxb7 Rxb7 26.Rd5 Kf6 27.a6 Rb6 28.Ra5 Rc6 29.Raxb5 d6 
-30.Rb7 Rxa6 31.b5 Ra1+ 32.Kf2 Ke6 33.Rxg7 Ra2 34.Ke3 Rh4 35.Rc7 Rxh2 36.f4 Ra3+ 37.c3 Nf7 38.Rf5 Nh6 39.Rf8 d5 
-40.e5 Ng4+ 41.Kf3 Nxe5+ 42.fxe5 Kxe5 43.Re8+ Kf5 44.Rd8 Ke5 45.Rc5 Ra2 46.Rdxd5+ Ke6 47.Re5+ Kf6 48.Rf5+ Ke6 49.Rce5+ Kd6 
-50.c4 Kc7 51.c5 Rhxg2 52.Rf7+ Kd8 53.Rxh7 Rgb2 54.Rg5 Rf2+ 55.Ke4 Rfe2+ 56.Kd5 Ra1 57.Kc6 Rae1 58.Rd5+ Ke8 59.Rdd7 Rf2 
-60.Kc7 Rf7 61.Rhxf7 a5 62.Rh7 Re7 63.Rhxe7+ Kf8 64.Kd6 a4 65.Rd8#
+{[Event "Third Rosenwald Trophy"]
+[Date "1956.10.17"]
+[Result "0-1"]
+[White "Donald Byrne"]
+[Black "Robert James Fischer"]
+
+THE GAME OF THE CENTURY
+SOURCE: https://en.wikipedia.org/wiki/Algebraic_notation_(chess) 
+https://en.wikipedia.org/wiki/The_Game_of_the_Century_(chess) 
+}
+
+1. Nf3 Nf6 2. c4 g6 3. Nc3 Bg7 4. d4 O-O 5. Bf4 d5 6. Qb3 dxc4 7. Qxc4 c6 8. e4 Nbd7 9. Rd1 Nb6 10. Qc5 Bg4 
+11. Bg5 Na4 12. Qa3 Nxc3 13. bxc3 Nxe4 14. Bxe7 Qb6 15. Bc4 Nxc3 16. Bc5 Rfe8+ 17. Kf1 Be6 18. Bxb6 Bxc4+ 
+19. Kg1 Ne2+ 20. Kf1 Nxd4+ 21. Kg1 Ne2+ 22. Kf1 Nc3+ 23. Kg1 axb6 24. Qb4 Ra4 25. Qxb6 Nxd1 26. h3 Rxa2 27. Kh2 Nxf2 
+28. Re1 Rxe1 29. Qd8+ Bf8 30. Nxe1 Bd5 31. Nf3 Ne4 32. Qb8 b5 33. h4 h5 34. Ne5 Kg7 35. Kg1 Bc5+ 36. Kf1 Ng3+ 37. Ke1 Bb4+ 
+38. Kd1 Bb3+ 39. Kc1 Ne2+ 40. Kb1 Nc3+ 41. Kc1 Rc2# 0-1
