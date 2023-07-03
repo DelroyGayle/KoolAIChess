@@ -226,10 +226,36 @@ Seeing this is the case, *Kool AI* does a *further test to see whether it is Che
 In the above scenario, this is indeed the case. Therefore, *Kool AI* declares itself the Victor!<br>
 However, for reasons explained below, the Game **will continue until the Player resigns!**
 
-By the way, the above chessboard Checkmate configuration, is known in the Chess world, as<br>
+By the way, the above chessboard Checkmate configuration, is known in the Chess world, as
+
 **Fool's Mate - Checkmate in two moves! 1. f2f3 e7e5 2. g2g4 Qd8h4# 0-1**
 
 The Computer Chess algorithm as designed by *Dean Menezes is clever enough* to make these moves and to Checkmate the opponent.
+
+---
+### Pawn Promotion
+When it comes to Pawn Promotion, *Kool AI* solely promotes *its Pawns* to Queens.<br>The Player, however, has the option to promote the White's Pawn to another piece besides Queen.<br>
+Here is an example of Pawn Promotion - The Player's pawn as reached **c8**:  
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/b4b88f91-c750-46fe-9d11-75276cb044a1)  
+
+The user has the option to enter either *r for Rook, b for Bishop, n for Knight or q for Queen.*<br>
+Note: the default is Queen. So, the user can just hit *Enter!*<br>
+When the user enters their choice, the Pawn in question is promoted to the requested piece; for example:
+     ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/c8f06bec-db47-4e81-a88a-67d9e4e170e5)
+
+In the above scenario, the result of the promotion of the Player's Pawn to Queen resulted in a win for *the Player!*<br>
+Hence the following response:
+```
+Checking Player move for b7-c8 Piece: Pawn
+Player took my Bishop
+Pawn promoted to Queen
+I am in Check
+Checkmate!! You Win!
+The moves of this Chess Game are as follows:
+
+1. e2e4 d7d5 2. e4xd5 Ng8f6 3. Bf1b5+ c7c6 4. d5xc6 Qd8b6 5. c6xb7+
+Qb6xb5 6. b7xc8=Q# 1-0
+```
 
 ------
 
