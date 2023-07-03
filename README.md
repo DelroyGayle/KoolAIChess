@@ -16,7 +16,7 @@ In my search for a suitable algorithm I came across this [476-line BASIC PROGRAM
 Let me reiterate: the basis of my project is a Chess Program written in<br>**[BASIC](https://en.wikipedia.org/wiki/BASIC) (Beginners' All-purpose Symbolic Instruction Code)** which is available [here](http://www.petesqbsite.com/sections/express/issue23/Tut_QB_Chess.txt).
 
 I found it amazing how Denezes has written such a highly interesting chess playing program in under 500 lines.<br>
-My goal then is to convert Denezes' BASIC program to Python; moreover, to add ***castling and en passant*** chess moves so that the user can play a complete game of Chess against their Computer opponent, namely, ***Kool AI***.
+My goal then is to convert Denezes' BASIC program to Python; moreover, to add ***[castling](https://en.wikipedia.org/wiki/Castling) and [en passant](https://en.wikipedia.org/wiki/En_passant)*** chess moves so that the user can play a complete game of Chess against their Computer opponent, namely, ***Kool AI***.
 
 ## Chess
 
@@ -309,7 +309,7 @@ Nonetheless, for more information please see the following Wikipedia articles: [
 * To speed up this process, the constant **MAXLEVEL which is currently equal to 5**, can be lowered to 4 or 3.<br>Although, this will indeed quicken the Computer's response, however, it will play a *dumber* game!
 
 ## Future Features
-* Attempt to speed up the program by using [itertools](https://docs.python.org/3/library/itertools.html)
+* Attempt to speed up the program by using a libary such as [itertools](https://docs.python.org/3/library/itertools.html)
 * The ability to switch sides
 * Undo/Redo ability when playing moves
 * Saving board positions during the game
@@ -448,10 +448,10 @@ Therefore, I split it up into different modules:
 * **constants.py** - Holds all the major constants used in this program
 * **extras.py** - I moved the routines that manage how piece moves are generated - Pawn/Rook/Knight/Bishop/Queen/King - into this module<br>
 Also any routines that caused *import circular issues* with the Python interpreter are placed in extras.py
-* **fileio.py** - This program can *essentially perform Chess-Playing Automation* by playing chess moves read from an *input.pgn* file<br>
+* **fileio.py** - This program can *essentially perform Chess-Playing Automation* by playing chess moves read from the *input.pgn* file<br>
 All routines related to this process are placed in fileio.py<br>(see [TESTING.md](https://github.com/DelroyGayle/KoolAIChess/blob/main/TESTING.md) for more details)
 * **game.py** - The *Game Class* and its related routines
-* **moves.py** - The functionality for chess moves: *Castling and En Passant*
+* **moves.py** - The functionality for the chess moves: *[Castling](https://en.wikipedia.org/wiki/Castling) and [En Passant](https://en.wikipedia.org/wiki/En_passant)*
 * **piece.py** - The *Game Piece* and its related routines
 * **run.py** - the main module of the program
 
@@ -581,8 +581,7 @@ The project is deployed on Heroku. These are the steps in order to deploy on Her
 
 * os - I use this library for the *clear* function in order to clear the console before displaying an updated chessboard.
 * re - I use *regular expressions* in order to validate user input of chess moves.
-* time - I use the *sleep* function to cause the program to delay for a few seconds.
-* copy TODO
+* time - I use the *sleep* function to cause the program to delay for a few seconds, in order so that the user can see the updated chessboard.
 
 ### Other tools
 
