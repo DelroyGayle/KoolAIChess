@@ -236,7 +236,7 @@ The Computer Chess algorithm as designed by *Dean Menezes is clever enough* to m
 ### Resignation
 Here is an example of Resignation:
 
-![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/d7bf8bf7-83cc-41ab-b3fd-f5ca4be4e07e)
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/394a8189-1cd2-4227-b9a2-1727683ae128)
 
 Resignation in Chess is the player conceding the game to their opponent, that is, to acknowledge defeat.<br>
 Resignation immediately ends the game.<br>
@@ -244,7 +244,8 @@ To resign, the Player has to enter **either R or r to resign.**
 Please note however:
 1.  Kool AI's algorithm will score each of **its own** potential moves before its play and if the score of a move is *too low, Kool AI* will resign.
 2.  Unfortunately, the program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the human user to end the game by *entering 'r' to resign*.
-3. Also, I am a novice chess player. So in writing this program, there is the distinct possibility that my program may declare **Checkmate** against the human opponent when in fact, it is not!<br>(Personally, throughout my testing I have not come across such a scenario!)<br>
+3.  However, when scoring its own move, if the score is below the constant **STALEMATE_THRESHOLD_SCORE which is equal to -2500**;<br>Kool AI will deem that it cannot possibly win the game; therefore, *Kool AI will resign!*
+4. I am a novice chess player. So in writing this program, there is the distinct possibility that my program may declare **Checkmate** against the human opponent when in fact, it is not!<br>(Although personally, throughout my testing I have not come across such a scenario!)<br>
 Therefore, in considering the possibility of such a scenario; even after declaring **Checkmate**; I leave it up to the user to resign.<br>That is, this program does **not** force the end of the game - *the player can play on!*
 
 ------
@@ -265,8 +266,9 @@ Nonetheless, for more information please see the following Wikipedia articles: [
 ------
 
 ### Resignation
-When either the Player or the Computer resigns, all the moves played are output to the screen.<br>
-(They are also outputted to *output.pgn* if applicable - see )
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/394a8189-1cd2-4227-b9a2-1727683ae128)<p>
+When either the Player or the Computer resigns, **all the moves played are output to the screen.**<br>
+(They are also outputted to *output.pgn for testing purposes only!* See [TESTING.md](https://github.com/DelroyGayle/KoolAIChess/blob/main/TESTING.md) for details.)<br>
 The moves are outputted in **Long algebraic notation (LAN)**<p> 
 To quote [Wikipedia](https://en.wikipedia.org/wiki/Algebraic_notation_(chess)), 
    > **In long algebraic notation (LAN), also known as full/fully expanded algebraic notation,<br> 
@@ -280,8 +282,11 @@ To quote [Wikipedia](https://en.wikipedia.org/wiki/Algebraic_notation_(chess)),
 ## Limitations
 * When it comes to Pawn Promotion, *Kool AI* solely promotes its Pawns to Queens.<br>Nonetheless, the Player is given the option to promote the White's Pawn to another piece besides Queen.
 * The program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the Player to end the game by *entering 'r' to resign*.<br>*Kool AI* will designate such an ending as a Draw i.e. *1/2-1/2*.
+* Unfortunately, this program is slow. Sometimes, it takes over 20 seconds, for *Kool AI* to respond with its move!
+* To speed up this process, the constant **MAXLEVEL which is currently equal to 5**, can be lowered to 4 or 3.<br>Although, this will indeed quicken the Computer's response, however, it will play a *dumber* game!
 
 ## Future Features
+* Attempt to speed up the program by using [itertools](https://docs.python.org/3/library/itertools.html)
 * The ability to switch sides
 * Undo/Redo ability when playing moves
 * Saving board positions during the game
