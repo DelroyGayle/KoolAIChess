@@ -217,6 +217,12 @@ So, in the above scenario, the Knight move does none of the above, **therefore, 
 ------
 
 ### Checkmate
+
+When Checkmate occurs, this signifies **a win**.<br>
+The game is won by checkmating the opponent's king, i.e. threatening it with inescapable capture.<br>
+The program will print a message declaring the victor and **all the moves played are output to the screen.**<br>
+(They are also outputted to *output.pgn for testing purposes only!* See [TESTING.md](https://github.com/DelroyGayle/KoolAIChess/blob/main/TESTING.md) for details.)<br>
+The moves are outputted in **Long algebraic notation (LAN)** (See *Resignation* below)<p> 
 Here is an example of Checkmate:
 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/5fd730fc-8748-42f0-bff8-80f350405743)
@@ -231,6 +237,36 @@ By the way, the above chessboard Checkmate configuration, is known in the Chess 
 **Fool's Mate - Checkmate in two moves! 1. f2f3 e7e5 2. g2g4 Qd8h4# 0-1**
 
 The Computer Chess algorithm as designed by *Dean Menezes is clever enough* to make these moves and to Checkmate the opponent.
+
+------
+
+### Resignation
+Here is an example of Resignation:
+
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/394a8189-1cd2-4227-b9a2-1727683ae128)
+
+Resignation in Chess is the player conceding the game to their opponent, that is, to acknowledge defeat.<br>
+Resignation immediately ends the game.<br>
+To resign, the Player has to enter **either R or r to resign.**<br>
+Please note however:
+1.  Kool AI's algorithm will score each of **its own** potential moves before its play and if the score of a move is *too low, Kool AI* will resign.<br>That is, if the score is below the constant **STALEMATE_THRESHOLD_SCORE which is equal to -2500**;<br>*Kool AI* will deem that it cannot possibly win the game; therefore, *Kool AI will resign!*
+2.  Unfortunately, the program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the human user to end the game by *entering 'r' to resign*.
+3.  I am a novice chess player. So in writing this program, there is the distinct possibility that my program may declare **Checkmate** against the human opponent when in fact, it is not! (Although personally, throughout my testing I have not come across such a scenario!)<br>
+Therefore, in considering the possibility of such a scenario; even after declaring **Checkmate**; I leave it up to the user to resign.<br>That is, this program does **not** force the end of the game - *the player can play on!*  
+
+
+When either the Player or the Computer resigns or if *Kool AI checkmates its opponent*; **all the moves played are output to the screen.**<br>
+(They are also outputted to *output.pgn for testing purposes only!* See [TESTING.md](https://github.com/DelroyGayle/KoolAIChess/blob/main/TESTING.md) for details.)<br>
+The moves are outputted in **Long algebraic notation (LAN)**<p> 
+To quote [Wikipedia](https://en.wikipedia.org/wiki/Algebraic_notation_(chess)), 
+   > **In long algebraic notation (LAN), also known as full/fully expanded algebraic notation,<br> 
+   both the starting and ending squares are specified**,<br>
+   for example: e2e4. Sometimes these are separated by a hyphen, e.g. Nb1-c3, while captures are indicated by an "x", e.g. Rd3xd7.<br>
+   Long algebraic notation takes more space and is no longer commonly used in print; however, it has the advantage of clarity. 
+   
+   Therefore, this program produces the output of all moves in LAN *without hyphens* so that an user such as I,<br> can read the moves clearly without too much difficulty;<br>that is,
+   *what moves were made from what square to which square, and what piece was moved.*<p>
+   The Player can then copy these moves from the console terminal for further study!
 
 ---
 ### Pawn Promotion
@@ -253,26 +289,9 @@ Here is the full response:
 
 ------
 
-### Resignation
-Here is an example of Resignation:
-
-![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/394a8189-1cd2-4227-b9a2-1727683ae128)
-
-Resignation in Chess is the player conceding the game to their opponent, that is, to acknowledge defeat.<br>
-Resignation immediately ends the game.<br>
-To resign, the Player has to enter **either R or r to resign.**
-Please note however:
-1.  Kool AI's algorithm will score each of **its own** potential moves before its play and if the score of a move is *too low, Kool AI* will resign.
-2.  Unfortunately, the program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the human user to end the game by *entering 'r' to resign*.
-3.  However, when scoring its own move, if the score is below the constant **STALEMATE_THRESHOLD_SCORE which is equal to -2500**;<br>Kool AI will deem that it cannot possibly win the game; therefore, *Kool AI will resign!*
-4. I am a novice chess player. So in writing this program, there is the distinct possibility that my program may declare **Checkmate** against the human opponent when in fact, it is not!<br>(Although personally, throughout my testing I have not come across such a scenario!)<br>
-Therefore, in considering the possibility of such a scenario; even after declaring **Checkmate**; I leave it up to the user to resign.<br>That is, this program does **not** force the end of the game - *the player can play on!*
-
-------
-
 ### Minimax/Negamax
-The Computer Chess algorithm as designed by *Dean Menezes* uses what is known as **negamax** to determine its next move.
-To quote Rod Bird as he describes the *evaluate* function:
+The Computer Chess algorithm as designed by *Dean Menezes* uses what is known as **negamax** to determine its next move.  
+To quote Rod Bird as he describes the *evaluate* function:  
 > *This function checks all squares for players to move then recursively test plays.<br>
   It plays its own move then plays the opponent's best move, recursively over four moves.<br>
   So getting the potential net worth of each moveable player on the board.<br>
@@ -283,22 +302,6 @@ To quote Rod Bird as he describes the *evaluate* function:
 I will not pretend that I understand the mathematics involved. I can only verify that it indeed works!<br>
 Nonetheless, for more information please see the following Wikipedia articles: [minimax](https://en.wikipedia.org/wiki/Minimax) and [negamax](https://en.wikipedia.org/wiki/Negamax).
 
-------
-
-### Resignation
-![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/394a8189-1cd2-4227-b9a2-1727683ae128)<p>
-When either the Player or the Computer resigns, **all the moves played are output to the screen.**<br>
-(They are also outputted to *output.pgn for testing purposes only!* See [TESTING.md](https://github.com/DelroyGayle/KoolAIChess/blob/main/TESTING.md) for details.)<br>
-The moves are outputted in **Long algebraic notation (LAN)**<p> 
-To quote [Wikipedia](https://en.wikipedia.org/wiki/Algebraic_notation_(chess)), 
-   > **In long algebraic notation (LAN), also known as full/fully expanded algebraic notation,<br> 
-   both the starting and ending squares are specified**,<br>
-   for example: e2e4. Sometimes these are separated by a hyphen, e.g. Nb1-c3, while captures are indicated by an "x", e.g. Rd3xd7.<br>
-   Long algebraic notation takes more space and is no longer commonly used in print; however, it has the advantage of clarity. 
-   
-   Therefore, this program produces the output of all moves in LAN *without hyphens* so that an user such as I,<br> can read the moves clearly without too much difficulty;<br>that is,
-   *what moves were made from what square to which square, and what piece was moved.*<p>
-   The Player can then copy these moves from the console terminal for further study!
 ## Limitations
 * When it comes to Pawn Promotion, *Kool AI* solely promotes its Pawns to Queens.<br>Nonetheless, the Player is given the option to promote the White's Pawn to another piece besides Queen.
 * The program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the Player to end the game by *entering 'r' to resign*.<br>*Kool AI* will designate such an ending as a Draw i.e. *1/2-1/2*.
