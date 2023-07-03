@@ -240,22 +240,16 @@ Here is an example of Pawn Promotion - The Player's pawn as reached **c8**:
 
 The user has the option to enter either *r for Rook, b for Bishop, n for Knight or q for Queen.*<br>
 Note: the default is Queen. So, the user can just hit *Enter!*<br>
-When the user enters their choice, the Pawn in question is promoted to the requested piece; for example:
-     ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/c8f06bec-db47-4e81-a88a-67d9e4e170e5)
+When the user enters their choice, the Pawn in question is promoted to the requested piece.<br>
+A message will be printed **Pawn promoted to** *which ever piece was chosen.*<br>
+For example:  
+     ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/6a746c09-3418-49da-8ee1-db4dfc5b5412)
+
 
 In the above scenario, the result of the promotion of the Player's Pawn to Queen resulted in a win for *the Player!*<br>
-Hence the following response:
-```
-Checking Player move for b7-c8 Piece: Pawn
-Player took my Bishop
-Pawn promoted to Queen
-I am in Check
-Checkmate!! You Win!
-The moves of this Chess Game are as follows:
+Here is the full response:  
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/ffd7a43b-21ed-4716-b3d5-95bc16c9bcd6)
 
-1. e2e4 d7d5 2. e4xd5 Ng8f6 3. Bf1b5+ c7c6 4. d5xc6 Qd8b6 5. c6xb7+
-Qb6xb5 6. b7xc8=Q# 1-0
-```
 
 ------
 
