@@ -4,11 +4,11 @@
 
 I am a novice chess player. I simply do not know enough chess to ensure that my program works correctly in its playing of Chess.<p>
 **My Solution:**<br>There are thousands of recorded chess games on the internet, all recorded in *PGN/SAN notation*.<br>Therefore,
-* If I could get the program to *actually play the chess moves as read from a pgn file*;
-* then exactly the same chessboard configuration should appear after *playing the read moves*;
-* without any differences in the outcomes.
+* If I could get the program to *actually play the chess moves that are read from a pgn file*;
+* then exactly the same configuration of the chessboard should display after *the read moves have been played*,
+* with no differences in the result.
 * Neither should there be any error messages or conflicts coming from the program.
-* If any error messages or discrepancies in the outcomes occur,
+* If any error messages or discrepancies in the result occur,
 * then I know that there is a bug in the program that needs to be resolved.
 * This is the rationale behind my method of testing.
 
@@ -641,7 +641,7 @@ Therefore, confirming that  *captures **x** and checks **+*** do not interfere w
 
 -----
 
-18. **Ignore Annotations** - Test that user can *Castle Queenside*
+18. **Ignore Annotations**
 
 * Another test to ensure that comments and annotations do not interfere with the parsing of a pgn file
 * **Note: I made up the annotations (++ # =Q ) for these moves. They do not actually correspond to any of these moves.**
@@ -652,7 +652,9 @@ Therefore, confirming that  *captures **x** and checks **+*** do not interfere w
     
 * Run the program
 * All moves were played successfully without any issues.
-* *The Output*
+* *The Output*  
+  	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/9d1bab32-d76a-470e-beea-8334fcccf45c)
+
 ```
 Computer moves a5-b4 Piece: Pawn
 Computer took your Pawn
@@ -730,7 +732,7 @@ There will be no further input from 'input.pgn'
    * *The Output*  
      	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/d86da3f7-9a8e-459b-8886-a1f4440b1c8e)
 
-   * * Move No. 15 is displayed as outputted as f2f4 **e4xf3+**
+   * Move No. 15 is outputted as f2f4 **e4xf3+**
 ```
 Checkmate!! I Win!
 The moves of this Chess Game are as follows:
