@@ -520,7 +520,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
            
 	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/3abb6084-11e0-4601-8de6-c2190eb00230)
            
- * All moves were played successfully without any issues. In fact, identical to **Test 1.**
+ * All moves were played successfully without any issues. In fact, identical to **Test 12.**
  * As you can see, White's position of pieces are indeed **set up for (Kingside) Castling**
  * So, I entered **O-O**
 
@@ -617,20 +617,10 @@ Qe7e6 15. Bb5xd7+ Nf6xd7 16. Qb3b8+ 1-0
 
 * **Note the moves numbered 12. White's Move is Castling O-O-O**
 * Run the program
-* *The Output*
-TODO1
-```
-Checking Player move for b3-b8 Piece: Queen
-I am in Check
-Kool AI resigns!
-The moves of this Chess Game are as follows:
+* *The Output*  
+	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/acab1381-5107-45b6-ad8d-9090cbba2988)
 
-1. e2e4 e7e5 2. Ng1f3 d7d6 3. d2d4 Bc8g4 4. d4xe5 Bg4xf3 5. Qd1xf3 d6xe5
-6. Bf1c4 Ng8f6 7. Qf3b3 Qd8e7 8. Nb1c3 c7c6 9. Bc1g5 b7b5 10. Nc3xb5
-c6xb5 11. Bc4xb5+ Nb8d7 12. O-O-O Ra8d8 13. Rd1xd7 Rd8xd7 14. Rh1d1
-Qe7e6 15. Bb5xd7+ Nf6xd7 16. Qb3b8+ 1-0
-```           
-           
+         
 Note:
 1. The difference is that KoolAI resigned at **Move 16** forseeing that it could not win this game.
 2. When you compare the contents of file08.pgn with the above output you will see that<br>
@@ -669,15 +659,12 @@ Computer took your Pawn
 * **h8h7** in this game is an illegal move since there would be a piece occupying **h7**
     
 * Run the program
-* *The Output*
-TODO2
-```
-Legal Chess Move Expected From Input File. Instead h8h7 6.
-There will be no further input from 'input.pgn'
-```
+* *The Output*  
+	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/099bf342-890f-45fa-8490-92dca5cb3865)  
 Therefore, in response to the invalid move, Kool AI ignores any further file input.<br>
-Instead it moves its King, *e7e6*:
-TODO3
+Instead it moves its King, *e7e6*:  
+  ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/9f913810-b396-497c-a5e7-692631e203ab)
+
 -----
 
 
@@ -852,13 +839,13 @@ Qb6xb5 6. b7xc8=Q# 1-0
    * *Method Used*
      <p>The Movetext used can be found in testdata/file26.pgn<br>
   
-   * Based on the same moves in **Test 1**. The difference being the rank numbers are given instead of the file letters  
+   * Based on the same moves in **Test 12**. The difference being the rank numbers are given instead of the file letters  
 ```
 1. e4 c6 2. d4? d5 3. e5? B8f5! 4. N1f3 !? e6 5. !? B1e2 N8h6!!
 ```
-   * So, the output should be identical to **Test 1!**           
+   * So, the output should be identical to **Test 12!**           
    * Run the program
-   * When I compared the output of **Test 1** with the outputted moves of this game using [Diffchecker](https://www.diffchecker.com/text-compare/), the result was<p>
+   * When I compared the output of **Test 12** with the outputted moves of this game using [Diffchecker](https://www.diffchecker.com/text-compare/), the result was<p>
    	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/df178d70-c58f-4da3-83f1-f0070de3e2cc)
 
 -----
