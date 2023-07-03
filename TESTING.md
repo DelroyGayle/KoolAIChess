@@ -529,7 +529,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
    ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/ac308bee-3ed5-435b-b2f9-1202dac400e2)
 
            
-* Success! Incidentally, the Computer responded with:
+* Success! Incidentally, *Kool AI* responded with:
            
 	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/1284bad3-255e-4c0c-9667-e52a3dec4055)
 
@@ -558,7 +558,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 
            
  * All 34 sets of moves were played successfully without any issues.
- * Incidentally, the Computer responded with:
+ * Incidentally, *Kool AI* responded with:
 
 	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/d01f5fcf-326b-4573-b7bb-837c68edc683)
 
@@ -705,13 +705,13 @@ Instead it moves its King, *e7e6*:
    * *The Output*  
      	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/b79553ff-0e0b-4346-ab41-735afe4a692a)
 
-   * Regarding **Move 11**, Kool AI responded with
+   * Regarding **Move 11**, *Kool AI* responded with
    * Computer moves c8-g4 Piece: Bishop
      
 
 ----
 
-22. **En Passant** - Ensure that Kool AI can play an *En Passant* move
+22. **En Passant** - Ensure that *Kool AI* can play an *En Passant* move
    * *Method Used*
      <p>The Movetext used can be found in testdata/file13.pgn<br>
 	
