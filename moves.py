@@ -9,7 +9,7 @@ from game import Game
 from run import handle_internal_error
 from run import finalise_player_move
 from extras import in_check, finalise_computer_move, CustomException
-from extras import input_status_message
+from extras import input_status_message, show_promotion_message
 import fileio as f
 from time import sleep
 
@@ -723,10 +723,7 @@ def indicate_en_passant_done(chess, who_are_you, from_file, from_rank,
         print("Computer Took Your Pawn En Passant")
         reset_2squares_pawn_positions(constants.PLAYER)
     # Was there a Pawn Promotion? If so, Display a Message
-    if Game.promotion_message:
-        print(Game.promotion_message)
-        Game.promotion_message = ""  # reset
-
+    show_promotion_message()
     print()
     # Pause the computer so that the Player can read the output
     sleep(constants.SLEEP_VALUE)
@@ -942,7 +939,7 @@ def check_if_inputfile_move_is_en_passant(chess, source, target):
     If it is, perform this move at this stage
     """
 
-    target_file = target[0]  # EG 'E' for 'E6' ' TODO need a dest
+    target_file = target[0]  # EG 'E' for 'E6'
     target_rank = target[1]  # EG '6' for 'E6'
     source_file = source[0]
     is_it_an_en_passant_move = validate_and_perform_en_passant(

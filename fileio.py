@@ -430,7 +430,7 @@ def double_tuple_with_source(matched):
     handle_move_suffix(matched)
 
 
-def parse_chess_move():
+def parse_chess_move(chess):
     """
     Parse the chess move into a tuple
     Place the tuple into 'Game.chess_move_tuple'
@@ -589,7 +589,7 @@ def parse_chess_move():
         return True  # Indicate success
 
 # Unknown Chess Move
-    print("Cannot match chess move")
+    chess.display("Cannot match chess move")
     e.input_status_message(constants.BAD_CHESS_MOVE_FROMFILE
                            + Game.input_stream[0:20])
     return False  # Indicate failure
@@ -655,7 +655,7 @@ def parse_move_text(chess):
             return False
 
         # Otherwise
-        return parse_chess_move()
+        return parse_chess_move(chess)
 
     # Therefore, Game.whose_move is == constants.PLAYER
     # Increment the Move Counter
@@ -710,7 +710,7 @@ def parse_move_text(chess):
 
     # Otherwise since not a move number,
     # Expecting to parse a chess move
-    return parse_chess_move()
+    return parse_chess_move(chess)
 
 
 def find_the_match(chess, all_matched_list,
@@ -743,10 +743,10 @@ def find_the_match(chess, all_matched_list,
     if not found_target:
         """
         This ought not to happen!
-        It means: An illegal move or invalid move
+        It means: An invalid move
         has been read in from the input file
         """
-        print("Invalid Move")
+        chess.display("Invalid Move")
         e.input_status_message(constants.BAD_CHESS_MOVE_FROMFILE
                                + Game.input_stream_previous_contents)
         return  # Failure
@@ -853,7 +853,7 @@ def determine_the_capture_by_both_squares(chess,
         It means: An illegal move or invalid move
         has been read in from the input file
         """
-        print("Invalid Long Notation Move")
+        chess.display("Invalid Long Notation Move")
         e.input_status_message(constants.BAD_CHESS_MOVE_FROMFILE
                                + Game.input_stream_previous_contents)
         return  # Failure

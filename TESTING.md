@@ -395,7 +395,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     ```
     * Then a 3 second delay, in addition to the general *2 second delay, hence a total delay of 5 seconds*
     * This gives the user,  plenty of time to see that *there is no longer any futher PGN file input*
-    * The Computer then displays the updated chessboard with its own move of 
+    * Kool AI then displays the updated chessboard with its own move of 
     * **Computer moves e7-e6 Piece: Pawn**
 
       ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/38eb7d4c-c313-4f71-8090-d5564a394484)
@@ -408,7 +408,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
         2. It converted e4 to *e2e4* then played it as White's move
         3. Updated the chessboard and displayed it with White's move
         4. Then proceeded to fetch the next move from the input file
-        5. No further input therefore the Computer evaluated its own move - in this case *e7e6*
+        5. No further input therefore Kool AI evaluated its own move - in this case *e7e6*
         6. Then played Black's move of *e7e6*
         7. Updated the chessboard and displayed it with Black's move
         8. Then prompted the Player for the next move; expecting all further moves to be from the keyboard<p>
@@ -615,11 +615,10 @@ c6xb5 11. Bc4xb5+ Nb8d7 12. O-O-O Ra8d8 13. Rd1xd7 Rd8xd7 14. Rh1d1
 Qe7e6 15. Bb5xd7+ Nf6xd7 16. Qb3b8+ 1-0
 ```
 
-* **Note the moves numbered 12. Number 12's White Move is Castling O-O-O**
+* **Note the moves numbered 12. White's Move is Castling O-O-O**
 * Run the program
-* All moves were played successfully without any issues.
 * *The Output*
-
+TODO1
 ```
 Checking Player move for b3-b8 Piece: Queen
 I am in Check
@@ -671,10 +670,14 @@ Computer took your Pawn
     
 * Run the program
 * *The Output*
+TODO2
 ```
 Legal Chess Move Expected From Input File. Instead h8h7 6.
 There will be no further input from 'input.pgn'
 ```
+Therefore, in response to the invalid move, Kool AI ignores any further file input.<br>
+Instead it moves its King, *e7e6*:
+TODO3
 -----
 
 
@@ -715,7 +718,7 @@ There will be no further input from 'input.pgn'
    * *The Output*  
      	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/b79553ff-0e0b-4346-ab41-735afe4a692a)
 
-   * The Computer responded with
+   * Regarding **Move 11**, Kool AI responded with
    * Computer moves c8-g4 Piece: Bishop
      
 
@@ -779,7 +782,6 @@ The moves of this Chess Game are as follows:
 1. b2b3 h7h6 2. Bc1b2 f7f5 3. e2e4 Ke8f7 4. e4xf5 Qd8e8 5. Qd1g4 g7g5 6.
 f5xg6# 1-0
 
-These moves have also been written to /workspace/KoolAIChess/output.pgn
 ```
 ----
 
@@ -921,7 +923,7 @@ Test 31 - Robert Fischer vs Boris Spassky
    * *The Output*  
      ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/3b0064f3-a06e-41f7-862a-6dc4a7480222)
 
-* Showing *Kool AI's* response in regard to the 43rd move i.e. *it moves its King c5-d4*
+* Showing *Kool AI's* response in regard to the 43rd move i.e. *it moves its King c5d4*
 ----
 Test 32 - **The Immortal Game** - Anderssen vs Kieseritzky, London 1851
    * *The Output*  
@@ -943,7 +945,7 @@ Qg5f6 16. Nb1c3 Bf8c5 17. Nc3d5 Qf6xb2 18. Bf4d6 Bc5xg1 19. e4e5 Qb2xa1+
 Test 33 - Charlick - Mann correspondence Australia, 1881
    * *The Output*  
      ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/b8b68cfe-5938-4f55-b12e-966e839e7411)
-* Showing *Kool AI's* response in regard to the 72nd move i.e. *it moves its King h6-g7*
+* Showing *Kool AI's* response in regard to the 72nd move i.e. *it moves its King h6g7*
 ----     
 Test 34 - **The 147-move computer game** HIARCS 11.1 UCI - Rybka 2.3.1 32-bit, 2008  
 * *The Output*  

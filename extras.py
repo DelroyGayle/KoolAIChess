@@ -748,6 +748,15 @@ def any_promotion(chess, to_file, to_rank):
         Game.promoted_piece = choice
 
 
+def show_promotion_message():
+    """
+    Was there a Pawn Promotion? If so, Display a Message
+    """
+    if Game.promotion_message:
+        print(Game.promotion_message)
+        Game.promotion_message = ""  # reset
+
+
 def in_check(chess, user_sign):
     """
     To quote Rod Bird:
@@ -893,9 +902,7 @@ def finalise_computer_move(chess, it_is_a_castling_move):
             print(Game.show_taken_message)
 
         # Was there a Pawn Promotion? If so, Display a Message
-        if Game.promotion_message:
-            print(Game.promotion_message)
-            Game.promotion_message = ""  # reset
+        show_promotion_message()
 
         # If reading from a file
         # Pause the computer so that the Player can read the output

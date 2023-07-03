@@ -15,8 +15,6 @@ class Game:
 
 # Class Variables
 
-    # recursion level for evaluate()
-    level = 0  # todo
     # worth of play
     score = 0
     # Result of evaluate()
@@ -31,10 +29,6 @@ class Game:
     new_to_file = ""
     new_to_rank = ""
 
-    # REMOVE?? TODO
-    # todo check_flag
-    # True means that one is currently in Check
-    check_flag = False
     # Player (White) goes first
     player_first_move = True
     # White goes first
@@ -65,7 +59,6 @@ class Game:
     computer_pawn_2squares_advanced_file = None
     computer_pawn_2squares_advanced_rank = None
     en_passant_status = None
-    selected_piece = None
 
     reading_game_file = None
     writing_game_file = False

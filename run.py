@@ -34,7 +34,7 @@ def handle_internal_error():
 
     print("Computer resigns due to an internal error")
     print("Please investigate")
-    f.output_all_chess_moves()  # todo
+    f.output_all_chess_moves()
     e.goodbye()
     # Internal Error
     # *** END PROGRAM ***
@@ -149,8 +149,6 @@ def is_player_move_illegal(chess, from_file, from_rank, to_file, to_rank):
             check_flag = in_check(chess, constants.PLAYER)
             if check_flag:
                 # reset play and restore board pieces
-                # check_flag todo
-                # checkmate # todo
                 print("You are in Check")
                 chess.board[from_square] = save_from_square
                 chess.board[to_square] = save_to_square
@@ -158,7 +156,6 @@ def is_player_move_illegal(chess, from_file, from_rank, to_file, to_rank):
                 return (True, True, taken)
 
             # Indicate not in check
-            # check_flag todo
             return (False, False, taken)
 
     # Indicate that no legal move has been found
@@ -364,19 +361,9 @@ def evaluate(chess, level, piece_sign, prune_factor):
 
         all_the_moves = e.movelist(chess, from_file, from_rank,
                                    piece_sign, level == 1)
-        # TODO
-        # if level == 1:  # Level 1 # todo refactor with level == 1 ==>
-        #     all_the_moves = movelist(chess, from_file, from_rank,
-        #                              piece_sign, True)
-        # else:
-        #     all_the_moves = movelist(chess, from_file, from_rank,
-        #                              piece_sign, False)
 
         # Loop through each possible move
         for m in range(len(all_the_moves)):
-            # todo
-            # For level=1, add logic to handle Castling
-
             (to_file, to_rank) = all_the_moves[m]
             oldscore = Game.score
             (exit_loop, bestscore) = do_evaluation(chess, level,
@@ -560,9 +547,7 @@ def finalise_player_move(chess, it_is_a_castling_move,
             print(Game.show_taken_message)
 
         # Was there a Pawn Promotion? If so, Display a Message
-        if Game.promotion_message:
-            print(Game.promotion_message)
-            Game.promotion_message = ""  # reset
+        e.show_promotion_message()
 
     # Now that the Player has played, see if the Computer is in Check
     check_flag = in_check(chess, constants.COMPUTER)
@@ -794,9 +779,7 @@ def play_2_moves(chess, from_file, from_rank, to_file, to_rank, result):
     """
 
     process_computer_move(chess, from_file, from_rank, to_file, to_rank)
-    # input("GO") # TODO
     player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank)
-    # input("GO/2") # TODO
 
 
 def main_part2():
