@@ -222,8 +222,8 @@ When Checkmate occurs, this signifies **a win**.<br>
 The game is won by checkmating the opponent's king, i.e. threatening it with inescapable capture.<br>
 The program will print a message declaring the victor and **all the moves played are output to the screen.**<br>
 (They are also outputted to *output.pgn for testing purposes only!* See [TESTING.md](https://github.com/DelroyGayle/KoolAIChess/blob/main/TESTING.md) for details.)<br>
-The moves are outputted in **Long algebraic notation (LAN)**. (See [Resignation](https://github.com/DelroyGayle/KoolAIChess/blob/main/README.md#resignation) 
- below)<p> 
+The moves are outputted in **Long algebraic notation (LAN)**.<br>(See [Resignation](https://github.com/DelroyGayle/KoolAIChess/blob/main/README.md#resignation) 
+ below for details)<p> 
 Here is an example of Checkmate:
 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/5fd730fc-8748-42f0-bff8-80f350405743)
@@ -252,8 +252,8 @@ To resign, the Player has to enter **either R or r to resign.**<br>
 Please note however:
 1.  *Kool AI's algorithm* will score each of **its own** potential moves before its play and if the score is *too low, Kool AI* will resign.<br>That is, if the score is below the constant **STALEMATE_THRESHOLD_SCORE which is equal to -2500**;<br>*Kool AI* will deem that it cannot possibly win the game; therefore, *Kool AI will resign!*
 2.  Unfortunately, the program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the human user to end the game by *entering 'r' to resign*.
-3.  I am a novice chess player. So in writing this program, there is the distinct possibility that my program may declare **Checkmate** against the human opponent when in fact, it is not! (Although personally, throughout my testing I have not come across such a scenario!)<br>
-Therefore, in considering the possibility of such a scenario; even after *Kool AI* declares **Checkmate**; I leave it up to the Player to resign.<br>That is, this program does **not** force the end of the game - *the Player can play on!*  
+3.  I am a novice chess player. So in writing this program, there is the possibility that my program may declare **Checkmate** against the human opponent when in fact, it is not! (Although personally, throughout my testing I have not come across such a scenario!)<br>
+Therefore, in regards to this: even after *Kool AI* declares **Checkmate**; I leave it up to the Player to resign.<br>That is, this program does **not** force the end of the game - *the Player can play on!*  
 
 
 When either the Player or *Kool AI* resigns or if *Kool AI checkmates its opponent*; **all the moves played are output to the screen.**<br>
@@ -271,8 +271,8 @@ To quote [Wikipedia](https://en.wikipedia.org/wiki/Algebraic_notation_(chess)),
 
 ---
 ### Pawn Promotion
-When it comes to Pawn Promotion, *Kool AI* solely promotes *its Pawns* to Queens.<br>The Player, however, has the option to promote the White's Pawn to another piece besides Queen.<br>
-Here is an example of Pawn Promotion - The Player's pawn as reached **c8**:  
+When it comes to Pawn Promotion, *Kool AI* solely promotes *its Pawns* to Queens.<br>The Player, however, has the option to promote a White Pawn to another piece besides Queen.<br>
+Here is an example of Pawn Promotion - The Player's pawn has reached **c8**:  
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/b4b88f91-c750-46fe-9d11-75276cb044a1)  
 
 The Player has the option to enter either *r for Rook, b for Bishop, n for Knight or q for Queen.*<br>
@@ -304,7 +304,7 @@ I will not pretend that I understand the mathematics involved. I can only verify
 Nonetheless, for more information please see the following Wikipedia articles: [minimax](https://en.wikipedia.org/wiki/Minimax) and [negamax](https://en.wikipedia.org/wiki/Negamax).
 
 ## Limitations
-* When it comes to Pawn Promotion, *Kool AI* solely promotes its Pawns to Queens.<br>Nonetheless, the Player is given the option to promote the White's Pawn to another piece besides Queen.
+* When it comes to Pawn Promotion, *Kool AI* solely promotes its Pawns to Queens.<br>Nonetheless, the Player is given the option to promote a White Pawn to another piece besides Queen.
 * The program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the Player to end the game by *entering 'r' to resign*.<br>*Kool AI* will designate such an ending as a Draw i.e. *1/2-1/2*.
 * Unfortunately, this program is slow. Sometimes, it takes over 20 seconds for *Kool AI* to respond with its move!
 * To speed up this process, the constant **MAXLEVEL which is currently equal to 5**, can be lowered to 4 or 3.<br>This will indeed quicken the Computer's response, however, it will play a *dumber* game!
@@ -574,13 +574,12 @@ I therefore chose  to use a *List of Sets to act as a Stack* that grows and shri
 ```
 Game.undo_stack.append(set())
 ```
-If any Pawn Promotion happens, the coordinates of that square in question is added to the current set at the top of the Stack.
+If any Pawn Promotion happens, the coordinates of the square in question is added to the current set at the top of the Stack.
 ```
 Game.undo_stack[-1].add(to_square)
 ```
 When the function call is over, if the current set at the top of the Stack is not empty; then each coordinate in the Set has their Pawn Promotion attributes removed; which in effect, *undoes the Pawn Promotion* of each Pawn in question.
 
-Then finally, the current set is popped of from the top of the Stack.
 ```
     if not Game.undo_stack[-1]:
         return
@@ -593,8 +592,10 @@ Then finally, the current set is popped of from the top of the Stack.
         del chess.board[index].promoted_letter
         # empty the set
     Game.undo_stack[-1].clear()
-...
-...
+```
+
+The current set is popped of from the top of the Stack.
+```
     # Regardless of whether the current set was empty or not
     # Pop the stack
     Game.undo_stack.pop()
