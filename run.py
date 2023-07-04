@@ -195,21 +195,22 @@ def undo_pawn_promotions(chess):
     'Game.undo_stack' is a list of sets that grows/shrinks
     with the call of 'evaluate'
     evaluate() may be called up to 5 levels deep
-    So if for example, when level 3 goes deeper to level 4
+    So if for example, when level 3 goes to level 4
     Any pawn promotions that occur will be added to level 4's Set
-    When 'evaluate' returns to level 3
+    When 'evaluate' returns to level 3;
     Compare the sets of level 3 and level 4
     Any new pawn promotions that have been added since level 3
     which are shown in level 4's Set stack need to be removed
     That way, when another call is made to level 4,
-    the chessboard is identical including any pawn promotions
+    the chessboard is identical regarding 'level 3'
+    including any pawn promotions
     """
     Game.promoted_piece = ""  # reset
     if not Game.undo_stack[-1]:
         return
 
-    set_difference = Game.undo_stack[-1]
-    for index in set_difference:
+    undo_set = Game.undo_stack[-1]
+    for index in undo_set:
         # Remove the Pawn Promotion attributes
         # i.e. Undo them!
         del chess.board[index].promoted_value

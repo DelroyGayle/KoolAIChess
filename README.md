@@ -100,8 +100,8 @@ The chessboard at the beginning of the game is shown as:
 
 Therefore, the form of how one enters a Chess move is of the form *\<FromSquare\>\<ToSquare\> e.g. d2d4*<br>That is, pawn *(p)* from square *d2* to square *d4*.<br>
 Another example, would be *g1f3*<br>That is, knight *(n)* from square *g1* to square *f3*.<br>
-If the Player enters a move in UPPERCASE, the input algorithm will *lowercase* the input in order to process the move<br>
-For checking against a *Castling move, either O-O or O-O-O*, the input algorithm will *UPPERCASE* the input in order to test for Castling
+If the Player enters a move in UPPERCASE, the input algorithm will *lowercase* the input in order to process the move.<br>
+For matching a *Castling move, either O-O or O-O-O*, the input algorithm will *UPPERCASE* the input in order to test for Castling.
 
 From the outset a prompt **(e.g. e2e4)** is displayed reminding the Player of the format of a Chess move.<br>
 
@@ -148,7 +148,7 @@ Since the Player has moved the pawn from square *e2 to e4* and the move is valid
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/cb116eae-8e63-4573-8ca1-742d3230e67f)
 
 *Kool AI* will inform the Player that it is *Thinking* - That is, *it is evaluating its next move*:<br>
-**Please note: sometimes Kool AI takes up to 10 seconds to respond!** Please Be Patient :)
+**Please note: sometimes Kool AI takes over 20 seconds to respond!** Please Be Patient :)
 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/d4fdb642-448e-41ef-b9fc-c594edd593e8)
 
@@ -183,9 +183,9 @@ In this scenario, the Player entered the word, *hello*
 5. Trying to play an illegal move for a piece
 
 This is the general *catchall* response.
-Kool AI's algorithm will examine the Player's move against all the possible moves for the chosen piece.
+*Kool AI's algorithm* will examine the Player's move against all the possible moves for the chosen piece.
 If the Player's move does not appear in the list of all possible moves it will display **an Illegal Move** message.
-In such a scenario it would be up to the user to determine why such a move cannot be played.
+In such a scenario it would be up to the Player to determine why such a move cannot be played.
 For example:
 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/324873df-a696-4269-a2fa-a96475a774b0)
@@ -212,7 +212,7 @@ The only *legal moves when in Check* is to protect your king, whether by
 2. Moving a piece to block the attacking piece
 3. Or moving the king out of its position where it is currently under attack
 
-So, in the above scenario, the Knight move does none of the above, **therefore, an illegal move!
+So, in this example, the Knight move does none of the above, **therefore, it is an illegal move!**
 
 ------
 
@@ -222,7 +222,7 @@ When Checkmate occurs, this signifies **a win**.<br>
 The game is won by checkmating the opponent's king, i.e. threatening it with inescapable capture.<br>
 The program will print a message declaring the victor and **all the moves played are output to the screen.**<br>
 (They are also outputted to *output.pgn for testing purposes only!* See [TESTING.md](https://github.com/DelroyGayle/KoolAIChess/blob/main/TESTING.md) for details.)<br>
-The moves are outputted in **Long algebraic notation (LAN)** (See *Resignation* below)<p> 
+The moves are outputted in **Long algebraic notation (LAN)**. (See *Resignation* below)<p> 
 Here is an example of Checkmate:
 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/5fd730fc-8748-42f0-bff8-80f350405743)
@@ -249,15 +249,15 @@ Resignation in Chess is the player conceding the game to their opponent, that is
 Resignation immediately ends the game.<br>
 To resign, the Player has to enter **either R or r to resign.**<br>
 Please note however:
-1.  Kool AI's algorithm will score each of **its own** potential moves before its play and if the score of a move is *too low, Kool AI* will resign.<br>That is, if the score is below the constant **STALEMATE_THRESHOLD_SCORE which is equal to -2500**;<br>*Kool AI* will deem that it cannot possibly win the game; therefore, *Kool AI will resign!*
+1.  *Kool AI's algorithm* will score each of **its own** potential moves before its play and if the score is *too low, Kool AI* will resign.<br>That is, if the score is below the constant **STALEMATE_THRESHOLD_SCORE which is equal to -2500**;<br>*Kool AI* will deem that it cannot possibly win the game; therefore, *Kool AI will resign!*
 2.  Unfortunately, the program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the human user to end the game by *entering 'r' to resign*.
 3.  I am a novice chess player. So in writing this program, there is the distinct possibility that my program may declare **Checkmate** against the human opponent when in fact, it is not! (Although personally, throughout my testing I have not come across such a scenario!)<br>
-Therefore, in considering the possibility of such a scenario; even after declaring **Checkmate**; I leave it up to the user to resign.<br>That is, this program does **not** force the end of the game - *the player can play on!*  
+Therefore, in considering the possibility of such a scenario; even after *Kool AI* declares **Checkmate**; I leave it up to the Player to resign.<br>That is, this program does **not** force the end of the game - *the player can play on!*  
 
 
-When either the Player or the Computer resigns or if *Kool AI checkmates its opponent*; **all the moves played are output to the screen.**<br>
+When either the Player or *Kool AI* resigns or if *Kool AI checkmates its opponent*; **all the moves played are output to the screen.**<br>
 (They are also outputted to *output.pgn for testing purposes only!* See [TESTING.md](https://github.com/DelroyGayle/KoolAIChess/blob/main/TESTING.md) for details.)<br>
-The moves are outputted in **Long algebraic notation (LAN)**<p> 
+The moves are outputted in **Long algebraic notation (LAN)**.<p> 
 To quote [Wikipedia](https://en.wikipedia.org/wiki/Algebraic_notation_(chess)), 
    > **In long algebraic notation (LAN), also known as full/fully expanded algebraic notation,<br> 
    both the starting and ending squares are specified**,<br>
@@ -274,10 +274,10 @@ When it comes to Pawn Promotion, *Kool AI* solely promotes *its Pawns* to Queens
 Here is an example of Pawn Promotion - The Player's pawn as reached **c8**:  
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/b4b88f91-c750-46fe-9d11-75276cb044a1)  
 
-The user has the option to enter either *r for Rook, b for Bishop, n for Knight or q for Queen.*<br>
-Note: the default is Queen. So, the user can just hit *Enter!*<br>
-When the user enters their choice, the Pawn in question is promoted to the requested piece.<br>
-A message will be printed **Pawn promoted to** *which ever piece was chosen.*<br>
+The Player has the option to enter either *r for Rook, b for Bishop, n for Knight or q for Queen.*<br>
+Note: the default is Queen. So, the Player can just hit *Enter!*<br>
+When the Player enters their choice, the Pawn in question is promoted to the requested piece.<br>
+A message will be printed of the form: **Pawn promoted to** *\<whichever piece was chosen.\>*<br>
 For example:  
      ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/6a746c09-3418-49da-8ee1-db4dfc5b5412)
 
@@ -305,11 +305,11 @@ Nonetheless, for more information please see the following Wikipedia articles: [
 ## Limitations
 * When it comes to Pawn Promotion, *Kool AI* solely promotes its Pawns to Queens.<br>Nonetheless, the Player is given the option to promote the White's Pawn to another piece besides Queen.
 * The program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the Player to end the game by *entering 'r' to resign*.<br>*Kool AI* will designate such an ending as a Draw i.e. *1/2-1/2*.
-* Unfortunately, this program is slow. Sometimes, it takes over 20 seconds, for *Kool AI* to respond with its move!
-* To speed up this process, the constant **MAXLEVEL which is currently equal to 5**, can be lowered to 4 or 3.<br>Although, this will indeed quicken the Computer's response, however, it will play a *dumber* game!
+* Unfortunately, this program is slow. Sometimes, it takes over 20 seconds for *Kool AI* to respond with its move!
+* To speed up this process, the constant **MAXLEVEL which is currently equal to 5**, can be lowered to 4 or 3.<br>This will indeed quicken the Computer's response, however, it will play a *dumber* game!
 
 ## Future Features
-* Attempt to speed up the program by using a libary such as [itertools](https://docs.python.org/3/library/itertools.html)
+* Attempt to speed up the program by using a library such as [itertools](https://docs.python.org/3/library/itertools.html)
 * The ability to switch sides
 * Undo/Redo ability when playing moves
 * Saving board positions during the game
@@ -358,7 +358,7 @@ Therefore the Dictionary would look like this:<br>
 *{a8:value, b8:value, ..., d1:None, ..., e1:None, a1:value, ..., h1:value}*<br>
 Blank squares have the value None<br> 
 Thereby if a variable for example *board* represents the chessboard, each square can be accessed using a *string key*.<br>
-For example to refer to square *"h3* I can use the code
+For example to refer to square *"h3"* I can use the code
 *square = board["h3"]*
 
 ### Overview of Classes
@@ -373,7 +373,7 @@ In order to incorporate Object Oriented programming I have used three classes in
 
 This Class is the Base Class for all the Chess Pieces.
 
-As a basis I adopted the way that X.S. had implemented the Pieces' Class in [this code](https://github.com/xsanon/chess/blob/main/src/piece.py)
+As a basis I adopted the way that X.S. had implemented the Piece Class in [this code](https://github.com/xsanon/chess/blob/main/src/piece.py)
 
 In my version the rationale is as follows:
 ```
@@ -411,13 +411,19 @@ Each piece has
 * * **The Kings' values differ as shown above**
 * Note: Blank squares have a value and a sign of ZERO
 
-* **print_string(self)**: This method returns a string description of each piece to describe which piece had been *taken* in a Chess move.
+* **piece_string(self)**: This method returns a string description of each piece to describe which piece had been *taken* in a Chess move.
 * * "Pawn"
 * * "Rook"
 * * "Knight"
 * * "Bishop"
 * * "Queen"
-* * Note: King piece cannot be *taken* - So no 'print_string'
+* * Note: King piece cannot be *taken* - So no 'piece_string'
+
+* **promote(self)**: This method handles Pawn Promotion. When a Pawn is promoted, two new attributes are added to the Pawn object.
+* 1. **self.promoted_letter**: the letter of the piece that the Pawn was promoted to.
+* 2. **self.promoted_value**: the corresponding value of the piece that the Pawn was promoted to.
+
+
 
 #### 2. Class: Game
 
@@ -452,7 +458,7 @@ Also any routines that caused *import circular issues* with the Python interpret
 All routines related to this process are placed in fileio.py<br>(see [TESTING.md](https://github.com/DelroyGayle/KoolAIChess/blob/main/TESTING.md) for more details)
 * **game.py** - The *Game Class* and its related routines
 * **moves.py** - The functionality for the chess moves: *[Castling](https://en.wikipedia.org/wiki/Castling) and [En Passant](https://en.wikipedia.org/wiki/En_passant)*
-* **piece.py** - The *Game Piece* and its related routines
+* **piece.py** - The *Piece Class* and its related routines
 * **run.py** - the main module of the program
 
 ## Testing
@@ -460,7 +466,7 @@ All routines related to this process are placed in fileio.py<br>(see [TESTING.md
 + Passed the code through the PEP8 linter and confirmed there are no problems.
 + Carried out tests of the program on both the local terminal and the Code Institute Heroku terminal.
 + Added functionality so that this program could read Chess moves from a [PGN](https://en.wikipedia.org/wiki/Portable_Game_Notation) file, namely, *input.pgn*.<br>
-My rationale is, that if my program can play *recorded chess games **identically*** then the chess-playing algorithm works correctly.<br>
+My rationale is that if my program can play *recorded chess games **identically*** then the chess-playing algorithm works correctly.<br>
 See [TESTING.md](https://github.com/DelroyGayle/KoolAIChess/blob/main/TESTING.md) for further details.
 
 ### Internal Errors
@@ -498,6 +504,7 @@ Goodbye<br>
 
 ### Solved Bugs
 
+#### Class Bug
 Initially when I defined my 'Game' class
 I thought I could call the following ***'initialise_class_variables'*** function
 to initialise all the relevant Class Variables
@@ -520,57 +527,138 @@ I got
 AttributeError: type object 'Game' has no attribute 'num_moves'
 ```
 
-Solution:
+##### Solution
 
-I know the error has something to do with scoping, however to resolve this issue, I removed the function 'initialise_class_variables' and defined all my Class Variables directly beneath the 'Game' Class definition.
+I know the error has something to do with scoping, however to resolve this issue, I removed the function *'initialise_class_variables'* and defined all my Class Variables directly beneath the 'Game' Class definition.
 ```
 class Game:
     player_first_move = True   
     ...
     ...
 ```
+------
 
-### Unfixed Bugs
+#### Pawn Promotion Bug
 
-When I played the following moves
+*Kool AI* determines its next move by calling the *evaluate* function up recursively over four moves.<br>
+The highest scored move is *Kool AI* next move.<br>The evaluation process involves moving the chess pieces then scoring the resultant chessboard configuration.<br>Therefore, before calling *evaluate* a copy of the original pieces are saved in order to be restored after the function call is completed. As follows:
 ```
-1. e2e4
-2. d2d4
-3. c1h6
+    # store From and To data so that it may be restored
+    save_from_square = chess.board[from_square]
+    save_to_square = chess.board[to_square]
 ```
-After I played my Bishop move c1h6, **the Computer took 40 seconds to respond with g7h6**!<br>
-So, the Computer algorithm can sometimes be *very slow* to evaluate its next move.<br>
-So, there appears to be an *unresolved bottleneck regarding how long it takes the Computer to play its next move.*
-    
 
+If a piece happens to be **a Black Pawn that is moved to rank 8** this will result in a promotion of the Pawn to a Queen in accordance with the rules of Chess.
+
+##### The Bug
+However, when the *evaluate* function call was returned, any Pawn pieces that happened to be promoted to Queens **were remaining Queens!** See for example:  
+TODO
+*There are two black queens - capital Q*  
+Despite the fact, that I was restoring the original pieces as shown in this code:
+```
+        # Restore previous squares
+        chess.board[from_square] = save_from_square
+        chess.board[to_square] = save_to_square
+```
+Nonetheless, these **black queens - capital Q** remained!
+
+##### Deepcover Solution
+
+Therefore, I concluded that I needed to make *a **deep** copy of chess.board[from_square] and chess.board[to_square]* to be used to restore their contents when the function *evaluate* returned.<br>I used *deepcover* from the [copy](https://docs.python.org/3/library/copy.html) library.  
+Unfortunately, my program is not fast as it is, and *deepcover appeared to be taking a very long time* - so using this option was not viable. 
+
+##### Alternative Solution
+
+I therefore chose  to use a *List of Sets to act as a Stack* that grows and shrinks with the call of *evaluate*. That is, at each function call level, an empty Set is added to the *undo_stack*.
+```
+Game.undo_stack.append(set())
+```
+If any Pawn Promotion happens, the coordinates of that square in question is added to the current set.
+```
+Game.undo_stack[-1].add(to_square)
+```
+When the function call is over, if the current set is not empty; then each coordinate is examined and the Pawn Promotion attributes are removed; which in effect, *undo the Pawn Promotion* of each piece in question.
+```
+    if not Game.undo_stack[-1]:
+        return
+
+    undo_set = Game.undo_stack[-1]
+    for index in undo_set:
+        # Remove the Pawn Promotion attributes
+        # i.e. Undo them!
+        del chess.board[index].promoted_value
+        del chess.board[index].promoted_letter
+        # empty the set
+    Game.undo_stack[-1].clear()
+...
+...
+    # Pop the stack
+    Game.undo_stack.pop()
+```
 ------
 
 ## Deployment
 
-The project is deployed on Heroku. These are the steps in order to deploy on Heroku
-
-1. Create Heroku account.
-2. Create a new project.
-3. Go into settings -> Config Var and add the following:
-    +  key by the name of *PORT* with the value of *8000*.<p>
-
-4. Include the following buildpacks:
-    + Heroku/python
-    + Heroku/nodejs
-    + Please note: the order is significant - the Python buildpack **must** appear before the NodeJs buildpack.<br>One can use the mouse to drag the buildpacks into the correct order.<p>
-
-
-5. Regarding your project:
+The project is deployed on Heroku. These are the steps in order to deploy on Heroku:
+1. Regarding your project:
     + create a Procfile with the following one line entry
     ```
     web: node index.js
     ```
 
-6. Then ensure that you have pushed your latest version including Procfile to GitHub.
-7. On Heroku for Deployment Method pick Github and find the repo with the project you want to deploy.
-8. Pick which branch you want to deploy -- Generally this would be **main**
-9. Click **deploy** and wait until the project is built.
-10. Ensure there are no errors.
+2. Then ensure that you have pushed your latest version including Procfile to GitHub.
+
+3. Create a Heroku account. You will need to enter 
+* First name
+* last name
+* email address,  
+* role e.g. *student*
+* location
+* primary development language i.e. *Python*
+
+4. Click *Create free account*
+
+5. Proceed with confirmation via email
+
+6. Log into Heroku
+
+7. Create a new application by clicking the *Create New App* button.<br>
+You will need to enter
+* The *App name*
+* The region
+* Then click the *Create app* button
+
+8. Go into settings -> Config Var and add the following:
+    +  key by the name of *PORT* with the value of *8000*.<p>
+
+9. The next step is to add a couple of  buildpacks to our application.<br>Then click the *Add buildpack* button
+
+10. Include the following buildpacks:
+    + The first buildpack is *heroku/python* - then click "Save changes".
+    + The second buildpack is *heroku/nodejs* - then click "Save changes".
+    + Please note: the order is significant - the Python buildpack **must** appear on top before the NodeJs buildpack.<br>One can use the mouse to drag the buildpacks into the correct order.<p>
+
+11. Then click the *Deploy* option. This is where you choose the deployment method of *GitHub*
+
+12. Find the repo with the project you want to deploy
+
+13. Confirm that you want to connect to GitHub by clicking the *Connect* button
+
+14. Scroll down to the two options, *Automatic deploys - Manual deploy*
+
+15. In this section, you can click *Enable Automatic deploys* - Heroku will rebuild your app every time you push a new change  
+to your code to GitHub.
+
+16. Or you can choose to *manually deploy* using the *Deploy Branch* option here.  
+
+17. Pick which branch you want to deploy -- Generally this would be **main**
+
+18. Click **Deploy Branch** and wait until the project is built.
+
+19. Ensure there are no errors. Heroku will display the message **Your app was successfully deployed.**
+
+20. Click the *View* button and you will be taken to an URL of the form *https:\/\/\<project-name>.herokuapp.com/*<br>
+This is your deployed app in operation
 
 ## Languages, Libraries and Technologies
 

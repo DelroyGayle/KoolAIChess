@@ -24,8 +24,8 @@ Therefore, essentially ***Chess-Playing Automation!***<br>
 *Method Used:*
 * I would copy and paste the chess moves from a PGN file into *input.pgn*;
 * Run the program, and watch it play each move, displaying the chessboard accordingly.
-* If the chosen game, ends in Check, I expect the outcome of the program to be the same.
-* If the chosen game, ends in Checkmate, I expect the outcome of the program to be the same.
+* If the chosen game ends in Check, I expect the outcome of the program to be the same.
+* If the chosen game ends in Checkmate, I expect the outcome of the program to be the same.
 * Any pieces taken, the program ought to take the same pieces.
 * All moves, including *Castling and En Passant*; should be followed in identical fashion. 
 
@@ -50,7 +50,7 @@ The program would need to read a pgn file which has a specific format. Here are 
 
 The major part that this program is interested in, is *the Movetext*.
 
-Originally, I envisioned that the user could browse and select a pgn file from their computer and play the game. However, I quickly realised that, that is far beyond the scope of this project and my expertise. :)
+Originally, I envisioned that the user could browse and select a pgn file from their computer and play the game. However, I quickly realised that this was far beyond the scope of this project and my expertise. :)
 <br>Instead, 
    * Copy solely the Movetext from a pgn file 
    * Place it into the input.pgn file
@@ -61,13 +61,13 @@ In short,
    * Removes leading/trailing whitespace
    * Removes unprintable characters (ASCII **\x00-\x08\x0B-\x1F\x7F-\xFF**)
    * Replaces Tab characters with spaces
-   * Removes **carriage returns \r** leaving solely **linefeed characters \n**
+   * Removes **carriage returns \r** leaving solely **line feed characters \n**
    * Then parses each component that makes up a chess move; that is
    *  * Move Number
    *  * White's Chess move
    *  * Black's Chess move
    * It will play each move without human intervention until either
-   * a) It reads a item of text that it cannot parse whereby it will display a message. Then it will proceed to handle chess moves from the Player via the keyboard
+   * a) It reads an item of text that it cannot parse whereby it will display a message. Then it will proceed to handle chess moves from the Player via the keyboard
    * b) The end of the file is reached whereby, in like manner,  it will display a suitable message. Then it will proceed to handle chess moves from the Player via the keyboard
    * c) A Game Termination Marker is detected: That is, either one of the following strings:
       + **1-0** which means (White wins)
@@ -122,7 +122,7 @@ Essentially, a PGN file is divided up into eight *mandatory* parts - a *Seven Ta
    The program expects *input.pgn* to contain solely the *Movetext portion* of a PGN Game file.<br>
    It will parse the following:
    * Movetext move number indications - A move number indication is composed of one or more adjacent digits (an integer token) followed by *zero or more periods*. 
-   * * **Note: This program expects that the Movetext begins with a move number of 1. Moreover, that the first move is White's move.**
+   * * **Note: This program expects that the Movetext begins with a move number of 1. Moreover, the first move is White's move.**
    * A chess move in **SAN (Standard Algebraic Notation)** - please refer to [this link](https://www.chessprogramming.org/Algebraic_Chess_Notation#Standard_Algebraic_Notation_.28SAN.29) for an explanation.
    * * Essentially, this notation uses English language single character abbreviations for chess pieces,<br>that is: pawn = "P", knight = "N", bishop = "B", rook = "R", queen = "Q", and king = "K".
    * The letter code for a pawn is not used for SAN moves in PGN export format movetext.
@@ -173,7 +173,7 @@ Essentially, a PGN file is divided up into eight *mandatory* parts - a *Seven Ta
    
 ## Testing
 ### **Testing the file-handling of input.pgn** 
-1. **Test: Empty File** - An empty file should be ignored. Simply proceed with the prompt for user's input.
+1. **Test: Empty File** - An empty file should be ignored. Simply proceed with the prompt for the user's input.
     * *Method Used*
         
         I modified *open_input_file()* to make it think it had an empty file e.g.<br>
@@ -304,7 +304,7 @@ Comments should always be ignored when parsing input.<p>
 
         Then the user is prompted:<br>
         *YOUR MOVE (e.g. e2e4):*    
-1. **Test: NAGs $nnn** - Dollar followed by a nonnegative integer.<br>This annotation ought to be ignored.<br>(I ignore the numeric value, that is, regardless whether it is greater than 255.)<br>
+1. **Test: NAGs $nnn** - Dollar followed by a nonnegative integer.<br>This annotation ought to be ignored.<br>(I ignore the numeric value, that is, regardless of whether it is greater than 255.)<br>
     * *Method Used*
         
         I set *input.pgn* contents with just one of the following lines as its file contents<br>
@@ -394,7 +394,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
     There will be no further input from 'input.pgn'
     ```
     * Then a 3 second delay, in addition to the general *2 second delay, hence a total delay of 5 seconds*
-    * This gives the user,  plenty of time to see that *there is no longer any futher PGN file input*
+    * This gives the user,  plenty of time to see that *there is no longer any further PGN file input*
     * Kool AI then displays the updated chessboard with its own move of 
     * **Computer moves e7-e6 Piece: Pawn**
 
@@ -564,7 +564,7 @@ annotation **e.p.** appears in PGN files. Therefore, if found, it ought to be ig
 
 -----
      
-16. **Can program play its own output?** - That is, can it play using Long algebraic notation?
+16. **Can the program play its own output?** - That is, can it play Long algebraic notation?
            
    One of the features of this program is that at the end of a game,
    the program will produce <br>**all the moves of the game in Long algebraic notation (LAN)** and write them both out to the screen and the ***output.pgn* file**<p>
@@ -622,7 +622,7 @@ Qe7e6 15. Bb5xd7+ Nf6xd7 16. Qb3b8+ 1-0
 
          
 Note:
-1. The difference is that KoolAI resigned at **Move 16** forseeing that it could not win this game.
+1. The difference is that KoolAI resigned at **Move 16** foreseeing that it could not win this game.
 2. When you compare the contents of file08.pgn with the above output you will see that<br>
 *All the captures shown by **x** and all the checks shown by **+** correspond!*
 3. Afterwards, I pasted the outputted moves into input.pgn just to ensure that the moves played and the output were identical.
@@ -853,7 +853,7 @@ Qb6xb5 6. b7xc8=Q# 1-0
    
 ### **Play Entire Games**
 At this stage, I decided to finish off testing by playing a series of full games. 
-In each case, the program played all the moves and emulate the result successfully.
+In each case, the program played all the moves and emulated the result successfully.
 This includes all **147 moves and 269 moves** of Tests 34 and 35.
 The games I chose with their testdata and endgames are as follows:<p>
 
@@ -862,7 +862,7 @@ The games I chose with their testdata and endgames are as follows:<p>
 30. **The Game of the Century** - Donald Byrne vs Robert Fischer - Result "0-1" - testdata/file20.pgn
 31. Robert Fischer vs Boris Spassky - Result "1/2-1/2" - testdata/file21.pgn
 32. **The Immortal Game** - Anderssen vs Kieseritzky, London 1851 - Result "1-0" - testdata/file22.pgn
-33. Charlick - Mann correspondence Australia, 1881 - testdata/file23.pgn
+33. Charlick - Mann correspondence Australia, 1881 - Result *Resignation* - testdata/file23.pgn
 34. **The 147-move computer game** HIARCS 11.1 UCI - Rybka 2.3.1 32-bit, 2008 - Result "1-0" - testdata/file24.pgn
 35. **The longest recorded game of chess in history - 269 moves!** - Ivan Nikolic vs Goran Arsovic - Result "1/2-1/2" - testdata/file25.pgn
 
