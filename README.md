@@ -549,10 +549,10 @@ The highest scored move is *Kool AI's* next move.<br>The evaluation process invo
     save_to_square = chess.board[to_square]
 ```
 
-If a piece happens to be **a Black Pawn that is moved to rank 8** this will result in a promotion of the Pawn to a Queen in accordance with the rules of Chess and *Kool AI's* handling of its own Pawns.
+*If during evaluation*, a piece happen to be **a Black Pawn that is moved to rank 8** this will result in a promotion of the Pawn to a Queen in accordance with the rules of Chess and *Kool AI's* handling of its own Pawns.
 
 ##### The Bug
-However, when the *evaluate* function call was returned, any Pawn pieces that happened to be promoted to Queens **were remaining Queens!**<br>They ought to have been restored back to Pawns! See for example:  
+However, when the *evaluate* function call was returned, any Pawns that happened to be promoted to Queens **were remaining Queens!**<br>*Pawns-to-Queens* ought to have been restored back to Pawns!<p>See for example:  
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/c6cc0b4b-c796-4b2a-8ccb-2f0fc1740d3d)  
 *There are two Black Queens - two capital Qs - when there should only be one!*  
 Despite the fact, that I was restoring the original pieces as shown in this code:
@@ -570,7 +570,7 @@ Unfortunately, my program is not fast as it stands, and *deepcopy appeared to be
 
 ##### Alternative Solution
 
-I therefore chose  to use a *List of Sets to act as a Stack* that grows and shrinks with the call of *evaluate*. That is, at each function call level, an empty Set is added to the *undo_stack*.
+I therefore chose  to use a *List of Sets to act as a Stack* that grows and shrinks with the calls of *evaluate*. That is, at each function call level, an empty Set is added to the *undo_stack*.
 ```
 Game.undo_stack.append(set())
 ```
