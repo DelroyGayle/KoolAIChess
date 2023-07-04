@@ -552,15 +552,15 @@ If a piece happens to be **a Black Pawn that is moved to rank 8** this will resu
 
 ##### The Bug
 However, when the *evaluate* function call was returned, any Pawn pieces that happened to be promoted to Queens **were remaining Queens!** See for example:  
-TODO
-*There are two black queens - capital Q*  
+![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/c6cc0b4b-c796-4b2a-8ccb-2f0fc1740d3d)  
+*There are two black queens - two capital Qs*  
 Despite the fact, that I was restoring the original pieces as shown in this code:
 ```
         # Restore previous squares
         chess.board[from_square] = save_from_square
         chess.board[to_square] = save_to_square
 ```
-Nonetheless, these **black queens - capital Q** remained!
+Nonetheless, these **black queens - capital Qs** remained!
 
 ##### Deepcover Solution
 
