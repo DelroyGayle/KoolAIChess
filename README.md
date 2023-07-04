@@ -542,31 +542,31 @@ class Game:
 #### Pawn Promotion Bug
 
 *Kool AI* determines its next move by calling the *evaluate* function recursively over four moves.<br>
-The highest scored move is *Kool AI's* next move.<br>The evaluation process involves moving the chess pieces then scoring the resultant chessboard configuration.<br>Therefore, before calling *evaluate* a copy of the original pieces are saved in order to be restored after the function call is completed.<br>As follows:
+The highest scored move is *Kool AI's* next move.<br>The evaluation process involves moving the chess pieces then scoring the resultant chessboard configuration.<br>Therefore, before calling *evaluate* a copy of the original pieces are saved in order to be restored after the function call is completed.<br>As shown:
 ```
     # store From and To data so that it may be restored
     save_from_square = chess.board[from_square]
     save_to_square = chess.board[to_square]
 ```
 
-If a piece happens to be **a Black Pawn that is moved to rank 8** this will result in a promotion of the Pawn to a Queen in accordance with the rules of Chess.
+If a piece happens to be **a Black Pawn that is moved to rank 8** this will result in a promotion of the Pawn to a Queen in accordance with the rules of Chess and *Kool AI's* handling of its own Pawns.
 
 ##### The Bug
-However, when the *evaluate* function call was returned, any Pawn pieces that happened to be promoted to Queens **were remaining Queens!** See for example:  
+However, when the *evaluate* function call was returned, any Pawn pieces that happened to be promoted to Queens **were remaining Queens!**<br>They ought to have been restored back to Pawns! See for example:  
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/c6cc0b4b-c796-4b2a-8ccb-2f0fc1740d3d)  
-*There are two black queens - two capital Qs*  
+*There are two Black Queens - two capital Qs - when there should only be one!*  
 Despite the fact, that I was restoring the original pieces as shown in this code:
 ```
         # Restore previous squares
         chess.board[from_square] = save_from_square
         chess.board[to_square] = save_to_square
 ```
-Nonetheless, these **black queens - capital Qs** remained!
+Nonetheless, **two Black Queens - capital Qs** appeared!
 
 ##### Deepcopy Solution
 
-Therefore, I concluded that I needed to make *a **deep** copy of chess.board[from_square] and chess.board[to_square]* to be used to restore their contents when the function *evaluate* returned.<br>I used *copy.deepcopy* from the [copy](https://docs.python.org/3/library/copy.html) library.  
-Unfortunately, my program is not fast as it is, and *deepcopy appeared to be taking a very long time* - so using this option was not viable. 
+Therefore, I concluded that I needed to make *a **deep** copy of chess.board[from_square] and chess.board[to_square]* to be used to restore their contents when the function *evaluate* returned.<br>I used **copy.deepcopy** from the [copy](https://docs.python.org/3/library/copy.html) library.  
+Unfortunately, my program is not fast as it stands, and *deepcopy appeared to be taking a very long time* - so using this option was not viable. 
 
 ##### Alternative Solution
 
@@ -578,9 +578,9 @@ If any Pawn Promotion happens, the coordinates of that square in question is add
 ```
 Game.undo_stack[-1].add(to_square)
 ```
-When the function call is over, if the current set at the top of the Stack is not empty; then each coordinate in the Set has the Pawn Promotion attributes removed; which in effect, *undoes the Pawn Promotion* of each Pawn in question.
+When the function call is over, if the current set at the top of the Stack is not empty; then each coordinate in the Set has their Pawn Promotion attributes removed; which in effect, *undoes the Pawn Promotion* of each Pawn in question.
 
-The current stack is popped of from the top of the Stack.
+Then finally, the current set is popped of from the top of the Stack.
 ```
     if not Game.undo_stack[-1]:
         return
@@ -595,6 +595,7 @@ The current stack is popped of from the top of the Stack.
     Game.undo_stack[-1].clear()
 ...
 ...
+    # Regardless of whether the current set was empty or not
     # Pop the stack
     Game.undo_stack.pop()
 ```
