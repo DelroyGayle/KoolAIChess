@@ -252,7 +252,7 @@ Please note however:
 1.  *Kool AI's algorithm* will score each of **its own** potential moves before its play and if the score is *too low, Kool AI* will resign.<br>That is, if the score is below the constant **STALEMATE_THRESHOLD_SCORE which is equal to -2500**;<br>*Kool AI* will deem that it cannot possibly win the game; therefore, *Kool AI will resign!*
 2.  Unfortunately, the program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the human user to end the game by *entering 'r' to resign*.
 3.  I am a novice chess player. So in writing this program, there is the distinct possibility that my program may declare **Checkmate** against the human opponent when in fact, it is not! (Although personally, throughout my testing I have not come across such a scenario!)<br>
-Therefore, in considering the possibility of such a scenario; even after *Kool AI* declares **Checkmate**; I leave it up to the Player to resign.<br>That is, this program does **not** force the end of the game - *the player can play on!*  
+Therefore, in considering the possibility of such a scenario; even after *Kool AI* declares **Checkmate**; I leave it up to the Player to resign.<br>That is, this program does **not** force the end of the game - *the Player can play on!*  
 
 
 When either the Player or *Kool AI* resigns or if *Kool AI checkmates its opponent*; **all the moves played are output to the screen.**<br>
@@ -277,7 +277,7 @@ Here is an example of Pawn Promotion - The Player's pawn as reached **c8**:
 The Player has the option to enter either *r for Rook, b for Bishop, n for Knight or q for Queen.*<br>
 Note: the default is Queen. So, the Player can just hit *Enter!*<br>
 When the Player enters their choice, the Pawn in question is promoted to the requested piece.<br>
-A message will be printed of the form: **Pawn promoted to** *\<whichever piece was chosen.\>*<br>
+A message will be printed of the form: **Pawn promoted to** *\<whichever piece was chosen\>*.<br>
 For example:  
      ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/6a746c09-3418-49da-8ee1-db4dfc5b5412)
 
@@ -419,7 +419,7 @@ Each piece has
 * * "Queen"
 * * Note: King piece cannot be *taken* - So no 'piece_string'
 
-* **promote(self)**: This method handles Pawn Promotion. When a Pawn is promoted, two new attributes are added to the Pawn object.
+* **promote(self)**: This method handles Pawn Promotion.<br>When a Pawn is promoted, two new attributes are added to the Pawn object.
 * 1. **self.promoted_letter**: the letter of the piece that the Pawn was promoted to.
 * 2. **self.promoted_value**: the corresponding value of the piece that the Pawn was promoted to.
 
@@ -540,8 +540,8 @@ class Game:
 
 #### Pawn Promotion Bug
 
-*Kool AI* determines its next move by calling the *evaluate* function up recursively over four moves.<br>
-The highest scored move is *Kool AI* next move.<br>The evaluation process involves moving the chess pieces then scoring the resultant chessboard configuration.<br>Therefore, before calling *evaluate* a copy of the original pieces are saved in order to be restored after the function call is completed. As follows:
+*Kool AI* determines its next move by calling the *evaluate* function recursively over four moves.<br>
+The highest scored move is *Kool AI's* next move.<br>The evaluation process involves moving the chess pieces then scoring the resultant chessboard configuration.<br>Therefore, before calling *evaluate* a copy of the original pieces are saved in order to be restored after the function call is completed.<br>As follows:
 ```
     # store From and To data so that it may be restored
     save_from_square = chess.board[from_square]
@@ -562,10 +562,10 @@ Despite the fact, that I was restoring the original pieces as shown in this code
 ```
 Nonetheless, these **black queens - capital Qs** remained!
 
-##### Deepcover Solution
+##### Deepcopy Solution
 
-Therefore, I concluded that I needed to make *a **deep** copy of chess.board[from_square] and chess.board[to_square]* to be used to restore their contents when the function *evaluate* returned.<br>I used *deepcover* from the [copy](https://docs.python.org/3/library/copy.html) library.  
-Unfortunately, my program is not fast as it is, and *deepcover appeared to be taking a very long time* - so using this option was not viable. 
+Therefore, I concluded that I needed to make *a **deep** copy of chess.board[from_square] and chess.board[to_square]* to be used to restore their contents when the function *evaluate* returned.<br>I used *copy.deepcopy* from the [copy](https://docs.python.org/3/library/copy.html) library.  
+Unfortunately, my program is not fast as it is, and *deepcopy appeared to be taking a very long time* - so using this option was not viable. 
 
 ##### Alternative Solution
 
@@ -573,11 +573,13 @@ I therefore chose  to use a *List of Sets to act as a Stack* that grows and shri
 ```
 Game.undo_stack.append(set())
 ```
-If any Pawn Promotion happens, the coordinates of that square in question is added to the current set.
+If any Pawn Promotion happens, the coordinates of that square in question is added to the current set at the top of the Stack.
 ```
 Game.undo_stack[-1].add(to_square)
 ```
-When the function call is over, if the current set is not empty; then each coordinate is examined and the Pawn Promotion attributes are removed; which in effect, *undo the Pawn Promotion* of each piece in question.
+When the function call is over, if the current set at the top of the Stack is not empty; then each coordinate in the Set has the Pawn Promotion attributes removed; which in effect, *undoes the Pawn Promotion* of each Pawn in question.
+
+The current stack is popped of from the top of the Stack.
 ```
     if not Game.undo_stack[-1]:
         return
@@ -606,10 +608,10 @@ The project is deployed on Heroku. These are the steps in order to deploy on Her
     web: node index.js
     ```
 
-2. Then ensure that you have pushed your latest version including Procfile to GitHub.
+2. Then ensure that you have pushed your latest version including Procfile to GitHub
 
 3. Create a Heroku account. You will need to enter 
-* First name
+* first name
 * last name
 * email address,  
 * role e.g. *student*
@@ -631,12 +633,12 @@ You will need to enter
 8. Go into settings -> Config Var and add the following:
     +  key by the name of *PORT* with the value of *8000*.<p>
 
-9. The next step is to add a couple of  buildpacks to our application.<br>Then click the *Add buildpack* button
+9. The next step is to add a couple of  buildpacks to your application.<br>Then click the *Add buildpack* button
 
 10. Include the following buildpacks:
-    + The first buildpack is *heroku/python* - then click "Save changes".
-    + The second buildpack is *heroku/nodejs* - then click "Save changes".
-    + Please note: the order is significant - the Python buildpack **must** appear on top before the NodeJs buildpack.<br>One can use the mouse to drag the buildpacks into the correct order.<p>
+    + The first buildpack is *heroku/python* - then click "Save changes"
+    + The second buildpack is *heroku/nodejs* - then click "Save changes"
+    + Please note: the order is significant - the Python buildpack **must** appear on top before the NodeJs buildpack.<br>One can use the mouse to drag the buildpacks into the correct order<p>
 
 11. Then click the *Deploy* option. This is where you choose the deployment method of *GitHub*
 
@@ -647,15 +649,15 @@ You will need to enter
 14. Scroll down to the two options, *Automatic deploys - Manual deploy*
 
 15. In this section, you can click *Enable Automatic deploys* - Heroku will rebuild your app every time you push a new change  
-to your code to GitHub.
+to your code to GitHub
 
-16. Or you can choose to *manually deploy* using the *Deploy Branch* option here.  
+16. Or you can choose to *manually deploy* using the *Deploy Branch* option here 
 
 17. Pick which branch you want to deploy -- Generally this would be **main**
 
-18. Click **Deploy Branch** and wait until the project is built.
+18. Click **Deploy Branch** and wait until the project is built
 
-19. Ensure there are no errors. Heroku will display the message **Your app was successfully deployed.**
+19. Ensure there are no errors. Heroku will display the message **Your app was successfully deployed**
 
 20. Click the *View* button and you will be taken to an URL of the form *https:\/\/\<project-name>.herokuapp.com/*<br>
 This is your deployed app in operation
