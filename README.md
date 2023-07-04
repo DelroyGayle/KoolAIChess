@@ -222,7 +222,8 @@ When Checkmate occurs, this signifies **a win**.<br>
 The game is won by checkmating the opponent's king, i.e. threatening it with inescapable capture.<br>
 The program will print a message declaring the victor and **all the moves played are output to the screen.**<br>
 (They are also outputted to *output.pgn for testing purposes only!* See [TESTING.md](https://github.com/DelroyGayle/KoolAIChess/blob/main/TESTING.md) for details.)<br>
-The moves are outputted in **Long algebraic notation (LAN)**. (See *Resignation* below)<p> 
+The moves are outputted in **Long algebraic notation (LAN)**. (See [Resignation](https://github.com/DelroyGayle/KoolAIChess/blob/main/README.md#resignation) 
+ below)<p> 
 Here is an example of Checkmate:
 
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/5fd730fc-8748-42f0-bff8-80f350405743)
