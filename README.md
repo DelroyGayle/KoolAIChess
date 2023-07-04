@@ -253,7 +253,7 @@ Please note however:
 1.  *Kool AI's algorithm* will score each of **its own** potential moves before its play and if the score is *too low, Kool AI* will resign.<br>That is, if the score is below the constant **STALEMATE_THRESHOLD_SCORE which is equal to -2500**;<br>*Kool AI* will deem that it cannot possibly win the game; therefore, *Kool AI will resign!*
 2.  Unfortunately, the program is not *smart enough* to determine whether a game is [Stalemate](https://en.wikipedia.org/wiki/Stalemate) or a [Draw](https://en.wikipedia.org/wiki/Draw_(chess));<br>so it relies on the human user to end the game by *entering 'r' to resign*.
 3.  I am a novice chess player. So in writing this program, there is the possibility that my program may declare **Checkmate** against the human opponent when in fact, it is not! (Although personally, throughout my testing I have not come across such a scenario!)<br>
-Therefore, in regards to this: even after *Kool AI* declares **Checkmate**; I leave it up to the Player to resign.<br>That is, this program does **not** force the end of the game - *the Player can play on!*  
+Therefore, in regards to this: even after *Kool AI* declares **Checkmate**, I leave it up to the Player to resign.<br>That is, this program does **not** force the end of the game - *the Player can play on!*  
 
 
 When either the Player or *Kool AI* resigns or if *Kool AI checkmates its opponent*; **all the moves played are output to the screen.**<br>
@@ -549,7 +549,7 @@ The highest scored move is *Kool AI's* next move.<br>The evaluation process invo
     save_to_square = chess.board[to_square]
 ```
 
-*If during evaluation*, a piece happen to be **a Black Pawn that is moved to rank 8** this will result in a promotion of the Pawn to a Queen in accordance with the rules of Chess and *Kool AI's* handling of its own Pawns.
+*If during evaluation*, a piece happens to be **a Black Pawn that is moved to rank 8** this will result in a promotion of the Pawn to a Queen in accordance with the rules of Chess and *Kool AI's* handling of its own Pawns.
 
 ##### The Bug
 However, when the *evaluate* function call was returned, any Pawns that happened to be promoted to Queens **were remaining Queens!**<br>*Pawns-to-Queens* ought to have been restored back to Pawns!<p>See for example:  
@@ -578,7 +578,9 @@ If any Pawn Promotion happens, the coordinates of the square in question is adde
 ```
 Game.undo_stack[-1].add(to_square)
 ```
-When the function call is over, if the current set at the top of the Stack is not empty; then each coordinate in the Set has their Pawn Promotion attributes removed; which in effect, *undoes the Pawn Promotion* of each Pawn in question.
+When the function call is over, the following two operations take place.  
+
+1) If the current set at the top of the Stack is not empty; then each coordinate in the Set has their Pawn Promotion attributes removed; which in effect, *undoes the Pawn Promotion* of each Pawn in question.
 
 ```
     if not Game.undo_stack[-1]:
@@ -594,7 +596,7 @@ When the function call is over, if the current set at the top of the Stack is no
     Game.undo_stack[-1].clear()
 ```
 
-The current set is popped of from the top of the Stack.
+2) The current set is popped of from the top of the Stack.
 ```
     # Regardless of whether the current set was empty or not
     # Pop the stack
