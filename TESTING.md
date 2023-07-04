@@ -163,12 +163,12 @@ Essentially, a PGN file is divided up into eight *mandatory* parts - a *Seven Ta
    Please note: this is LAN as opposed to strict SAN as expected in the PGN Standard.<br>Nevertheless, PGN files can indeed contain LAN and Chess-playing software should understand LAN.
 	   
 ## Limitations
-* When it comes to File Input of moves and Pawn Promotion, *Kool AI* solely promotes Pawns to Queens.
-* Therefore, when parsing *input.pgn* the program will, for example, ignore the annotation *=N* in a move such as **a8=N**.
-* Instead it would automatically promote the pawn in a8 to a Queen.
-* Some PGN files prefix Black's move with a number and/or periods e.g.<br>**6. Qb3 { clock paused for 7 days } 6... Qc8**
-* This program will not parse this. Instead, an error message will be displayed.
-* Therefore, edit such PGN files before testing. For example, change the line in question to<br>**6. Qb3 { clock paused for 7 days } Qc8** in order for it to work. *See Test No. 13*
+* When it comes to the File Input of moves and Pawn Promotion, *Kool AI* solely promotes Pawns to Queens.
+* * Therefore, when parsing *input.pgn* the program will, for example, ignore the annotation *=N* in a move such as **a8=N**.
+* * Instead it would automatically promote the pawn in a8 to a Queen.
+* Some PGN files prefix Black's move with a number and/or periods e.g. **6. Qb3 { clock paused for 7 days } 6... Qc8**
+* * This program will not parse this. Instead, an error message will be displayed.
+* * Therefore, edit such PGN files before testing. For example, change the line in question to<br>**6. Qb3 { clock paused for 7 days } Qc8** in order for it to work. *See Test No. 13*
 -----
    
 ## Testing
@@ -717,6 +717,7 @@ Instead it moves its King, *e7e6*:
 	
    * Move No. 15 for Black: **... exf3+ is a Discovery Check which is the result of the En Passant move!**
    * So, the program should emulate the same Check! As well as ending the game with Checkmate!
+   * That is, *Kool AI wins!*
    * Run the program
    * All moves were played successfully without any issues.
    * *The Output*  
@@ -742,7 +743,7 @@ Qh3e6# 0-1
    * *Method Used*
      <p>The Movetext used can be found in testdata/file14.pgn<br>
 	
-   * The program should emulate the same Checkmate!
+   * The program should emulate the same Checkmate! *The Player wins!*
    * Run the program - Successful Checkmate:
    * *The Output*  
 	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/40e4784f-d7c7-480d-8106-d2f6d5b2a005)
@@ -756,7 +757,7 @@ Qh3e6# 0-1
 1 b3 h6 2 Bb2 f5 3 e4 Kf7 4 exf5 Qe8 5 Qg4 g5 6 fxg6 (mate)
 ```     
 	
-   * The program should emulate the same Checkmate!
+   * The program should emulate the same Checkmate! *The Player wins!*
    * Run the program - Successful Checkmate:  
    * *The Output*  
      	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/60b50390-11e4-45b4-bcd1-004003682989)
@@ -779,7 +780,7 @@ f5xg6# 1-0
 1 e4 e5 2 Qh5 Nc6 3 g4 d6 4 Bh3 Kd7 5 g5+ f5 6 gxf6 (mate)
 ```     
 	
-   * The program should emulate the same Checkmate!
+   * The program should emulate the same Checkmate! *The Player wins!*
    * Run the program - Successful Checkmate:  
    * *The Output*  
      	![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/f3eb30c0-3229-4892-8e8f-cd7ac59d2c41)
@@ -804,7 +805,7 @@ g5xf6# 1-0
      <p>The Movetext used can be found in testdata/file17.pgn<br>
   
    * In order to Test that Pawn Promotion handling works correctly, this game ends with Checkmate after a Pawn Promotion
-   * The program should emulate the same Checkmate!  
+   * The program should emulate the same Checkmate! *The Player wins!*  
 ```
 1. e4 d5 2. exd5 Nf6 3. Bb5+ c6 4. dxc6 Qb6 5. cxb7+ Qxb5 6.bxc8=# { pawn promotion & CHECKMATE! }
 1-0
@@ -856,13 +857,13 @@ In each case, the program played all the moves and emulate the result successful
 This includes all **147 moves and 269 moves** of Tests 34 and 35.
 The games I chose with their testdata and endgames are as follows:<p>
 
-28. Fool's mate - **Checkmate in 2 moves!** - testdata/file18.pgn
-29. Joseph Henry Blackburne's Gambit - testdata/file19.pgn
+28. Fool's mate - **Checkmate in 2 moves!** - Result "0-1" - testdata/file18.pgn
+29. Joseph Henry Blackburne's Gambit - Result "0-1" - testdata/file19.pgn
 30. **The Game of the Century** - Donald Byrne vs Robert Fischer - Result "0-1" - testdata/file20.pgn
 31. Robert Fischer vs Boris Spassky - Result "1/2-1/2" - testdata/file21.pgn
 32. **The Immortal Game** - Anderssen vs Kieseritzky, London 1851 - Result "1-0" - testdata/file22.pgn
 33. Charlick - Mann correspondence Australia, 1881 - testdata/file23.pgn
-34. **The 147-move computer game** HIARCS 11.1 UCI - Rybka 2.3.1 32-bit, 2008 - testdata/file24.pgn
+34. **The 147-move computer game** HIARCS 11.1 UCI - Rybka 2.3.1 32-bit, 2008 - Result "1-0" - testdata/file24.pgn
 35. **The longest recorded game of chess in history - 269 moves!** - Ivan Nikolic vs Goran Arsovic - Result "1/2-1/2" - testdata/file25.pgn
 
 ----
