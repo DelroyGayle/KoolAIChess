@@ -879,7 +879,8 @@ def validate_and_perform_en_passant(chess, from_file, from_rank,
         # Redisplay the Board
         chess.display(display_chess_move)
         # Display error message
-        format_string = "Instead, Value: {}"
+        piece = chess.piece_value(save_file, save_rank)
+        format_string = f"Instead, Value: {piece}"
         output_error_message = ("INTERNAL ERROR: Expected the Captured Piece "
                                 "to be a Pawn\n"
                                 "of the right colour for "
