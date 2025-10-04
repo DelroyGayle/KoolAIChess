@@ -971,7 +971,7 @@ def check_if_inputfile_move_is_en_passant(chess, source, target):
             sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
 
 
-def handle_evaluated_castling_move(chess, computer_move_finalised):
+def handle_evaluated_castling_move(chess, computer_move_finalised, the_tuple):
     """
     If the 'evaluate' function generated a Castling Move then perform it
     """
@@ -997,6 +997,9 @@ def handle_evaluated_castling_move(chess, computer_move_finalised):
         # Therefore, End the Program
         print("INTERNAL ERROR OCCURRED - VALID CASTLE MOVE EXPECTED",
               Game.general_string.result)
+        (move_finalised,
+         from_file, from_rank,
+         to_file, to_rank) = the_tuple
         print(from_file, from_rank, to_file, to_rank)
         print()
         handle_internal_error()
