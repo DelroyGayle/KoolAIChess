@@ -2,8 +2,6 @@
 ![image](https://github.com/DelroyGayle/KoolAIChess/assets/91061592/cedf65e7-23b2-47a6-beb1-e0b2dc097035)
 
 
-[Live Link](https://koolai-chess.herokuapp.com/)
-
 **Kool AI Chess - A command line Chess program using Python - Player vs Computer**
 
 ## Introduction
