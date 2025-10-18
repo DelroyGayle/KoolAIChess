@@ -663,7 +663,7 @@ def player_move_validation_loop(chess, from_file, from_rank, to_file, to_rank):
             # Note: although it is fair to assume that ALL the Chess Moves
             # in the input file are legal
             # Nevertheless the read input file's moves will be validated
-            # as if the user has entered them from the keyboard
+            # as if the user had entered them from the keyboard
             from_file = Game.new_from_file
             from_rank = Game.new_from_rank
             to_file = Game.new_to_file

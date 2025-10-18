@@ -1182,10 +1182,10 @@ def handle_computer_move_from_inputfile(chess,
 
     if Game.en_passant_status == constants.VALID:
         # The En Passant that was read from the input file was valid!
-        # En Pasant Validation has already been done
+        # En Passant Validation has already been done
         # to see whether this En Passant move would put the Player in Check
         # 'indicate_en_passant_done()' displays the appropriate messaging
-        # regarding the En Pasant move
+        # regarding the En Passant move
         # Previous values regarding 'Computer's pawn positions'
         # have already been reset
 

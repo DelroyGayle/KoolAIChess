@@ -967,7 +967,7 @@ def check_if_inputfile_move_is_en_passant(chess, source, target):
             # the En Passant move from the file is erroneous
             input_status_message(constants.BAD_EN_PASSANT_FROMFILE
                                  + Game.input_stream_previous_contents)
-            g_message_printed = True
+
             sleep(constants.COMPUTER_FILEIO_SLEEP_VALUE)
 
 
