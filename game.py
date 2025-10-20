@@ -225,7 +225,7 @@ class Game:
         # If so, return its promoted piece's 'letter'
         theletter = getattr(self.board[index], "promoted_letter", None)
         if theletter is None:
-            theletter = getattr(self.board[index], "letter", constants.BLANK)
+            theletter = getattr(self.board[index], "letter", "")
         return theletter
 
     def showboard(self):
