@@ -215,7 +215,7 @@ class Game:
     def piece_letter(self, index, rank=""):
         """
         Determine the letter of the piece on the square
-        Blank squares are depicted as None
+        Blank squares are depicted as ""
         """
 
         if rank:
